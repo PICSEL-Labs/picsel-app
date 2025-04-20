@@ -1,0 +1,11 @@
+{
+  "java.compile.nullAnalysis.mode": "automatic",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.run": "onSave",
+  "cSpell.words": [
+    "Pressable" //  Pressable을 잘못된 워딩으로 체크합니다, cSpell extends 스펠 체크 오류 fix
+  ]
+}

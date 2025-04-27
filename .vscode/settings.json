@@ -5,7 +5,11 @@
   },
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "eslint.run": "onSave",
-  "cSpell.words": [
-    "Pressable" //  Pressable을 잘못된 워딩으로 체크합니다, cSpell extends 스펠 체크 오류 fix
-  ]
+  "cSpell.words": [ // cSpell extends 스펠 체크 오류 fix
+    "Kakao",
+    "Pressable", 
+    "Kakao",
+    "nativewind"
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic"
 }

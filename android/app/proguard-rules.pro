@@ -15,3 +15,5 @@
 -dontwarn org.bouncycastle.jsse.**
 -dontwarn org.conscrypt.*
 -dontwarn org.openjsse.**
+
+-keep public class com.navercorp.nid.** { *; }

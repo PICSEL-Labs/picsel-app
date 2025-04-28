@@ -5,6 +5,8 @@ import ReactAppDependencyProvider
 
 import KakaoSDKAuth
 
+import NidThirdPartyLogin
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
@@ -38,6 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if (AuthApi.isKakaoTalkLoginUrl(url)) {
       return AuthController.handleOpenUrl(url: url)
       }
+
+    if (NidOAuth.shared.handleURL(url) == true) { // 네이버앱에서 전달된 Url인 경우
+     return true
+    }
+
       return false
       }
   }

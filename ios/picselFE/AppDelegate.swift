@@ -3,6 +3,10 @@ import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 
+import KakaoSDKAuth
+
+import NidThirdPartyLogin
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
@@ -31,7 +35,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     return true
   }
-}
+
+  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    if (AuthApi.isKakaoTalkLoginUrl(url)) {
+      return AuthController.handleOpenUrl(url: url)
+      }
+
+    if (NidOAuth.shared.handleURL(url) == true) { // 네이버앱에서 전달된 Url인 경우
+     return true
+    }
+
+      return false
+      }
+  }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
   override func sourceURL(for bridge: RCTBridge) -> URL? {

@@ -10,11 +10,17 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-kakao/core": "^2.3.0",
+    "@react-native-kakao/user": "^2.3.0",
+    "@react-native-seoul/kakao-login": "^5.4.1",
+    "@react-native-seoul/naver-login": "^4.1.2",
     "@tanstack/react-query": "^5.74.4",
     "eslint-plugin-import": "^2.31.0",
     "nativewind": "^2.0.11",
     "react": "19.0.0",
     "react-native": "0.79.1",
+    "react-native-config": "^1.5.5",
+    "react-native-dotenv": "^3.4.11",
     "react-native-safe-area-context": "^5.4.0",
     "zustand": "^5.0.3"
   },

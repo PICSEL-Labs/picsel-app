@@ -9,6 +9,9 @@ declare module 'react-native-config' {
     NAVER_CLIENT_SECRET: string;
     NAVER_APP_NAME: string;
     NAVER_SERVICE_SCHEME_IOS: string;
+
+    // API
+    API_KEY: string;
   }
 
   export const Config: NativeConfig;

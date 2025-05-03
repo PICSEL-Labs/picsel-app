@@ -1,51 +1,81 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { login } from '@react-native-kakao/user';
-import NaverLogin from '@react-native-seoul/naver-login';
-import { Pressable, Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const TestScreen = () => {
-  const [kakaoResult, setKakaoResult] = useState('');
-  const [naverResult, setNaverResult] = useState('');
+import {
+  LoginRequest,
+  LoginResponse,
+  SocialTypes,
+} from '@/feature/auth/types/auth';
+import { loginApi, loginStrategies } from '@/shared/lib/api/auth/loginApi';
+import { useAuthStore } from '@/store/auth';
 
-  // 카카오 로그인
-  const handleKakaoLogin = async () => {
+const TestScreen = () => {
+  // User Auth State
+  const { setSocialAccessToken, setAccessToken, setRefreshToken } =
+    useAuthStore();
+
+  // 소셜 로그인 기능
+  const handleSocialLogin = async (socialType: SocialTypes) => {
     try {
-      const token = await login();
-      setKakaoResult(JSON.stringify(token));
+      // 플랫폼에서 응답으로 받아오는 socialAccessToken
+      const socialAccessToken = await loginStrategies[socialType]();
+
+      // 소셜 토큰 authStore에 저장
+      setSocialAccessToken(socialAccessToken);
+
+      // 비동기적으로 상태가 업데이트 되기 때문에 플랫폼에서 받아온 token을 바로 넣어준다.
+      await handleLogin({ socialType, socialAccessToken });
     } catch (err) {
-      console.error('login err', err);
+      console.error(`${socialType} 로그인 실패:`, err);
     }
   };
 
-  // 네이버 로그인
-  const handleNaverLogin = async () => {
+  // 서비스 로그인 기능
+  const handleLogin = async (loginPayload: LoginRequest) => {
     try {
-      const successResponse = await NaverLogin.login();
-      setNaverResult(JSON.stringify(successResponse));
+      // login api 호출
+      const response = await loginApi(loginPayload);
+
+      console.log('로그인 성공:', response);
+
+      response.signUp ? handleSuccessfulLogin(response) : undefined; // 회원가입으로 navigate
     } catch (err) {
-      console.error(err);
+      console.error('로그인 실패:', err);
     }
+  };
+
+  // 로그인 성공했을 때 action
+  const handleSuccessfulLogin = (response: LoginResponse) => {
+    setSocialAccessToken(null);
+    setAccessToken(response.accessToken);
+    setRefreshToken(response.refreshToken);
+    // 홈화면으로 navigate
   };
 
   return (
     <SafeAreaView className="bg-white flex-1 justify-center items-center">
-      {/* 소셜 로그인(임시) */}
-      <Pressable onPress={handleKakaoLogin} className="bg-yellow-300 p-4">
-        <Text>카카오 로그인</Text>
-      </Pressable>
+      <View className="space-y-3">
+        {/* 소셜 로그인(임시) */}
+        <Pressable
+          onPress={() => handleSocialLogin('KAKAO')}
+          className="bg-yellow-300 p-4">
+          <Text>카카오 로그인</Text>
+        </Pressable>
 
-      <Text className="text-black font-bold text-base">
-        kakao res: {kakaoResult}
-      </Text>
+        <Pressable
+          onPress={() => handleSocialLogin('NAVER')}
+          className="bg-green-300 p-4">
+          <Text>네이버 로그인</Text>
+        </Pressable>
 
-      <Pressable onPress={handleNaverLogin} className="bg-green-300 p-4">
-        <Text>네이버 로그인</Text>
-      </Pressable>
-      <Text className="text-black font-bold text-base">
-        naver res: {naverResult}
-      </Text>
+        <Pressable
+          onPress={() => handleLogin}
+          className="bg-slate-400 p-4 items-center">
+          <Text>로그인 하기</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 };

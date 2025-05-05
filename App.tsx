@@ -10,7 +10,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import TestScreen from '@/screens/TestScreen';
+import OnboardingTestScreen from '@/screens/OnboardingTestScreen';
 
 const queryClient = new QueryClient();
 
@@ -18,7 +18,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <TestScreen />
+        <OnboardingTestScreen />
       </SafeAreaProvider>
     </QueryClientProvider>
   );

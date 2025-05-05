@@ -1,3 +1,4 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { login } from '@react-native-kakao/user';
 import NaverLogin from '@react-native-seoul/naver-login';
 
@@ -26,16 +27,19 @@ export const loginApi = async ({
 export const loginStrategies: Record<SocialTypes, SocialLoginFunction> = {
   KAKAO: async () => {
     const response = await login(); // Kakao login
+
     return response.accessToken;
   },
   NAVER: async () => {
     const response = await NaverLogin.login(); // Naver login
+
     return response.successResponse.accessToken;
   },
   GOOGLE: async () => {
-    // const data = await login(); // Kakao login
-    // return data.accessToken;
-    return 'test';
+    await GoogleSignin.hasPlayServices();
+    const response = await GoogleSignin.signIn(); // Google login
+
+    return response.data.idToken;
   },
   APPLE: async () => {
     // const data = await login(); // Kakao login

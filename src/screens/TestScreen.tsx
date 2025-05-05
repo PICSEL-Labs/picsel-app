@@ -25,7 +25,7 @@ const TestScreen = () => {
       // 소셜 토큰 authStore에 저장
       setSocialAccessToken(socialAccessToken);
 
-      // 비동기적으로 상태가 업데이트 되기 때문에 플랫폼에서 받아온 token을 바로 넣어준다.
+      // 비동기적으로 상태가 업데이트 되기 때문에 플랫폼에서 받아온 token을 바로 파라미터로 넣은 후, Login API 요청
       await handleLogin({ socialType, socialAccessToken });
     } catch (err) {
       console.error(`${socialType} 로그인 실패:`, err);
@@ -71,9 +71,9 @@ const TestScreen = () => {
         </Pressable>
 
         <Pressable
-          onPress={() => handleLogin}
+          onPress={() => handleSocialLogin('GOOGLE')}
           className="bg-slate-400 p-4 items-center">
-          <Text>로그인 하기</Text>
+          <Text>구글 로그인</Text>
         </Pressable>
       </View>
     </SafeAreaView>

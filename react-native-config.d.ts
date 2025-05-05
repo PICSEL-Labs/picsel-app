@@ -10,6 +10,11 @@ declare module 'react-native-config' {
     NAVER_APP_NAME: string;
     NAVER_SERVICE_SCHEME_IOS: string;
 
+    // 구글
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_SERVICE_SCHEME_IOS: string;
+    GOOGLE_WEB_CLIENT_ID: string;
+
     // API
     API_KEY: string;
   }

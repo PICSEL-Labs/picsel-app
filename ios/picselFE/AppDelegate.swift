@@ -7,6 +7,8 @@ import KakaoSDKAuth
 
 import NidThirdPartyLogin
 
+import GoogleSignIn
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
@@ -37,16 +39,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    // KAKAO LOGIN
     if (AuthApi.isKakaoTalkLoginUrl(url)) {
       return AuthController.handleOpenUrl(url: url)
       }
 
+    // NAVER LOGIN
     if (NidOAuth.shared.handleURL(url) == true) { // 네이버앱에서 전달된 Url인 경우
      return true
     }
 
-      return false
-      }
+    // GOOGLE LOGIN
+    var handled: Bool
+    handled = GIDSignIn.sharedInstance.handle(url)
+    if handled {
+      return true  
+    }
+
+    return false
+
+    }
   }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {

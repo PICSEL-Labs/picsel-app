@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Pressable, Text, View } from 'react-native';
+import { AppleButton } from '@invertase/react-native-apple-authentication';
+import { Platform, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -60,13 +61,13 @@ const TestScreen = () => {
         {/* 소셜 로그인(임시) */}
         <Pressable
           onPress={() => handleSocialLogin('KAKAO')}
-          className="bg-yellow-300 p-4">
+          className="bg-yellow-300 p-4 items-center">
           <Text>카카오 로그인</Text>
         </Pressable>
 
         <Pressable
           onPress={() => handleSocialLogin('NAVER')}
-          className="bg-green-300 p-4">
+          className="bg-green-300 p-4 items-center">
           <Text>네이버 로그인</Text>
         </Pressable>
 
@@ -75,6 +76,19 @@ const TestScreen = () => {
           className="bg-slate-400 p-4 items-center">
           <Text>구글 로그인</Text>
         </Pressable>
+
+        {/* Apple 로그인은 ios에서만 제공 */}
+        {Platform.OS === 'ios' && (
+          <AppleButton
+            buttonStyle={AppleButton.Style.WHITE}
+            buttonType={AppleButton.Type.SIGN_IN}
+            style={{
+              width: 160,
+              height: 45,
+            }}
+            onPress={() => handleSocialLogin('APPLE')}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

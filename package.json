@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --udid B93520D6-1444-41D8-971F-60FF196A17FC",
-    "ios-device": "react-native run-ios --device '현중2' --mode Debug",   
+    "ios-device": "react-native run-ios --udid 00008110-000615091E3B801E --mode Debug",    
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"

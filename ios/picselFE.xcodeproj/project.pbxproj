@@ -311,6 +311,7 @@
 				CODE_SIGN_ENTITLEMENTS = picselFE/picselFE.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Y343288YP2;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y343288YP2;
 				INFOPLIST_FILE = picselFE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -325,6 +326,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = picselFE;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Picsel;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

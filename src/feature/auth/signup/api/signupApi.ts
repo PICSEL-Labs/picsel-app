@@ -6,7 +6,6 @@ import { axiosInstance } from '@/shared/lib/api/axiosInstance';
 export const signupApi = async (
   body: SignupRequest,
 ): Promise<SignupResponse> => {
-  console.log(body);
   const response = await axiosInstance.post<SignupResponse>(
     '/auth/signup',
     body,

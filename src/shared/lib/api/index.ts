@@ -34,12 +34,20 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   response => response,
   async error => {
-    const { refreshToken, setAccessToken, logout } = useAuthStore.getState();
+    const { refreshToken, setAccessToken } = useAuthStore.getState();
 
-    if (error.response?.status === 401 && refreshToken) {
+    if (error.response?.status === 401 && error.response?.code === 1401) {
       try {
         // 1. 토큰 재발급 요청
-        const res = await axios.post('/auth/refresh/access', { refreshToken });
+        const res = await axios.post(
+          '/auth/refresh/access',
+          {},
+          {
+            headers: {
+              'Refresh-Token': refreshToken,
+            },
+          },
+        );
 
         // 2. accessToken 저장
         setAccessToken(res.data.accessToken);
@@ -48,7 +56,44 @@ axiosInstance.interceptors.response.use(
         error.config.headers['Access-Token'] = res.data.accessToken;
         return axiosInstance.request(error.config);
       } catch (refreshError) {
-        logout();
+        // logout();
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
+
+// refreshToken 재발급 interceptor
+axiosInstance.interceptors.response.use(
+  response => response,
+  async error => {
+    const { refreshToken, accessToken, setRefreshToken } =
+      useAuthStore.getState();
+
+    if (error.response?.status === 401 && error.response?.code === 1402) {
+      try {
+        // 1. 토큰 재발급 요청
+        const res = await axios.post(
+          '/auth/refresh/refresh',
+          {},
+          {
+            headers: {
+              'Access-Token': accessToken,
+              'Refresh-Token': refreshToken,
+            },
+          },
+        );
+
+        // 2. refreshToken 저장
+        setRefreshToken(res.data.refreshToken);
+
+        // 3. 원래 요청 다시 보내기
+        error.config.headers['Refresh-Token'] = res.data.refreshToken;
+        return axiosInstance.request(error.config);
+      } catch (refreshError) {
+        // logout();
         return Promise.reject(refreshError);
       }
     }

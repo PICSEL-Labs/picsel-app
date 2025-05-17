@@ -1,4 +1,4 @@
-import { ValidateResponse, ValidationType } from '../types/types';
+import { ValidateResponse, ValidationType } from '../types';
 
 import { axiosInstance } from '@/shared/lib/api/axiosInstance';
 

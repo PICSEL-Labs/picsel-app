@@ -8,7 +8,7 @@ import {
   LoginResponse,
   SocialLoginFunction,
   SocialTypes,
-} from '../types/types';
+} from '../types';
 
 import { axiosInstance } from '@/shared/lib/api/axiosInstance';
 

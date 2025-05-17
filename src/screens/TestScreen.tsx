@@ -9,7 +9,7 @@ import {
   LoginRequest,
   LoginResponse,
   SocialTypes,
-} from '@/feature/auth/login/types/types';
+} from '@/feature/auth/login/types';
 import { useAuthStore } from '@/store/authStore';
 
 const TestScreen = () => {

@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { signupApi } from '@/feature/auth/signup/api/signupApi';
 import { validateUserInfoApi } from '@/feature/auth/signup/api/validateApi';
-import { ValidationType } from '@/feature/auth/signup/types/types';
+import { ValidationType } from '@/feature/auth/signup/types';
 import { useAuthStore } from '@/store/authStore';
 
 const SignupScreen = () => {

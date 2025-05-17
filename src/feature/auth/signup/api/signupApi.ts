@@ -1,4 +1,4 @@
-import { SignupRequest, SignupResponse } from '../types/types';
+import { SignupRequest, SignupResponse } from '../types';
 
 import { axiosInstance } from '@/shared/lib/api/axiosInstance';
 

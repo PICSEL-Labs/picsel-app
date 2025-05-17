@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
-import { axiosInstance } from '@/shared/lib/api';
+import { axiosInstance } from '@/shared/lib/api/axiosInstance';
 
 export const useAxios = <D = any>(axiosParams: AxiosRequestConfig<D>) => {
   const [response, setResponse] = useState<D | null>(null);

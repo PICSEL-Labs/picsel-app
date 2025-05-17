@@ -1,0 +1,15 @@
+import { SignupRequest, SignupResponse } from '../types';
+
+import { axiosInstance } from '@/shared/lib/api/axiosInstance';
+
+// 회원가입 API
+export const signupApi = async (
+  body: SignupRequest,
+): Promise<SignupResponse> => {
+  const response = await axiosInstance.post<SignupResponse>(
+    '/auth/signup',
+    body,
+  );
+
+  return response.data;
+};

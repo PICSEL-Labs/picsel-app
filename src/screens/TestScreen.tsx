@@ -4,18 +4,22 @@ import { AppleButton } from '@invertase/react-native-apple-authentication';
 import { Platform, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { loginApi, loginStrategies } from '@/feature/auth/login/api/loginApi';
 import {
   LoginRequest,
   LoginResponse,
   SocialTypes,
-} from '@/feature/auth/types/auth';
-import { loginApi, loginStrategies } from '@/shared/lib/api/auth/loginApi';
-import { useAuthStore } from '@/store/auth';
+} from '@/feature/auth/login/types';
+import { useAuthStore } from '@/store/authStore';
 
 const TestScreen = () => {
   // User Auth State
-  const { setSocialAccessToken, setAccessToken, setRefreshToken } =
-    useAuthStore();
+  const {
+    setSocialAccessToken,
+    setAccessToken,
+    setRefreshToken,
+    setSocialType,
+  } = useAuthStore();
 
   // 소셜 로그인 기능
   const handleSocialLogin = async (socialType: SocialTypes) => {
@@ -23,8 +27,9 @@ const TestScreen = () => {
       // 플랫폼에서 응답으로 받아오는 socialAccessToken
       const socialAccessToken = await loginStrategies[socialType]();
 
-      // 소셜 토큰 authStore에 저장
+      // 소셜 토큰과 소셜 타입 authStore에 저장
       setSocialAccessToken(socialAccessToken);
+      setSocialType(socialType);
 
       // 비동기적으로 상태가 업데이트 되기 때문에 플랫폼에서 받아온 token을 바로 파라미터로 넣은 후, Login API 요청
       await handleLogin({ socialType, socialAccessToken });
@@ -56,8 +61,8 @@ const TestScreen = () => {
   };
 
   return (
-    <SafeAreaView className="bg-white flex-1 justify-center items-center">
-      <View className="space-y-3">
+    <SafeAreaView className="bg-white flex-1 justify-start items-center">
+      <View className="space-y-3 flex">
         {/* 소셜 로그인(임시) */}
         <Pressable
           onPress={() => handleSocialLogin('KAKAO')}

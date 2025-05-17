@@ -1,6 +1,4 @@
-// API
 export type SocialTypes = 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';
-
 export type SocialLoginFunction = () => Promise<string>;
 
 export interface LoginRequest {

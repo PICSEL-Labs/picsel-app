@@ -8,8 +8,9 @@ import {
   LoginResponse,
   SocialLoginFunction,
   SocialTypes,
-} from '@/feature/auth/types/auth';
-import { axiosInstance } from '@/shared/lib/api';
+} from '../types';
+
+import { axiosInstance } from '@/shared/lib/api/axiosInstance';
 
 // 로그인 API
 export const loginApi = async ({

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,9 +8,69 @@ import {
   onboardingShowData,
   OnboardingText,
 } from '@/components/OnboardingText';
+import { loginApi, loginStrategies } from '@/feature/auth/login/api/loginApi';
+import {
+  LoginRequest,
+  LoginResponse,
+  SocialTypes,
+} from '@/feature/auth/login/types';
+import { RootStackNavigationProp } from '@/shared/lib/navigation/navigateTypeUtil';
+import { useAuthStore } from '@/store/authStore';
 
 const OnboardingTestScreen = () => {
   const [carouselIdx, setCarouselIdx] = useState(0);
+
+  // User Auth State
+  const {
+    setSocialAccessToken,
+    setAccessToken,
+    setRefreshToken,
+    setSocialType,
+  } = useAuthStore();
+
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  // 소셜 로그인 기능
+  const handleSocialLogin = async (socialType: SocialTypes) => {
+    try {
+      // 플랫폼에서 응답으로 받아오는 socialAccessToken
+      const socialAccessToken = await loginStrategies[socialType]();
+
+      // 소셜 토큰과 소셜 타입 authStore에 저장
+      setSocialAccessToken(socialAccessToken);
+      setSocialType(socialType);
+
+      // 비동기적으로 상태가 업데이트 되기 때문에 플랫폼에서 받아온 token을 바로 파라미터로 넣은 후, Login API 요청
+      await handleLogin({ socialType, socialAccessToken });
+    } catch (err) {
+      console.error(`${socialType} 로그인 실패:`, err);
+    }
+  };
+
+  // 서비스 로그인 기능
+  const handleLogin = async (loginPayload: LoginRequest) => {
+    try {
+      // login api 호출
+      const response = await loginApi(loginPayload);
+
+      console.log('로그인 성공:', response.data);
+
+      response.data.signUp
+        ? handleSuccessfulLogin(response)
+        : navigation.navigate('Signup');
+    } catch (err) {
+      console.error('로그인 실패:', err);
+    }
+  };
+
+  // 로그인 성공했을 때 action
+  const handleSuccessfulLogin = (response: LoginResponse) => {
+    setSocialAccessToken(null);
+    setAccessToken(response.data.accessToken);
+    setRefreshToken(response.data.refreshToken);
+
+    navigation.navigate('Home');
+  };
 
   // carousel 3초 단위
   useEffect(() => {
@@ -27,11 +88,6 @@ const OnboardingTestScreen = () => {
 
     return () => clearInterval(interval); // 언마운트 시 정리
   }, []);
-
-  // 로그인 하러 가기 클릭시
-  const handleLogin = () => {
-    setCarouselIdx(4); // login 텍스트 렌더링
-  };
 
   return (
     <SafeAreaView className="bg-white flex-1 justify-center items-center">
@@ -70,7 +126,7 @@ const OnboardingTestScreen = () => {
         <View className="space-y-2">
           {/* 로그인 모드 */}
           <Pressable
-            onPress={handleLogin}
+            onPress={() => handleSocialLogin('NAVER')}
             className="bg-green-500 w-[320px] h-[56px] rounded-[40px] justify-center items-center mb-2">
             <Text className="text-white font-semibold text-[20px]">
               네이버 로그인
@@ -78,7 +134,7 @@ const OnboardingTestScreen = () => {
           </Pressable>
 
           <Pressable
-            onPress={handleLogin}
+            onPress={() => handleSocialLogin('KAKAO')}
             className="bg-yellow-500 w-[320px] h-[56px] rounded-[40px] justify-center items-center mb-2">
             <Text className="text-white font-semibold text-[20px]">
               카카오 로그인
@@ -86,7 +142,15 @@ const OnboardingTestScreen = () => {
           </Pressable>
 
           <Pressable
-            onPress={handleLogin}
+            onPress={() => handleSocialLogin('GOOGLE')}
+            className="bg-gray-300 w-[320px] h-[56px] rounded-[40px] justify-center items-center mb-2">
+            <Text className="text-white font-semibold text-[20px]">
+              구글 로그인
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => handleSocialLogin('APPLE')}
             className="bg-black w-[320px] h-[56px] rounded-[40px] justify-center items-center mb-2">
             <Text className="text-white font-semibold text-[20px]">
               애플 로그인
@@ -97,7 +161,7 @@ const OnboardingTestScreen = () => {
         <>
           {/* 온보딩 모드 */}
           <Pressable
-            onPress={handleLogin}
+            onPress={() => setCarouselIdx(4)}
             className="bg-pink-500 w-[320px] h-[56px] rounded-[40px] justify-center items-center mb-2">
             <Text className="text-white font-semibold text-[20px]">
               로그인 하러 가기

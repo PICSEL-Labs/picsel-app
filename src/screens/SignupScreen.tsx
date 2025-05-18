@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { signupApi } from '@/feature/auth/signup/api/signupApi';
 import { validateUserInfoApi } from '@/feature/auth/signup/api/validateApi';
 import { ValidationType } from '@/feature/auth/signup/types';
+import { RootStackNavigationProp } from '@/shared/lib/navigation/navigateTypeUtil';
 import { useAuthStore } from '@/store/authStore';
 
 const SignupScreen = () => {
   const [userId, setUserId] = useState('');
   const [userNickname, setUserNickname] = useState('');
+
+  const navigation = useNavigation<RootStackNavigationProp>();
 
   // user auth
   const { socialType, socialAccessToken } = useAuthStore();
@@ -50,6 +54,8 @@ const SignupScreen = () => {
       });
 
       console.log(response);
+
+      navigation.navigate('Home');
     } catch (err) {
       console.log(err);
     }
@@ -57,7 +63,7 @@ const SignupScreen = () => {
 
   return (
     <SafeAreaView className="bg-white flex-1 justify-start items-center">
-      <View className="flex w-[50%] space-y-3">
+      <View className="flex w-[50%] space-y-3 mt-20">
         <TextInput
           value={userId}
           className="border-black border p-2"
@@ -71,8 +77,10 @@ const SignupScreen = () => {
           onChangeText={nickname => handleValidation('nickname', nickname)}
         />
 
-        <Pressable onPress={handleSignup}>
-          <Text>회원가입 테스트</Text>
+        <Pressable
+          onPress={handleSignup}
+          className="items-center border rounded-lg ">
+          <Text>회원가입 테스트 버튼</Text>
         </Pressable>
       </View>
     </SafeAreaView>

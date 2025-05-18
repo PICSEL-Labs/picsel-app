@@ -11,7 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import MainStack from '@/feature/auth/navigation';
+import MainStack from '@/feature/navigation';
 
 const queryClient = new QueryClient();
 

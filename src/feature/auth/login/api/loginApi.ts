@@ -1,3 +1,4 @@
+import appleAuth from '@invertase/react-native-apple-authentication';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { login } from '@react-native-kakao/user';
 import NaverLogin from '@react-native-seoul/naver-login';
@@ -7,8 +8,9 @@ import {
   LoginResponse,
   SocialLoginFunction,
   SocialTypes,
-} from '@/feature/auth/types/auth';
-import { axiosInstance } from '@/shared/lib/api';
+} from '../types';
+
+import { axiosInstance } from '@/shared/lib/api/axiosInstance';
 
 // 로그인 API
 export const loginApi = async ({
@@ -42,8 +44,12 @@ export const loginStrategies: Record<SocialTypes, SocialLoginFunction> = {
     return response.data.idToken;
   },
   APPLE: async () => {
-    // const data = await login(); // Kakao login
-    // return data.accessToken;
-    return 'test';
+    // Apple login
+    const appleAuthResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+    });
+
+    return appleAuthResponse.identityToken;
   },
 };

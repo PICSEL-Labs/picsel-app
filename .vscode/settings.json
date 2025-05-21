@@ -9,7 +9,8 @@
     "Kakao",
     "Pressable", 
     "Kakao",
-    "nativewind"
+    "nativewind",
+    "PICSEL"
   ],
   "java.configuration.updateBuildConfiguration": "automatic"
 }

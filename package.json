@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.4.1",
+    "@mj-studio/react-native-naver-map": "^2.4.0",
     "@react-native-google-signin/google-signin": "^13.2.0",
     "@react-native-kakao/core": "^2.3.0",
     "@react-native-kakao/user": "^2.3.0",

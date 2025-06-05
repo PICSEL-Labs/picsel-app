@@ -94,6 +94,7 @@ android {
         // env
         resValue "string", "KAKAO_APP_KEY", project.env.get("KAKAO_APP_KEY")
         resValue "string", "KAKAO_SCHEME_KEY", project.env.get("KAKAO_SCHEME_KEY")
+        resValue "string", "NAVER_MAP_CLIENT_ID", project.env.get("NAVER_MAP_CLIENT_ID")
     }
     signingConfigs {
         debug {

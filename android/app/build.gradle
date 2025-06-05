@@ -1,6 +1,11 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+
+project.ext.envConfigFiles = [
+    anothercustombuild: ".env",
+]
+
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 
@@ -87,8 +92,8 @@ android {
         versionCode 1
         versionName "1.0"
         // env
-        buildConfigField "String", "KAKAO_APP_KEY", project.env.KAKAO_APP_KEY
-        buildConfigField "String", "KAKAO_SCHEME_KEY", project.env.KAKAO_SCHEME_KEY
+        resValue "string", "KAKAO_APP_KEY", project.env.get("KAKAO_APP_KEY")
+        resValue "string", "KAKAO_SCHEME_KEY", project.env.get("KAKAO_SCHEME_KEY")
     }
     signingConfigs {
         debug {
@@ -123,4 +128,3 @@ dependencies {
         implementation jscFlavor
     }
 }
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"

@@ -20,6 +20,19 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>위치 권한이 필요합니다.</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>위치 권한이 필요합니다.</key>
+		<string>위치 권한이 필요합니다.</string>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>위치 권한이 필요합니다.</string>
+	<key>NMFNcpKeyId</key>
+	<string>$(NAVER_MAP_CLIENT_ID)</string>
+	<key>NMFClientId</key>
+	<string>$(NAVER_MAP_CLIENT_ID)</string>
 	<key>GIDClientID</key>
 	<string>$(GOOGLE_CLIENT_ID)</string>
 	<key>CFBundleURLTypes</key>

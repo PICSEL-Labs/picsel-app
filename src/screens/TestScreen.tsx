@@ -11,7 +11,7 @@ const TestScreen = () => {
   console.log(
     'accessToken:',
     accessToken,
-    'refreshToken11',
+    'refreshToken',
     refreshToken,
     'socialType',
     socialType,

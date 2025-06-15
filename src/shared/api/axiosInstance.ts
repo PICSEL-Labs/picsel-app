@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Config from 'react-native-config';
 
-import { useAuthStore } from '@/store/authStore';
+import { useUserStore } from '../store';
 
 export const axiosInstance = axios.create({
   baseURL: Config.API_KEY,
@@ -13,7 +13,7 @@ export const axiosInstance = axios.create({
 // accessToken Header interceptor
 axiosInstance.interceptors.request.use(
   config => {
-    const accessToken = useAuthStore.getState().accessToken;
+    const accessToken = useUserStore.getState().accessToken;
 
     if (accessToken) {
       config.headers['Access-Token'] = accessToken;
@@ -34,7 +34,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   response => response,
   async error => {
-    const { refreshToken, setAccessToken } = useAuthStore.getState();
+    const { refreshToken, setAccessToken } = useUserStore.getState();
 
     if (error.response?.status === 401 && error.response?.code === 1401) {
       try {
@@ -70,7 +70,7 @@ axiosInstance.interceptors.response.use(
   response => response,
   async error => {
     const { refreshToken, accessToken, setRefreshToken } =
-      useAuthStore.getState();
+      useUserStore.getState();
 
     if (error.response?.status === 401 && error.response?.code === 1402) {
       try {

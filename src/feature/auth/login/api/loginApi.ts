@@ -10,7 +10,7 @@ import {
   SocialTypes,
 } from '../types';
 
-import { axiosInstance } from '@/shared/lib/api/axiosInstance';
+import { axiosInstance } from '@/shared/api/axiosInstance';
 
 // 로그인 API
 export const loginApi = async ({
@@ -25,7 +25,7 @@ export const loginApi = async ({
   return response.data;
 };
 
-// 소셜 로그인(종합) API
+// 소셜 로그인 API
 export const loginStrategies: Record<SocialTypes, SocialLoginFunction> = {
   KAKAO: async () => {
     const response = await login(); // Kakao login

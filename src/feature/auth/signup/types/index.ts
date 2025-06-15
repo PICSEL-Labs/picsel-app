@@ -16,7 +16,6 @@ export interface SignupResponse {
 export interface SignupRequest {
   socialAccessToken: string;
   socialType: string;
-  userId: string;
   userNickname: string;
   userAgreementConsentRequestDto: {
     ageConsent: boolean;

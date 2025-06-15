@@ -1,6 +1,6 @@
 import { SignupRequest, SignupResponse } from '../types';
 
-import { axiosInstance } from '@/shared/lib/api/axiosInstance';
+import { axiosInstance } from '@/shared/api/axiosInstance';
 
 // 회원가입 API
 export const signupApi = async (

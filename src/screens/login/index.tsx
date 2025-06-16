@@ -9,9 +9,8 @@ import {
   LoginResponse,
   SocialTypes,
 } from '@/feature/auth/login/types';
-import { OnboardingText } from '@/shared/components/common/OnboardingText';
+import { HighlightedText } from '@/shared/components/common/HighlightedText';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { LOGIN_TEXT } from '@/shared/constants/onboardingText';
 import { useUserStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
@@ -67,7 +66,11 @@ const LoginScreen = () => {
     <ScreenLayout>
       <View className="flex-1 justify-center items-center">
         <View className="items-center">
-          <OnboardingText text={LOGIN_TEXT} />
+          <HighlightedText
+            text={`세상의 모든 포토부스\n검색부터 보관까지\n모두 [픽셀]에서 더 쉽고 즐겁게!`}
+            fontSize="text-[24px]"
+            fontWeight="font-semibold"
+          />
           <View className="bg-gray-500 w-[320px] h-[200px] mt-10" />
         </View>
 

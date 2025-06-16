@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
-import { OnboardingText } from '@/shared/components/common/OnboardingText';
+import { HighlightedText } from '@/shared/components/common/HighlightedText';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { ONBOARDING_TEXT } from '@/shared/constants/onboardingText';
 import { WIDTH } from '@/shared/constants/size';
@@ -32,9 +32,13 @@ const OnboardingScreen = () => {
           renderItem={({ item }) => (
             <View className="items-center justify-center">
               <View className="mb-10 h-[110px]">
-                <OnboardingText text={item.text} />
+                <HighlightedText
+                  text={item.text}
+                  fontSize="text-[24px]"
+                  fontWeight="font-semibold"
+                  highlightWeight="font-bold"
+                />
               </View>
-
               <View className={`${item.color} w-[320px] h-[200px]`} />
             </View>
           )}

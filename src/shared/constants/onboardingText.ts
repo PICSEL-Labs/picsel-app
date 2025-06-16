@@ -20,3 +20,6 @@ export const ONBOARDING_TEXT = [
     color: 'bg-gray-400',
   },
 ];
+
+export const LOGIN_TEXT =
+  '세상의 모든 포토부스\n검색부터 보관까지\n모두 [픽셀]에서 더 쉽고 즐겁게!';

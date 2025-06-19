@@ -34,6 +34,7 @@
     "clsx": "^2.1.1",
     "eslint-plugin-import": "^2.31.0",
     "nativewind": "^2.0.11",
+    "prettier-plugin-tailwindcss": "^0.6.12",
     "react": "19.0.0",
     "react-native": "0.79.1",
     "react-native-config": "^1.5.5",

@@ -20,7 +20,6 @@ axiosInstance.interceptors.request.use(
     }
     console.log('axios config : ', config);
 
-    console.log('accessToken: ', config.headers.Authorization);
     return config;
   },
 

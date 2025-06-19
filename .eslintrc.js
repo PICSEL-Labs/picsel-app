@@ -1,16 +1,8 @@
 module.exports = {
   root: true,
-  extends: ['@react-native-community', 'prettier'],
-  plugins: [
-    'import',
-    'react',
-    'react-hooks',
-    'jsx-a11y',
-    'unused-imports',
-    'prettier',
-  ],
+  extends: ['@react-native-community'],
+  plugins: ['import', 'react', 'react-hooks', 'jsx-a11y', 'unused-imports'],
   rules: {
-    'prettier/prettier': 'error', // Prettier 규칙 강제 적용
     'import/no-relative-parent-imports': 'error', // 상위 폴더 접근 방지
     'react-native/no-inline-styles': 0, // inlined styles 허용(라이브러리 컴포넌트는 inlined styles 필요)
     // ✅ Import 순서 정리

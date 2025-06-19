@@ -94,19 +94,19 @@ const TermsModal = ({
       <GestureDetector gesture={panGesture}>
         <Animated.View
           style={animatedStyle}
-          className="absolute bottom-0 w-full bg-white rounded-t-2xl px-5 pt-3 pb-8 max-h-[80%]">
-          <View className="w-10 h-1.5 bg-gray-300 rounded-full self-center mb-12" />
+          className="absolute bottom-0 max-h-[80%] w-full rounded-t-2xl bg-white px-5 pb-8 pt-3">
+          <View className="mb-12 h-1.5 w-10 self-center rounded-full bg-gray-300" />
 
-          <Text className="text-[16px] font-semibold text-[#3B3E46] mb-6">
+          <Text className="mb-6 text-[16px] font-semibold text-[#3B3E46]">
             {title}
           </Text>
 
           {/* 전체동의 */}
           <Pressable
-            className="flex-row items-center mb-3 border-b-2 border-b-[#E5E6E9] pb-5"
+            className="mb-3 flex-row items-center border-b-2 border-b-[#E5E6E9] pb-5"
             onPress={toggleAll}>
             {allChecked ? <CheckedOn /> : <CheckedOff />}
-            <Text className="ml-2 text-[#111114] font-bold text-[16px]">
+            <Text className="ml-2 text-[16px] font-bold text-[#111114]">
               전체동의
             </Text>
           </Pressable>
@@ -116,14 +116,14 @@ const TermsModal = ({
             {TERMS_TEXT.map((label, index) => (
               <View
                 key={index}
-                className="flex-row items-center mb-2 space-x-3">
+                className="mb-2 flex-row items-center space-x-3">
                 <Pressable onPress={() => toggleItem(index)}>
                   {checkedStates[index] ? <CheckedOn /> : <CheckedOff />}
                 </Pressable>
-                <Text className="ml-2 text-[#3B3E46] text-[16px] font-semibold">
+                <Text className="ml-2 text-[16px] font-semibold text-[#3B3E46]">
                   {index < 4 ? '(필수)' : '(선택)'}
                 </Text>
-                <Text className="ml-1 text-[#3B3E46] text-[16px] font-normal">
+                <Text className="ml-1 text-[16px] font-normal text-[#3B3E46]">
                   {label}
                 </Text>
                 {/* notion으로 linking */}
@@ -136,10 +136,10 @@ const TermsModal = ({
             disabled={!isRequiredAllChecked}
             className={cn(
               isRequiredAllChecked ? 'bg-[#FF6C9A]' : 'bg-[#E5E6E9]',
-              'w-[320px] h-[56px] mt-5 rounded-[40px] justify-center items-center self-center',
+              'mt-5 h-[56px] w-[320px] items-center justify-center self-center rounded-[40px]',
             )}
             onPress={handleSignup}>
-            <Text className="text-white text-[20px] font-bold">완료</Text>
+            <Text className="text-[20px] font-bold text-white">완료</Text>
           </Pressable>
         </Animated.View>
       </GestureDetector>

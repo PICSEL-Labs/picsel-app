@@ -17,7 +17,7 @@ const OnboardingScreen = () => {
 
   return (
     <ScreenLayout>
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 items-center justify-center">
         <Carousel
           loop={false}
           width={WIDTH}
@@ -39,18 +39,18 @@ const OnboardingScreen = () => {
                   highlightWeight="font-bold"
                 />
               </View>
-              <View className={`${item.color} w-[320px] h-[200px]`} />
+              <View className={`${item.color} h-[200px] w-[320px]`} />
             </View>
           )}
         />
 
         {/* indicator */}
         {carouselIdx < 4 && (
-          <View className="flex-row space-x-2 mt-8">
+          <View className="mt-8 flex-row space-x-2">
             {ONBOARDING_TEXT.slice(0, 4).map((_, index) => (
               <View
                 key={index}
-                className={`w-2 h-2 rounded-full ${
+                className={`h-2 w-2 rounded-full ${
                   index === carouselIdx ? 'bg-gray-500' : 'bg-gray-300'
                 }`}
               />
@@ -63,8 +63,8 @@ const OnboardingScreen = () => {
       <View className="items-center">
         <Pressable
           onPress={() => navigation.navigate('Login')}
-          className="bg-pink-500 w-[330px] h-[56px] rounded-[40px] justify-center items-center mb-6">
-          <Text className="text-white font-semibold text-[20px]">
+          className="mb-6 h-[56px] w-[330px] items-center justify-center rounded-[40px] bg-pink-500">
+          <Text className="text-[20px] font-semibold text-white">
             로그인 하러 가기
           </Text>
         </Pressable>

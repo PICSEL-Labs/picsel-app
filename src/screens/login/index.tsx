@@ -64,31 +64,31 @@ const LoginScreen = () => {
 
   return (
     <ScreenLayout>
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 items-center justify-center">
         <View className="items-center">
           <HighlightedText
             text={`세상의 모든 포토부스\n검색부터 보관까지\n모두 [픽셀]에서 더 쉽고 즐겁게!`}
             fontSize="text-[24px]"
             fontWeight="font-semibold"
           />
-          <View className="bg-gray-500 w-[320px] h-[200px] mt-10" />
+          <View className="mt-10 h-[200px] w-[320px] bg-gray-500" />
         </View>
 
-        <View className="flex-row gap-1 pt-10 flex-wrap justify-center">
+        <View className="flex-row flex-wrap justify-center gap-1 pt-10">
           {(['KAKAO', 'NAVER', 'GOOGLE', 'APPLE'] as SocialTypes[]).map(
             type => (
               <Pressable
                 key={type}
                 onPress={() => handleSocialLogin(type)}
-                className="bg-gray-400 w-[79px] h-[67px] justify-center items-center mb-2 mx-1">
-                <Text className="text-black font-normal text-[20px]">
+                className="mx-1 mb-2 h-[67px] w-[79px] items-center justify-center bg-gray-400">
+                <Text className="text-[20px] font-normal text-black">
                   {type === 'KAKAO'
                     ? '카카오톡'
                     : type === 'NAVER'
-                    ? '네이버'
-                    : type === 'GOOGLE'
-                    ? '구글'
-                    : '애플'}
+                      ? '네이버'
+                      : type === 'GOOGLE'
+                        ? '구글'
+                        : '애플'}
                 </Text>
               </Pressable>
             ),

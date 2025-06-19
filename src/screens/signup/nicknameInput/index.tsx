@@ -22,9 +22,10 @@ import FailedIcon from '@/assets/icons/nickname-failed.svg';
 import { signupApi } from '@/feature/auth/signup/api/signupApi';
 import { validateUserInfoApi } from '@/feature/auth/signup/api/validateApi';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { cn } from '@/shared/lib/cn';
 import { useUserStore } from '@/shared/store';
 import { SignupNavigationProp } from '@/shared/types/navigateTypeUtil';
-import { validateFormat } from '@/shared/utils/validators/validateNickname';
+import { validateFormat } from '@/shared/utils/validateNickname';
 
 const NicknameInputScreen = () => {
   const [userNickname, setUserNickname] = useState('');
@@ -145,18 +146,18 @@ const NicknameInputScreen = () => {
   };
 
   return (
-    <ScreenLayout className="flex-1 bg-white w-full h-full">
+    <ScreenLayout className="h-full w-full flex-1 bg-white">
       <KeyboardAvoidingView
         behavior={Platform.select({ ios: 'padding', android: undefined })}
         className="flex-1">
-        <View className="flex-1 p-2 mx-3">
+        <View className="mx-3 flex-1 p-2">
           {/* Header h 수정 */}
-          <View className="flex-row items-center h-12">
-            <View className="w-12">
+          <View className="h-12 flex-row items-center">
+            <Pressable onPress={() => navigation.goBack()} className="w-12">
               <BackIcon />
-            </View>
+            </Pressable>
             <View className="flex-1 items-center">
-              <Text className="text-black font-semibold text-[20px] text-center">
+              <Text className="text-center text-[20px] font-semibold text-black">
                 회원가입
               </Text>
             </View>
@@ -164,18 +165,23 @@ const NicknameInputScreen = () => {
           </View>
 
           {/* Input Area */}
-          <View className="items-start mt-10">
+          <View className="mt-10 items-start">
             {/* <HighlightedText  text={TEXT} /> */}
             <Text className="text-center text-[24px] font-semibold leading-9">
               닉네임을 입력해주세요
             </Text>
-            <Text className="text-[#3B3E46] text-[16px] font-normal mt-2">
+            <Text className="mt-2 text-[16px] font-normal text-[#3B3E46]">
               2-12자 이내로 작성해주세요
             </Text>
           </View>
           <View>
             <TextInput
-              className="w-full border h-[56px] border-[#FF6C9A] rounded-2xl text-[#111114] text-[16px] font-normal pl-5 mt-5"
+              className={cn(
+                userNickname.length > 0
+                  ? 'border-[#FF6C9A]'
+                  : 'border-[#B2B5BD]',
+                'mt-5 h-[56px] w-full rounded-2xl border pl-5 text-[16px] font-normal text-[#111114]',
+              )}
               placeholder="닉네임을 입력해주세요"
               placeholderTextColor="#B2B5BD"
               maxLength={12}
@@ -196,26 +202,26 @@ const NicknameInputScreen = () => {
           </View>
 
           {/* input 하단 텍스트 */}
-          <View className="flex-row mx-2 items-center justify-between">
-            <View className="flex-row items-center mt-3">
+          <View className="mx-2 flex-row items-center justify-between">
+            <View className="mt-3 flex-row items-center">
               {isAvailable === true ? (
                 <>
                   <CheckIcon />
-                  <Text className="text-[#000000] text-[16px] font-normal ml-3">
+                  <Text className="ml-3 text-[16px] font-normal text-[#000000]">
                     사용할 수 있는 닉네임이에요
                   </Text>
                 </>
               ) : errorMessage ? (
                 <>
                   <FailedIcon />
-                  <Text className="text-[#FF6C6C] text-[16px] font-normal ml-3">
+                  <Text className="ml-3 text-[16px] font-normal text-[#FF6C6C]">
                     {errorMessage}
                   </Text>
                 </>
               ) : null}
             </View>
-            <View className="top-3 absolute right-0">
-              <Text className="text-[#B2B5BD] text-[16px] font-normal">
+            <View className="absolute right-0 top-3">
+              <Text className="text-[16px] font-normal text-[#B2B5BD]">
                 ({userNickname.length}/12)
               </Text>
             </View>
@@ -246,7 +252,7 @@ const NicknameInputScreen = () => {
                 focus ? () => Keyboard.dismiss() : () => setIsTermsOpen(true)
               }
               disabled={focus ? false : !isAvailable}>
-              <Text className="text-white text-[20px] font-bold">
+              <Text className="text-[20px] font-bold text-white">
                 {focus ? '확인' : '다음'}
               </Text>
             </Pressable>

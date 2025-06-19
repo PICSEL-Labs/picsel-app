@@ -1,11 +1,6 @@
 import { create } from 'zustand';
 
-interface Brand {
-  brandId: string;
-  name: string;
-  description: string;
-  iconImageUrl: string;
-}
+import { Brand } from '@/feature/brand/types/brandType';
 
 interface BrandStore {
   brandList: Brand[];

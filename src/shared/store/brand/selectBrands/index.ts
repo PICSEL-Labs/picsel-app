@@ -7,8 +7,8 @@ interface SelectedBrand {
 
 interface BrandStore {
   selectedList: SelectedBrand[];
-  selectBrand: (id: string, name: string) => void;
-  removeBrand: (id: string) => void;
+  selectBrand: (brandId: string, name: string) => void;
+  removeBrand: (brandId: string) => void;
 }
 
 export const useSelectedBrandsStore = create<BrandStore>(set => ({
@@ -21,7 +21,7 @@ export const useSelectedBrandsStore = create<BrandStore>(set => ({
 
       if (brandId === 'NONE') {
         return {
-          selectedList: isSelected ? [] : [{ brandId: brandId, name }],
+          selectedList: isSelected ? [] : [{ brandId, name }],
         };
       }
 
@@ -35,7 +35,7 @@ export const useSelectedBrandsStore = create<BrandStore>(set => ({
         };
       } else {
         return {
-          selectedList: [...filtered, { brandId: brandId, name }],
+          selectedList: [...filtered, { brandId, name }],
         };
       }
     }),

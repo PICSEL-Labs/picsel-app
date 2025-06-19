@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
-import { HighlightedText } from '@/shared/components/common/HighlightedText';
+import { HighlightedText } from '@/shared/components/HighlightedText';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { ONBOARDING_TEXT } from '@/shared/constants/onboardingText';
 import { WIDTH } from '@/shared/constants/size';

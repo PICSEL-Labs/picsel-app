@@ -9,7 +9,7 @@ import {
   LoginResponse,
   SocialTypes,
 } from '@/feature/auth/login/types';
-import { HighlightedText } from '@/shared/components/common/HighlightedText';
+import { HighlightedText } from '@/shared/components/HighlightedText';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useUserStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';

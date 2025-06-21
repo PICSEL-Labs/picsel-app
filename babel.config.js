@@ -3,6 +3,7 @@ module.exports = {
   plugins: [
     // nativewind
     'nativewind/babel',
+    'react-native-reanimated/plugin',
     [
       // 절대경로
       'module-resolver',

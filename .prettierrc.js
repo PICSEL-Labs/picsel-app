@@ -8,4 +8,5 @@ module.exports = {
   printWidth: 80,
   semi: true,
   parser: 'typescript',
+  plugins: ['prettier-plugin-tailwindcss'],
 };

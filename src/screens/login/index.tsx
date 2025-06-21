@@ -1,0 +1,108 @@
+import React from 'react';
+
+import { useNavigation } from '@react-navigation/native';
+import { View, Text, Pressable } from 'react-native';
+
+import { loginApi, loginStrategies } from '@/feature/auth/login/api/loginApi';
+import {
+  LoginRequest,
+  LoginResponse,
+  SocialTypes,
+} from '@/feature/auth/login/types';
+import { HighlightedText } from '@/shared/components/HighlightedText';
+import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { useUserStore } from '@/shared/store';
+import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+
+const LoginScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  const {
+    setSocialAccessToken,
+    setAccessToken,
+    setRefreshToken,
+    setUserSocialType,
+    userSocialType,
+  } = useUserStore();
+
+  const handleSocialLogin = async (socialType: SocialTypes) => {
+    try {
+      const socialAccessToken = await loginStrategies[socialType]();
+      setSocialAccessToken(socialAccessToken);
+      setUserSocialType(socialType);
+      await handleLogin({ socialType, socialAccessToken });
+    } catch (err) {
+      console.error(`${socialType} 로그인 실패:`, err);
+    }
+  };
+
+  const handleLogin = async (loginPayload: LoginRequest) => {
+    try {
+      const response = await loginApi(loginPayload);
+      console.log('로그인 성공:', response.data);
+
+      if (response.data.signUp) {
+        handleSuccessfulLogin(response);
+      } else {
+        setUserSocialType(response.data.socialType);
+
+        navigation.navigate('SignupRoute');
+      }
+    } catch (err) {
+      console.error('로그인 실패:', err);
+    }
+  };
+
+  const handleSuccessfulLogin = (response: LoginResponse) => {
+    setSocialAccessToken(null);
+    setAccessToken(response.data.accessToken);
+    setRefreshToken(response.data.refreshToken);
+    setUserSocialType(response.data.socialType);
+
+    navigation.navigate('Home');
+  };
+
+  return (
+    <ScreenLayout>
+      <View className="flex-1 items-center justify-center">
+        <View className="items-center">
+          <HighlightedText
+            text={`세상의 모든 포토부스\n검색부터 보관까지\n모두 [픽셀]에서 더 쉽고 즐겁게!`}
+            fontSize="text-[24px]"
+            fontWeight="font-semibold"
+          />
+          <View className="mt-10 h-[200px] w-[320px] bg-gray-500" />
+        </View>
+
+        <View className="flex-row flex-wrap justify-center gap-1 pt-10">
+          {(['KAKAO', 'NAVER', 'GOOGLE', 'APPLE'] as SocialTypes[]).map(
+            type => (
+              <Pressable
+                key={type}
+                onPress={() => handleSocialLogin(type)}
+                className="mx-1 mb-2 h-[67px] w-[79px] items-center justify-center bg-gray-400">
+                <Text className="text-[20px] font-normal text-black">
+                  {type === 'KAKAO'
+                    ? '카카오톡'
+                    : type === 'NAVER'
+                      ? '네이버'
+                      : type === 'GOOGLE'
+                        ? '구글'
+                        : '애플'}
+                </Text>
+              </Pressable>
+            ),
+          )}
+        </View>
+
+        {userSocialType && (
+          <View>
+            <Text>최근 로그인: {userSocialType}</Text>
+          </View>
+        )}
+      </View>
+    </ScreenLayout>
+  );
+};
+
+export default LoginScreen;

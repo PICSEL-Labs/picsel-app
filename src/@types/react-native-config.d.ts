@@ -19,6 +19,7 @@ declare module 'react-native-config' {
 
     // API
     API_KEY: string;
+    IMAGE_URL: string;
   }
 
   export const Config: NativeConfig;

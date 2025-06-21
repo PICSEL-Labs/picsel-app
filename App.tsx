@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, { useEffect } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,7 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 
-import MainStack from '@/feature/navigation';
+import MainRoute from '@/navigation';
 
 const queryClient = new QueryClient();
 
@@ -29,7 +22,7 @@ function App() {
       <SafeAreaProvider>
         <GestureHandlerRootView>
           <NavigationContainer>
-            <MainStack />
+            <MainRoute />
           </NavigationContainer>
         </GestureHandlerRootView>
       </SafeAreaProvider>

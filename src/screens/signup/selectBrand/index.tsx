@@ -63,7 +63,7 @@ const SelectBrandScreen = () => {
       console.log(err);
     }
 
-    // navigation.navigate('SignupSuccess');
+    navigation.navigate('SignupSuccess');
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

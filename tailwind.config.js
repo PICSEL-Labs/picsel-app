@@ -3,6 +3,12 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './App.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        'nanum-square-extra-bold': ['NanumSquareRoundEB'],
+        'nanum-square-bold': ['NanumSquareRoundB'],
+        'nanum-square-regular': ['NanumSquareRoundR'],
+        'nanum-square-light': ['NanumSquareRoundL'],
+      },
       colors: {
         pink: {
           100: '#F5F5F5',
@@ -73,5 +79,98 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const typoUtilities = {
+        // Title
+        '.title-05': {
+          fontSize: '24px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundEB',
+        },
+        '.title-03': {
+          fontSize: '22px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundEB',
+        },
+        '.title-02': {
+          fontSize: '20px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundEB',
+        },
+        '.title-01': {
+          fontSize: '18px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundEB',
+        },
+
+        // Headline
+        '.headline-05': {
+          fontSize: '24px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundB',
+        },
+        '.headline-04': {
+          fontSize: '20px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundB',
+        },
+        '.headline-03': {
+          fontSize: '18px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundB',
+        },
+        '.headline-02': {
+          fontSize: '16px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundB',
+        },
+        '.headline-01': {
+          fontSize: '14px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundB',
+        },
+
+        // Body Regular
+        '.body-rg-04': {
+          fontSize: '18px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundR',
+        },
+        '.body-rg-03': {
+          fontSize: '16px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundR',
+        },
+        '.body-rg-02': {
+          fontSize: '14px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundR',
+        },
+        '.body-rg-01': {
+          fontSize: '12px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundR',
+        },
+
+        // Body Light
+        '.body-lt-03': {
+          fontSize: '16px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundL',
+        },
+        '.body-lt-02': {
+          fontSize: '14px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundL',
+        },
+        '.body-lt-01': {
+          fontSize: '12px',
+          lineHeight: '150%',
+          fontFamily: 'NanumSquareRoundL',
+        },
+      };
+      addUtilities(typoUtilities);
+    },
+  ],
 };

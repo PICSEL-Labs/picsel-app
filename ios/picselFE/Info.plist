@@ -28,7 +28,7 @@
 		<string>위치 권한이 필요합니다.</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>위치 권한이 필요합니다.</string>
+	<string/>
 	<key>NMFNcpKeyId</key>
 	<string>$(NAVER_MAP_CLIENT_ID)</string>
 	<key>NMFClientId</key>
@@ -83,8 +83,6 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -99,5 +97,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>NanumSquareRoundB.ttf</string>
+		<string>NanumSquareRoundEB.ttf</string>
+		<string>NanumSquareRoundL.ttf</string>
+		<string>NanumSquareRoundR.ttf</string>
+	</array>
 </dict>
 </plist>

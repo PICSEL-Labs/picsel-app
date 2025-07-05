@@ -6,18 +6,18 @@ import Kakao from '@/assets/button/button-kakao.svg';
 import Naver from '@/assets/button/button-naver.svg';
 
 interface Props {
-  shape: 'kakao' | 'naver' | 'google' | 'apple';
+  shape: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';
 }
 
 const SocialButtons = ({ shape }: Props) => {
   switch (shape) {
-    case 'kakao':
+    case 'KAKAO':
       return <Kakao />;
-    case 'apple':
+    case 'APPLE':
       return <Apple />;
-    case 'google':
+    case 'GOOGLE':
       return <Google />;
-    case 'naver':
+    case 'NAVER':
       return <Naver />;
     default:
       return <Kakao />;

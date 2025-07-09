@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Modal, TouchableWithoutFeedback, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  useSharedValue,
-  withSpring,
-  useAnimatedStyle,
-  runOnJS,
-} from 'react-native-reanimated';
+import { GestureDetector } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
+
+import { useModalService } from '../../model/useModalService';
 
 import TermsAgreementList from './TermsAgreementList';
 import TermsModalHeader from './TermsModalHeader';
@@ -18,7 +15,7 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   title: string;
-  handleSignup: () => void;
+  handleSignup: () => Promise<void>;
   checkedStates: boolean[];
   setCheckedStates: React.Dispatch<React.SetStateAction<boolean[]>>;
   allChecked: boolean;
@@ -39,33 +36,11 @@ const TermsModal = ({
   toggleAll,
   toggleItem,
 }: Props) => {
-  const translateY = useSharedValue(0);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
-
-  const panGesture = Gesture.Pan()
-    .onUpdate(event => {
-      if (event.y < 50) {
-        return;
-      }
-      translateY.value = event.translationY;
-    })
-    .onEnd(event => {
-      if (event.translationY > 200) {
-        runOnJS(onClose)();
-      } else {
-        translateY.value = withSpring(0);
-      }
-    });
-
-  useEffect(() => {
-    if (visible) {
-      setCheckedStates([false, false, false, false, false]);
-      translateY.value = 0;
-    }
-  }, [visible]);
+  const { panGesture, animatedStyle } = useModalService({
+    visible,
+    onClose,
+    setCheckedStates,
+  });
 
   return (
     <Modal visible={visible} transparent animationType="slide">

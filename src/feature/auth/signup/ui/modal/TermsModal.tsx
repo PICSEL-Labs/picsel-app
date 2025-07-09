@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import { Modal, TouchableWithoutFeedback, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -17,7 +17,7 @@ interface Props {
   title: string;
   handleSignup: () => Promise<void>;
   checkedStates: boolean[];
-  setCheckedStates: React.Dispatch<React.SetStateAction<boolean[]>>;
+  setCheckedStates: Dispatch<SetStateAction<boolean[]>>;
   allChecked: boolean;
   isRequiredAllChecked: boolean;
   toggleAll: () => void;

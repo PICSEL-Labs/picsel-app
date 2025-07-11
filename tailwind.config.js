@@ -8,6 +8,7 @@ module.exports = {
         'nanum-square-bold': ['NanumSquareRoundB'],
         'nanum-square-regular': ['NanumSquareRoundR'],
         'nanum-square-light': ['NanumSquareRoundL'],
+        'nanum-square-ac-regular': ['NanumSquare_acR'],
       },
       colors: {
         pink: {

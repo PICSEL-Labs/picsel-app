@@ -3,13 +3,13 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
+import { verticalScale } from 'react-native-size-matters';
 
 import { paginationStyles } from './styles';
 
 import { HighlightedText } from '@/shared/components/HighlightedText';
 import { WIDTH } from '@/shared/constants/size';
 import { ONBOARDING_TEXT } from '@/shared/constants/text/onboardingText';
-import responsive from '@/shared/utils/responsive';
 
 const OnboardingCarousel = () => {
   const progress = useSharedValue(0);
@@ -19,7 +19,7 @@ const OnboardingCarousel = () => {
       <Carousel
         loop
         width={WIDTH}
-        height={responsive(500)}
+        height={verticalScale(400)}
         data={ONBOARDING_TEXT}
         autoPlay
         autoPlayInterval={3000}
@@ -27,7 +27,7 @@ const OnboardingCarousel = () => {
         onProgressChange={(_, p) => (progress.value = p)}
         renderItem={({ item }) => (
           <View className="items-center pt-20">
-            <View className="mb-14 h-[110px] items-center">
+            <View className="mb-14 h-[120px] items-center">
               <HighlightedText text={item.text} font="title-05" />
             </View>
             <View className={`${item.color} h-[280px] w-[220px] rounded-3xl`} />

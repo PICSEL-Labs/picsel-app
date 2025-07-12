@@ -2,8 +2,8 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import BrandSearchScreen from '@/screens/signup/brandSearch';
 import NicknameInputScreen from '@/screens/signup/nicknameInput';
+import BrandSearchScreen from '@/screens/signup/searchBrand';
 import SelectBrandScreen from '@/screens/signup/selectBrand';
 import SignupSuccessScreen from '@/screens/signup/signupSuccess';
 
@@ -12,6 +12,7 @@ export type SignupNavigationProps = {
   SelectBrand: undefined;
   BrandSearch: undefined;
   SignupSuccess: undefined;
+  Home: undefined;
 };
 
 const SignupRoute = () => {
@@ -27,7 +28,7 @@ const SignupRoute = () => {
         name="SelectBrand"
         component={SelectBrandScreen}
         options={{
-          gestureEnabled: false, // iOS 스와이프 뒤로가기 방지
+          gestureEnabled: false, // iOS 스와이프 뒤로가기 방지 & android 설절 필요
         }}
       />
 
@@ -39,7 +40,7 @@ const SignupRoute = () => {
         name="SignupSuccess"
         component={SignupSuccessScreen}
         options={{
-          gestureEnabled: false, // iOS 스와이프 뒤로가기 방지
+          gestureEnabled: false, // iOS 스와이프 뒤로가기 방지 & android 설절 필요
         }}
       />
     </Stack.Navigator>

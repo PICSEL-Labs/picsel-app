@@ -11,28 +11,27 @@ import CheckboxIcons from '@/shared/icons/CheckboxIcons';
 import CheckIcons from '@/shared/icons/CheckIcons';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import CloseIcons from '@/shared/icons/CloseIcons';
-import CopyIcons from '@/shared/icons/CopyIcons/indes';
+import CopyIcons from '@/shared/icons/CopyIcons';
 import FloatingButton from '@/shared/icons/FloatingButton';
 import LocateIcons from '@/shared/icons/LocateIcons';
 import MapIcons from '@/shared/icons/MapIcons';
 import MyIcons from '@/shared/icons/MyIcons';
-import QrIcons from '@/shared/icons/QrIcons/idnex';
+import QrIcons from '@/shared/icons/QrIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
-import SearchIcons from '@/shared/icons/SearchIcons';
 import SemanticIcons from '@/shared/icons/SemanticIcons';
-import SocialButtons from '@/shared/icons/SocialButtons';
 import SparkleIcons from '@/shared/icons/SparkleIcons';
 import StarIcons from '@/shared/icons/StarIcons';
+import Button from '@/shared/ui/atoms/Button';
 
 const Test = () => {
   return (
     <SafeAreaView className="h-full flex-1 bg-pink-200">
-      <Text className="text-primary-black title-05">
+      <Text className="text-primary-pink title-01">
         The quick brown fox jumps over the lazy dog
       </Text>
 
       <View className="flex-row">
-        <SparkleIcons shape="off" height={50} width={50} />
+        <CheckboxIcons shape="check-gray" height={50} width={50} />
         <SparkleIcons shape="on" height={50} width={50} />
         <SparkleIcons shape="double" height={50} width={50} />
       </View>
@@ -73,8 +72,6 @@ const Test = () => {
         <QrIcons shape="on-2" width={24} height={24} />
       </View>
 
-      <SearchIcons shape="default" width={24} height={24} />
-
       <View className="flex-row">
         <CloseIcons shape="black" width={24} height={24} />
         <CloseIcons shape="gray" width={24} height={24} />
@@ -112,14 +109,15 @@ const Test = () => {
 
       <Gradient />
 
-      <View className="flex-row">
-        <SocialButtons shape="kakao" />
-        <SocialButtons shape="google" />
-        <SocialButtons shape="apple" />
-        <SocialButtons shape="naver" />
-      </View>
-
       <FloatingButton shape="floating" />
+
+      <Button
+        onPressIn={() => console.log('hi')}
+        color="white"
+        textColor="white"
+        text="다음으로"
+        shadow
+      />
     </SafeAreaView>
   );
 };

@@ -28,7 +28,7 @@ const LoginScreen = () => {
                 key={type}
                 type={type}
                 isLastLogin={userSocialType === type}
-                onPress={handleSocialLogin}
+                onPressIn={handleSocialLogin}
               />
             ),
           )}

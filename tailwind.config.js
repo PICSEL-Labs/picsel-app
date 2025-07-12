@@ -82,92 +82,108 @@ module.exports = {
   },
   plugins: [
     function ({ addUtilities }) {
+      // 기준 디바이스 크기 (iPhone X 기준)
+      const baseWidth = 375;
+
+      // 평균적인 디바이스 크기로 스케일링 계산
+      const moderateScale = (size, factor = 0.3) => {
+        // 일반적인 모바일 디바이스 범위: 320~428px
+        const avgWidth = 375;
+        const scale = avgWidth / baseWidth;
+        return Math.round(size + (scale - 1) * factor * size);
+      };
+
+      const verticalScale = size => {
+        // 세로 스케일은 보수적으로 적용
+        return Math.round(size * 1.1);
+      };
+
       const typoUtilities = {
         // Title
         '.title-05': {
-          fontSize: 24,
-          lineHeight: '36px',
+          fontSize: moderateScale(24, 0.3),
+          lineHeight: `${verticalScale(36)}px`,
           fontFamily: 'NanumSquareRoundEB',
         },
         '.title-03': {
-          fontSize: 22,
-          lineHeight: '33px',
+          fontSize: moderateScale(22, 0.3),
+          lineHeight: `${verticalScale(33)}px`,
           fontFamily: 'NanumSquareRoundEB',
         },
         '.title-02': {
-          fontSize: 20,
-          lineHeight: '30px',
+          fontSize: moderateScale(20, 0.3),
+          lineHeight: `${verticalScale(30)}px`,
           fontFamily: 'NanumSquareRoundEB',
         },
         '.title-01': {
-          fontSize: 18,
-          lineHeight: '27px',
+          fontSize: moderateScale(18, 0.3),
+          lineHeight: `${verticalScale(27)}px`,
           fontFamily: 'NanumSquareRoundEB',
         },
 
         // Headline
         '.headline-05': {
-          fontSize: 24,
-          lineHeight: '36px',
+          fontSize: moderateScale(24, 0.3),
+          lineHeight: `${verticalScale(36)}px`,
           fontFamily: 'NanumSquareRoundB',
         },
         '.headline-04': {
-          fontSize: 20,
-          lineHeight: '30px',
+          fontSize: moderateScale(20, 0.3),
+          lineHeight: `${verticalScale(30)}px`,
           fontFamily: 'NanumSquareRoundB',
         },
         '.headline-03': {
-          fontSize: 18,
-          lineHeight: '27px',
+          fontSize: moderateScale(18, 0.3),
+          lineHeight: `${verticalScale(27)}px`,
           fontFamily: 'NanumSquareRoundB',
         },
         '.headline-02': {
-          fontSize: 16,
-          lineHeight: '24px',
+          fontSize: moderateScale(16, 0.3),
+          lineHeight: `${verticalScale(24)}px`,
           fontFamily: 'NanumSquareRoundB',
         },
         '.headline-01': {
-          fontSize: 14,
-          lineHeight: '21px',
+          fontSize: moderateScale(14, 0.3),
+          lineHeight: `${verticalScale(21)}px`,
           fontFamily: 'NanumSquareRoundB',
         },
 
         // Body Regular
         '.body-rg-04': {
-          fontSize: 18,
-          lineHeight: '27px',
+          fontSize: moderateScale(18, 0.3),
+          lineHeight: `${verticalScale(27)}px`,
           fontFamily: 'NanumSquareRoundR',
         },
         '.body-rg-03': {
-          fontSize: 16,
-          lineHeight: '24px',
+          fontSize: moderateScale(16, 0.3),
+          lineHeight: `${verticalScale(24)}px`,
           fontFamily: 'NanumSquareRoundR',
         },
         '.body-rg-02': {
-          fontSize: 14,
-          lineHeight: '21px',
+          fontSize: moderateScale(14, 0.3),
+          lineHeight: `${verticalScale(21)}px`,
           fontFamily: 'NanumSquareRoundR',
         },
         '.body-rg-01': {
-          fontSize: 12,
-          lineHeight: '18px',
+          fontSize: moderateScale(12, 0.3),
+          lineHeight: `${verticalScale(18)}px`,
           fontFamily: 'NanumSquareRoundR',
         },
 
         // Body Light
         '.body-lt-03': {
-          fontSize: 16,
-          lineHeight: '24px',
+          fontSize: moderateScale(16, 0.3),
+          lineHeight: `${verticalScale(24)}px`,
           fontFamily: 'NanumSquareRoundL',
         },
         '.body-lt-02': {
-          fontSize: 14,
-          lineHeight: '21px',
+          fontSize: moderateScale(14, 0.3),
+          lineHeight: `${verticalScale(21)}px`,
           fontFamily: 'NanumSquareRoundL',
         },
         '.body-lt-01': {
-          fontSize: 12,
-          lineHeight: '18px',
+          fontSize: moderateScale(12, 0.3),
+          lineHeight: `${verticalScale(18)}px`,
           fontFamily: 'NanumSquareRoundL',
         },
       };

@@ -5,13 +5,6 @@
   },
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "eslint.run": "onSave",
-  "cSpell.words": [ // cSpell extends 스펠 체크 오류 fix
-    "Kakao",
-    "Pressable", 
-    "Kakao",
-    "nativewind",
-    "PICSEL"
-  ],
   "java.configuration.updateBuildConfiguration": "automatic",
   "gitmoji.onlyUseCustomEmoji": true,
   "gitmoji.addCustomEmoji": [

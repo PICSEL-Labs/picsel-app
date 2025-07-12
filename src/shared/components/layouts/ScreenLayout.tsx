@@ -9,7 +9,7 @@ interface Props extends ViewProps {
 
 const ScreenLayout = ({ children, ...rest }: Props) => {
   return (
-    <SafeAreaView className="flex-1 bg-white w-full h-full" {...rest}>
+    <SafeAreaView className="h-full w-full flex-1 bg-white" {...rest}>
       {children}
     </SafeAreaView>
   );

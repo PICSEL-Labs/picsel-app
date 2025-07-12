@@ -8,32 +8,24 @@ import { cn } from '@/shared/lib/cn';
 interface Props {
   text: string;
   keyword?: string;
-  fontSize:
-    | 'text-xs'
-    | 'text-sm'
-    | 'text-base'
-    | 'text-lg'
-    | 'text-xl'
-    | 'text-2xl'
-    | string;
+  font?: string;
   color?: string;
   highlightColor?: string;
-  fontWeight?: 'font-normal' | 'font-medium' | 'font-semibold' | string;
-  highlightWeight?: 'font-bold' | 'font-extrabold' | string;
   textAlign?: 'text-left' | 'text-center' | 'text-right';
-  leading?: string;
+  search?: boolean;
+  highlightWeight?: string;
+  fontWeight?: string;
 }
 
 export const HighlightedText = ({
   text,
   keyword,
-  fontSize,
-  fontWeight = 'font-semibold',
-  highlightWeight = 'font-bold',
+  font,
   textAlign = 'text-center',
-  color = '#111114',
-  highlightColor = '#FF6C9A',
-  leading = 'leading-[36px]',
+  color = 'text-gray-900',
+  highlightColor = 'text-pink-500',
+  highlightWeight,
+  fontWeight,
 }: Props) => {
   const formattedText = keyword
     ? text.replace(new RegExp(`(${keyword})`, 'gi'), '[$1]')
@@ -42,14 +34,14 @@ export const HighlightedText = ({
   const parts = useHighlightText(formattedText);
 
   return (
-    <Text
-      className={cn(fontSize, fontWeight, textAlign, leading)}
-      style={{ color }}>
+    <Text className={cn(font, textAlign)} style={{ color }}>
       {parts.map((part, index) => (
         <Text
           key={index}
-          className={cn(part.highlight ? highlightWeight : fontWeight)}
-          style={{ color: part.highlight ? highlightColor : color }}>
+          className={cn(
+            part.highlight ? highlightColor : color,
+            part.highlight ? highlightWeight : fontWeight,
+          )}>
           {part.text}
         </Text>
       ))}

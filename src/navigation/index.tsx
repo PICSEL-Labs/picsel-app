@@ -3,8 +3,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SignupRoute from './route/signup';
+import BottomTabBar from './tabs/BottomTabBar';
 
-import HomeScreen from '@/screens/home';
 import LoginScreen from '@/screens/login';
 import OnboardingScreen from '@/screens/onboarding';
 
@@ -26,7 +26,7 @@ const MainRoute = () => {
 
       <Stack.Screen name="SignupRoute" component={SignupRoute} />
 
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Home" component={BottomTabBar} />
     </Stack.Navigator>
   );
 };

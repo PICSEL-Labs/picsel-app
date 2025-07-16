@@ -22,8 +22,8 @@ const OnboardingCarousel = () => {
         height={verticalScale(400)}
         data={ONBOARDING_TEXT}
         autoPlay
-        autoPlayInterval={3000}
-        scrollAnimationDuration={1000}
+        autoPlayInterval={1000}
+        scrollAnimationDuration={800}
         onProgressChange={(_, p) => (progress.value = p)}
         renderItem={({ item }) => (
           <View className="items-center pt-20">
@@ -35,7 +35,7 @@ const OnboardingCarousel = () => {
         )}
       />
 
-      <View className="flex-row items-center justify-center pt-12">
+      <View className="mb-[88px] flex-1 justify-end">
         <Pagination.Basic
           progress={progress}
           data={ONBOARDING_TEXT.slice(0, 4)}

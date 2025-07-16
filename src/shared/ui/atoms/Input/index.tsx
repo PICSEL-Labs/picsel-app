@@ -15,6 +15,7 @@ interface Props extends TextInputProps {
   arrow?: boolean;
   close?: boolean;
   handleClear: () => void;
+  paddingBottom?: number;
 }
 
 const Input = ({
@@ -24,9 +25,12 @@ const Input = ({
   arrow,
   close,
   handleClear,
+  paddingBottom = 32,
   ...props
 }: Props) => (
-  <View className="mx-4 mt-5 items-center justify-center pb-8">
+  <View
+    className="mx-4 mt-5 items-center justify-center"
+    style={{ paddingBottom: paddingBottom }}>
     <View className="w-full rounded-full bg-white shadow" style={inputShadow}>
       <View className="absolute left-5 top-[11px]">
         {search && <SearchIcons shape="gray" width={24} height={24} />}

@@ -2,7 +2,12 @@ import React from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+
+import MapSearchControls from '@/shared/ui/organisms/MapSearchControls';
 
 // 초기 카메라 위치 설정
 const INITIAL_CAMERA = {
@@ -12,10 +17,17 @@ const INITIAL_CAMERA = {
 };
 
 const HomeScreen = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <SafeAreaView className="flex-1" edges={['left', 'right']}>
       <View className="flex-1">
         <NaverMapView style={{ flex: 1 }} initialCamera={INITIAL_CAMERA} />
+        <View
+          className="absolute left-[16px] right-[16px]"
+          style={{ top: insets.top, zIndex: 10 }}>
+          <MapSearchControls />
+        </View>
       </View>
     </SafeAreaView>
   );

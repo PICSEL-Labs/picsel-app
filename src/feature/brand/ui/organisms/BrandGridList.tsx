@@ -16,7 +16,7 @@ interface Props {
     brandId: string;
     name: string;
   }[];
-  onPressIn: (brandId: string, name: string) => void;
+  onPress: (brandId: string, name: string) => void;
   keyword?: string;
   highlight?: boolean;
 }
@@ -24,7 +24,7 @@ interface Props {
 const BrandGridList = ({
   brandList,
   selectedList,
-  onPressIn,
+  onPress,
   keyword = '',
   highlight = false,
 }: Props) => {
@@ -40,8 +40,7 @@ const BrandGridList = ({
             return (
               <View key={item.brandId} className="flex-1 items-center">
                 <View style={commonShadow} className="mb-[7px] rounded-full">
-                  <Pressable
-                    onPressIn={() => onPressIn(item.brandId, item.name)}>
+                  <Pressable onPress={() => onPress(item.brandId, item.name)}>
                     <ImageBackground
                       source={{ uri: Config.IMAGE_URL + item.iconImageUrl }}
                       className="h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full bg-white">

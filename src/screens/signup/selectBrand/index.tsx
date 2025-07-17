@@ -61,7 +61,7 @@ const SelectBrandScreen = () => {
         <BrandGridList
           brandList={brandList}
           selectedList={selectedList}
-          onPressIn={selectBrand}
+          onPress={selectBrand}
         />
       </ScrollView>
 

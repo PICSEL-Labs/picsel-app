@@ -14,7 +14,7 @@ export const useButtonService = ({ focus }: Props) => {
     const keyboardWillShow = Keyboard.addListener('keyboardWillShow', e => {
       Animated.timing(keyboardHeight, {
         toValue: e.endCoordinates.height,
-        duration: 450,
+        duration: 300,
         useNativeDriver: false,
       }).start();
     });
@@ -22,7 +22,7 @@ export const useButtonService = ({ focus }: Props) => {
     const keyboardWillHide = Keyboard.addListener('keyboardWillHide', () => {
       Animated.timing(keyboardHeight, {
         toValue: 0,
-        duration: 750,
+        duration: 300,
         useNativeDriver: false,
       }).start();
     });
@@ -36,7 +36,7 @@ export const useButtonService = ({ focus }: Props) => {
   useEffect(() => {
     Animated.timing(buttonWidth, {
       toValue: 330,
-      duration: 250,
+      duration: 300,
       useNativeDriver: false,
     }).start();
   }, [focus]);

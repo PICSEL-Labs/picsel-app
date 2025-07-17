@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 import Input from '../../atoms/Input';
-import BrandFilterButton from '../../molecules/BrandFilterButton';
+
+import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
 
 const MapSearchControls = () => {
   const [brandName, setBrandName] = useState('');
@@ -16,10 +17,10 @@ const MapSearchControls = () => {
         placeholder="브랜드명, 매장명, 위치 검색"
         search
         close
-        paddingBottom={8}
+        className="pb-[8px]"
       />
       <BrandFilterButton
-        isActive={isFilterActive}
+        variant={isFilterActive ? 'active' : 'inactive'}
         onPress={() => setIsFilterActive(prev => !prev)}
       />
     </>

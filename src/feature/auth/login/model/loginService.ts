@@ -19,9 +19,8 @@ export const useLoginService = (navigation: NavigationProp<any>) => {
       const socialAccessToken = await loginStrategies[socialType]();
 
       setSocialAccessToken(socialAccessToken);
-      setUserSocialType(socialType);
 
-      await handleLogin({ socialType, socialAccessToken });
+      handleLogin({ socialType, socialAccessToken });
     } catch (err) {
       console.error(`${socialType} 로그인 실패:`, err);
     }
@@ -35,8 +34,8 @@ export const useLoginService = (navigation: NavigationProp<any>) => {
         handleSuccessfulLogin(response);
       } else {
         // 회원가입 필요
-        setUserSocialType(response.data.socialType);
         navigation.navigate('SignupRoute');
+        setUserSocialType(response.data.socialType);
       }
     } catch (err) {
       console.error('로그인 실패:', err);

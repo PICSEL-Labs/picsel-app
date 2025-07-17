@@ -73,6 +73,7 @@ const NicknameInputScreen = () => {
           handleChange={handleNicknameChange}
           handleClear={handleClear}
           setFocus={setFocus}
+          errorMessage={errorMessage}
           userNickname={userNickname}>
           <NicknameFeedback
             errorMessage={errorMessage}

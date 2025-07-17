@@ -1,14 +1,10 @@
 import React from 'react';
 
 import { Pressable, View } from 'react-native';
-import { Text } from 'react-native';
-import { scale } from 'react-native-size-matters';
 
 import { SocialTypes } from '@/feature/auth/login/types';
-import { TOOLTIP_CONFIG } from '@/shared/constants/tooltip';
+import LoginTooltip from '@/feature/auth/login/ui/organisms/LoginTooltip';
 import SocialButtons from '@/shared/icons/SocialButtons';
-import Tooltip from '@/shared/icons/Tooltip';
-import { boxShadow } from '@/styles/boxShadow';
 import { commonShadow } from '@/styles/shadow';
 
 interface Props {
@@ -18,8 +14,6 @@ interface Props {
 }
 
 const SocialLoginButton = ({ type, isLastLogin, onPressIn }: Props) => {
-  const config = TOOLTIP_CONFIG[type];
-
   return (
     <View className="mx-3 items-center">
       <Pressable
@@ -29,22 +23,7 @@ const SocialLoginButton = ({ type, isLastLogin, onPressIn }: Props) => {
         <SocialButtons shape={type} />
       </Pressable>
 
-      {isLastLogin && (
-        <View
-          className="j absolute top-[72px] z-10 mt-1 items-center rounded-3xl bg-primary-pink px-3 py-2"
-          style={{
-            width: scale(188),
-            ...boxShadow,
-            ...config.offset,
-          }}>
-          <View className="absolute -top-1.5 z-0" style={config.tooltipDir}>
-            <Tooltip shape={config.shape} />
-          </View>
-          <Text className="text-white body-rg-02">
-            마지막으로 로그인한 계정이에요!
-          </Text>
-        </View>
-      )}
+      {isLastLogin && <LoginTooltip type={type} />}
     </View>
   );
 };

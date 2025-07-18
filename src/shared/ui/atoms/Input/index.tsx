@@ -26,8 +26,8 @@ const Input = ({
   handleClear,
   ...props
 }: Props) => (
-  <View className="mx-4 mt-5 items-center justify-center pb-8">
-    <View className="w-full rounded-full bg-white shadow" style={inputShadow}>
+  <>
+    <View className="mx-4 rounded-full bg-white shadow" style={inputShadow}>
       <View className="absolute left-5 top-[11px]">
         {search && <SearchIcons shape="gray" width={24} height={24} />}
         {arrow && <ArrowIcons shape="back" width={24} height={24} />}
@@ -45,6 +45,7 @@ const Input = ({
         {...props}
       />
     </View>
+
     {value.length > 0 && close && (
       <Pressable
         className="absolute right-5 top-[11px]"
@@ -52,7 +53,7 @@ const Input = ({
         <CloseIcons shape="gray" width={24} height={24} />
       </Pressable>
     )}
-  </View>
+  </>
 );
 
 export default Input;

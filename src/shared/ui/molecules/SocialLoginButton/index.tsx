@@ -5,15 +5,17 @@ import { Pressable, View } from 'react-native';
 import { SocialTypes } from '@/feature/auth/login/types';
 import LoginTooltip from '@/feature/auth/login/ui/organisms/LoginTooltip';
 import SocialButtons from '@/shared/icons/SocialButtons';
+import { useUserStore } from '@/shared/store';
 import { commonShadow } from '@/styles/shadow';
 
 interface Props {
   type: SocialTypes;
-  isLastLogin: boolean;
   onPressIn: (type: SocialTypes) => void;
 }
 
-const SocialLoginButton = ({ type, isLastLogin, onPressIn }: Props) => {
+const SocialLoginButton = ({ type, onPressIn }: Props) => {
+  const { userSocialType } = useUserStore();
+
   return (
     <View className="mx-3 items-center">
       <Pressable
@@ -23,7 +25,7 @@ const SocialLoginButton = ({ type, isLastLogin, onPressIn }: Props) => {
         <SocialButtons shape={type} />
       </Pressable>
 
-      {isLastLogin && <LoginTooltip type={type} />}
+      {userSocialType === type && <LoginTooltip />}
     </View>
   );
 };

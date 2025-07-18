@@ -19,10 +19,6 @@ const LoginTooltip = () => {
     duration2: 500,
   });
 
-  if (!userSocialType) {
-    return null;
-  }
-
   return (
     <Animated.View
       className="absolute top-[75px] z-10 items-center rounded-3xl bg-primary-pink px-3 py-2"

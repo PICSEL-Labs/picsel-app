@@ -6,7 +6,6 @@ import { View } from 'react-native';
 import { useLoginService } from '@/feature/auth/login/model/loginService';
 import { SocialTypes } from '@/feature/auth/login/types';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { useUserStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import SocialLoginButton from '@/shared/ui/molecules/SocialLoginButton';
 import LoginIntro from '@/shared/ui/organisms/LoginIntro';
@@ -14,7 +13,6 @@ import LoginIntro from '@/shared/ui/organisms/LoginIntro';
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { handleSocialLogin } = useLoginService(navigation);
-  const { userSocialType } = useUserStore();
 
   return (
     <ScreenLayout>
@@ -27,7 +25,6 @@ const LoginScreen = () => {
               <SocialLoginButton
                 key={type}
                 type={type}
-                isLastLogin={userSocialType === type}
                 onPressIn={handleSocialLogin}
               />
             ),

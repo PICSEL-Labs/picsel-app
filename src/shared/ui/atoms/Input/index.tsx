@@ -15,7 +15,7 @@ interface Props extends TextInputProps {
   arrow?: boolean;
   close?: boolean;
   handleClear: () => void;
-  className?: string;
+  container?: string;
 }
 
 const Input = ({
@@ -25,11 +25,11 @@ const Input = ({
   arrow,
   close,
   handleClear,
-  className = 'pb-8',
+  container = '',
   ...props
 }: Props) => (
-  <View className={`mx-4 mt-5 items-center justify-center ${className}`}>
-    <View className="w-full rounded-full bg-white shadow" style={inputShadow}>
+  <View className={container}>
+    <View className="mx-4 rounded-full bg-white" style={inputShadow}>
       <View className="absolute left-5 top-[11px]">
         {search && <SearchIcons shape="gray" width={24} height={24} />}
         {arrow && <ArrowIcons shape="back" width={24} height={24} />}

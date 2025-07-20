@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
-import { View } from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
 
-import MapSearchControls from '@/shared/ui/organisms/MapSearchControls';
+import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
+import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import Input from '@/shared/ui/atoms/Input';
 
 // 초기 카메라 위치 설정
 const INITIAL_CAMERA = {
@@ -17,19 +15,29 @@ const INITIAL_CAMERA = {
 };
 
 const HomeScreen = () => {
-  const insets = useSafeAreaInsets();
+  const [brandName, setBrandName] = useState('');
+  const [isFilterActive, setIsFilterActive] = useState(false);
 
   return (
-    <SafeAreaView className="flex-1" edges={['left', 'right']}>
-      <View className="flex-1">
-        <NaverMapView style={{ flex: 1 }} initialCamera={INITIAL_CAMERA} />
-        <View
-          className="absolute left-[16px] right-[16px]"
-          style={{ top: insets.top, zIndex: 10 }}>
-          <MapSearchControls />
-        </View>
-      </View>
-    </SafeAreaView>
+    <ScreenLayout>
+      <NaverMapView
+        style={StyleSheet.absoluteFillObject}
+        initialCamera={INITIAL_CAMERA}
+      />
+      <Input
+        value={brandName}
+        onChangeText={brand => setBrandName(brand)}
+        handleClear={() => setBrandName('')}
+        placeholder="브랜드명, 매장명, 위치 검색"
+        search
+        close
+        container="pb-[8px]"
+      />
+      <BrandFilterButton
+        variant={isFilterActive ? 'active' : 'inactive'}
+        onPress={() => setIsFilterActive(prev => !prev)}
+      />
+    </ScreenLayout>
   );
 };
 

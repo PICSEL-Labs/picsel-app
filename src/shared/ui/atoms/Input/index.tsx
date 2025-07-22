@@ -25,11 +25,11 @@ const Input = ({
   arrow,
   close,
   handleClear,
-  container = '',
+  container,
   ...props
 }: Props) => (
   <View className={container}>
-    <View className="mx-4 rounded-full bg-white" style={inputShadow}>
+    <View className="mx-4 rounded-full bg-white shadow" style={inputShadow}>
       <View className="absolute left-5 top-[11px]">
         {search && <SearchIcons shape="gray" width={24} height={24} />}
         {arrow && <ArrowIcons shape="back" width={24} height={24} />}
@@ -46,14 +46,15 @@ const Input = ({
         className={INPUT_STYLE}
         {...props}
       />
+
+      {value.length > 0 && close && (
+        <Pressable
+          className="absolute right-5 top-[11px]"
+          onPressIn={handleClear}>
+          <CloseIcons shape="gray" width={24} height={24} />
+        </Pressable>
+      )}
     </View>
-    {value.length > 0 && close && (
-      <Pressable
-        className="absolute right-5 top-[11px]"
-        onPressIn={handleClear}>
-        <CloseIcons shape="gray" width={24} height={24} />
-      </Pressable>
-    )}
   </View>
 );
 

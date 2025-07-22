@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 import Gradient from '@/assets/gradient/gradient.svg';
-import SparkleIcons from '@/shared/icons/SparkleIcons';
+import SparkleImages from '@/shared/images/Sparkle';
 
 const SuccessHeader = () => {
   return (
@@ -14,7 +14,7 @@ const SuccessHeader = () => {
         픽셀러가 된걸 환영해요!{'\n'}세상의 모든 포토부스{'\n'}즐기러 가볼까요?
       </Text>
 
-      <SparkleIcons shape="big" width={340} height={418} />
+      <SparkleImages shape="bg" animationType height={418} width={340} />
     </View>
   );
 };

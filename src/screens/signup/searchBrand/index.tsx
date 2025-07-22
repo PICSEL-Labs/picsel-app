@@ -38,6 +38,7 @@ const SearchBrandScreen = () => {
         placeholder="원하는 포토부스를 검색해보세요"
         search
         close
+        container="mt-5 pb-8"
       />
 
       {brandName.length > 0 && searchedList.length > 0 ? (
@@ -49,7 +50,7 @@ const SearchBrandScreen = () => {
           <BrandGridList
             brandList={searchedList}
             selectedList={selectedList}
-            onPressIn={selectBrand}
+            onPress={selectBrand}
             keyword={brandName}
             highlight
           />

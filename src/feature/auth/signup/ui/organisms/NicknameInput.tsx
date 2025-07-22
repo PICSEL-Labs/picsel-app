@@ -12,6 +12,7 @@ interface Props {
   setFocus: (value: React.SetStateAction<boolean>) => void;
   handleBlur: () => void;
   handleClear: () => void;
+  errorMessage: string;
   children?: React.ReactNode;
 }
 
@@ -21,6 +22,7 @@ const NicknameInput = ({
   setFocus,
   handleBlur,
   handleClear,
+  errorMessage,
   children,
 }: Props) => {
   return (
@@ -28,6 +30,7 @@ const NicknameInput = ({
       <TextInput
         className={cn(
           userNickname.length > 0 ? 'border-pink-500' : 'border-gray-300',
+          errorMessage && 'border-semantic-error',
           NICKNAME_INPUT,
         )}
         placeholder="닉네임을 입력해주세요"

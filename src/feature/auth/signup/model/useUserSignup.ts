@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { signupApi } from '../api/signupApi';
 
@@ -9,7 +9,7 @@ interface Props {
   userSocialType: string;
   userNickname: string;
   checkedStates: boolean[];
-  setIsTermsOpen: (value: SetStateAction<boolean>) => void;
+  closeModal: () => void;
   navigation: SignupNavigationProp;
 }
 
@@ -18,35 +18,40 @@ export const useUserSignup = ({
   userSocialType,
   userNickname,
   checkedStates,
-  setIsTermsOpen,
+  closeModal,
   navigation,
 }: Props) => {
+  const agreementData = useMemo(
+    () => ({
+      ageConsent: checkedStates[0],
+      termsOfService: checkedStates[1],
+      privacyPolicy: checkedStates[2],
+      locationConsent: checkedStates[3],
+      marketingConsent: checkedStates[4],
+    }),
+    [checkedStates],
+  );
+
   const handleSignup = useCallback(async () => {
     try {
       await signupApi({
         socialAccessToken,
         socialType: userSocialType,
         userNickname,
-        userAgreementConsentRequestDto: {
-          ageConsent: checkedStates[0],
-          termsOfService: checkedStates[1],
-          privacyPolicy: checkedStates[2],
-          locationConsent: checkedStates[3],
-          marketingConsent: checkedStates[4],
-        },
+        userAgreementConsentRequestDto: agreementData,
       });
 
-      setIsTermsOpen(false);
+      closeModal();
       navigation.navigate('SelectBrand');
     } catch (err) {
-      console.log(err);
+      console.error('Signup failed:', err);
     }
   }, [
     socialAccessToken,
     userSocialType,
     userNickname,
-    checkedStates,
-    setIsTermsOpen,
+    agreementData,
+    closeModal,
     navigation,
   ]);
 

@@ -3,18 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getBrandsListApi } from '../api/getBrandListApi';
 import { Brand } from '../types/brandType';
 
+import { QUERY_KEYS } from '@/shared/constants/query/key';
+
 export const useGetBrandsList = () => {
   return useQuery<Brand[]>({
-    queryKey: ['brands'],
+    queryKey: QUERY_KEYS.BRANDS,
     queryFn: getBrandsListApi,
-    select: data => [
-      {
-        brandId: 'NONE',
-        name: '선호 브랜드 없음',
-        iconImageUrl: '',
-        displayOrder: -1,
-      },
-      ...data,
-    ],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    retry: 2,
   });
 };

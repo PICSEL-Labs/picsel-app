@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,10 +15,19 @@ interface Props {
 }
 
 const SelectedBrand = ({ selectedList, onPressIn }: Props) => {
+  const scrollRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollToEnd({ animated: true });
+    }
+  }, [selectedList]);
+
   return (
     <View>
       {selectedList.length > 0 && selectedList[0].brandId !== 'NONE' && (
         <ScrollView
+          ref={scrollRef}
           horizontal
           showsHorizontalScrollIndicator
           indicatorStyle="black"

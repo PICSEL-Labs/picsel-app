@@ -7,14 +7,5 @@ export const useGetBrandsList = () => {
   return useQuery<Brand[]>({
     queryKey: ['brands'],
     queryFn: getBrandsListApi,
-    select: data => [
-      {
-        brandId: 'NONE',
-        name: '선호 브랜드 없음',
-        iconImageUrl: '',
-        displayOrder: -1,
-      },
-      ...data,
-    ],
   });
 };

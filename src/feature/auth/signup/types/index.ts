@@ -25,3 +25,14 @@ export interface SignupRequest {
     marketingConsent: boolean;
   };
 }
+
+export interface TermsState {
+  checkedStates: boolean[];
+  allChecked: boolean;
+  isRequiredAllChecked: boolean;
+}
+
+export interface TermsActions {
+  toggleAll: () => void;
+  toggleItem: (index: number) => void;
+}

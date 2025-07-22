@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useTermSheet } from '../../model/useTermSheet';
 import { TermsActions, TermsState } from '../../types';
 
 import TermsAgreementList from './TermsAgreementList';
@@ -22,8 +23,20 @@ const TermsBottomSheet = ({
   termsActions,
   termsState,
 }: Props) => {
+  const { animatedStyle, panGesture } = useTermSheet({
+    visible,
+    onClose,
+    setCheckedStates: termsState.setCheckedStates,
+  });
+
   return (
-    <BottomSheet onClose={onClose} title="이용약관 동의" visible={visible}>
+    <BottomSheet
+      onClose={onClose}
+      title="이용약관 동의"
+      visible={visible}
+      animatedStyle={animatedStyle}
+      panGesture={panGesture}
+      backDrop>
       <TermsAgreementList
         checkedStates={termsState.checkedStates}
         allChecked={termsState.allChecked}

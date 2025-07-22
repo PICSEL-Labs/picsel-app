@@ -46,15 +46,15 @@ const Input = ({
         className={INPUT_STYLE}
         {...props}
       />
-    </View>
 
-    {value.length > 0 && close && (
-      <Pressable
-        className="absolute right-5 top-[11px]"
-        onPressIn={handleClear}>
-        <CloseIcons shape="gray" width={24} height={24} />
-      </Pressable>
-    )}
+      {value.length > 0 && close && (
+        <Pressable
+          className="absolute right-5 top-[11px]"
+          onPressIn={handleClear}>
+          <CloseIcons shape="gray" width={24} height={24} />
+        </Pressable>
+      )}
+    </View>
   </View>
 );
 

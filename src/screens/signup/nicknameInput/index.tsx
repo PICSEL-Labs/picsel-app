@@ -23,6 +23,7 @@ const NicknameInputScreen = () => {
   } = useSignupFlow();
 
   const termsState = {
+    setCheckedStates: termsAgreement.setCheckedStates,
     checkedStates: termsAgreement.checkedStates,
     allChecked: termsAgreement.allChecked,
     isRequiredAllChecked: termsAgreement.isRequiredAllChecked,

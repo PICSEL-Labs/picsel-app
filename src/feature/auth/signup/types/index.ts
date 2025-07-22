@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type ValidationType = 'user-id' | 'nickname';
 
 export interface ValidateResponse {
@@ -27,6 +29,7 @@ export interface SignupRequest {
 }
 
 export interface TermsState {
+  setCheckedStates: Dispatch<SetStateAction<boolean[]>>;
   checkedStates: boolean[];
   allChecked: boolean;
   isRequiredAllChecked: boolean;

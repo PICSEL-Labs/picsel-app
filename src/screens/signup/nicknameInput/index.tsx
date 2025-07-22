@@ -1,59 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 
-import { useButtonService } from '@/feature/auth/signup/model/useButtonService';
-import { useNicknameValidation } from '@/feature/auth/signup/model/useNicknameValidation';
-import { useTermsAgreement } from '@/feature/auth/signup/model/useTermsAgreement';
-import { useUserSignup } from '@/feature/auth/signup/model/useUserSignup';
-import { TermsModal } from '@/feature/auth/signup/ui/modal';
+import { useSignupFlow } from '@/feature/auth/signup/model/useSignupFlow';
+import { TermsBottomSheet } from '@/feature/auth/signup/ui/modal';
 import NicknameFeedback from '@/feature/auth/signup/ui/organisms/NicknameFeedback';
 import NicknameInput from '@/feature/auth/signup/ui/organisms/NicknameInput';
 import NicknameSubmitButton from '@/feature/auth/signup/ui/organisms/NicknameSubmitButton';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { useUserStore } from '@/shared/store';
-import { SignupNavigationProp } from '@/shared/types/navigateTypeUtil';
 import SignupHeader from '@/shared/ui/organisms/SignupHeader';
 import SignupIntro from '@/shared/ui/organisms/SignupIntro';
 
 const NicknameInputScreen = () => {
-  const navigation = useNavigation<SignupNavigationProp>();
-
-  const [isTermsOpen, setIsTermsOpen] = useState(false);
-
-  const { userSocialType, socialAccessToken } = useUserStore();
-
   const {
-    errorMessage,
-    isAvailable,
-    focus,
-    handleBlur,
-    handleClear,
-    handleNicknameChange,
-    setFocus,
-    userNickname,
-  } = useNicknameValidation();
+    isModalOpen,
+    openModal,
+    closeModal,
+    nicknameValidation,
+    termsAgreement,
+    keyboardHeight,
+    handleSignup,
+  } = useSignupFlow();
 
-  const {
-    checkedStates,
-    setCheckedStates,
-    allChecked,
-    isRequiredAllChecked,
-    toggleAll,
-    toggleItem,
-  } = useTermsAgreement();
+  const termsState = {
+    checkedStates: termsAgreement.checkedStates,
+    allChecked: termsAgreement.allChecked,
+    isRequiredAllChecked: termsAgreement.isRequiredAllChecked,
+  };
 
-  const { handleSignup } = useUserSignup({
-    checkedStates,
-    socialAccessToken,
-    userSocialType,
-    userNickname,
-    navigation,
-    setIsTermsOpen,
-  });
-
-  const { keyboardHeight } = useButtonService({ focus });
+  const termsActions = {
+    toggleAll: termsAgreement.toggleAll,
+    toggleItem: termsAgreement.toggleItem,
+  };
 
   return (
     <ScreenLayout>
@@ -69,38 +47,33 @@ const NicknameInputScreen = () => {
         />
 
         <NicknameInput
-          handleBlur={handleBlur}
-          handleChange={handleNicknameChange}
-          handleClear={handleClear}
-          setFocus={setFocus}
-          errorMessage={errorMessage}
-          userNickname={userNickname}>
+          handleBlur={nicknameValidation.handleBlur}
+          handleChange={nicknameValidation.handleNicknameChange}
+          handleClear={nicknameValidation.handleClear}
+          setFocus={nicknameValidation.setFocus}
+          errorMessage={nicknameValidation.errorMessage}
+          userNickname={nicknameValidation.userNickname}>
           <NicknameFeedback
-            errorMessage={errorMessage}
-            isAvailable={isAvailable}
-            length={userNickname.length}
+            errorMessage={nicknameValidation.errorMessage}
+            isAvailable={nicknameValidation.isAvailable}
+            length={nicknameValidation.userNickname.length}
           />
         </NicknameInput>
 
         <NicknameSubmitButton
-          focus={focus}
-          isAvailable={isAvailable}
+          focus={nicknameValidation.focus}
+          isAvailable={nicknameValidation.isAvailable}
           keyboardHeight={keyboardHeight}
-          setIsTermsOpen={setIsTermsOpen}
+          setIsTermsOpen={openModal}
         />
       </KeyboardAvoidingView>
 
-      <TermsModal
-        checkedStates={checkedStates}
-        setCheckedStates={setCheckedStates}
-        handleSignup={handleSignup}
-        visible={isTermsOpen}
-        onClose={() => setIsTermsOpen(false)}
-        toggleAll={toggleAll}
-        allChecked={allChecked}
-        isRequiredAllChecked={isRequiredAllChecked}
-        toggleItem={toggleItem}
-        title="이용약관 동의"
+      <TermsBottomSheet
+        visible={isModalOpen}
+        onClose={closeModal}
+        onSignup={handleSignup}
+        termsState={termsState}
+        termsActions={termsActions}
       />
     </ScreenLayout>
   );

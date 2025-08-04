@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Pressable, ImageBackground, Text } from 'react-native';
+import { ImageBackground, Pressable, Text, View } from 'react-native';
 import Config from 'react-native-config';
 
 import { Brand } from '../../types/brandType';
@@ -19,6 +19,7 @@ interface Props {
   onPress: (brandId: string, name: string) => void;
   keyword?: string;
   highlight?: boolean;
+  excludeNoneBrand?: boolean;
 }
 
 const BrandGridList = ({
@@ -27,10 +28,14 @@ const BrandGridList = ({
   onPress,
   keyword = '',
   highlight = false,
+  excludeNoneBrand = false,
 }: Props) => {
+  const filteredBrandList = excludeNoneBrand
+    ? brandList.filter(brand => brand.brandId !== 'NONE')
+    : brandList;
   return (
     <>
-      {chunkArray(brandList, 3).map((row, rowIndex) => (
+      {chunkArray(filteredBrandList, 3).map((row, rowIndex) => (
         <View key={rowIndex} className="mx-3 mb-6 flex-row justify-between">
           {row.map(item => {
             const isSelected = selectedList.some(

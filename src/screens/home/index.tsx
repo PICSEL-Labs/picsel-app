@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
+import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { useModal } from '@/shared/hooks/useModal';
 import Input from '@/shared/ui/atoms/Input';
 
 // 초기 카메라 위치 설정
@@ -16,7 +18,7 @@ const INITIAL_CAMERA = {
 
 const HomeScreen = () => {
   const [brandName, setBrandName] = useState('');
-  const [isFilterActive, setIsFilterActive] = useState(false);
+  const { openModal, closeModal, isModalOpen } = useModal();
 
   return (
     <ScreenLayout>
@@ -34,9 +36,16 @@ const HomeScreen = () => {
         container="pb-[8px]"
       />
       <BrandFilterButton
-        variant={isFilterActive ? 'active' : 'inactive'}
-        onPress={() => setIsFilterActive(prev => !prev)}
+        variant={isModalOpen ? 'active' : 'inactive'}
+        onPress={() => {
+          if (isModalOpen) {
+            closeModal();
+          } else {
+            openModal();
+          }
+        }}
       />
+      <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
     </ScreenLayout>
   );
 };

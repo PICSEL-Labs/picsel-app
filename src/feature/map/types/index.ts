@@ -33,6 +33,14 @@ export interface StoreSearchResult {
   last: boolean;
 }
 
+export interface Store {
+  storeId: string;
+  storeName: string;
+  brandIconImageUrl: string;
+  x: number;
+  y: number;
+}
+
 // 서버 전체 응답 구조
 export interface StoreSearchResponse {
   code: number;

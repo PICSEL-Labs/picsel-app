@@ -1,32 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 
-import DefaultMarker from '@/feature/map/ui/organisms/DefaultMarker';
+import { Store } from '../types';
+import DefaultMarker from '../ui/organisms/DefaultMarker';
 
-interface Store {
-  storeId: string;
-  storeName: string;
-  brandIconImageUrl: string;
-  x: number;
-  y: number;
-}
-
-interface MapOverlayProps {
+interface Props {
   stores?: Store[];
 }
 
-export const MapOverlay = ({ stores }: MapOverlayProps) => {
+export const MapOverlay = ({ stores }: Props) => {
+  const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
+
+  const handleMarkerPress = (storeId: string) => {
+    setSelectedMarkerId(prev => (prev === storeId ? null : storeId));
+  };
+
   return (
     <>
       {stores?.map(store => {
-        // console.log('🧭 store:', store.storeName, store.y, store.x);
+        const isSelected = selectedMarkerId === store.storeId;
+
+        console.log(isSelected);
+
         return (
           <NaverMapMarkerOverlay
             key={store.storeId}
             latitude={store.y}
-            longitude={store.x}>
-            <DefaultMarker brandIconImageUrl={store.brandIconImageUrl} />
+            longitude={store.x}
+            onTap={() => handleMarkerPress(store.storeId)}>
+            <DefaultMarker
+              selected={isSelected}
+              brandIconImageUrl={store.brandIconImageUrl}
+            />
           </NaverMapMarkerOverlay>
         );
       })}

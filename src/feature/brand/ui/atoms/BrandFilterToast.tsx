@@ -13,6 +13,16 @@ import Animated, {
 
 import { useToastStore } from '@/shared/store/ui/Toast';
 
+const GRADIENT_COLORS = [
+  'rgba(255, 255, 255, 1)',
+  'rgba(17, 17, 20, 0.8)',
+  'rgba(17, 17, 20, 1)',
+  'rgba(17, 17, 20, 0.8)',
+  'rgba(255, 255, 255, 1)',
+] as string[];
+
+const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1] as number[];
+
 interface Props {
   bottomAreaHeight: SharedValue<number>;
 }
@@ -62,14 +72,8 @@ const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
       style={animatedStyle}
       className="absolute z-50 w-full items-center">
       <LinearGradient
-        colors={[
-          'rgba(255, 255, 255, 1)',
-          'rgba(17, 17, 20, 0.8)',
-          'rgba(17, 17, 20, 1)',
-          'rgba(17, 17, 20, 0.8)',
-          'rgba(255, 255, 255, 1)',
-        ]}
-        locations={[0, 0.2, 0.4, 0.95, 1]} // 각 색상의 위치를 비율(0~1)로 지정
+        colors={GRADIENT_COLORS}
+        locations={GRADIENT_LOCATIONS} // 각 색상의 위치를 비율(0~1)로 지정
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         className="h-[40px] w-[288px] items-center justify-center rounded-xl">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
@@ -20,6 +20,14 @@ const HomeScreen = () => {
   const [brandName, setBrandName] = useState('');
   const { openModal, closeModal, isModalOpen } = useModal();
 
+  const handleModal = useCallback(() => {
+    if (isModalOpen) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  }, [isModalOpen, openModal, closeModal]);
+
   return (
     <ScreenLayout>
       <NaverMapView
@@ -37,13 +45,7 @@ const HomeScreen = () => {
       />
       <BrandFilterButton
         variant={isModalOpen ? 'active' : 'inactive'}
-        onPress={() => {
-          if (isModalOpen) {
-            closeModal();
-          } else {
-            openModal();
-          }
-        }}
+        onPress={handleModal}
       />
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
     </ScreenLayout>

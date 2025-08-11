@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 interface Props {
   title: string;
+  right?: ReactNode;
 }
 
-const BottomSheetHeader = ({ title }: Props) => {
+const BottomSheetHeader = ({ title, right }: Props) => {
   return (
     <>
       <View className="mb-4 h-[5px] w-[36px] self-center rounded-full bg-gray-300" />
-      <Text className="mb-[29px] text-center text-gray-900 title-01">
-        {title}
-      </Text>
+      <View className="relative mb-[29px] items-center justify-center">
+        <Text className="text-gray-900 title-01">{title}</Text>
+        {right && <View className="absolute right-0 pr-[20px]">{right}</View>}
+      </View>
     </>
   );
 };

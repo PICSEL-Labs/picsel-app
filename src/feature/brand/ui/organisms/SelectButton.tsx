@@ -9,10 +9,10 @@ import Button from '@/shared/ui/atoms/Button';
 interface Props {
   disabled: boolean;
   actualSelectedCount: number;
-  handleSelectedCompleted: () => Promise<void>;
-  showFloatingButton: boolean;
-  scrollToTop: () => void;
-  handleNavigation: () => void;
+  handleSelectedCompleted?: () => Promise<void>;
+  showFloatingButton?: boolean;
+  scrollToTop?: () => void;
+  handleNavigation?: () => void;
 }
 
 const SelectButton = ({
@@ -24,7 +24,7 @@ const SelectButton = ({
   scrollToTop,
 }: Props) => {
   return (
-    <View className="absolute bottom-10 w-full items-center">
+    <View className="w-full items-center">
       <Button
         color={!disabled ? 'disabled' : 'active'}
         textColor="white"

@@ -1,15 +1,16 @@
 import React from 'react';
 
 import { Image } from 'react-native';
-import Config from 'react-native-config';
 import Svg, { Defs, ClipPath, Path, ForeignObject } from 'react-native-svg';
 
 interface Props {
-  brandIconImageUrl: string;
+  imageSource: {
+    uri: string;
+  };
 }
 
 // Pink blur 적용 필요
-const SelectedStoreMarker = ({ brandIconImageUrl }: Props) => {
+const SelectedStoreMarker = ({ imageSource }: Props) => {
   return (
     <Svg width={46} height={54} viewBox="0 0 46 54" fill="none">
       <Defs>
@@ -25,7 +26,7 @@ const SelectedStoreMarker = ({ brandIconImageUrl }: Props) => {
         height="54"
         clipPath="url(#teardrop-clip)">
         <Image
-          source={{ uri: Config.IMAGE_URL + brandIconImageUrl }}
+          source={imageSource}
           style={{ width: 46, height: 54 }}
           resizeMode="cover"
         />

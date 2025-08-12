@@ -11,15 +11,17 @@ interface Props {
 }
 
 const DefaultMarker = ({ brandIconImageUrl, selected }: Props) => {
+  const imageSource = { uri: Config.IMAGE_URL + brandIconImageUrl };
+
   return selected ? (
-    <SelectedStoreMarker brandIconImageUrl={brandIconImageUrl} />
+    <SelectedStoreMarker imageSource={imageSource} />
   ) : (
     <Image
-      source={{ uri: Config.IMAGE_URL + brandIconImageUrl }}
       width={28}
       height={28}
+      source={imageSource}
+      resizeMode="cover"
       className="rounded-full border-2 border-white"
-      // 임시 shadow value 추후 쉐도우 스타일 코드 구현 후 수정
       style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

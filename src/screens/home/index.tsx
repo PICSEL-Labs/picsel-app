@@ -7,7 +7,7 @@ import {
 import { StyleSheet } from 'react-native';
 
 import MapControls from '@/feature/map/components/MapControls';
-import { MapOverlay } from '@/feature/map/components/MapOverlay';
+import MapOverlay from '@/feature/map/components/MapOverlay';
 import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
 import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
 import { useStores } from '@/feature/map/queries/useStores';

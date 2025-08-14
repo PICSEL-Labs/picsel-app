@@ -1,33 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Image } from 'react-native';
-import Config from 'react-native-config';
-
-import SelectedStoreMarker from '../../components/SelectedStoreMarker';
 
 interface Props {
-  brandIconImageUrl: string;
-  selected: boolean;
+  imageSource: {
+    uri: string;
+  };
 }
 
-const DefaultMarker = ({ brandIconImageUrl, selected }: Props) => {
-  const imageSource = { uri: Config.IMAGE_URL + brandIconImageUrl };
+const DefaultMarker = ({ imageSource }: Props) => {
+  const [renderKey, setRenderKey] = useState(0);
 
-  return selected ? (
-    <SelectedStoreMarker imageSource={imageSource} />
-  ) : (
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setRenderKey(prev => prev + 1);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    // shadow 작업 이후 적용 필요
     <Image
+      key={renderKey}
       width={28}
       height={28}
-      source={imageSource}
+      source={{
+        ...imageSource,
+        cache: 'force-cache',
+      }}
       resizeMode="cover"
       className="rounded-full border-2 border-white"
-      style={{
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-      }}
     />
   );
 };

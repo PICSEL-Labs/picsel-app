@@ -9,10 +9,10 @@ export const useMapSearch = () => {
     maxX: 0,
     minY: 0,
     maxY: 0,
-    centerX: 126.9783881,
-    centerY: 37.5666102,
+    centerX: 0,
+    centerY: 0,
     page: 0,
-    size: 200,
+    size: 0,
   });
 
   const getOffsetByZoom = useMemo(

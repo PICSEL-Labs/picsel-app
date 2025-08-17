@@ -10,5 +10,6 @@ export const useMarker = () => {
   return {
     handleMarkerPress,
     selectedMarkerId,
+    setSelectedMarkerId,
   };
 };

@@ -1,47 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
-import { Image } from 'react-native';
 import Config from 'react-native-config';
 
-import { useMarker } from '../hooks/useMarker';
 import { Store } from '../types';
-import DefaultMarker from '../ui/organisms/DefaultMarker';
+
+import DefaultMarker from './DefaultMarker';
+import SelectedStoreMarker from './SelectedStoreMarker';
 
 interface Props {
   stores?: Store[];
+  selectedMarkerId: string | null;
+  handleMarkerPress: (storeId: string) => void;
 }
 
-const MapOverlay = ({ stores }: Props) => {
-  const [shouldRenderMarkers, setShouldRenderMarkers] = useState(false);
-  const { handleMarkerPress, selectedMarkerId } = useMarker();
-
-  useEffect(() => {
-    if (stores?.length) {
-      setShouldRenderMarkers(false);
-
-      const preloadPromises = stores.map(store =>
-        Image.prefetch(Config.IMAGE_URL + store.brandIconImageUrl),
-      );
-
-      Promise.all(preloadPromises)
-        .then(() => {
-          setTimeout(() => setShouldRenderMarkers(true), 100);
-        })
-        .catch(() => {
-          setTimeout(() => setShouldRenderMarkers(true), 500);
-        });
-    }
-  }, [stores]);
-
-  if (!shouldRenderMarkers) {
-    return null;
-  }
-
+const MapOverlay = ({ stores, selectedMarkerId, handleMarkerPress }: Props) => {
   return (
     <>
       {stores?.map(store => {
-        const isSelected = selectedMarkerId === store.storeId;
+        const imageSource = {
+          uri: Config.IMAGE_URL + store.brandIconImageUrl,
+        };
 
         return (
           <NaverMapMarkerOverlay
@@ -49,10 +28,11 @@ const MapOverlay = ({ stores }: Props) => {
             latitude={store.y}
             longitude={store.x}
             onTap={() => handleMarkerPress(store.storeId)}>
-            <DefaultMarker
-              selected={isSelected}
-              brandIconImageUrl={store.brandIconImageUrl}
-            />
+            {selectedMarkerId === store.storeId ? (
+              <SelectedStoreMarker imageSource={imageSource} />
+            ) : (
+              <DefaultMarker imageSource={imageSource} />
+            )}
           </NaverMapMarkerOverlay>
         );
       })}

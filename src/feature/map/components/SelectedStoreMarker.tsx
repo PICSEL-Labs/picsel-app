@@ -9,7 +9,7 @@ interface Props {
   };
 }
 
-// Pink blur 적용 필요
+// 임시 코드 -> 다은님께 해당 디자인 이슈 공유드려놓은 상황
 const SelectedStoreMarker = ({ imageSource }: Props) => {
   return (
     <Svg width={46} height={54} viewBox="0 0 46 54" fill="none">

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios --udid C4CC9334-93A7-4034-A63E-FE9EA20AFD6D",
+    "ios": "react-native run-ios",
+    "ios-hyeon": "react-native run-ios --udid C4CC9334-93A7-4034-A63E-FE9EA20AFD6D",
     "ios-device": "react-native run-ios --udid 00008110-000615091E3B801E --mode Debug",
     "lint": "eslint .",
     "start": "react-native start",

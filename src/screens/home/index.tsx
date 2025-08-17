@@ -10,7 +10,8 @@ import MapControls from '@/feature/map/components/MapControls';
 import MapOverlay from '@/feature/map/components/MapOverlay';
 import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
 import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
-import { useStores } from '@/feature/map/queries/useStores';
+import { useMarker } from '@/feature/map/hooks/useMarker';
+import { useFetchStores } from '@/feature/map/queries/useFetchStores';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 
 const HomeScreen = () => {
@@ -23,6 +24,9 @@ const HomeScreen = () => {
   const clearBrandName = () => setBrandName('');
   const toggleFilter = () => setIsFilterActive(prev => !prev);
   // 채린님 구현 코드
+  const { storeParams, searchStoresByLocation } = useMapSearch();
+
+  const { data: stores } = useFetchStores(storeParams);
 
   const {
     camera,
@@ -32,12 +36,12 @@ const HomeScreen = () => {
     INITIAL_CAMERA,
   } = useMapCamera();
 
-  const { storeParams, searchStoresByLocation } = useMapSearch();
-
-  const { data: stores } = useStores(storeParams);
+  const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
+    useMarker();
 
   const handleLocationSearch = () => {
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
+    setSelectedMarkerId(null);
     hideSearchButton();
   };
 
@@ -48,9 +52,14 @@ const HomeScreen = () => {
           handleCameraChanged(latitude, longitude, zoom);
         }}
         ref={mapRef}
+        onTapMap={() => setSelectedMarkerId(null)}
         style={StyleSheet.absoluteFillObject}
         initialCamera={INITIAL_CAMERA}>
-        <MapOverlay stores={stores?.data?.content} />
+        <MapOverlay
+          handleMarkerPress={handleMarkerPress}
+          selectedMarkerId={selectedMarkerId}
+          stores={stores?.data?.content}
+        />
       </NaverMapView>
 
       <MapControls

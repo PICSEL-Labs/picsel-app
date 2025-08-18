@@ -6,12 +6,12 @@ import {
 } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
-import MapControls from '@/feature/map/components/MapControls';
-import MapOverlay from '@/feature/map/components/MapOverlay';
 import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
 import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
 import { useMarker } from '@/feature/map/hooks/useMarker';
 import { useFetchStores } from '@/feature/map/queries/useFetchStores';
+import MapControls from '@/feature/map/ui/organisms/MapControls';
+import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 
 const HomeScreen = () => {

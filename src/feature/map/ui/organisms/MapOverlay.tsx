@@ -3,10 +3,9 @@ import React from 'react';
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 import Config from 'react-native-config';
 
-import { Store } from '../types';
-
-import DefaultMarker from './DefaultMarker';
-import SelectedStoreMarker from './SelectedStoreMarker';
+import { Store } from '../../types';
+import DefaultMarker from '../atoms/DefaultMarker';
+import SelectedStoreMarker from '../atoms/SelectedStoreMarker';
 
 interface Props {
   stores?: Store[];

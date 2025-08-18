@@ -10,12 +10,13 @@ import { inputShadow } from '@/styles/inputShadow';
 
 interface Props extends TextInputProps {
   value: string;
-  placeholder: string;
+  placeholder?: string;
   search?: boolean;
   arrow?: boolean;
   close?: boolean;
   handleClear: () => void;
   container?: string;
+  onPressLeft?: () => void;
 }
 
 const Input = ({
@@ -26,14 +27,25 @@ const Input = ({
   close,
   handleClear,
   container,
+  onPressLeft,
   ...props
 }: Props) => (
   <View className={container}>
     <View className="mx-4 rounded-full bg-white shadow" style={inputShadow}>
-      <View className="absolute left-5 top-[11px]">
-        {search && <SearchIcons shape="gray" width={24} height={24} />}
-        {arrow && <ArrowIcons shape="back" width={24} height={24} />}
-      </View>
+      {arrow ? (
+        <Pressable
+          className="absolute left-5 top-[11px]"
+          style={{ zIndex: 1 }}
+          onPress={onPressLeft}
+          hitSlop={8}
+          disabled={!onPressLeft}>
+          <ArrowIcons shape="back" width={24} height={24} />
+        </Pressable>
+      ) : search ? (
+        <View className="absolute left-5 top-[11px]">
+          <SearchIcons shape="gray" width={24} height={24} />
+        </View>
+      ) : null}
 
       <TextInput
         value={value}

@@ -19,6 +19,8 @@ interface Props extends TextInputProps {
   onPressLeft?: () => void;
 }
 
+const ICON_POSITION = 'absolute left-5 top-[11px]';
+
 const Input = ({
   value,
   placeholder,
@@ -34,7 +36,7 @@ const Input = ({
     <View className="mx-4 rounded-full bg-white shadow" style={inputShadow}>
       {arrow ? (
         <Pressable
-          className="absolute left-5 top-[11px]"
+          className={ICON_POSITION}
           style={{ zIndex: 1 }}
           onPress={onPressLeft}
           hitSlop={8}
@@ -42,7 +44,7 @@ const Input = ({
           <ArrowIcons shape="back" width={24} height={24} />
         </Pressable>
       ) : search ? (
-        <View className="absolute left-5 top-[11px]">
+        <View className={ICON_POSITION}>
           <SearchIcons shape="gray" width={24} height={24} />
         </View>
       ) : null}

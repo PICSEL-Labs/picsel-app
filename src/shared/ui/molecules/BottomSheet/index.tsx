@@ -1,12 +1,14 @@
 import React, { ReactNode } from 'react';
 
-import { Modal } from 'react-native';
+import { Modal, View } from 'react-native';
 import { GestureDetector, PanGesture } from 'react-native-gesture-handler';
 import Animated, { AnimatedStyle } from 'react-native-reanimated';
 
 import BackDrop from '../BackDrop';
 
 import BottomSheetHeader from './BottomSheetHeader';
+
+import { bottomSheetShadow } from '@/styles/bottomSheetShadow';
 
 interface Props {
   children: ReactNode;
@@ -15,7 +17,8 @@ interface Props {
   visible: boolean;
   backDrop?: boolean;
   panGesture: PanGesture;
-  animatedStyle: AnimatedStyle<{ transform: { translateY: number }[] }>;
+  animatedStyle: AnimatedStyle<{ height: number }>;
+  headerRight?: ReactNode;
 }
 
 const BottomSheet = ({
@@ -26,6 +29,7 @@ const BottomSheet = ({
   panGesture,
   animatedStyle,
   backDrop = false,
+  headerRight,
 }: Props) => {
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -33,11 +37,12 @@ const BottomSheet = ({
 
       <GestureDetector gesture={panGesture}>
         <Animated.View
-          style={animatedStyle}
-          className="absolute bottom-0 max-h-[80%] w-full rounded-t-2xl bg-white px-4 pb-8 pt-2">
-          <BottomSheetHeader title={title} />
-
-          {children}
+          style={[animatedStyle, bottomSheetShadow]}
+          className="absolute bottom-0 w-full rounded-t-2xl bg-white px-4 pb-8 pt-2">
+          <View className="flex-1 flex-col">
+            <BottomSheetHeader title={title} right={headerRight} />
+            {children}
+          </View>
         </Animated.View>
       </GestureDetector>
     </Modal>

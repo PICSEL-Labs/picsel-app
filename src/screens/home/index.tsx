@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import {
   NaverMapView,
@@ -6,6 +6,8 @@ import {
 } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
+import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
+import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
 import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
 import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
 import { useMarker } from '@/feature/map/hooks/useMarker';
@@ -13,17 +15,26 @@ import { useFetchStores } from '@/feature/map/queries/useFetchStores';
 import MapControls from '@/feature/map/ui/organisms/MapControls';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { useModal } from '@/shared/hooks/useModal';
+import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
 
-  // 채린님 구현 코드
   const [brandName, setBrandName] = useState('');
   const [isFilterActive, setIsFilterActive] = useState(false);
-
+  const { openModal, closeModal, isModalOpen } = useModal();
   const clearBrandName = () => setBrandName('');
   const toggleFilter = () => setIsFilterActive(prev => !prev);
-  // 채린님 구현 코드
+
+  const handleModal = useCallback(() => {
+    if (isModalOpen) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  }, [isModalOpen, openModal, closeModal]);
+
   const { storeParams, searchStoresByLocation } = useMapSearch();
 
   const { data: stores } = useFetchStores(storeParams);
@@ -71,6 +82,20 @@ const HomeScreen = () => {
         showSearchButton={showSearchButton}
         onLocationSearch={handleLocationSearch}
       />
+      <Input
+        value={brandName}
+        onChangeText={brand => setBrandName(brand)}
+        handleClear={() => setBrandName('')}
+        placeholder="브랜드명, 매장명, 위치 검색"
+        search
+        close
+        container="pb-[8px]"
+      />
+      <BrandFilterButton
+        variant={isModalOpen ? 'active' : 'inactive'}
+        onPress={handleModal}
+      />
+      <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
     </ScreenLayout>
   );
 };

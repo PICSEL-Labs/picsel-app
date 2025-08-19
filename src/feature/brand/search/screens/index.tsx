@@ -12,14 +12,6 @@ const BrandSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
 
-  const handleClear = () => {
-    setQuery('');
-  };
-
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -30,9 +22,9 @@ const BrandSearchScreen = () => {
         <Input
           value={query}
           onChangeText={setQuery}
-          handleClear={handleClear}
+          handleClear={() => setQuery('')}
           arrow
-          onPressLeft={handleBack}
+          onPressLeft={() => navigation.goBack()}
           close
           autoFocus
         />

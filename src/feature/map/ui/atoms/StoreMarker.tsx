@@ -11,18 +11,17 @@ interface Props {
 const StoreMarker = ({ imageSource, isSelected = false }: Props) => {
   const [renderKey, setRenderKey] = useState(0);
 
-  const size = isSelected ? 48 : 28;
+  const IMAGE_SIZE = isSelected ? 48 : 28;
 
   useEffect(() => {
     setRenderKey(prev => prev + 1);
   }, [isSelected]);
 
-  console.log(isSelected);
   return (
     <Image
       key={renderKey}
-      width={size}
-      height={size}
+      width={IMAGE_SIZE}
+      height={IMAGE_SIZE}
       className={clsx('rounded-full', isSelected && 'border-2 border-white')}
       source={{
         ...imageSource,

@@ -12,7 +12,7 @@ import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
 import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
 import { useMarker } from '@/feature/map/hooks/useMarker';
 import { useFetchStores } from '@/feature/map/queries/useFetchStores';
-import MapControls from '@/feature/map/ui/organisms/MapControls';
+import CurrentLocationSearch from '@/feature/map/ui/organisms/CurrentLocationSearch';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
@@ -22,10 +22,7 @@ const HomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
 
   const [brandName, setBrandName] = useState('');
-  const [isFilterActive, setIsFilterActive] = useState(false);
   const { openModal, closeModal, isModalOpen } = useModal();
-  const clearBrandName = () => setBrandName('');
-  const toggleFilter = () => setIsFilterActive(prev => !prev);
 
   const handleModal = useCallback(() => {
     if (isModalOpen) {
@@ -73,15 +70,6 @@ const HomeScreen = () => {
         />
       </NaverMapView>
 
-      <MapControls
-        brandName={brandName}
-        onBrandNameChange={setBrandName}
-        onClearBrandName={clearBrandName}
-        isFilterActive={isFilterActive}
-        onToggleFilter={toggleFilter}
-        showSearchButton={showSearchButton}
-        onLocationSearch={handleLocationSearch}
-      />
       <Input
         value={brandName}
         onChangeText={brand => setBrandName(brand)}
@@ -94,6 +82,11 @@ const HomeScreen = () => {
       <BrandFilterButton
         variant={isModalOpen ? 'active' : 'inactive'}
         onPress={handleModal}
+      />
+
+      <CurrentLocationSearch
+        showSearchButton={showSearchButton}
+        onLocationSearch={handleLocationSearch}
       />
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
     </ScreenLayout>

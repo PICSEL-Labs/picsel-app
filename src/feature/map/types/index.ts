@@ -5,11 +5,10 @@ export interface StoreSearchParams {
   maxY: number;
   page: number;
   size: number;
-  centerX: number;
-  centerY: number;
+  userX: number;
+  userY: number;
 }
 
-// 단일 매장 정보
 export interface StoreData {
   brandId: string;
   brandName: string;
@@ -17,9 +16,10 @@ export interface StoreData {
   storeId: string;
   storeName: string;
   address: string;
-  x: number; // 경도
-  y: number; // 위도
+  x: number;
+  y: number;
   isFavorite: boolean;
+  distance: number;
 }
 
 // 실제 content 포함한 내부 응답 구조

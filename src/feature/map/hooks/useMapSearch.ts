@@ -9,8 +9,8 @@ export const useMapSearch = () => {
     maxX: 0,
     minY: 0,
     maxY: 0,
-    centerX: 0,
-    centerY: 0,
+    userX: 0,
+    userY: 0,
     page: 0,
     size: 0,
   });
@@ -53,8 +53,8 @@ export const useMapSearch = () => {
         maxX: longitude + offset,
         minY: latitude - offset,
         maxY: latitude + offset,
-        centerX: longitude,
-        centerY: latitude,
+        userX: longitude,
+        userY: latitude,
         page: 0,
         size: MAP_SEARCH_CONFIG.DEFAULT_PAGE_SIZE,
       };

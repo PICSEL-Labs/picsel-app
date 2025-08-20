@@ -1,12 +1,14 @@
 import React, { useCallback, useState } from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
+import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
 // 초기 카메라 위치 설정
@@ -17,6 +19,7 @@ const INITIAL_CAMERA = {
 };
 
 const HomeScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [brandName, setBrandName] = useState('');
   const { openModal, closeModal, isModalOpen } = useModal();
 
@@ -38,6 +41,7 @@ const HomeScreen = () => {
         value={brandName}
         onChangeText={brand => setBrandName(brand)}
         handleClear={() => setBrandName('')}
+        onPress={() => navigation.navigate('SearchBrand')}
         placeholder="브랜드명, 매장명, 위치 검색"
         search
         close

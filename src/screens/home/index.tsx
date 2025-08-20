@@ -1,24 +1,28 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
-import { NaverMapView } from '@mj-studio/react-native-naver-map';
+import {
+  NaverMapView,
+  NaverMapViewRef,
+} from '@mj-studio/react-native-naver-map';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
+import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
+import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
+import { useMarker } from '@/feature/map/hooks/useMarker';
+import { useFetchStores } from '@/feature/map/queries/useFetchStores';
+import CurrentLocationSearch from '@/feature/map/ui/organisms/CurrentLocationSearch';
+import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
-// 초기 카메라 위치 설정
-const INITIAL_CAMERA = {
-  latitude: 37.5666102, // 서울 중심부 위도
-  longitude: 126.9783881, // 서울 중심부 경도
-  zoom: 12, // 줌 레벨
-};
-
 const HomeScreen = () => {
+  const mapRef = useRef<NaverMapViewRef>(null);
+
   const navigation = useNavigation<RootStackNavigationProp>();
   const [brandName, setBrandName] = useState('');
   const { openModal, closeModal, isModalOpen } = useModal();
@@ -31,12 +35,44 @@ const HomeScreen = () => {
     }
   }, [isModalOpen, openModal, closeModal]);
 
+  const { storeParams, searchStoresByLocation } = useMapSearch();
+
+  const { data: stores } = useFetchStores(storeParams);
+
+  const {
+    camera,
+    showSearchButton,
+    handleCameraChanged,
+    hideSearchButton,
+    INITIAL_CAMERA,
+  } = useMapCamera();
+
+  const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
+    useMarker();
+
+  const handleLocationSearch = () => {
+    searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
+    setSelectedMarkerId(null);
+    hideSearchButton();
+  };
+
   return (
     <ScreenLayout>
       <NaverMapView
+        onCameraIdle={({ latitude, longitude, zoom }) => {
+          handleCameraChanged(latitude, longitude, zoom);
+        }}
+        ref={mapRef}
+        onTapMap={() => setSelectedMarkerId(null)}
         style={StyleSheet.absoluteFillObject}
-        initialCamera={INITIAL_CAMERA}
-      />
+        initialCamera={INITIAL_CAMERA}>
+        <MapOverlay
+          handleMarkerPress={handleMarkerPress}
+          selectedMarkerId={selectedMarkerId}
+          stores={stores?.data?.content}
+        />
+      </NaverMapView>
+
       <Input
         value={brandName}
         onChangeText={brand => setBrandName(brand)}
@@ -50,6 +86,11 @@ const HomeScreen = () => {
       <BrandFilterButton
         variant={isModalOpen ? 'active' : 'inactive'}
         onPress={handleModal}
+      />
+
+      <CurrentLocationSearch
+        showSearchButton={showSearchButton}
+        onLocationSearch={handleLocationSearch}
       />
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
     </ScreenLayout>

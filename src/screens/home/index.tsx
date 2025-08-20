@@ -4,6 +4,7 @@ import {
   NaverMapView,
   NaverMapViewRef,
 } from '@mj-studio/react-native-naver-map';
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
@@ -16,11 +17,13 @@ import CurrentLocationSearch from '@/feature/map/ui/organisms/CurrentLocationSea
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
+import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
 
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [brandName, setBrandName] = useState('');
   const { openModal, closeModal, isModalOpen } = useModal();
 
@@ -74,6 +77,7 @@ const HomeScreen = () => {
         value={brandName}
         onChangeText={brand => setBrandName(brand)}
         handleClear={() => setBrandName('')}
+        onPress={() => navigation.navigate('SearchBrand')}
         placeholder="브랜드명, 매장명, 위치 검색"
         search
         close

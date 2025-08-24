@@ -35,7 +35,7 @@ const SelectedBrand = ({ selectedList, onPressIn }: Props) => {
           {selectedList.map(item => (
             <View
               key={item.brandId}
-              className="ml-5 flex-row items-center justify-center rounded-[27px] border border-pink-500 bg-pink-500 pb-2 pl-3 pr-2 pt-2"
+              className="ml-5 flex-row items-center justify-center rounded-[27px] bg-pink-500 pb-2 pl-3 pr-2 pt-2"
               style={boxShadow}>
               <Text className="mr-1 text-white headline-01">{item.name}</Text>
 

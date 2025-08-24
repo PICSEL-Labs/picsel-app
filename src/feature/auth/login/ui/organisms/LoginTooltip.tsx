@@ -23,7 +23,7 @@ const LoginTooltip = () => {
     <Animated.View
       className="absolute top-[75px] z-10 items-center rounded-3xl bg-primary-pink px-3 py-2"
       style={{
-        width: scale(188),
+        width: scale(195),
         ...boxShadow,
         ...config.offset,
         transform: [{ translateY }],

@@ -22,8 +22,8 @@ const OnboardingCarousel = () => {
         height={verticalScale(400)}
         data={ONBOARDING_TEXT}
         autoPlay
-        autoPlayInterval={1000}
-        scrollAnimationDuration={2000}
+        autoPlayInterval={2000}
+        scrollAnimationDuration={400}
         onProgressChange={(_, p) => (progress.value = p)}
         renderItem={({ item }) => (
           <View className="items-center pt-20">

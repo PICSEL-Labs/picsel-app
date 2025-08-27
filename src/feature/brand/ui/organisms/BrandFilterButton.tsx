@@ -6,7 +6,7 @@ import { Pressable, PressableProps, Text } from 'react-native';
 import { FILTER_BUTTON_STYLE } from '@/shared/constants/styles/filterButton';
 import FilterIcons from '@/shared/icons/FilterIcons';
 import { cn } from '@/shared/lib/cn';
-import { filterButtonShadow } from '@/styles/filterButtonShadow';
+import { filterButtonShadow } from '@/styles/shadows';
 
 const buttonVariants = cva(FILTER_BUTTON_STYLE, {
   variants: {

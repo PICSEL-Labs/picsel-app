@@ -5,7 +5,7 @@ import { Pressable, PressableProps, Text } from 'react-native';
 
 import { BUTTON_STYLE } from '@/shared/constants/styles/button';
 import { cn } from '@/shared/lib/cn';
-import { commonShadow } from '@/styles/shadow';
+import { circleDefaultShadow } from '@/styles/shadows';
 
 interface Props extends PressableProps {
   color?: 'active' | 'disabled' | 'white';
@@ -50,7 +50,7 @@ const Button = ({
 }: Props) => (
   <Pressable
     className={cn(buttonVariants({ color, outline }), className)}
-    style={shadow && commonShadow}
+    style={shadow && circleDefaultShadow}
     {...props}>
     <Text className={cn(textVariants({ textColor }))}>{text}</Text>
   </Pressable>

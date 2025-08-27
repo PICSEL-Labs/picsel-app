@@ -7,7 +7,7 @@ import { TOOLTIP_CONFIG } from '@/shared/constants/tooltip';
 import { useFloatingAnimation } from '@/shared/hooks/useFloatingAnimation';
 import Tooltip from '@/shared/icons/Tooltip';
 import { useUserStore } from '@/shared/store';
-import { boxShadow } from '@/styles/boxShadow';
+import { insetShadow } from '@/styles/shadows';
 
 const LoginTooltip = () => {
   const { userSocialType } = useUserStore();
@@ -24,7 +24,7 @@ const LoginTooltip = () => {
       className="absolute top-[75px] z-10 items-center rounded-3xl bg-primary-pink px-3 py-2"
       style={{
         width: scale(195),
-        ...boxShadow,
+        boxShadow: insetShadow.default,
         ...config.offset,
         transform: [{ translateY }],
       }}>

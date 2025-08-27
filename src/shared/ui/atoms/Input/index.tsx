@@ -6,7 +6,7 @@ import { INPUT_STYLE } from '@/shared/constants/styles/input';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import CloseIcons from '@/shared/icons/CloseIcons';
 import SearchIcons from '@/shared/icons/SearchIcons';
-import { inputShadow } from '@/styles/inputShadow';
+import { inputShadow } from '@/styles/shadows';
 
 interface Props extends TextInputProps {
   value: string;
@@ -33,7 +33,7 @@ const Input = ({
   ...props
 }: Props) => (
   <View className={container}>
-    <View className="mx-4 rounded-full bg-white shadow" style={inputShadow}>
+    <View className="mx-4 rounded-full bg-white" style={inputShadow}>
       {arrow ? (
         <Pressable
           className={ICON_POSITION}

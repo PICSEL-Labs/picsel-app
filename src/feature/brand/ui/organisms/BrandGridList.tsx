@@ -8,7 +8,7 @@ import { Brand } from '../../types/brandType';
 import { HighlightedText } from '@/shared/components/HighlightedText';
 import CheckIcons from '@/shared/icons/CheckIcons';
 import { chunkArray } from '@/shared/utils/arrayUtils';
-import { commonShadow } from '@/styles/shadow';
+import { defaultShadow } from '@/styles/shadows';
 
 interface Props {
   brandList: Brand[];
@@ -44,7 +44,7 @@ const BrandGridList = ({
 
             return (
               <View key={item.brandId} className="flex-1 items-center">
-                <View style={commonShadow} className="mb-[7px] rounded-full">
+                <View style={defaultShadow} className="mb-[7px] rounded-full">
                   <Pressable onPress={() => onPress(item.brandId, item.name)}>
                     <ImageBackground
                       source={{ uri: Config.IMAGE_URL + item.iconImageUrl }}

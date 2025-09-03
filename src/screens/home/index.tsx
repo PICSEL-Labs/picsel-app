@@ -77,7 +77,7 @@ const HomeScreen = () => {
         value={brandName}
         onChangeText={brand => setBrandName(brand)}
         handleClear={() => setBrandName('')}
-        onPress={() => navigation.navigate('SearchBrand')}
+        onPress={() => navigation.navigate('StoreSearch')}
         placeholder="브랜드명, 매장명, 위치 검색"
         search
         close

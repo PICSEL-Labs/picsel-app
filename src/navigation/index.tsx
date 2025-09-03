@@ -5,16 +5,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
-import BrandSearchScreen from '@/feature/brand/search/screens';
 import LoginScreen from '@/screens/login';
 import OnboardingScreen from '@/screens/onboarding';
+import StoreSearchScreen from '@/screens/search';
 
 export type MainNavigationProps = {
   Onboarding: undefined;
   Login: undefined;
   SignupRoute: undefined;
   Home: undefined;
-  SearchBrand: undefined;
+  StoreSearch: undefined;
 };
 
 const MainRoute = () => {
@@ -30,7 +30,7 @@ const MainRoute = () => {
 
       <Stack.Screen name="Home" component={BottomTabBar} />
 
-      <Stack.Screen name="SearchBrand" component={BrandSearchScreen} />
+      <Stack.Screen name="StoreSearch" component={StoreSearchScreen} />
     </Stack.Navigator>
   );
 };

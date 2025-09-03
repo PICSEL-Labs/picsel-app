@@ -23,6 +23,8 @@ const SearchBrandScreen = () => {
     .filter(brand => brand.name.includes(brandName))
     .sort((a, b) => a.name.localeCompare(b.name, 'ko'));
 
+  const showNoResult = brandName.length > 0 && searchedList.length === 0;
+
   return (
     <ScreenLayout>
       <SignupHeader
@@ -56,7 +58,7 @@ const SearchBrandScreen = () => {
           />
         </ScrollView>
       ) : (
-        <NoResult searchedList={searchedList} />
+        <NoResult visible={showNoResult} />
       )}
     </ScreenLayout>
   );

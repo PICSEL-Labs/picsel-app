@@ -7,7 +7,7 @@ import { cn } from '@/shared/lib/cn';
 
 interface Props {
   text: string;
-  keyword?: string;
+  keyword?: string | string[];
   font?: string;
   color?: string;
   highlightColor?: string;
@@ -27,9 +27,14 @@ export const HighlightedText = ({
   highlightWeight,
   fontWeight,
 }: Props) => {
-  const formattedText = keyword
-    ? text.replace(new RegExp(`(${keyword})`, 'gi'), '[$1]')
-    : text;
+  const regex = keyword
+    ? new RegExp(
+        `(${Array.isArray(keyword) ? keyword.join('|') : keyword})`,
+        'gi',
+      )
+    : null;
+
+  const formattedText = regex ? text.replace(regex, '[$1]') : text;
 
   const parts = useHighlightText(formattedText);
 

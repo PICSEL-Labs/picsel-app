@@ -35,7 +35,7 @@ const StoreSearchScreen = () => {
         <View className="flex-1">
           <SearchResultList
             data={result}
-            highlight={query}
+            highlight={query.split(/\s+/)}
             onPressItem={row => {
               console.log(row);
             }}

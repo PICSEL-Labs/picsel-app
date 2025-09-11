@@ -9,7 +9,7 @@ import type { AcSearchResult } from '@/feature/search/types';
 
 interface Props {
   data?: AcSearchResult;
-  highlight?: string;
+  highlight?: string[];
   onPressItem?: (row: any) => void;
 }
 
@@ -35,7 +35,7 @@ const SearchResultList = ({ data, highlight, onPressItem }: Props) => {
             kind={item.kind}
             title={item.title}
             subtitle={item.subtitle}
-            highlight={highlight}
+            highlightKeyword={highlight}
             distanceMeters={item.distanceMeters}
             onPress={() => onPressItem?.(item)}
           />

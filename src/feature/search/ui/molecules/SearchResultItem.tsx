@@ -12,7 +12,7 @@ interface Props {
   subtitle?: string; // 주소
   distanceMeters?: number; // 거리
   onPress?: () => void;
-  highlight?: string;
+  highlightKeyword?: string | string[];
 }
 
 const SearchResultItem = ({
@@ -21,9 +21,9 @@ const SearchResultItem = ({
   subtitle,
   distanceMeters,
   onPress,
-  highlight,
+  highlightKeyword,
 }: Props) => {
-  const isHighlight = kind === 'store' || kind === 'administrativeDistrict';
+  const hasKeyword = kind === 'store' || kind === 'administrativeDistrict';
 
   return (
     <Pressable
@@ -37,7 +37,7 @@ const SearchResultItem = ({
         <Text numberOfLines={1}>
           <HighlightedText
             text={title}
-            keyword={isHighlight && highlight}
+            keyword={hasKeyword && highlightKeyword}
             fontWeight="body-rg-03"
             textAlign="text-left"
             highlightColor="text-gray-900"

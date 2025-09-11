@@ -7,7 +7,7 @@ type UIState = 'hasResults' | 'noResults';
 
 const DEFAULT_COORDS = { latitude: 37.5666102, longitude: 126.9783881 };
 
-interface Options {
+interface Props {
   minLen?: number;
   debounceMs?: number;
   radius?: number;
@@ -15,14 +15,14 @@ interface Options {
   longitude?: number;
 }
 
-export const useStoreSearch = (query: string, options: Options = {}) => {
+export const useStoreSearch = (query: string, props: Props = {}) => {
   const {
     minLen = 2, // 최소 2글자로 요청
     debounceMs = 400, // 0.4초로 디바운스
     radius = 999, // 임시 반경값
     latitude = DEFAULT_COORDS.latitude,
     longitude = DEFAULT_COORDS.longitude,
-  } = options;
+  } = props;
 
   const debouncedQuery = useDebouncedValue(query, debounceMs);
   const hasQuery = debouncedQuery.trim().length >= minLen;

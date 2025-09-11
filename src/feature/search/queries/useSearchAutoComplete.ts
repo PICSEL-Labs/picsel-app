@@ -14,6 +14,6 @@ export const useSearchAutocomplete = (
     queryFn: () => searchAutocompleteApi(params),
     enabled,
     staleTime: 1000 * 60,
-    retry: 2,
+    retry: 1,
   });
 };

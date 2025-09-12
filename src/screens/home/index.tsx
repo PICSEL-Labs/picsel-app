@@ -26,12 +26,16 @@ const HomeScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [brandName, setBrandName] = useState('');
   const { openModal, closeModal, isModalOpen } = useModal();
+  const [activeButton, setActiveButton] = useState<'brand' | 'location'>(
+    'brand',
+  );
 
   const handleModal = useCallback(() => {
     if (isModalOpen) {
       closeModal();
     } else {
       openModal();
+      setActiveButton('brand');
     }
   }, [isModalOpen, openModal, closeModal]);
 
@@ -39,13 +43,8 @@ const HomeScreen = () => {
 
   const { data: stores } = useFetchStores(storeParams);
 
-  const {
-    camera,
-    showSearchButton,
-    handleCameraChanged,
-    hideSearchButton,
-    INITIAL_CAMERA,
-  } = useMapCamera();
+  const { camera, handleMapIdle, hideSearchButton, INITIAL_CAMERA } =
+    useMapCamera();
 
   const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
     useMarker();
@@ -54,14 +53,22 @@ const HomeScreen = () => {
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
     setSelectedMarkerId(null);
     hideSearchButton();
+    setActiveButton('brand');
   };
 
   return (
     <ScreenLayout>
       <NaverMapView
-        onCameraIdle={({ latitude, longitude, zoom }) => {
-          handleCameraChanged(latitude, longitude, zoom);
-        }}
+        onCameraIdle={cam =>
+          handleMapIdle(cam, isFirst => {
+            if (isFirst) {
+              return;
+            }
+            if (!isModalOpen) {
+              setActiveButton('location');
+            }
+          })
+        }
         ref={mapRef}
         onTapMap={() => setSelectedMarkerId(null)}
         style={StyleSheet.absoluteFillObject}
@@ -83,15 +90,18 @@ const HomeScreen = () => {
         close
         container="pb-[8px]"
       />
-      <BrandFilterButton
-        variant={isModalOpen ? 'active' : 'inactive'}
-        onPress={handleModal}
-      />
 
-      <CurrentLocationSearch
-        showSearchButton={showSearchButton}
-        onLocationSearch={handleLocationSearch}
-      />
+      {activeButton === 'brand' && (
+        <BrandFilterButton
+          variant={isModalOpen ? 'active' : 'inactive'}
+          onPress={handleModal}
+        />
+      )}
+
+      {activeButton === 'location' && (
+        <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
+      )}
+
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
     </ScreenLayout>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import {
   NaverMapView,
@@ -8,12 +8,11 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
-import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
 import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
 import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
 import { useMarker } from '@/feature/map/hooks/useMarker';
 import { useFetchStores } from '@/feature/map/queries/useFetchStores';
-import CurrentLocationSearch from '@/feature/map/ui/organisms/CurrentLocationSearch';
+import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
@@ -24,23 +23,15 @@ const HomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
 
   const navigation = useNavigation<RootStackNavigationProp>();
+
   const [brandName, setBrandName] = useState('');
-  const { openModal, closeModal, isModalOpen } = useModal();
   const [activeButton, setActiveButton] = useState<'brand' | 'location'>(
     'brand',
   );
 
-  const handleModal = useCallback(() => {
-    if (isModalOpen) {
-      closeModal();
-    } else {
-      openModal();
-      setActiveButton('brand');
-    }
-  }, [isModalOpen, openModal, closeModal]);
+  const { closeModal, isModalOpen, openModal } = useModal();
 
   const { storeParams, searchStoresByLocation } = useMapSearch();
-
   const { data: stores } = useFetchStores(storeParams);
 
   const { camera, handleMapIdle, hideSearchButton, INITIAL_CAMERA } =
@@ -91,16 +82,14 @@ const HomeScreen = () => {
         container="pb-[8px]"
       />
 
-      {activeButton === 'brand' && (
-        <BrandFilterButton
-          variant={isModalOpen ? 'active' : 'inactive'}
-          onPress={handleModal}
-        />
-      )}
-
-      {activeButton === 'location' && (
-        <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
-      )}
+      <MapActionButton
+        activeButton={activeButton}
+        setActiveButton={setActiveButton}
+        handleLocationSearch={handleLocationSearch}
+        isModalOpen={isModalOpen}
+        openModal={openModal}
+        closeModal={closeModal}
+      />
 
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
     </ScreenLayout>

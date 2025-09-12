@@ -3,7 +3,6 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Gradient from '@/assets/gradient/gradient.svg';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import BookIcons from '@/shared/icons/BookIcons';
 import BrandFavIcons from '@/shared/icons/BrandFav';
@@ -22,6 +21,7 @@ import SemanticIcons from '@/shared/icons/SemanticIcons';
 import SparkleIcons from '@/shared/icons/SparkleIcons';
 import StarIcons from '@/shared/icons/StarIcons';
 import Button from '@/shared/ui/atoms/Button';
+import SButton from '@/shared/ui/atoms/SButton';
 
 const Test = () => {
   return (
@@ -107,17 +107,33 @@ const Test = () => {
         <SemanticIcons shape="pink" width={24} height={24} />
       </View>
 
-      <Gradient />
-
       <FloatingButton shape="floating" />
 
-      <Button
-        onPressIn={() => console.log('hi')}
-        color="white"
-        textColor="white"
-        text="다음으로"
-        shadow
-      />
+      {/* SButton example */}
+      <View className="gaps items-center">
+        <Button
+          onPressIn={() => console.log('hi')}
+          color="white"
+          textColor="pink"
+          text="QR 사진저장"
+          shadow
+        />
+      </View>
+      <View className="mt-2 flex-row justify-between px-2">
+        <SButton text="BUTTON" textColor="white" />
+        <SButton
+          text="TEXT ONLY"
+          textColor="gray"
+          color="textOnly"
+          activeOpacity={1}
+        />
+        <SButton
+          text="Disabled"
+          color="disabled"
+          textColor="white"
+          activeOpacity={1}
+        />
+      </View>
     </SafeAreaView>
   );
 };

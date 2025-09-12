@@ -1,21 +1,19 @@
 import React from 'react';
 
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
-import { Brand } from '../../types/brandType';
-
-import SparkleIcons from '@/shared/icons/SparkleIcons';
+import SparkleImages from '@/shared/images/Sparkle';
 
 interface Props {
-  searchedList: Brand[];
+  visible: boolean;
 }
 
-const NoResult = ({ searchedList }: Props) => {
+const NoResult = ({ visible }: Props) => {
   return (
-    <View className="h-[70%] w-full items-center justify-center">
-      <SparkleIcons shape="b-opacity" width={340} height={418} />
-      {!searchedList.length && (
-        <Text className="absolute mb-20 text-center text-gray-900 headline-04">
+    <View className="h-[90%] w-full items-center justify-center">
+      <SparkleImages shape="bg-opacity" height={418} width={340} />
+      {visible && (
+        <Text className="absolute text-center text-gray-900 headline-04">
           검색결과가 없어요
         </Text>
       )}

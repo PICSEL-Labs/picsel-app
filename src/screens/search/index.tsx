@@ -3,14 +3,18 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 
+import NoResult from '@/feature/brand/ui/organisms/NoResult';
+import { useStoreSearch } from '@/feature/search/hooks/useStoreSearch';
+import SearchResultList from '@/feature/search/ui/organisms/SearchResultList';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import SparkleImages from '@/shared/images/Sparkle';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
-const BrandSearchScreen = () => {
+const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
+
+  const { result, uiState, hasResults } = useStoreSearch(query);
 
   return (
     <TouchableWithoutFeedback
@@ -28,13 +32,19 @@ const BrandSearchScreen = () => {
           close
           autoFocus
         />
-
-        <View className="w-full flex-1 items-center justify-center">
-          <SparkleImages shape="bg-opacity" height={418} width={340} />
+        <View className="flex-1">
+          <SearchResultList
+            data={result}
+            highlight={query.split(/\s+/)}
+            onPressItem={row => {
+              console.log(row);
+            }}
+          />
+          {!hasResults && <NoResult visible={uiState === 'noResults'} />}
         </View>
       </ScreenLayout>
     </TouchableWithoutFeedback>
   );
 };
 
-export default BrandSearchScreen;
+export default StoreSearchScreen;

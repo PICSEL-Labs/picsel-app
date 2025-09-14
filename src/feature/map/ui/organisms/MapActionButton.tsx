@@ -30,19 +30,13 @@ const MapActionButton = ({
     }
   }, [isModalOpen, openModal, closeModal, setActiveButton]);
 
-  return (
-    <>
-      {activeButton === 'brand' && (
-        <BrandFilterButton
-          variant={isModalOpen ? 'active' : 'inactive'}
-          onPress={handleModal}
-        />
-      )}
-
-      {activeButton === 'location' && (
-        <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
-      )}
-    </>
+  return activeButton === 'brand' ? (
+    <BrandFilterButton
+      variant={isModalOpen ? 'active' : 'inactive'}
+      onPress={handleModal}
+    />
+  ) : (
+    <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
   );
 };
 

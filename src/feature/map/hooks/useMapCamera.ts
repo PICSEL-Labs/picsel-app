@@ -1,4 +1,6 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+
+import { Camera, Region } from '@mj-studio/react-native-naver-map';
 
 interface MapCamera {
   latitude: number;
@@ -7,7 +9,7 @@ interface MapCamera {
 }
 
 // 이후 유저 위치 동의 받는 시점에 기본값 세팅 삭제
-const INITIAL_CAMERA = {
+export const INITIAL_CAMERA: MapCamera = {
   latitude: 37.5666102,
   longitude: 126.9783881,
   zoom: 16,
@@ -36,11 +38,39 @@ export const useMapCamera = () => {
     setShowSearchButton(false);
   }, []);
 
+  const hasInitialIdle = useRef(false);
+  const isFirstCameraIdle = useCallback(() => !hasInitialIdle.current, []);
+  const markInitialIdleHandled = useCallback(() => {
+    hasInitialIdle.current = true;
+  }, []);
+
+  const handleMapIdle = useCallback(
+    (
+      navCamera: Camera & { region: Region },
+      onAfterIdle?: (isFirst: boolean) => void,
+    ) => {
+      const { latitude, longitude, zoom } = navCamera;
+
+      handleCameraChanged(latitude, longitude, zoom ?? INITIAL_CAMERA.zoom);
+
+      const first = isFirstCameraIdle();
+      if (first) {
+        markInitialIdleHandled();
+      }
+
+      if (onAfterIdle) {
+        onAfterIdle(first);
+      }
+    },
+    [handleCameraChanged, isFirstCameraIdle, markInitialIdleHandled],
+  );
+
   return {
     camera,
     showSearchButton,
     handleCameraChanged,
     hideSearchButton,
+    handleMapIdle,
     INITIAL_CAMERA,
   };
 };

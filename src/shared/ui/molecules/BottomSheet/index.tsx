@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Modal, View } from 'react-native';
+import { Modal, View, ViewStyle } from 'react-native';
 import { GestureDetector, PanGesture } from 'react-native-gesture-handler';
 import Animated, { AnimatedStyle } from 'react-native-reanimated';
 
@@ -8,7 +8,7 @@ import BackDrop from '../BackDrop';
 
 import BottomSheetHeader from './BottomSheetHeader';
 
-import { bottomSheetShadow } from '@/styles/bottomSheetShadow';
+import { bottomSheetShadow } from '@/styles/shadows';
 
 interface Props {
   children: ReactNode;
@@ -17,7 +17,7 @@ interface Props {
   visible: boolean;
   backDrop?: boolean;
   panGesture: PanGesture;
-  animatedStyle: AnimatedStyle<{ height: number }>;
+  animatedStyle: AnimatedStyle<ViewStyle>;
   headerRight?: ReactNode;
 }
 

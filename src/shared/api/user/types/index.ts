@@ -1,7 +1,6 @@
-export interface UserConfigResponse {
-  code: number;
-  codeMessage: string;
-  message: string;
+import { CommonResponseType } from '../../types';
+
+export interface UserConfigResponse extends CommonResponseType {
   data: UserVersion;
 }
 

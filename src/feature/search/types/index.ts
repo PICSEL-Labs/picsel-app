@@ -1,3 +1,5 @@
+import { CommonResponseType } from '@/shared/api/types';
+
 export interface AcSearchParams {
   query: string;
   latitude: number;
@@ -41,9 +43,6 @@ export interface AcSearchResult {
   administrativeDistricts: AcAdministrativeDistrict[];
 }
 
-export interface AcSearchResponse {
-  code: number;
-  codeMessage: string;
-  message: string;
+export interface AcSearchResponse extends CommonResponseType {
   data: AcSearchResult;
 }

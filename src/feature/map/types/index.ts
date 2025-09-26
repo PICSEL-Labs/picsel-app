@@ -1,3 +1,5 @@
+import { CommonResponseType } from '@/shared/api/types';
+
 export interface StoreSearchParams {
   minX: number;
   maxX: number;
@@ -40,10 +42,6 @@ export interface StoreSearchResult {
   last: boolean;
 }
 
-// 서버 전체 응답 구조
-export interface StoreSearchResponse {
-  code: number;
-  codeMessage: string;
-  message: string;
+export interface StoreSearchResponse extends CommonResponseType {
   data: StoreSearchResult;
 }

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { Brand } from '@/feature/brand/types/brandType';
+import { Brand } from '@/feature/brand/types';
 
 interface BrandStore {
   brandList: Brand[];

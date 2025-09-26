@@ -22,8 +22,15 @@ export interface StoreData {
   distance: number;
 }
 
-// 실제 content 포함한 내부 응답 구조
+export interface BrandData {
+  brandDisplayOrder: number;
+  brandIconImageUrl: string;
+  brandId: string;
+  brandName: string;
+}
+
 export interface StoreSearchResult {
+  brands: BrandData[];
   content: StoreData[];
   totalElements: number;
   totalPages: number;
@@ -31,14 +38,6 @@ export interface StoreSearchResult {
   pageSize: number;
   first: boolean;
   last: boolean;
-}
-
-export interface Store {
-  storeId: string;
-  storeName: string;
-  brandIconImageUrl: string;
-  x: number;
-  y: number;
 }
 
 // 서버 전체 응답 구조

@@ -1,3 +1,5 @@
+import { CommonResponseType } from '@/shared/api/types';
+
 export interface Brand {
   brandId: string;
   name: string;
@@ -5,7 +7,6 @@ export interface Brand {
   displayOrder: number;
 }
 
-export interface BrandsResponse {
-  code: number;
+export interface BrandsResponse extends CommonResponseType {
   data: Brand[];
 }

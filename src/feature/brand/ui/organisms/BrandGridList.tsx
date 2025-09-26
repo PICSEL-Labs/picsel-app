@@ -3,7 +3,7 @@ import React from 'react';
 import { ImageBackground, Pressable, Text, View } from 'react-native';
 import Config from 'react-native-config';
 
-import { Brand } from '../../types/brandType';
+import { Brand } from '../../types';
 
 import { HighlightedText } from '@/shared/components/HighlightedText';
 import CheckIcons from '@/shared/icons/CheckIcons';

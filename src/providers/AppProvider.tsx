@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useSplashScreen } from '@/shared/hooks/useSplashScreen';
+import { useUserConfig } from '@/shared/hooks/useUserConfig';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -43,6 +44,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
   ).defaultProps!.allowFontScaling = false;
 
   useSplashScreen();
+  useUserConfig();
 
   return (
     <QueryClientProvider client={queryClient}>

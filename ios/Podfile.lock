@@ -1875,6 +1875,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - RNCKakaoCore
     - Yoga
+  - RNDeviceInfo (14.1.1):
+    - React-Core
   - RNGestureHandler (2.25.0):
     - DoubleConversion
     - glog
@@ -2259,6 +2261,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCKakaoCore (from `../node_modules/@react-native-kakao/core`)"
   - "RNCKakaoUser (from `../node_modules/@react-native-kakao/user`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - "RNNaverLogin (from `../node_modules/@react-native-seoul/naver-login`)"
@@ -2443,6 +2446,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-kakao/core"
   RNCKakaoUser:
     :path: "../node_modules/@react-native-kakao/user"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -2550,6 +2555,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 2cf7d05f5b1bc38680b6c83971e535a6ae9c5bc7
   RNCKakaoCore: bd5aaf1330e66242e7a76397001af25bb3a21889
   RNCKakaoUser: 57d6e04b46a92389298465b9ecc90ecee126203d
+  RNDeviceInfo: 8b6fa8379062949dd79a009cf3d6b02a9c03ca59
   RNGestureHandler: 5d8431415d4b8518e86e289e9ad5bb9be78f6dba
   RNGoogleSignin: d216e84db1adedb0d6f5306d5aedf3b43451bbab
   RNNaverLogin: cef5c8e8d1ce3272efe05db3d826631184f6abf8

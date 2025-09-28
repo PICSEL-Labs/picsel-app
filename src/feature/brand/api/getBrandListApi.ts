@@ -1,4 +1,4 @@
-import { BrandsResponse } from '../types/brandType';
+import { BrandsResponse } from '../types';
 
 import { axiosInstance } from '@/shared/api/axiosInstance';
 

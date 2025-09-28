@@ -7,6 +7,7 @@ import BottomTabBar from './tabs';
 
 import LoginScreen from '@/screens/login';
 import OnboardingScreen from '@/screens/onboarding';
+import QrScreen from '@/screens/qr';
 import StoreSearchScreen from '@/screens/search';
 
 export type MainNavigationProps = {
@@ -15,6 +16,7 @@ export type MainNavigationProps = {
   SignupRoute: undefined;
   Home: undefined;
   StoreSearch: undefined;
+  QrScan: undefined;
 };
 
 const MainRoute = () => {
@@ -31,6 +33,14 @@ const MainRoute = () => {
       <Stack.Screen name="Home" component={BottomTabBar} />
 
       <Stack.Screen name="StoreSearch" component={StoreSearchScreen} />
+
+      <Stack.Screen
+        name="QrScan"
+        component={QrScreen}
+        options={{
+          animation: 'slide_from_bottom',
+        }}
+      />
     </Stack.Navigator>
   );
 };

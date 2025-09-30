@@ -21,7 +21,6 @@ import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
-
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const [brandName, setBrandName] = useState('');
@@ -30,13 +29,10 @@ const HomeScreen = () => {
   );
 
   const { closeModal, isModalOpen, openModal } = useModal();
-
   const { storeParams, searchStoresByLocation } = useMapSearch();
   const { data: stores } = useFetchStores(storeParams);
-
   const { camera, handleMapIdle, hideSearchButton, INITIAL_CAMERA } =
     useMapCamera();
-
   const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
     useMarker();
 
@@ -67,7 +63,8 @@ const HomeScreen = () => {
         <MapOverlay
           handleMarkerPress={handleMarkerPress}
           selectedMarkerId={selectedMarkerId}
-          stores={stores?.data?.content}
+          store={stores?.data.content}
+          brand={stores?.data.brands}
         />
       </NaverMapView>
 

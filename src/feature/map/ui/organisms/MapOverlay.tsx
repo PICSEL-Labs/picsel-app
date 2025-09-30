@@ -3,36 +3,46 @@ import React, { useMemo } from 'react';
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 import Config from 'react-native-config';
 
-import { Store } from '../../types';
+import { BrandData, StoreData } from '../../types';
 import StoreMarker from '../atoms/StoreMarker';
 
 interface Props {
-  stores?: Store[];
+  store: StoreData[];
+  brand: BrandData[];
   selectedMarkerId: string | null;
   handleMarkerPress: (storeId: string) => void;
 }
 
-const MapOverlay = ({ stores, selectedMarkerId, handleMarkerPress }: Props) => {
+const MapOverlay = ({
+  brand,
+  store,
+  selectedMarkerId,
+  handleMarkerPress,
+}: Props) => {
   const markers = useMemo(() => {
-    return stores?.map(store => {
+    return store?.map(data => {
+      const matchedBrand = brand.find(b => b.brandId === data.brandId);
+
       const imageSource = {
-        uri: `${Config.IMAGE_URL}${store.brandIconImageUrl}?w=50&h=50`,
+        uri: matchedBrand
+          ? `${Config.IMAGE_URL}${matchedBrand.brandIconImageUrl}?w=50&h=50`
+          : `${Config.IMAGE_URL}/img/brand/logo/default.jpg`,
       };
 
       return (
         <NaverMapMarkerOverlay
-          key={`${store.storeId}-${selectedMarkerId === store.storeId}`}
-          latitude={store.y}
-          longitude={store.x}
-          onTap={() => handleMarkerPress(store.storeId)}>
+          key={`${data.storeId}-${selectedMarkerId === data.storeId}`}
+          latitude={data.y}
+          longitude={data.x}
+          onTap={() => handleMarkerPress(data.storeId)}>
           <StoreMarker
             imageSource={imageSource}
-            isSelected={selectedMarkerId === store.storeId}
+            isSelected={selectedMarkerId === data.storeId}
           />
         </NaverMapMarkerOverlay>
       );
     });
-  }, [stores, selectedMarkerId]);
+  }, [store, brand, selectedMarkerId]);
 
   return <>{markers}</>;
 };

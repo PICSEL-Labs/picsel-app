@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getBrandsListApi } from '../api/getBrandListApi';
-import { Brand } from '../types/brandType';
+import { Brand } from '../types';
 
 import { QUERY_KEYS } from '@/shared/constants/query/key';
 

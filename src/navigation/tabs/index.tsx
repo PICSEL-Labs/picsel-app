@@ -15,7 +15,7 @@ const DummyScreen = ({ label }: { label: string }) => (
   </View>
 );
 
-const EmptyScreen: React.FC = () => null;
+const EmptyScreen = () => <></>;
 
 const renderTabBarIcon =
   (routeName: string) =>
@@ -24,6 +24,7 @@ const renderTabBarIcon =
   );
 
 const handleQrTabPress = (navigation: any) => (e: any) => {
+  // 생산성을 위한 임시 any 허용
   e.preventDefault();
   navigation.navigate('QrScan');
 };

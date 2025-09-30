@@ -3,7 +3,7 @@ import React from 'react';
 import Corner from '@/assets/icons/corner/icon-corner.svg';
 
 interface Props {
-  rotation: 0 | 90 | 180 | 270;
+  rotation: number;
   width: number;
   height: number;
 }

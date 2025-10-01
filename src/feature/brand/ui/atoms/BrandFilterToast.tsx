@@ -55,7 +55,7 @@ const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
 
       return () => clearTimeout(timer);
     }
-  }, [visible, bottomAreaHeight.value]);
+  }, [visible]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

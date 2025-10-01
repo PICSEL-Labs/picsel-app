@@ -15,6 +15,20 @@ const DummyScreen = ({ label }: { label: string }) => (
   </View>
 );
 
+const EmptyScreen = () => <></>;
+
+const renderTabBarIcon =
+  (routeName: string) =>
+  ({ focused }: { focused: boolean }) => (
+    <TabBarIcon routeName={routeName} focused={focused} />
+  );
+
+const handleQrTabPress = (navigation: any) => (e: any) => {
+  // 생산성을 위한 임시 any 허용
+  e.preventDefault();
+  navigation.navigate('QrScan');
+};
+
 const BottomTabBar = () => {
   return (
     <Tab.Navigator
@@ -23,16 +37,23 @@ const BottomTabBar = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarIcon: ({ focused }) => (
-          <TabBarIcon routeName={route.name} focused={focused} />
-        ),
+        tabBarIcon: renderTabBarIcon(route.name),
         tabBarStyle: {
           paddingTop: 6,
           paddingHorizontal: 4,
         },
       })}>
       <Tab.Screen name="HomeScreen" component={HomeScreen} />
-      <Tab.Screen name="QRScreen" children={() => <DummyScreen label="QR" />} />
+      <Tab.Screen
+        name="QRScreen"
+        component={EmptyScreen}
+        listeners={({ navigation }) => ({
+          tabPress: handleQrTabPress(navigation),
+        })}
+        options={{
+          tabBarIcon: renderTabBarIcon('QRScreen'),
+        }}
+      />
       <Tab.Screen
         name="BookScreen"
         children={() => <DummyScreen label="Book" />}

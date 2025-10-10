@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   NaverMapView,
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
+import { useLocationPermission } from '@/feature/map/hooks/useLocationPermission'; // ✅ 추가
 import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
 import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
 import { useMarker } from '@/feature/map/hooks/useMarker';
@@ -22,6 +23,7 @@ import Input from '@/shared/ui/atoms/Input';
 const HomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
   const navigation = useNavigation<RootStackNavigationProp>();
+  const { getCurrentLocation } = useLocationPermission();
 
   const [brandName, setBrandName] = useState('');
   const [activeButton, setActiveButton] = useState<'brand' | 'location'>(
@@ -35,6 +37,20 @@ const HomeScreen = () => {
     useMapCamera();
   const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
     useMarker();
+
+  // 앱 최초 실행 시 현재 위치로 이동(위치 권한이 있는 경우)
+  useEffect(() => {
+    (async () => {
+      const location = await getCurrentLocation();
+      if (location) {
+        mapRef.current?.animateCameraTo({
+          ...location,
+          zoom: 15,
+          duration: 500,
+        });
+      }
+    })();
+  }, [getCurrentLocation]);
 
   const handleLocationSearch = () => {
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
@@ -70,7 +86,7 @@ const HomeScreen = () => {
 
       <Input
         value={brandName}
-        onChangeText={brand => setBrandName(brand)}
+        onChangeText={setBrandName}
         handleClear={() => setBrandName('')}
         onPress={() => navigation.navigate('StoreSearch')}
         placeholder="브랜드명, 매장명, 위치 검색"

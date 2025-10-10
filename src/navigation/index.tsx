@@ -5,8 +5,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
-import LoginScreen from '@/screens/login';
-import OnboardingScreen from '@/screens/onboarding';
 import QrScreen from '@/screens/qr';
 import StoreSearchScreen from '@/screens/search';
 

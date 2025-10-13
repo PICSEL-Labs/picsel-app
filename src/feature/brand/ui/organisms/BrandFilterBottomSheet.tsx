@@ -20,7 +20,7 @@ import SelectButton from './SelectButton';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
-import { useToastStore } from '@/shared/store/ui/Toast';
+import { useToastStore } from '@/shared/store/ui/toast';
 import BottomSheet from '@/shared/ui/molecules/BottomSheet';
 
 interface Props {

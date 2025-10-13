@@ -15,6 +15,7 @@ import { useMarker } from '@/feature/map/hooks/useMarker';
 import { useFetchStores } from '@/feature/map/queries/useFetchStores';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
+import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBrandBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
@@ -37,6 +38,8 @@ const HomeScreen = () => {
     useMapCamera();
   const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
     useMarker();
+
+  const [nearbyBrandVisible, setNearbyBrandVisible] = useState(true);
 
   // 앱 최초 실행 시 현재 위치로 이동(위치 권한이 있는 경우)
   useEffect(() => {
@@ -102,6 +105,12 @@ const HomeScreen = () => {
         isModalOpen={isModalOpen}
         openModal={openModal}
         closeModal={closeModal}
+      />
+
+      <NearbyBrandBottomSheet
+        visible={nearbyBrandVisible}
+        brands={stores?.data.brands}
+        onClose={() => setNearbyBrandVisible(false)}
       />
 
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />

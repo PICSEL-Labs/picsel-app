@@ -1,27 +1,24 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { FlatList, Image, Text, View } from 'react-native';
-import Config from 'react-native-config';
+import { FlatList, Text, View } from 'react-native';
 
-import BrandFavIcons from '@/shared/icons/BrandFav';
+import BottomSheetBrandImage from '../atoms/BottomSheetBrandImage';
+
 import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
-import { bottomSheetShadow, defaultShadow } from '@/styles/shadows';
+import { bottomSheetShadow } from '@/styles/shadows';
 
 interface Brand {
   brandName: string;
   brandIconImageUrl: string;
 }
 
-interface NearbyBrandBottomSheetProps {
+interface Props {
   visible: boolean;
   brands?: Brand[];
 }
 
-const NearbyBrandBottomSheet = ({
-  visible,
-  brands = [],
-}: NearbyBrandBottomSheetProps) => {
+const NearbyBrandBottomSheet = ({ visible, brands = [] }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const snapPoints = useMemo(() => ['5%', '25%'], []);
@@ -57,16 +54,7 @@ const NearbyBrandBottomSheet = ({
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }) => (
             <View className="mr-3 mt-3 w-[90px] items-center">
-              <View style={defaultShadow} className="items-center">
-                <Image
-                  className="h-[60px] w-[60px] rounded-full"
-                  source={{ uri: Config.IMAGE_URL + item.brandIconImageUrl }}
-                  resizeMode="cover"
-                />
-                <View className="absolute bottom-0 right-0">
-                  <BrandFavIcons width={23} height={23} shape="gray" />
-                </View>
-              </View>
+              <BottomSheetBrandImage imageUrl={item.brandIconImageUrl} nearBy />
 
               <Text className="mt-2 text-center text-gray-900 body-rg-02">
                 {item.brandName}

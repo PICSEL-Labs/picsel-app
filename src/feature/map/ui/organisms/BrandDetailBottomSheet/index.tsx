@@ -26,6 +26,7 @@ const BrandDetailBottomSheet = ({ visible, onClose }: Props) => {
       bottomSheetModalRef.current?.present();
     } else {
       bottomSheetModalRef.current?.dismiss();
+      setOpenCopy(false);
     }
   }, [visible]);
 

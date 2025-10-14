@@ -37,9 +37,12 @@ export const filterButtonShadow = {
 };
 
 export const bottomSheetShadow = {
+  borderTopLeftRadius: 24,
+  borderTopRightRadius: 24,
+  backgroundColor: '#FFF',
   shadowColor: '#000',
   shadowOffset: { width: 0, height: -2 },
-  shadowOpacity: 0.2,
-  shadowRadius: 8,
-  elevation: 6,
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 10,
 };

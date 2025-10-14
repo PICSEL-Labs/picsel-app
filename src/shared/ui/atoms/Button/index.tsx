@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { cva } from 'class-variance-authority';
-import { Pressable, PressableProps, Text, View } from 'react-native';
+import { Pressable, PressableProps, Text } from 'react-native';
 
 import { BUTTON_STYLE } from '@/shared/constants/styles/button';
-import QrIcons from '@/shared/icons/QrIcons';
 import { cn } from '@/shared/lib/cn';
 import { defaultButtonShadow } from '@/styles/shadows';
 
@@ -14,7 +13,6 @@ interface Props extends PressableProps {
   outline?: 'active' | 'disabled';
   text: string;
   shadow?: boolean;
-  qr?: boolean;
 }
 
 const buttonVariants = cva(BUTTON_STYLE, {
@@ -34,7 +32,7 @@ const buttonVariants = cva(BUTTON_STYLE, {
 const textVariants = cva('headline-04', {
   variants: {
     textColor: {
-      pink: 'text-pink-600 headline-02',
+      pink: 'text-pink-600',
       white: 'text-white',
       gray: 'text-gray-600',
     },
@@ -48,17 +46,14 @@ const Button = ({
   text,
   outline,
   shadow,
-  qr = false,
+
   ...props
 }: Props) => (
   <Pressable
     className={cn(buttonVariants({ color, outline }), className)}
     style={shadow && defaultButtonShadow}
     {...props}>
-    <View className="flex-row space-x-2">
-      {qr && <QrIcons shape="on-1" width={24} height={24} />}
-      <Text className={cn(textVariants({ textColor }))}>{text}</Text>
-    </View>
+    <Text className={cn(textVariants({ textColor }))}>{text}</Text>
   </Pressable>
 );
 

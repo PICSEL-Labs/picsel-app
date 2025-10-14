@@ -16,10 +16,10 @@ export const inputShadow = {
 
 export const defaultButtonShadow = {
   shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.2,
-  shadowRadius: 4,
-  elevation: 4,
+  shadowOffset: { width: 1, height: 2 },
+  shadowOpacity: 0.15,
+  shadowRadius: 3,
+  elevation: 3,
 };
 
 export const insetShadow = {

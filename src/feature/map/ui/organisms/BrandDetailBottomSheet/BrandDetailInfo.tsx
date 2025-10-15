@@ -2,13 +2,14 @@ import React, { Dispatch, SetStateAction } from 'react';
 
 import { View, Text, Pressable } from 'react-native';
 
-import Dropdown from '@/assets/icons/dropdown/dropdown.svg';
+import DropIcons from '@/shared/icons/DropIcons';
 
 interface Props {
   brandName: string;
   location: string;
   detailAddress: string;
   setOpenCopy: Dispatch<SetStateAction<boolean>>;
+  openCopy: boolean;
 }
 
 const BrandDetailInfo = ({
@@ -16,6 +17,7 @@ const BrandDetailInfo = ({
   detailAddress,
   location,
   setOpenCopy,
+  openCopy,
 }: Props) => {
   return (
     <>
@@ -27,7 +29,7 @@ const BrandDetailInfo = ({
         <Text className="mt-2 text-gray-900 body-rg-02">{detailAddress}</Text>
 
         <Pressable onPress={() => setOpenCopy(prev => !prev)}>
-          <Dropdown />
+          <DropIcons height={24} width={24} shape={openCopy ? 'up' : 'down'} />
         </Pressable>
       </View>
     </>

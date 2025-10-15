@@ -47,6 +47,7 @@ const BrandDetailBottomSheet = ({ visible, onClose }: Props) => {
             detailAddress="부산 부산진구 중앙대로"
             location="349m"
             setOpenCopy={setOpenCopy}
+            openCopy={openCopy}
           />
 
           {openCopy && (

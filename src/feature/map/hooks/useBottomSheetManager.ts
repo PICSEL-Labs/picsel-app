@@ -1,32 +1,37 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
-export type BottomSheetFunc = 'nearby' | 'detail';
+export type BottomSheetType = 'nearby' | 'detail';
 
 export const useBottomSheetManager = () => {
   const [nearbyBrandVisible, setNearbyBrandVisible] = useState(false);
   const [detailBrandVisible, setDetailBrandVisible] = useState(false);
 
-  const hideAllSheet = () => {
+  const hideAllSheet = useCallback(() => {
     setNearbyBrandVisible(false);
     setDetailBrandVisible(false);
-  };
+  }, []);
 
-  const showSheet = (func: BottomSheetFunc) => {
-    func === 'nearby'
-      ? setNearbyBrandVisible(true)
-      : setDetailBrandVisible(true);
-  };
+  const showSheet = useCallback((type: BottomSheetType) => {
+    if (type === 'nearby') {
+      setDetailBrandVisible(false);
+      setNearbyBrandVisible(true);
+    } else {
+      setNearbyBrandVisible(false);
+      setDetailBrandVisible(true);
+    }
+  }, []);
 
-  const hideSheet = (func: BottomSheetFunc) => {
-    func === 'nearby'
-      ? setNearbyBrandVisible(false)
-      : setDetailBrandVisible(false);
-  };
+  const hideSheet = useCallback((type: BottomSheetType) => {
+    if (type === 'nearby') {
+      setNearbyBrandVisible(false);
+    } else {
+      setDetailBrandVisible(false);
+    }
+  }, []);
 
   return {
     nearbyBrandVisible,
     detailBrandVisible,
-    setNearbyBrandVisible,
     hideAllSheet,
     showSheet,
     hideSheet,

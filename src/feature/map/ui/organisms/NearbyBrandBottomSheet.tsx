@@ -16,9 +16,16 @@ interface Brand {
 interface Props {
   visible: boolean;
   brands?: Brand[];
+  showSheet: () => void;
+  hideSheet: () => void;
 }
 
-const NearbyBrandBottomSheet = ({ visible, brands = [] }: Props) => {
+const NearbyBrandBottomSheet = ({
+  showSheet,
+  hideSheet,
+  visible,
+  brands = [],
+}: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const snapPoints = useMemo(() => ['5%', '25%'], []);
@@ -31,13 +38,22 @@ const NearbyBrandBottomSheet = ({ visible, brands = [] }: Props) => {
     }
   }, [visible]);
 
+  const handleSheetChange = (index: number) => {
+    if (index === 0) {
+      hideSheet();
+    } else {
+      showSheet();
+    }
+  };
+
   return (
     <BottomSheet
       style={bottomSheetShadow}
       ref={bottomSheetRef}
       snapPoints={snapPoints}
       handleIndicatorStyle={bottomSheetIndicator}
-      index={1}
+      index={0}
+      onChange={handleSheetChange}
       animateOnMount={false}
       enablePanDownToClose={false}
       backgroundStyle={{ borderRadius: 24 }}>

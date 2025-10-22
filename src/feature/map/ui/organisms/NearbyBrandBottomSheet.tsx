@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { FlatList, Text, View } from 'react-native';
+import { Easing } from 'react-native-reanimated';
 
 import BottomSheetBrandImage from '../atoms/BottomSheetBrandImage';
 
@@ -30,6 +31,14 @@ const NearbyBrandBottomSheet = ({
 
   const snapPoints = useMemo(() => ['5%', '25%'], []);
 
+  const animationConfigs = useMemo(
+    () => ({
+      duration: 300,
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+    }),
+    [],
+  );
+
   useEffect(() => {
     if (visible) {
       bottomSheetRef.current?.snapToIndex(1);
@@ -55,6 +64,8 @@ const NearbyBrandBottomSheet = ({
       index={0}
       onChange={handleSheetChange}
       animateOnMount={false}
+      enableOverDrag={false}
+      animationConfigs={animationConfigs}
       enablePanDownToClose={false}
       backgroundStyle={{ borderRadius: 24 }}>
       <BottomSheetView>

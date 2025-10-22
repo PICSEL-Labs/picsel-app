@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   NaverMapView,
@@ -19,7 +19,7 @@ import { useFetchStores } from '@/feature/map/queries/useFetchStores';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
-import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBrandBottomSheet';
+import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
@@ -68,6 +68,15 @@ const HomeScreen = () => {
     navigation,
     camera,
   });
+
+  useEffect(() => {
+    console.log('Stores data updated:', {
+      storeCount: stores?.data?.content?.length,
+      brandCount: stores?.data?.brands?.length,
+    });
+  }, [stores]);
+
+  console.log(stores);
 
   return (
     <ScreenLayout>

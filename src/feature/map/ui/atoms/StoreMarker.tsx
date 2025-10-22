@@ -2,9 +2,10 @@ import React, { memo } from 'react';
 
 import clsx from 'clsx';
 import { Image } from 'react-native';
+import Config from 'react-native-config';
 
 interface Props {
-  imageSource: { uri: string };
+  imageSource: string;
   isSelected?: boolean;
 }
 
@@ -13,11 +14,11 @@ const StoreMarker = ({ imageSource, isSelected = false }: Props) => {
 
   return (
     <Image
-      key={`${imageSource.uri}-${isSelected}`} // uri와 선택 상태를 조합한 key
+      key={`${imageSource}-${isSelected}`}
       width={IMAGE_SIZE}
       height={IMAGE_SIZE}
       className={clsx('rounded-full', isSelected && 'border-2 border-white')}
-      source={imageSource}
+      source={{ uri: Config.IMAGE_URL + imageSource }}
       resizeMode="cover"
     />
   );
@@ -25,7 +26,6 @@ const StoreMarker = ({ imageSource, isSelected = false }: Props) => {
 
 export default memo(StoreMarker, (prev, next) => {
   return (
-    prev.imageSource.uri === next.imageSource.uri &&
-    prev.isSelected === next.isSelected
+    prev.imageSource === next.imageSource && prev.isSelected === next.isSelected
   );
 });

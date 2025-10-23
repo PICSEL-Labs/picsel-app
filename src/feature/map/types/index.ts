@@ -20,7 +20,6 @@ export interface StoreData {
   address: string;
   x: number;
   y: number;
-  isFavorite: boolean;
   distance: number;
 }
 
@@ -29,6 +28,7 @@ export interface BrandData {
   brandIconImageUrl: string;
   brandId: string;
   brandName: string;
+  isFavorite: boolean;
 }
 
 export interface StoreSearchResult {
@@ -44,4 +44,27 @@ export interface StoreSearchResult {
 
 export interface StoreSearchResponse extends CommonResponseType {
   data: StoreSearchResult;
+}
+export interface BrandDetail {
+  brandName: string;
+  brandIconImageUrl: string;
+  isFavorite: boolean;
+  brandId: string;
+}
+
+export interface MapBottomSheetProps {
+  imageUrl?: string;
+  nearBy?: boolean;
+  isFavorite: boolean;
+  brandId: string;
+}
+
+export interface StoreDetail {
+  storeId: string;
+  storeName: string;
+  brandId: string;
+  brandName: string;
+  address: string;
+  distance: number;
+  brandIconImageUrl: string;
 }

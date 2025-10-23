@@ -23,7 +23,6 @@ import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
-import { useFilteredBrandsStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
@@ -71,8 +70,6 @@ const HomeScreen = () => {
     camera,
   });
 
-  const { filteredList, filterBrand, resetFilter } = useFilteredBrandsStore();
-
   useEffect(() => {
     const storeData = stores?.data?.content;
     const brandData = stores?.data?.brands;
@@ -101,13 +98,6 @@ const HomeScreen = () => {
       });
     }
   }, [stores?.data?.content, stores?.data?.brands]);
-
-  useEffect(() => {
-    console.log('Stores data updated:', {
-      storeCount: stores?.data?.content?.length,
-      brandCount: stores?.data?.brands?.length,
-    });
-  }, [stores]);
 
   console.log(stores);
 
@@ -156,13 +146,7 @@ const HomeScreen = () => {
         closeModal={closeModal}
       />
 
-      <BrandFilterBottomSheet
-        visible={isModalOpen}
-        onClose={closeModal}
-        filteredList={filteredList}
-        filterBrand={filterBrand}
-        resetFilter={resetFilter}
-      />
+      <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
 
       <NearbyBrandBottomSheet
         visible={nearbyBrandVisible}
@@ -174,7 +158,9 @@ const HomeScreen = () => {
       <BrandDetailBottomSheet
         visible={detailBrandVisible}
         storeDetail={selectedStore}
-        onClose={() => hideSheet('detail')}
+        onClose={() => {
+          clearSelection();
+        }}
       />
     </ScreenLayout>
   );

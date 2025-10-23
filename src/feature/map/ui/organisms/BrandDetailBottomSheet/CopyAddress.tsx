@@ -6,10 +6,10 @@ import CopyIcons from '@/shared/icons/CopyIcons';
 import { defaultButtonShadow } from '@/styles/shadows';
 
 interface Props {
-  address: string;
+  detailLocation: string;
 }
 
-const CopyAddress = ({ address }: Props) => {
+const CopyAddress = ({ detailLocation }: Props) => {
   return (
     <View
       style={defaultButtonShadow}
@@ -17,15 +17,15 @@ const CopyAddress = ({ address }: Props) => {
       <View className="rounded-[8px] border border-gray-100 px-1 py-0.5">
         <Text className="text-gray-300 body-rg-01">도로명</Text>
       </View>
+
       <Text
-        className="flex-1 text-gray-950 body-rg-02"
+        className="text-gray-950 body-rg-02"
         numberOfLines={1}
         ellipsizeMode="tail">
-        {address}
+        {detailLocation}
       </Text>
-      <TouchableOpacity
-        onPress={() => console.log('복사')}
-        className="w-[55px]">
+
+      <TouchableOpacity onPress={() => console.log('복사')}>
         <CopyIcons shape="default" width={24} height={24} />
       </TouchableOpacity>
     </View>

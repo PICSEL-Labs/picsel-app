@@ -44,21 +44,21 @@ const BrandDetailBottomSheet = ({ visible, storeDetail, onClose }: Props) => {
     return null;
   }
 
-  console.log(storeDetail);
-
   const splitAddress = (fullAddress: string) => {
     const parts = fullAddress.split(' ');
     if (parts.length > 3) {
       return {
         location: parts.slice(0, 3).join(' '),
+        detailLocation: parts.slice(3, -1).join(' '),
       };
     }
     return {
       location: fullAddress,
+      detailLocation: fullAddress,
     };
   };
 
-  const { location } = splitAddress(storeDetail.address);
+  const { location, detailLocation } = splitAddress(storeDetail.address);
   const distanceText = `${Math.round(storeDetail.distance * 1000)}m`;
 
   return (
@@ -81,7 +81,7 @@ const BrandDetailBottomSheet = ({ visible, storeDetail, onClose }: Props) => {
             openCopy={openCopy}
           />
 
-          {openCopy && <CopyAddress address={storeDetail.address} />}
+          {openCopy && <CopyAddress detailLocation={detailLocation} />}
 
           <View className="mb-2 py-4">
             <QrSaveButton />

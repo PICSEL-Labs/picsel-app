@@ -16,7 +16,7 @@ interface Props {
 
 const BrandDetailBottomSheet = ({ visible, storeDetail, onClose }: Props) => {
   const { bottomSheetModalRef, openCopy, setOpenCopy } =
-    useBrandDetailBottomSheet({ visible });
+    useBrandDetailBottomSheet({ visible, storeDetail });
 
   if (!storeDetail) {
     return null;
@@ -26,7 +26,6 @@ const BrandDetailBottomSheet = ({ visible, storeDetail, onClose }: Props) => {
     <BottomSheetModal
       style={bottomSheetShadow}
       ref={bottomSheetModalRef}
-      enablePanDownToClose={true}
       handleIndicatorStyle={bottomSheetIndicator}
       onDismiss={onClose}
       backgroundStyle={{ borderRadius: 24 }}>

@@ -12,12 +12,22 @@ import CopyAddress from './CopyAddress';
 import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/styles/shadows';
 
+interface StoreDetail {
+  storeId: string;
+  storeName: string;
+  brandName: string;
+  address: string;
+  distance: number;
+  brandIconImageUrl: string;
+}
+
 interface Props {
   visible: boolean;
+  storeDetail: StoreDetail | null;
   onClose: () => void;
 }
 
-const BrandDetailBottomSheet = ({ visible, onClose }: Props) => {
+const BrandDetailBottomSheet = ({ visible, storeDetail, onClose }: Props) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [openCopy, setOpenCopy] = useState(false);
 
@@ -30,6 +40,27 @@ const BrandDetailBottomSheet = ({ visible, onClose }: Props) => {
     }
   }, [visible]);
 
+  if (!storeDetail) {
+    return null;
+  }
+
+  console.log(storeDetail);
+
+  const splitAddress = (fullAddress: string) => {
+    const parts = fullAddress.split(' ');
+    if (parts.length > 3) {
+      return {
+        location: parts.slice(0, 3).join(' '),
+      };
+    }
+    return {
+      location: fullAddress,
+    };
+  };
+
+  const { location } = splitAddress(storeDetail.address);
+  const distanceText = `${Math.round(storeDetail.distance * 1000)}m`;
+
   return (
     <BottomSheetModal
       style={bottomSheetShadow}
@@ -40,19 +71,17 @@ const BrandDetailBottomSheet = ({ visible, onClose }: Props) => {
       backgroundStyle={{ borderRadius: 24 }}>
       <BottomSheetView>
         <View className="mt-1 h-[270px] flex-1 items-center justify-center">
-          <BottomSheetBrandImage imageUrl="/img/brand/logo/default.jpg" />
+          <BottomSheetBrandImage imageUrl={storeDetail.brandIconImageUrl} />
 
           <BrandDetailInfo
-            brandName="하루필름 부산서면점"
-            detailAddress="부산 부산진구 중앙대로"
-            location="349m"
+            brandName={storeDetail.storeName}
+            distance={distanceText}
+            location={location}
             setOpenCopy={setOpenCopy}
             openCopy={openCopy}
           />
 
-          {openCopy && (
-            <CopyAddress address="부산 부산진구 중앙대로702번길 19" />
-          )}
+          {openCopy && <CopyAddress address={storeDetail.address} />}
 
           <View className="mb-2 py-4">
             <QrSaveButton />

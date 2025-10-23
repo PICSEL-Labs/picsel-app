@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Image } from 'react-native';
+import { View, Image, Pressable } from 'react-native';
 import Config from 'react-native-config';
 
 import BrandFavIcons from '@/shared/icons/BrandFav';
@@ -19,9 +19,12 @@ const BottomSheetBrandImage = ({ imageUrl, nearBy = false }: Props) => {
         source={{ uri: Config.IMAGE_URL + imageUrl }}
         resizeMode="cover"
       />
-      <View className="absolute bottom-0 right-0">
+
+      <Pressable
+        className="absolute bottom-0 right-0"
+        onPress={() => console.log('fav pressed')}>
         <BrandFavIcons width={23} height={23} shape="gray" />
-      </View>
+      </Pressable>
     </View>
   );
 };

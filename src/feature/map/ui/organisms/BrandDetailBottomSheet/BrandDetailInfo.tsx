@@ -7,14 +7,14 @@ import DropIcons from '@/shared/icons/DropIcons';
 interface Props {
   brandName: string;
   location: string;
-  detailAddress: string;
+  distance: string;
   setOpenCopy: Dispatch<SetStateAction<boolean>>;
   openCopy: boolean;
 }
 
 const BrandDetailInfo = ({
   brandName,
-  detailAddress,
+  distance,
   location,
   setOpenCopy,
   openCopy,
@@ -24,9 +24,9 @@ const BrandDetailInfo = ({
       <Text className="mt-2 text-gray-900 title-01">{brandName}</Text>
 
       <View className="flex-row items-end space-x-1">
-        <Text className="mt-2 text-gray-900 headline-01">{location}</Text>
+        <Text className="mt-2 text-gray-900 headline-01">{distance}</Text>
         <Text className="mt-2 text-gray-900 body-rg-02">·</Text>
-        <Text className="mt-2 text-gray-900 body-rg-02">{detailAddress}</Text>
+        <Text className="mt-2 text-gray-900 body-rg-02">{location}</Text>
 
         <Pressable onPress={() => setOpenCopy(prev => !prev)}>
           <DropIcons height={24} width={24} shape={openCopy ? 'up' : 'down'} />

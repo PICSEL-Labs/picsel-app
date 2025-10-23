@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
-import Config from 'react-native-config';
 
+import { SelectedStore } from '../../hooks/useMarker';
 import { BrandData, StoreData } from '../../types';
 import StoreMarker from '../atoms/StoreMarker';
 
@@ -10,10 +10,8 @@ interface Props {
   store?: StoreData[];
   brand?: BrandData[];
   selectedMarkerId: string | null;
-  handleMarkerPress: (storeId: string) => void;
+  handleMarkerPress: (store: SelectedStore) => void;
 }
-
-const DEFAULT_IMAGE = `${Config.IMAGE_URL}/img/brand/logo/default.jpg`;
 
 const MapOverlay = ({
   brand = [],
@@ -24,7 +22,7 @@ const MapOverlay = ({
   const [renderTrigger, setRenderTrigger] = useState(0);
 
   const brandMap = useMemo(() => {
-    return new Map(brand.map(b => [b.brandId, b.brandIconImageUrl]));
+    return new Map(brand.map(b => [b.brandId, b]));
   }, [brand]);
 
   useEffect(() => {
@@ -43,12 +41,9 @@ const MapOverlay = ({
     }
 
     return store.map(data => {
-      const brandIconUrl = brandMap.get(data.brandId);
-      const imageSource = {
-        uri: brandIconUrl
-          ? `${Config.IMAGE_URL}${brandIconUrl}?w=50&h=50`
-          : DEFAULT_IMAGE,
-      };
+      const brandInfo = brandMap.get(data.brandId);
+      const brandIconUrl = brandInfo?.brandIconImageUrl;
+
       const isSelected = selectedMarkerId === data.storeId;
 
       return (
@@ -56,9 +51,18 @@ const MapOverlay = ({
           key={`${data.storeId}-${renderTrigger}`}
           latitude={data.y}
           longitude={data.x}
-          onTap={() => handleMarkerPress(data.storeId)}
+          onTap={() =>
+            handleMarkerPress({
+              storeId: data.storeId,
+              storeName: data.storeName,
+              brandName: brandInfo?.brandName || '알 수 없음',
+              address: data.address,
+              distance: data.distance,
+              brandIconImageUrl: brandIconUrl,
+            })
+          }
           anchor={{ x: 0.5, y: 0.5 }}>
-          <StoreMarker imageSource={imageSource} isSelected={isSelected} />
+          <StoreMarker imageSource={brandIconUrl} isSelected={isSelected} />
         </NaverMapMarkerOverlay>
       );
     });

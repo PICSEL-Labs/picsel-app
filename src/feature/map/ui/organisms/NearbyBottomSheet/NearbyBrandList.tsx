@@ -4,13 +4,10 @@ import { FlatList, Text, View } from 'react-native';
 
 import BottomSheetBrandImage from '../../atoms/BottomSheetBrandImage';
 
-interface Brand {
-  brandName: string;
-  brandIconImageUrl: string;
-}
+import { NearByBrand } from '@/feature/map/types';
 
 interface Props {
-  brands: Brand[];
+  brands: NearByBrand[];
 }
 
 const NearbyBrandList = ({ brands }: Props) => {
@@ -23,7 +20,11 @@ const NearbyBrandList = ({ brands }: Props) => {
       keyExtractor={(_, index) => index.toString()}
       renderItem={({ item }) => (
         <View className="mr-3 mt-3 w-[90px] items-center">
-          <BottomSheetBrandImage imageUrl={item.brandIconImageUrl} nearBy />
+          <BottomSheetBrandImage
+            isFavorite={item.isFavorite}
+            imageUrl={item.brandIconImageUrl}
+            nearBy
+          />
 
           <Text
             className="mt-2 text-center text-gray-900 body-rg-02"

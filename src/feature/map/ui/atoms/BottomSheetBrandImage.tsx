@@ -9,9 +9,14 @@ import { defaultShadow } from '@/styles/shadows';
 interface Props {
   imageUrl: string;
   nearBy?: boolean;
+  isFavorite: boolean;
 }
 
-const BottomSheetBrandImage = ({ imageUrl, nearBy = false }: Props) => {
+const BottomSheetBrandImage = ({
+  imageUrl,
+  nearBy = false,
+  isFavorite,
+}: Props) => {
   return (
     <View style={defaultShadow} className={nearBy && 'items-center'}>
       <Image
@@ -23,7 +28,11 @@ const BottomSheetBrandImage = ({ imageUrl, nearBy = false }: Props) => {
       <Pressable
         className="absolute bottom-0 right-0"
         onPress={() => console.log('fav pressed')}>
-        <BrandFavIcons width={23} height={23} shape="gray" />
+        <BrandFavIcons
+          width={23}
+          height={23}
+          shape={isFavorite ? 'empty' : 'gray'}
+        />
       </Pressable>
     </View>
   );

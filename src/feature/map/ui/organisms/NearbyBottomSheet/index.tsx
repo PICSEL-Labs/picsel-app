@@ -7,17 +7,13 @@ import NearbyBrandEmptyState from './NearbyBrandEmptyState';
 import NearbyBrandList from './NearbyBrandList';
 
 import { useNearbyBrandBottomSheet } from '@/feature/map/hooks/useNearbyBrandBottomSheet';
+import { NearByBrand } from '@/feature/map/types';
 import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/styles/shadows';
 
-interface Brand {
-  brandName: string;
-  brandIconImageUrl: string;
-}
-
 interface Props {
   visible: boolean;
-  brands?: Brand[];
+  brands?: NearByBrand[];
   showSheet: () => void;
   hideSheet: () => void;
 }

@@ -1,25 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { View } from 'react-native';
 
-import BottomSheetBrandImage from '../../atoms/BottomSheetBrandImage';
-import QrSaveButton from '../../atoms/QrSaveButton';
+import BrandDetailContent, { StoreDetail } from './BrandDetailContent';
 
-import BrandDetailInfo from './BrandDetailInfo';
-import CopyAddress from './CopyAddress';
-
+import { useBrandDetailBottomSheet } from '@/feature/map/hooks/useBrandDetailBottomSheet';
 import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/styles/shadows';
-
-interface StoreDetail {
-  storeId: string;
-  storeName: string;
-  brandName: string;
-  address: string;
-  distance: number;
-  brandIconImageUrl: string;
-}
 
 interface Props {
   visible: boolean;
@@ -28,38 +15,12 @@ interface Props {
 }
 
 const BrandDetailBottomSheet = ({ visible, storeDetail, onClose }: Props) => {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const [openCopy, setOpenCopy] = useState(false);
-
-  useEffect(() => {
-    if (visible) {
-      bottomSheetModalRef.current?.present();
-    } else {
-      bottomSheetModalRef.current?.dismiss();
-      setOpenCopy(false);
-    }
-  }, [visible]);
+  const { bottomSheetModalRef, openCopy, setOpenCopy } =
+    useBrandDetailBottomSheet({ visible });
 
   if (!storeDetail) {
     return null;
   }
-
-  const splitAddress = (fullAddress: string) => {
-    const parts = fullAddress.split(' ');
-    if (parts.length > 3) {
-      return {
-        location: parts.slice(0, 3).join(' '),
-        detailLocation: parts.slice(3, -1).join(' '),
-      };
-    }
-    return {
-      location: fullAddress,
-      detailLocation: fullAddress,
-    };
-  };
-
-  const { location, detailLocation } = splitAddress(storeDetail.address);
-  const distanceText = `${Math.round(storeDetail.distance * 1000)}m`;
 
   return (
     <BottomSheetModal
@@ -70,23 +31,11 @@ const BrandDetailBottomSheet = ({ visible, storeDetail, onClose }: Props) => {
       onDismiss={onClose}
       backgroundStyle={{ borderRadius: 24 }}>
       <BottomSheetView>
-        <View className="mt-1 h-[270px] flex-1 items-center justify-center">
-          <BottomSheetBrandImage imageUrl={storeDetail.brandIconImageUrl} />
-
-          <BrandDetailInfo
-            brandName={storeDetail.storeName}
-            distance={distanceText}
-            location={location}
-            setOpenCopy={setOpenCopy}
-            openCopy={openCopy}
-          />
-
-          {openCopy && <CopyAddress detailLocation={detailLocation} />}
-
-          <View className="mb-2 py-4">
-            <QrSaveButton />
-          </View>
-        </View>
+        <BrandDetailContent
+          storeDetail={storeDetail}
+          openCopy={openCopy}
+          setOpenCopy={setOpenCopy}
+        />
       </BottomSheetView>
     </BottomSheetModal>
   );

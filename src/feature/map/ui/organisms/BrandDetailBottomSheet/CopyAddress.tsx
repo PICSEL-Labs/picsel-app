@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import CopyIcons from '@/shared/icons/CopyIcons';
 import { defaultButtonShadow } from '@/styles/shadows';
@@ -17,17 +17,15 @@ const CopyAddress = ({ detailLocation }: Props) => {
       <View className="rounded-[8px] border border-gray-100 px-1 py-0.5">
         <Text className="text-gray-300 body-rg-01">도로명</Text>
       </View>
-
       <Text
         className="text-gray-950 body-rg-02"
         numberOfLines={1}
         ellipsizeMode="tail">
         {detailLocation}
       </Text>
-
-      <TouchableOpacity onPress={() => console.log('복사')}>
+      <Pressable onPress={() => console.log('복사')}>
         <CopyIcons shape="default" width={24} height={24} />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };

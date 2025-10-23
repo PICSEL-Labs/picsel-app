@@ -46,3 +46,11 @@ export const bottomSheetShadow = {
   shadowRadius: 2,
   elevation: 10,
 };
+
+export const mapIconShadow = {
+  shadowColor: '#000',
+  shadowOffset: { width: 1, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 3,
+  elevation: 6,
+};

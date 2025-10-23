@@ -5,7 +5,8 @@ import {
   NaverMapViewRef,
 } from '@mj-studio/react-native-naver-map';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
+import Config from 'react-native-config';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import { useBottomSheetManager } from '@/feature/map/hooks/useBottomSheetManager';
@@ -22,6 +23,7 @@ import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
+import { useFilteredBrandsStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
@@ -40,7 +42,7 @@ const HomeScreen = () => {
   const { data: stores } = useFetchStores(storeParams);
   const { camera, handleMapIdle, hideSearchButton, INITIAL_CAMERA } =
     useMapCamera();
-  const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
+  const { selectedMarkerId, selectedStore, handleMarkerPress, clearSelection } =
     useMarker();
   const {
     nearbyBrandVisible,
@@ -60,7 +62,7 @@ const HomeScreen = () => {
 
   const { handleLocationSearch, handleNavigateSearch } = useMapActions({
     searchStoresByLocation,
-    setSelectedMarkerId,
+    setSelectedMarkerId: clearSelection,
     hideSearchButton,
     setActiveButton,
     showSheet,
@@ -68,6 +70,37 @@ const HomeScreen = () => {
     navigation,
     camera,
   });
+
+  const { filteredList, filterBrand, resetFilter } = useFilteredBrandsStore();
+
+  useEffect(() => {
+    const storeData = stores?.data?.content;
+    const brandData = stores?.data?.brands;
+
+    if (storeData?.length && brandData?.length) {
+      const brandMap = new Map(
+        brandData.map(b => [b.brandId, b.brandIconImageUrl]),
+      );
+
+      const imageUrls = storeData
+        .map(s => {
+          const brandIconUrl = brandMap.get(s.brandId);
+          return brandIconUrl ? `${Config.IMAGE_URL}${brandIconUrl}` : null;
+        })
+        .filter(Boolean);
+
+      // 모든 이미지를 병렬로 프리로드
+      Promise.all(
+        imageUrls.map(url =>
+          Image.prefetch(url!).catch(err => {
+            console.warn('Image prefetch failed:', url, err);
+          }),
+        ),
+      ).then(() => {
+        console.log('All images prefetched');
+      });
+    }
+  }, [stores?.data?.content, stores?.data?.brands]);
 
   useEffect(() => {
     console.log('Stores data updated:', {
@@ -92,7 +125,7 @@ const HomeScreen = () => {
           })
         }
         ref={mapRef}
-        onTapMap={() => setSelectedMarkerId(null)}
+        onTapMap={clearSelection}
         style={StyleSheet.absoluteFillObject}
         initialCamera={INITIAL_CAMERA}>
         <MapOverlay
@@ -123,7 +156,13 @@ const HomeScreen = () => {
         closeModal={closeModal}
       />
 
-      <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
+      <BrandFilterBottomSheet
+        visible={isModalOpen}
+        onClose={closeModal}
+        filteredList={filteredList}
+        filterBrand={filterBrand}
+        resetFilter={resetFilter}
+      />
 
       <NearbyBrandBottomSheet
         visible={nearbyBrandVisible}
@@ -134,6 +173,7 @@ const HomeScreen = () => {
 
       <BrandDetailBottomSheet
         visible={detailBrandVisible}
+        storeDetail={selectedStore}
         onClose={() => hideSheet('detail')}
       />
     </ScreenLayout>

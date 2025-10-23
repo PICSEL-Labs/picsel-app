@@ -1,21 +1,12 @@
 import { useState, useCallback } from 'react';
 
-export interface SelectedStore {
-  storeId: string;
-  storeName: string;
-  brandName: string;
-  address: string;
-  distance: number;
-  brandIconImageUrl: string;
-}
+import { StoreDetail } from '../types';
 
 export const useMarker = () => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
-  const [selectedStore, setSelectedStore] = useState<SelectedStore | null>(
-    null,
-  );
+  const [selectedStore, setSelectedStore] = useState<StoreDetail | null>(null);
 
-  const handleMarkerPress = useCallback((store: SelectedStore) => {
+  const handleMarkerPress = useCallback((store: StoreDetail) => {
     setSelectedMarkerId(prev =>
       prev === store.storeId ? null : store.storeId,
     );

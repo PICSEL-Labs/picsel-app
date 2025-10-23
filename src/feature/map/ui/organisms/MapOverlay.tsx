@@ -2,15 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 
-import { SelectedStore } from '../../hooks/useMarker';
-import { BrandData, StoreData } from '../../types';
+import { BrandData, StoreData, StoreDetail } from '../../types';
 import StoreMarker from '../atoms/StoreMarker';
 
 interface Props {
   store?: StoreData[];
   brand?: BrandData[];
   selectedMarkerId: string | null;
-  handleMarkerPress: (store: SelectedStore) => void;
+  handleMarkerPress: (store: StoreDetail) => void;
 }
 
 const MapOverlay = ({
@@ -55,6 +54,7 @@ const MapOverlay = ({
             handleMarkerPress({
               storeId: data.storeId,
               storeName: data.storeName,
+              brandId: data.brandId,
               brandName: brandInfo?.brandName || '알 수 없음',
               address: data.address,
               distance: data.distance,

@@ -47,7 +47,7 @@ const MapOverlay = ({
 
       return (
         <NaverMapMarkerOverlay
-          key={`${data.storeId}-${renderTrigger}`}
+          key={`${data.storeId}-${isSelected ? 'selected' : 'unselected'}-${renderTrigger}`}
           latitude={data.y}
           longitude={data.x}
           onTap={() =>
@@ -61,7 +61,8 @@ const MapOverlay = ({
               brandIconImageUrl: brandIconUrl,
             })
           }
-          anchor={{ x: 0.5, y: 0.5 }}>
+          anchor={{ x: 0.5, y: 0.5 }}
+          zIndex={isSelected ? 1000 : 0}>
           <StoreMarker imageSource={brandIconUrl} isSelected={isSelected} />
         </NaverMapMarkerOverlay>
       );

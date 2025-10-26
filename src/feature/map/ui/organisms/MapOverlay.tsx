@@ -5,6 +5,8 @@ import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 import { BrandData, StoreData, StoreDetail } from '../../types';
 import StoreMarker from '../atoms/StoreMarker';
 
+import { useFavoriteStore } from '@/shared/store';
+
 interface Props {
   store?: StoreData[];
   brand?: BrandData[];
@@ -19,6 +21,7 @@ const MapOverlay = ({
   handleMarkerPress,
 }: Props) => {
   const [renderTrigger, setRenderTrigger] = useState(0);
+  const { optimisticFavorites } = useFavoriteStore();
 
   const brandMap = useMemo(() => {
     return new Map(brand.map(b => [b.brandId, b]));
@@ -42,12 +45,12 @@ const MapOverlay = ({
     return store.map(data => {
       const brandInfo = brandMap.get(data.brandId);
       const brandIconUrl = brandInfo?.brandIconImageUrl;
-
       const isSelected = selectedMarkerId === data.storeId;
+      const isFavorite = optimisticFavorites[data.brandId] ?? false;
 
       return (
         <NaverMapMarkerOverlay
-          key={`${data.storeId}-${isSelected ? 'selected' : 'unselected'}-${renderTrigger}`}
+          key={`${data.storeId}-${isSelected ? 'selected' : 'unselected'}-${isFavorite ? 'fav' : 'unfav'}-${renderTrigger}`}
           latitude={data.y}
           longitude={data.x}
           onTap={() =>
@@ -63,11 +66,22 @@ const MapOverlay = ({
           }
           anchor={{ x: 0.5, y: 0.5 }}
           zIndex={isSelected ? 1000 : 0}>
-          <StoreMarker imageSource={brandIconUrl} isSelected={isSelected} />
+          <StoreMarker
+            imageSource={brandIconUrl}
+            brandId={data.brandId}
+            isSelected={isSelected}
+          />
         </NaverMapMarkerOverlay>
       );
     });
-  }, [store, brandMap, selectedMarkerId, handleMarkerPress, renderTrigger]);
+  }, [
+    store,
+    brandMap,
+    selectedMarkerId,
+    handleMarkerPress,
+    renderTrigger,
+    optimisticFavorites,
+  ]);
 
   return <>{markers}</>;
 };

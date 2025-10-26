@@ -1,20 +1,8 @@
 import { useState, useCallback } from 'react';
 
-import { toggleFavoriteBrandApi } from '../api/toggleFavoriteBrandAPi';
-
 export type BottomSheetType = 'nearby' | 'detail';
 
-interface Props {
-  isPending?: boolean;
-  brandId?: string;
-  isFavorite?: boolean;
-}
-
-export const useBottomSheetManager = ({
-  isPending,
-  brandId,
-  isFavorite,
-}: Props) => {
+export const useBottomSheetManager = () => {
   const [nearbyBrandVisible, setNearbyBrandVisible] = useState(false);
   const [detailBrandVisible, setDetailBrandVisible] = useState(false);
 
@@ -41,19 +29,7 @@ export const useBottomSheetManager = ({
     }
   }, []);
 
-  const handleToggleFavorite = () => {
-    if (isPending || !brandId) {
-      return;
-    }
-
-    toggleFavoriteBrandApi({
-      brandId,
-      action: isFavorite ? 'REMOVE' : 'ADD',
-    });
-  };
-
   return {
-    handleToggleFavorite,
     nearbyBrandVisible,
     detailBrandVisible,
     hideAllSheet,

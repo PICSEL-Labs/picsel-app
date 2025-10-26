@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useToggleFavoriteBrand } from '../mutations/useToggleFavoriteBrand';
+
+import { useFavoriteStore } from '@/shared/store';
 
 interface Props {
   brandId?: string;
@@ -8,20 +10,26 @@ interface Props {
 }
 
 export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
-  const [optimisticFavorite, setOptimisticFavorite] = useState(isFavorite);
+  const { optimisticFavorites, toggleOptimisticFavorite, syncFavorite } =
+    useFavoriteStore();
   const { mutate: toggleFavorite, isPending } = useToggleFavoriteBrand();
 
+  const optimisticFavorite = brandId
+    ? (optimisticFavorites[brandId] ?? isFavorite)
+    : isFavorite;
+
   useEffect(() => {
-    setOptimisticFavorite(isFavorite);
-  }, [isFavorite]);
+    if (brandId) {
+      syncFavorite(brandId, isFavorite);
+    }
+  }, [brandId, isFavorite, syncFavorite]);
 
   const handleToggleFavorite = () => {
     if (isPending || !brandId) {
       return;
     }
 
-    const newFavoriteState = !optimisticFavorite;
-    setOptimisticFavorite(newFavoriteState);
+    toggleOptimisticFavorite(brandId);
 
     toggleFavorite(
       {
@@ -30,7 +38,7 @@ export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
       },
       {
         onError: () => {
-          setOptimisticFavorite(isFavorite);
+          syncFavorite(brandId, isFavorite);
         },
       },
     );

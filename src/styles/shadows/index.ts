@@ -50,3 +50,12 @@ export const mapIconShadow = {
   shadowOpacity: 0.3,
   shadowRadius: 0.5,
 };
+
+// 디자인 파트 수정 요청시
+// 바로 수정 반영할게요.
+export const favoriteShadow = {
+  shadowColor: '#FF6C9A',
+  shadowOffset: { width: 0, height: 0 },
+  shadowOpacity: 1,
+  shadowRadius: 7,
+};

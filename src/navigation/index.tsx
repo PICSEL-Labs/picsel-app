@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
-import QrScreen from '@/screens/qr';
+import QrPreviewScreen from '@/screens/qr/preview';
+import QrScanScreen from '@/screens/qr/scan';
 import StoreSearchScreen from '@/screens/search';
 
 export type MainNavigationProps = {
@@ -15,6 +16,7 @@ export type MainNavigationProps = {
   Home: undefined;
   StoreSearch: undefined;
   QrScan: undefined;
+  QrPreview: { url: string };
 };
 
 const MainRoute = () => {
@@ -33,11 +35,13 @@ const MainRoute = () => {
 
       <Stack.Screen
         name="QrScan"
-        component={QrScreen}
+        component={QrScanScreen}
         options={{
           animation: 'slide_from_bottom',
         }}
       />
+
+      <Stack.Screen name="QrPreview" component={QrPreviewScreen} />
     </Stack.Navigator>
   );
 };

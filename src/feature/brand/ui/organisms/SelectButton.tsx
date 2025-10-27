@@ -13,6 +13,7 @@ interface Props {
   showFloatingButton?: boolean;
   scrollToTop?: () => void;
   handleNavigation?: () => void;
+  onPress?: () => void;
 }
 
 const SelectButton = ({
@@ -22,6 +23,7 @@ const SelectButton = ({
   handleNavigation,
   showFloatingButton,
   scrollToTop,
+  onPress,
 }: Props) => {
   return (
     <View className="w-full items-center">
@@ -33,6 +35,7 @@ const SelectButton = ({
         onPressIn={
           actualSelectedCount ? handleSelectedCompleted : handleNavigation
         }
+        onPress={onPress}
       />
 
       {showFloatingButton && <Floating scrollToTop={scrollToTop} />}

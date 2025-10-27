@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { useFilteredBrandsStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface UseMapActionsParams {
@@ -23,7 +24,10 @@ export const useMapActions = ({
   navigation,
   camera,
 }: UseMapActionsParams) => {
+  const { clearAppliedFilter } = useFilteredBrandsStore();
+
   const handleLocationSearch = useCallback(() => {
+    clearAppliedFilter();
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
     setSelectedMarkerId(null);
     hideSearchButton();

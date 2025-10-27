@@ -33,13 +33,12 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   response => response,
   async error => {
-    const { refreshToken, setAccessToken } = useUserStore.getState();
+    const { refreshToken, setAccessToken, logout } = useUserStore.getState();
 
-    if (error.response?.status === 401 && error.response?.code === 1401) {
+    if (error.response?.data?.code === 1401) {
       try {
-        // 1. 토큰 재발급 요청
         const res = await axios.post(
-          '/auth/refresh/access',
+          `${Config.API_KEY}/auth/refresh/access`,
           {},
           {
             headers: {
@@ -48,14 +47,15 @@ axiosInstance.interceptors.response.use(
           },
         );
 
-        // 2. accessToken 저장
-        setAccessToken(res.data.accessToken);
+        const newAccessToken = res.data.data.accessToken;
 
-        // 3. 원래 요청 다시 보내기
-        error.config.headers['Access-Token'] = res.data.accessToken;
+        setAccessToken(newAccessToken);
+
+        error.config.headers['Access-Token'] = newAccessToken;
+
         return axiosInstance.request(error.config);
       } catch (refreshError) {
-        // logout();
+        logout();
         return Promise.reject(refreshError);
       }
     }
@@ -64,37 +64,14 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-// refreshToken 재발급 interceptor
+// refreshToken issue
 axiosInstance.interceptors.response.use(
   response => response,
   async error => {
-    const { refreshToken, accessToken, setRefreshToken } =
-      useUserStore.getState();
+    const { logout } = useUserStore.getState();
 
-    if (error.response?.status === 401 && error.response?.code === 1402) {
-      try {
-        // 1. 토큰 재발급 요청
-        const res = await axios.post(
-          '/auth/refresh/refresh',
-          {},
-          {
-            headers: {
-              'Access-Token': accessToken,
-              'Refresh-Token': refreshToken,
-            },
-          },
-        );
-
-        // 2. refreshToken 저장
-        setRefreshToken(res.data.refreshToken);
-
-        // 3. 원래 요청 다시 보내기
-        error.config.headers['Refresh-Token'] = res.data.refreshToken;
-        return axiosInstance.request(error.config);
-      } catch (refreshError) {
-        // logout();
-        return Promise.reject(refreshError);
-      }
+    if (error.response?.data?.code === 1402) {
+      logout();
     }
 
     return Promise.reject(error);

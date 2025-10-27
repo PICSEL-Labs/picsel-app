@@ -11,7 +11,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { useToastStore } from '@/shared/store/ui/Toast';
+import { useToastStore } from '@/shared/store/ui/toast';
 
 const GRADIENT_COLORS = [
   'rgba(255, 255, 255, 1)',

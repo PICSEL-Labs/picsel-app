@@ -1,40 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import clsx from 'clsx';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
+import Config from 'react-native-config';
+
+import { useFavoriteStore } from '@/shared/store';
+import { mapIconShadow } from '@/styles/shadows';
 
 interface Props {
-  imageSource: { uri: string };
+  imageSource: string;
+  brandId: string;
   isSelected?: boolean;
 }
 
-const StoreMarker = ({ imageSource, isSelected = false }: Props) => {
-  const [renderKey, setRenderKey] = useState(0);
-
+const StoreMarker = ({ imageSource, brandId, isSelected = false }: Props) => {
   const IMAGE_SIZE = isSelected ? 48 : 28;
-
-  useEffect(() => {
-    setRenderKey(prev => prev + 1);
-  }, [isSelected]);
+  const isFavorite = useFavoriteStore(
+    state => state.optimisticFavorites[brandId] ?? false,
+  );
 
   return (
-    <Image
-      key={renderKey}
-      width={IMAGE_SIZE}
-      height={IMAGE_SIZE}
-      className={clsx('rounded-full', isSelected && 'border-2 border-white')}
-      source={{
-        ...imageSource,
-        cache: 'force-cache',
-      }}
-      resizeMode="cover"
-    />
+    <View
+      style={[mapIconShadow, { width: IMAGE_SIZE, height: IMAGE_SIZE }]}
+      className="items-center justify-center">
+      <Image
+        width={IMAGE_SIZE}
+        height={IMAGE_SIZE}
+        className={clsx(
+          'rounded-full',
+          isSelected &&
+            `border-2 ${isFavorite ? 'border-primary-pink' : 'border-white'}`,
+        )}
+        source={{ uri: Config.IMAGE_URL + imageSource }}
+        resizeMode="cover"
+      />
+    </View>
   );
 };
 
-export default React.memo(StoreMarker, (prev, next) => {
-  return (
-    prev.imageSource.uri === next.imageSource.uri &&
-    prev.isSelected === next.isSelected
-  );
-});
+export default StoreMarker;

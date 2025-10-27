@@ -6,30 +6,34 @@ interface FilteredBrand {
 }
 
 interface FilteredBrandStore {
+  tempFilteredList: FilteredBrand[];
   filteredList: FilteredBrand[];
   filterBrand: (brandId: string, name: string) => boolean;
+  applyFilter: () => void;
   resetFilter: () => void;
+  clearAppliedFilter: () => void;
 }
 
 export const useFilteredBrandsStore = create<FilteredBrandStore>(
   (set, get) => ({
+    tempFilteredList: [] as FilteredBrand[],
     filteredList: [] as FilteredBrand[],
 
     filterBrand: (brandId, name) => {
-      const { filteredList } = get();
+      const { tempFilteredList } = get();
 
-      const isSelected = filteredList.some(b => b.brandId === brandId);
-      const isOverLimit = filteredList.length >= 5;
+      const isSelected = tempFilteredList.some(b => b.brandId === brandId);
+      const isOverLimit = tempFilteredList.length >= 5;
 
       if (isSelected) {
         set({
-          filteredList: filteredList.filter(b => b.brandId !== brandId),
+          tempFilteredList: tempFilteredList.filter(b => b.brandId !== brandId),
         });
         return true;
       }
       if (!isOverLimit) {
         set({
-          filteredList: [...filteredList, { brandId, name }],
+          tempFilteredList: [...tempFilteredList, { brandId, name }],
         });
         return true;
       }
@@ -37,8 +41,23 @@ export const useFilteredBrandsStore = create<FilteredBrandStore>(
       return false;
     },
 
+    applyFilter: () => {
+      const { tempFilteredList } = get();
+      set({ filteredList: [...tempFilteredList] });
+    },
+
     resetFilter: () => {
-      set({ filteredList: [] });
+      set({
+        tempFilteredList: [],
+        filteredList: [],
+      });
+    },
+
+    clearAppliedFilter: () => {
+      set({
+        tempFilteredList: [],
+        filteredList: [],
+      });
     },
   }),
 );

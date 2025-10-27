@@ -20,7 +20,7 @@ import SelectButton from './SelectButton';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
-import { useToastStore } from '@/shared/store/ui/Toast';
+import { useToastStore } from '@/shared/store/ui/toast';
 import BottomSheet from '@/shared/ui/molecules/BottomSheet';
 
 interface Props {
@@ -32,10 +32,13 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
   const { data: brands } = useGetBrandsList();
   const { brandList, setBrandList } = useBrandListStore();
   const { handleScroll, scrollViewRef } = useHandleScroll();
-  const { filteredList, filterBrand, resetFilter } = useFilteredBrandsStore();
+  const { tempFilteredList, filterBrand, resetFilter, applyFilter } =
+    useFilteredBrandsStore();
   const { showToast } = useToastStore();
-  const { panGesture, animatedStyle, isDisabled, actualCount } =
-    useBrandFilterSheet({ visible, onClose });
+  const { panGesture, animatedStyle, isDisabled } = useBrandFilterSheet({
+    visible,
+    onClose,
+  });
 
   const bottomAreaHeight = useSharedValue(0);
 
@@ -43,7 +46,7 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
     if (brands) {
       setBrandList(brands);
     }
-  }, [brands]);
+  }, [brands, setBrandList]);
 
   const handleFilter = (brandId: string, name: string) => {
     const success = filterBrand(brandId, name);
@@ -56,6 +59,11 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
     bottomAreaHeight.value = event.nativeEvent.layout.height;
   };
 
+  const handleApplyFilter = () => {
+    applyFilter();
+    onClose();
+  };
+
   return (
     <BottomSheet
       onClose={onClose}
@@ -65,14 +73,14 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
           <View className="flex-row">
             <Text
               className={`mr-1 headline-02 ${
-                filteredList.length > 0 ? 'text-pink-500' : 'text-gray-500'
+                tempFilteredList.length > 0 ? 'text-pink-500' : 'text-gray-500'
               }`}>
               초기화
             </Text>
             <ReplayIcons
               width={24}
               height={24}
-              shape={filteredList.length > 0 ? 'true' : 'false'}
+              shape={tempFilteredList.length > 0 ? 'true' : 'false'}
             />
           </View>
         </Pressable>
@@ -88,7 +96,7 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
         indicatorStyle="default">
         <BrandGridList
           brandList={brandList}
-          selectedList={filteredList}
+          selectedList={tempFilteredList}
           onPress={handleFilter}
           excludeNoneBrand
         />
@@ -96,8 +104,9 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
       <View onLayout={handleButtonLayout} className="relative">
         <BrandFilterToast bottomAreaHeight={bottomAreaHeight} />
         <SelectButton
-          actualSelectedCount={actualCount}
-          disabled={!isDisabled}
+          actualSelectedCount={tempFilteredList.length}
+          disabled={isDisabled}
+          onPress={handleApplyFilter}
         />
       </View>
     </BottomSheet>

@@ -46,6 +46,7 @@ const Button = ({
   text,
   outline,
   shadow,
+
   ...props
 }: Props) => (
   <Pressable

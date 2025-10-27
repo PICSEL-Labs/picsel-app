@@ -1,47 +1,43 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 
-import {
-  NaverMapView,
-  NaverMapViewRef,
-} from '@mj-studio/react-native-naver-map';
-import { useNavigation } from '@react-navigation/native';
+import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
-import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
-import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
-import { useMarker } from '@/feature/map/hooks/useMarker';
-import { useFetchStores } from '@/feature/map/queries/useFetchStores';
+import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
+import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
+import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { useModal } from '@/shared/hooks/useModal';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
-  const mapRef = useRef<NaverMapViewRef>(null);
-  const navigation = useNavigation<RootStackNavigationProp>();
-
-  const [brandName, setBrandName] = useState('');
-  const [activeButton, setActiveButton] = useState<'brand' | 'location'>(
-    'brand',
-  );
-
-  const { closeModal, isModalOpen, openModal } = useModal();
-  const { storeParams, searchStoresByLocation } = useMapSearch();
-  const { data: stores } = useFetchStores(storeParams);
-  const { camera, handleMapIdle, hideSearchButton, INITIAL_CAMERA } =
-    useMapCamera();
-  const { setSelectedMarkerId, selectedMarkerId, handleMarkerPress } =
-    useMarker();
-
-  const handleLocationSearch = () => {
-    searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
-    setSelectedMarkerId(null);
-    hideSearchButton();
-    setActiveButton('brand');
-  };
+  const {
+    mapRef,
+    brandName,
+    setBrandName,
+    activeButton,
+    setActiveButton,
+    isModalOpen,
+    openModal,
+    closeModal,
+    filteredStores,
+    filteredBrands,
+    isFavorite,
+    handleMapIdle,
+    INITIAL_CAMERA,
+    selectedMarkerId,
+    selectedStore,
+    handleMarkerPress,
+    clearSelection,
+    nearbyBrandVisible,
+    detailBrandVisible,
+    hideSheet,
+    showSheet,
+    handleLocationSearch,
+    handleNavigateSearch,
+  } = useHomeScreen();
 
   return (
     <ScreenLayout>
@@ -57,22 +53,22 @@ const HomeScreen = () => {
           })
         }
         ref={mapRef}
-        onTapMap={() => setSelectedMarkerId(null)}
+        onTapMap={clearSelection}
         style={StyleSheet.absoluteFillObject}
         initialCamera={INITIAL_CAMERA}>
         <MapOverlay
           handleMarkerPress={handleMarkerPress}
           selectedMarkerId={selectedMarkerId}
-          store={stores?.data.content}
-          brand={stores?.data.brands}
+          store={filteredStores}
+          brand={filteredBrands}
         />
       </NaverMapView>
 
       <Input
         value={brandName}
-        onChangeText={brand => setBrandName(brand)}
+        onChangeText={setBrandName}
         handleClear={() => setBrandName('')}
-        onPress={() => navigation.navigate('StoreSearch')}
+        onPress={handleNavigateSearch}
         placeholder="브랜드명, 매장명, 위치 검색"
         search
         close
@@ -89,6 +85,20 @@ const HomeScreen = () => {
       />
 
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
+
+      <NearbyBrandBottomSheet
+        visible={nearbyBrandVisible}
+        brands={filteredBrands}
+        showSheet={() => showSheet('nearby')}
+        hideSheet={() => hideSheet('nearby')}
+      />
+
+      <BrandDetailBottomSheet
+        visible={detailBrandVisible}
+        storeDetail={selectedStore}
+        isFavorite={isFavorite}
+        onClose={clearSelection}
+      />
     </ScreenLayout>
   );
 };

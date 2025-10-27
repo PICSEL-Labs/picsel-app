@@ -1,15 +1,28 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+
+import { StoreDetail } from '../types';
 
 export const useMarker = () => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
+  const [selectedStore, setSelectedStore] = useState<StoreDetail | null>(null);
 
-  const handleMarkerPress = (storeId: string) => {
-    setSelectedMarkerId(prev => (prev === storeId ? null : storeId));
-  };
+  const handleMarkerPress = useCallback((store: StoreDetail) => {
+    setSelectedMarkerId(prev =>
+      prev === store.storeId ? null : store.storeId,
+    );
+    setSelectedStore(prev => (prev?.storeId === store.storeId ? null : store));
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedMarkerId(null);
+    setSelectedStore(null);
+  }, []);
 
   return {
     handleMarkerPress,
     selectedMarkerId,
+    selectedStore,
     setSelectedMarkerId,
+    clearSelection,
   };
 };

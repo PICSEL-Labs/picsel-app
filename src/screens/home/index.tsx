@@ -1,105 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
-import {
-  NaverMapView,
-  NaverMapViewRef,
-} from '@mj-studio/react-native-naver-map';
-import { useNavigation } from '@react-navigation/native';
-import { Image, StyleSheet } from 'react-native';
-import Config from 'react-native-config';
+import { NaverMapView } from '@mj-studio/react-native-naver-map';
+import { StyleSheet } from 'react-native';
 
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
-import { useBottomSheetManager } from '@/feature/map/hooks/useBottomSheetManager';
-import { useLocationPermission } from '@/feature/map/hooks/useLocationPermission';
-import { useMapActions } from '@/feature/map/hooks/useMapActions';
-import { useMapCamera } from '@/feature/map/hooks/useMapCamera';
-import { useMapEffects } from '@/feature/map/hooks/useMapEffects';
-import { useMapSearch } from '@/feature/map/hooks/useMapSearch';
-import { useMarker } from '@/feature/map/hooks/useMarker';
-import { useFetchStores } from '@/feature/map/queries/useFetchStores';
+import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { useModal } from '@/shared/hooks/useModal';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
-  const mapRef = useRef<NaverMapViewRef>(null);
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const { getCurrentLocation } = useLocationPermission();
-
-  const [brandName, setBrandName] = useState('');
-  const [activeButton, setActiveButton] = useState<'brand' | 'location'>(
-    'brand',
-  );
-
-  const { closeModal, isModalOpen, openModal } = useModal();
-  const { storeParams, searchStoresByLocation } = useMapSearch();
-  const { data: stores } = useFetchStores(storeParams);
-  const { camera, handleMapIdle, hideSearchButton, INITIAL_CAMERA } =
-    useMapCamera();
-  const { selectedMarkerId, selectedStore, handleMarkerPress, clearSelection } =
-    useMarker();
   const {
+    mapRef,
+    brandName,
+    setBrandName,
+    activeButton,
+    setActiveButton,
+    isModalOpen,
+    openModal,
+    closeModal,
+    filteredStores,
+    filteredBrands,
+    isFavorite,
+    handleMapIdle,
+    INITIAL_CAMERA,
+    selectedMarkerId,
+    selectedStore,
+    handleMarkerPress,
+    clearSelection,
     nearbyBrandVisible,
     detailBrandVisible,
-    hideAllSheet,
     hideSheet,
     showSheet,
-  } = useBottomSheetManager();
-
-  useMapEffects({
-    getCurrentLocation,
-    mapRef,
-    selectedMarkerId,
-    hideSheet,
-    showSheet,
-  });
-
-  const { handleLocationSearch, handleNavigateSearch } = useMapActions({
-    searchStoresByLocation,
-    setSelectedMarkerId: clearSelection,
-    hideSearchButton,
-    setActiveButton,
-    showSheet,
-    hideAllSheet,
-    navigation,
-    camera,
-  });
-
-  useEffect(() => {
-    const storeData = stores?.data?.content;
-    const brandData = stores?.data?.brands;
-
-    if (storeData?.length && brandData?.length) {
-      const brandMap = new Map(
-        brandData.map(b => [b.brandId, b.brandIconImageUrl]),
-      );
-
-      const imageUrls = storeData
-        .map(s => {
-          const brandIconUrl = brandMap.get(s.brandId);
-          return brandIconUrl ? `${Config.IMAGE_URL}${brandIconUrl}` : null;
-        })
-        .filter(Boolean);
-
-      // 모든 이미지를 병렬로 프리로드
-      Promise.all(
-        imageUrls.map(url =>
-          Image.prefetch(url!).catch(err => {
-            console.warn('Image prefetch failed:', url, err);
-          }),
-        ),
-      ).then(() => {
-        console.log('All images prefetched');
-      });
-    }
-  }, [stores?.data?.content, stores?.data?.brands]);
-
-  console.log(stores);
+    handleLocationSearch,
+    handleNavigateSearch,
+  } = useHomeScreen();
 
   return (
     <ScreenLayout>
@@ -121,8 +59,8 @@ const HomeScreen = () => {
         <MapOverlay
           handleMarkerPress={handleMarkerPress}
           selectedMarkerId={selectedMarkerId}
-          store={stores?.data.content}
-          brand={stores?.data.brands}
+          store={filteredStores}
+          brand={filteredBrands}
         />
       </NaverMapView>
 
@@ -150,7 +88,7 @@ const HomeScreen = () => {
 
       <NearbyBrandBottomSheet
         visible={nearbyBrandVisible}
-        brands={stores?.data.brands}
+        brands={filteredBrands}
         showSheet={() => showSheet('nearby')}
         hideSheet={() => hideSheet('nearby')}
       />
@@ -158,9 +96,8 @@ const HomeScreen = () => {
       <BrandDetailBottomSheet
         visible={detailBrandVisible}
         storeDetail={selectedStore}
-        onClose={() => {
-          clearSelection();
-        }}
+        isFavorite={isFavorite}
+        onClose={clearSelection}
       />
     </ScreenLayout>
   );

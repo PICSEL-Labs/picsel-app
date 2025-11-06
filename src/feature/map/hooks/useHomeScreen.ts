@@ -13,7 +13,6 @@ import { useMarker } from '../hooks/useMarker';
 import { useFetchStores } from '../queries/useFetchStores';
 
 import { useFilteredData } from './useFilteredData';
-import { useImagePrefetch } from './useImagePrefetch';
 import { useStoreFavorite } from './useStoreFavorite';
 
 import { useModal } from '@/shared/hooks/useModal';
@@ -69,8 +68,6 @@ export const useHomeScreen = () => {
   });
 
   const isFavorite = useStoreFavorite(stores?.data?.brands, selectedStore);
-
-  useImagePrefetch(stores?.data?.content, stores?.data?.brands);
 
   return {
     // Refs

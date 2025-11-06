@@ -27,15 +27,15 @@ interface Props {
   bottomAreaHeight: SharedValue<number>;
 }
 
-const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
-  const { message, visible, hideToast } = useToastStore();
+const Toast = ({ bottomAreaHeight }: Props) => {
+  const { message, visible, hideToast, marginBottom } = useToastStore();
   const animatedBottom = useSharedValue(0);
 
   useEffect(() => {
     if (visible) {
       const height = bottomAreaHeight.value > 0 ? bottomAreaHeight.value : 72;
 
-      animatedBottom.value = withTiming(height + 12, {
+      animatedBottom.value = withTiming(height + marginBottom, {
         duration: 300,
         easing: Easing.bezier(0.42, 0, 0.58, 1),
       });
@@ -55,7 +55,7 @@ const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
 
       return () => clearTimeout(timer);
     }
-  }, [visible]);
+  }, [visible, marginBottom, bottomAreaHeight]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -83,4 +83,4 @@ const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
   );
 };
 
-export default BrandFilterToast;
+export default Toast;

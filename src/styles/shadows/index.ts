@@ -3,7 +3,6 @@ export const defaultShadow = {
   shadowOffset: { width: 2, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 2,
-  elevation: 6,
 };
 
 export const inputShadow = {
@@ -44,15 +43,6 @@ export const bottomSheetShadow = {
   shadowRadius: 2,
 };
 
-export const mapIconShadow = {
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 0.1 },
-  shadowOpacity: 0.3,
-  shadowRadius: 0.5,
-};
-
-// 디자인 파트 수정 요청시
-// 바로 수정 반영할게요.
 export const favoriteShadow = {
   shadowColor: '#FF6C9A',
   shadowOffset: { width: 0, height: 0 },

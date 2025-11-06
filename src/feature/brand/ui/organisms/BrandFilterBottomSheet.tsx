@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
+import BrandFilterToast from '../../../../shared/ui/atoms/Toast';
 import { useBrandFilterSheet } from '../../model/hooks/useBrandFilterSheet';
 import { useHandleScroll } from '../../model/hooks/useHandleScroll';
 import { useGetBrandsList } from '../../queries/useGetBrandList';
-import BrandFilterToast from '../atoms/BrandFilterToast';
 
 import BrandGridList from './BrandGridList';
 import SelectButton from './SelectButton';
@@ -34,7 +34,7 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
   const { handleScroll, scrollViewRef } = useHandleScroll();
   const { tempFilteredList, filterBrand, resetFilter, applyFilter } =
     useFilteredBrandsStore();
-  const { showToast } = useToastStore();
+  const { showToast, hideToast } = useToastStore();
   const { panGesture, animatedStyle, isDisabled } = useBrandFilterSheet({
     visible,
     onClose,
@@ -61,6 +61,7 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
 
   const handleApplyFilter = () => {
     applyFilter();
+    hideToast();
     onClose();
   };
 

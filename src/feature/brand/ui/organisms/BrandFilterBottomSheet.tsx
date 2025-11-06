@@ -67,7 +67,6 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
 
   return (
     <BottomSheet
-      onClose={onClose}
       title="브랜드 찾기"
       headerRight={
         <Pressable onPress={resetFilter}>
@@ -102,6 +101,7 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
           excludeNoneBrand
         />
       </ScrollView>
+
       <View onLayout={handleButtonLayout} className="relative">
         <BrandFilterToast bottomAreaHeight={bottomAreaHeight} />
         <SelectButton

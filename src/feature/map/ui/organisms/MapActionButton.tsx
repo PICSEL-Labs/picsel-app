@@ -11,6 +11,8 @@ interface Props {
   isModalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
+  detailHideSheet: () => void;
+  nearbyHideSheet: () => void;
 }
 
 const MapActionButton = ({
@@ -20,11 +22,15 @@ const MapActionButton = ({
   isModalOpen,
   openModal,
   closeModal,
+  detailHideSheet,
+  nearbyHideSheet,
 }: Props) => {
   const handleModal = useCallback(() => {
     if (isModalOpen) {
       closeModal();
     } else {
+      detailHideSheet();
+      nearbyHideSheet();
       openModal();
       setActiveButton('brand');
     }

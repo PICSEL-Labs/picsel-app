@@ -82,6 +82,8 @@ const HomeScreen = () => {
         isModalOpen={isModalOpen}
         openModal={openModal}
         closeModal={closeModal}
+        detailHideSheet={() => hideSheet('detail')}
+        nearbyHideSheet={() => hideSheet('nearby')}
       />
 
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
-import { StoreDetail } from '../ui/organisms/BrandDetailBottomSheet/BrandDetailContent';
+import { StoreDetail } from '../types';
 
 interface Props {
   visible: boolean;

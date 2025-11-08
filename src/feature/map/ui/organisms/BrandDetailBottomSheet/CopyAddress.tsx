@@ -1,10 +1,8 @@
 import React from 'react';
 
 import { View, Text, Pressable } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
 
 import CopyIcons from '@/shared/icons/CopyIcons';
-import Toast from '@/shared/ui/atoms/Toast';
 import { defaultButtonShadow } from '@/styles/shadows';
 
 interface Props {
@@ -18,8 +16,6 @@ const CopyAddress = ({
   copyAddress,
   handleCopyAddress,
 }: Props) => {
-  const bottomAreaHeight = useSharedValue(0);
-
   return (
     <View
       style={defaultButtonShadow}
@@ -33,11 +29,10 @@ const CopyAddress = ({
         ellipsizeMode="tail">
         {detailLocation}
       </Text>
+
       <Pressable onPress={() => handleCopyAddress(copyAddress)}>
         <CopyIcons shape="default" width={24} height={24} />
       </Pressable>
-
-      <Toast bottomAreaHeight={bottomAreaHeight} />
     </View>
   );
 };

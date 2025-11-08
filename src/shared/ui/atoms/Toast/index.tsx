@@ -5,11 +5,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
   Easing,
   runOnJS,
-  SharedValue,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useToastStore } from '@/shared/store/ui/toast';
 
@@ -23,28 +23,27 @@ const GRADIENT_COLORS = [
 
 const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1] as number[];
 
-interface Props {
-  bottomAreaHeight: SharedValue<number>;
-}
-
-const Toast = ({ bottomAreaHeight }: Props) => {
+const Toast = () => {
   const { message, visible, hideToast, marginBottom } = useToastStore();
   const animatedBottom = useSharedValue(-100);
   const [shouldRender, setShouldRender] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
       setShouldRender(true);
-      const height = bottomAreaHeight.value > 0 ? bottomAreaHeight.value : 72;
 
-      animatedBottom.value = withTiming(height + marginBottom, {
+      // 안전영역 + 추가 margin
+      const baseBottom = insets.bottom + (marginBottom ?? 48);
+
+      animatedBottom.value = withTiming(baseBottom, {
         duration: 300,
         easing: Easing.bezier(0.42, 0, 0.58, 1),
       });
 
       const timer = setTimeout(() => {
         animatedBottom.value = withTiming(
-          -height - 50,
+          -100,
           {
             duration: 300,
             easing: Easing.bezier(0.42, 0, 0.58, 1),
@@ -58,7 +57,7 @@ const Toast = ({ bottomAreaHeight }: Props) => {
 
       return () => clearTimeout(timer);
     }
-  }, [visible, marginBottom]);
+  }, [visible, marginBottom, insets.bottom]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     bottom: animatedBottom.value,

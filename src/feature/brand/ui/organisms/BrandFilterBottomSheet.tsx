@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
-import Toast from '../../../../shared/ui/atoms/Toast';
 import { useBrandFilterSheet } from '../../model/hooks/useBrandFilterSheet';
 import { useHandleScroll } from '../../model/hooks/useHandleScroll';
 import { useGetBrandsList } from '../../queries/useGetBrandList';
@@ -103,7 +102,6 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
       </ScrollView>
 
       <View onLayout={handleButtonLayout} className="relative">
-        <Toast bottomAreaHeight={bottomAreaHeight} />
         <SelectButton
           actualSelectedCount={tempFilteredList.length}
           disabled={isDisabled}

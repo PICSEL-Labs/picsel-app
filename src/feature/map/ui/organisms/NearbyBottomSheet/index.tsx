@@ -34,6 +34,7 @@ const NearbyBrandBottomSheet = ({
   const renderContent = () => {
     if (!brands) {
       return null;
+      // 초기 바텀시트 UI 필요
     }
     if (brands.length === 0) {
       return <NearbyBrandEmptyState />;

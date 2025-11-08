@@ -15,7 +15,7 @@ interface Props {
 export const useBrandDetailBottomSheet = ({ visible, storeDetail }: Props) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [openCopy, setOpenCopy] = useState(false);
-  const { showToast, hideToast } = useToastStore();
+  const { showToast } = useToastStore();
 
   useEffect(() => {
     if (visible) {
@@ -32,14 +32,13 @@ export const useBrandDetailBottomSheet = ({ visible, storeDetail }: Props) => {
 
   const handleCopyButton = () => {
     if (!openCopy) {
-      hideToast();
     }
     setOpenCopy(prev => !prev);
   };
 
   const handleCopyAddress = (copyAddress: string) => {
     Clipboard.setString(copyAddress);
-    showToast('주소를 복사했어요', -20); // margin-bottom 값 수정될 가능성 있음
+    showToast('주소를 복사했어요', 75);
   };
 
   return {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -29,10 +29,12 @@ interface Props {
 
 const Toast = ({ bottomAreaHeight }: Props) => {
   const { message, visible, hideToast, marginBottom } = useToastStore();
-  const animatedBottom = useSharedValue(0);
+  const animatedBottom = useSharedValue(-100);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
     if (visible) {
+      setShouldRender(true);
       const height = bottomAreaHeight.value > 0 ? bottomAreaHeight.value : 72;
 
       animatedBottom.value = withTiming(height + marginBottom, {
@@ -42,28 +44,27 @@ const Toast = ({ bottomAreaHeight }: Props) => {
 
       const timer = setTimeout(() => {
         animatedBottom.value = withTiming(
-          -height,
+          -height - 50,
           {
             duration: 300,
             easing: Easing.bezier(0.42, 0, 0.58, 1),
           },
           () => {
             runOnJS(hideToast)();
+            runOnJS(setShouldRender)(false);
           },
         );
-      }, 2000);
+      }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [visible, marginBottom, bottomAreaHeight]);
+  }, [visible, marginBottom]);
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      bottom: animatedBottom.value,
-    };
-  });
+  const animatedStyle = useAnimatedStyle(() => ({
+    bottom: animatedBottom.value,
+  }));
 
-  if (!visible) {
+  if (!shouldRender) {
     return null;
   }
 
@@ -73,7 +74,7 @@ const Toast = ({ bottomAreaHeight }: Props) => {
       className="absolute z-50 w-full items-center">
       <LinearGradient
         colors={GRADIENT_COLORS}
-        locations={GRADIENT_LOCATIONS} // 각 색상의 위치를 비율(0~1)로 지정
+        locations={GRADIENT_LOCATIONS}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         className="h-[40px] w-[288px] items-center justify-center rounded-xl">

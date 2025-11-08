@@ -33,7 +33,6 @@ const Toast = () => {
     if (visible) {
       setShouldRender(true);
 
-      // 안전영역 + 추가 margin
       const baseBottom = insets.bottom + (marginBottom ?? 48);
 
       animatedBottom.value = withTiming(baseBottom, {

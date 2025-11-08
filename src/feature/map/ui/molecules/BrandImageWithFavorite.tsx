@@ -40,7 +40,7 @@ const BrandImageWithFavorite = ({
       {brandId && (
         <Pressable
           className="absolute bottom-0 right-0"
-          onPress={handleToggleFavorite}
+          onPress={() => handleToggleFavorite(nearBy ? 65 : 75)}
           disabled={isPending}>
           <BrandFavIcons
             width={23}

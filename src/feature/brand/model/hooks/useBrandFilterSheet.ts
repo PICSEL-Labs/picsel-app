@@ -26,7 +26,7 @@ const DRAG_CLOSE_THRESHOLD = 150;
 
 export const useBrandFilterSheet = ({ visible, onClose }: Props) => {
   const translateY = useSharedValue(SNAP_POINTS.HIDDEN);
-  const { filteredList, resetFilter } = useFilteredBrandsStore();
+  const { resetFilter } = useFilteredBrandsStore();
   const midpoint = (SNAP_POINTS.HALF + SNAP_POINTS.FULL) / 2;
 
   const panGesture = Gesture.Pan()
@@ -63,13 +63,6 @@ export const useBrandFilterSheet = ({ visible, onClose }: Props) => {
     height: translateY.value,
   }));
 
-  const isDisabled =
-    filteredList.length === 0 || filteredList.some(b => b.brandId === 'NONE');
-
-  const actualCount = filteredList.some(b => b.brandId === 'NONE')
-    ? 0
-    : filteredList.length;
-
   const handleReset = () => {
     resetFilter();
   };
@@ -77,8 +70,7 @@ export const useBrandFilterSheet = ({ visible, onClose }: Props) => {
   return {
     panGesture,
     animatedStyle,
-    isDisabled,
-    actualCount,
+
     handleReset,
   };
 };

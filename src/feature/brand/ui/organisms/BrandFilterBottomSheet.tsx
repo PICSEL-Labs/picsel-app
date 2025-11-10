@@ -1,18 +1,10 @@
 import React, { useEffect } from 'react';
 
-import {
-  LayoutChangeEvent,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { useBrandFilterSheet } from '../../model/hooks/useBrandFilterSheet';
 import { useHandleScroll } from '../../model/hooks/useHandleScroll';
 import { useGetBrandsList } from '../../queries/useGetBrandList';
-import BrandFilterToast from '../atoms/BrandFilterToast';
 
 import BrandGridList from './BrandGridList';
 import SelectButton from './SelectButton';
@@ -20,7 +12,6 @@ import SelectButton from './SelectButton';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
-import { useToastStore } from '@/shared/store/ui/toast';
 import BottomSheet from '@/shared/ui/molecules/BottomSheet';
 
 interface Props {
@@ -34,13 +25,11 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
   const { handleScroll, scrollViewRef } = useHandleScroll();
   const { tempFilteredList, filterBrand, resetFilter, applyFilter } =
     useFilteredBrandsStore();
-  const { showToast } = useToastStore();
-  const { panGesture, animatedStyle, isDisabled } = useBrandFilterSheet({
+  // const { showToast } = useToastStore();
+  const { panGesture, animatedStyle } = useBrandFilterSheet({
     visible,
     onClose,
   });
-
-  const bottomAreaHeight = useSharedValue(0);
 
   useEffect(() => {
     if (brands) {
@@ -50,13 +39,12 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
 
   const handleFilter = (brandId: string, name: string) => {
     const success = filterBrand(brandId, name);
-    if (!success) {
-      showToast('브랜드는 최대 5개까지 선택 가능해요');
-    }
-  };
 
-  const handleButtonLayout = (event: LayoutChangeEvent) => {
-    bottomAreaHeight.value = event.nativeEvent.layout.height;
+    if (!success) {
+      // showToast('브랜드는 최대 5개까지 선택 가능해요', 600); -> 바텀시트 리팩토링이 진행되지 않아 토스트 z-index가 묻혀서 바텀시트 뒤로 렌더링 되는거 같아요
+      // 일단 마진값 크게 줘서 토스트 정상 렌더링 확인하였습니다.
+      // 리팩토링 진행해주시면 토스트가 시트 위로 올라올 거 같아요.
+    }
   };
 
   const handleApplyFilter = () => {
@@ -66,7 +54,6 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
 
   return (
     <BottomSheet
-      onClose={onClose}
       title="브랜드 찾기"
       headerRight={
         <Pressable onPress={resetFilter}>
@@ -101,14 +88,12 @@ const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
           excludeNoneBrand
         />
       </ScrollView>
-      <View onLayout={handleButtonLayout} className="relative">
-        <BrandFilterToast bottomAreaHeight={bottomAreaHeight} />
-        <SelectButton
-          actualSelectedCount={tempFilteredList.length}
-          disabled={isDisabled}
-          onPress={handleApplyFilter}
-        />
-      </View>
+
+      <SelectButton
+        actualSelectedCount={tempFilteredList.length}
+        disabled={!!tempFilteredList.length}
+        onPress={handleApplyFilter}
+      />
     </BottomSheet>
   );
 };

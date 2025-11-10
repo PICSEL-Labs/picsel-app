@@ -11,7 +11,7 @@ import { bottomSheetShadow } from '@/styles/shadows';
 
 interface Props {
   visible: boolean;
-  storeDetail: StoreDetail;
+  storeDetail: StoreDetail | null;
   onClose: () => void;
   isFavorite: boolean;
 }
@@ -22,8 +22,11 @@ const BrandDetailBottomSheet = ({
   onClose,
   isFavorite,
 }: Props) => {
-  const { bottomSheetModalRef, openCopy, setOpenCopy } =
-    useBrandDetailBottomSheet({ visible, storeDetail });
+  const { bottomSheetModalRef, openCopy, handleCopyButton, handleCopyAddress } =
+    useBrandDetailBottomSheet({
+      visible,
+      storeDetail,
+    });
 
   if (!storeDetail) {
     return null;
@@ -42,7 +45,8 @@ const BrandDetailBottomSheet = ({
           isFavorite={isFavorite}
           storeDetail={storeDetail}
           openCopy={openCopy}
-          setOpenCopy={setOpenCopy}
+          handleCopyButton={handleCopyButton}
+          handleCopyAddress={handleCopyAddress}
         />
       </BottomSheetView>
     </BottomSheetModal>

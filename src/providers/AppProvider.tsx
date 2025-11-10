@@ -9,6 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useSplashScreen } from '@/shared/hooks/useSplashScreen';
 import { useUserConfig } from '@/shared/hooks/useUserConfig';
+import Toast from '@/shared/ui/atoms/Toast';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -53,6 +54,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
             <NavigationContainer>{children}</NavigationContainer>
+            <Toast />
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

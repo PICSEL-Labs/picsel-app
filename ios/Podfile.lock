@@ -1848,6 +1848,30 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNCClipboard (1.16.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNCKakaoCore (2.3.0):
     - DoubleConversion
     - glog
@@ -2314,6 +2338,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCKakaoCore (from `../node_modules/@react-native-kakao/core`)"
   - "RNCKakaoUser (from `../node_modules/@react-native-kakao/user`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -2501,6 +2526,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCKakaoCore:
     :path: "../node_modules/@react-native-kakao/core"
   RNCKakaoUser:
@@ -2617,6 +2644,7 @@ SPEC CHECKSUMS:
   ReactCommon: 9f975582dc535de1de110bdb46d4553140a77541
   RNAppleAuthentication: b2d8b5ccba86b5b1e55a1a2e858f7ac6d8a21816
   RNCAsyncStorage: 2cf7d05f5b1bc38680b6c83971e535a6ae9c5bc7
+  RNCClipboard: b202bc12352f3e213f94f6d9bf2e8c5a2739192e
   RNCKakaoCore: bd5aaf1330e66242e7a76397001af25bb3a21889
   RNCKakaoUser: 57d6e04b46a92389298465b9ecc90ecee126203d
   RNDeviceInfo: 8b6fa8379062949dd79a009cf3d6b02a9c03ca59

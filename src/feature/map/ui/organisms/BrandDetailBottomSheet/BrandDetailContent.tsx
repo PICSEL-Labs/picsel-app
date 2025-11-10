@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
 import { View } from 'react-native';
 
@@ -14,15 +14,17 @@ import { formatDistance, splitAddress } from '@/feature/map/utils/addressUtils';
 interface Props extends MapBottomSheetProps {
   storeDetail: StoreDetail;
   openCopy: boolean;
-  setOpenCopy: Dispatch<SetStateAction<boolean>>;
+  handleCopyButton: () => void;
+  handleCopyAddress: (address: string) => void;
 }
 
 const BrandDetailContent = ({
   storeDetail,
-  openCopy,
-  setOpenCopy,
   brandId,
   isFavorite,
+  openCopy,
+  handleCopyButton,
+  handleCopyAddress,
 }: Props) => {
   const { location, detailLocation } = splitAddress(storeDetail.address);
   const distanceText = formatDistance(storeDetail.distance);
@@ -39,11 +41,17 @@ const BrandDetailContent = ({
         brandName={storeDetail.storeName}
         distance={distanceText}
         location={location}
-        setOpenCopy={setOpenCopy}
         openCopy={openCopy}
+        handleCopyButton={handleCopyButton}
       />
 
-      {openCopy && <CopyAddress detailLocation={detailLocation} />}
+      {openCopy && (
+        <CopyAddress
+          copyAddress={storeDetail.address}
+          detailLocation={detailLocation}
+          handleCopyAddress={handleCopyAddress}
+        />
+      )}
 
       <View className="mb-2 py-4">
         <QrSaveButton />

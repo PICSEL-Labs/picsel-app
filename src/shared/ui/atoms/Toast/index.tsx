@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
   Easing,
   runOnJS,
-  SharedValue,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useToastStore } from '@/shared/store/ui/toast';
 
@@ -23,47 +23,46 @@ const GRADIENT_COLORS = [
 
 const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1] as number[];
 
-interface Props {
-  bottomAreaHeight: SharedValue<number>;
-}
-
-const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
-  const { message, visible, hideToast } = useToastStore();
-  const animatedBottom = useSharedValue(0);
+const Toast = () => {
+  const { message, visible, hideToast, marginBottom } = useToastStore();
+  const animatedBottom = useSharedValue(-100);
+  const [shouldRender, setShouldRender] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
-      const height = bottomAreaHeight.value > 0 ? bottomAreaHeight.value : 72;
+      setShouldRender(true);
 
-      animatedBottom.value = withTiming(height + 12, {
+      const baseBottom = insets.bottom + (marginBottom ?? 48);
+
+      animatedBottom.value = withTiming(baseBottom, {
         duration: 300,
         easing: Easing.bezier(0.42, 0, 0.58, 1),
       });
 
       const timer = setTimeout(() => {
         animatedBottom.value = withTiming(
-          -height,
+          -100,
           {
             duration: 300,
             easing: Easing.bezier(0.42, 0, 0.58, 1),
           },
           () => {
             runOnJS(hideToast)();
+            runOnJS(setShouldRender)(false);
           },
         );
-      }, 2000);
+      }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [visible]);
+  }, [visible, marginBottom, insets.bottom]);
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      bottom: animatedBottom.value,
-    };
-  });
+  const animatedStyle = useAnimatedStyle(() => ({
+    bottom: animatedBottom.value,
+  }));
 
-  if (!visible) {
+  if (!shouldRender) {
     return null;
   }
 
@@ -73,7 +72,7 @@ const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
       className="absolute z-50 w-full items-center">
       <LinearGradient
         colors={GRADIENT_COLORS}
-        locations={GRADIENT_LOCATIONS} // 각 색상의 위치를 비율(0~1)로 지정
+        locations={GRADIENT_LOCATIONS}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         className="h-[40px] w-[288px] items-center justify-center rounded-xl">
@@ -83,4 +82,4 @@ const BrandFilterToast = ({ bottomAreaHeight }: Props) => {
   );
 };
 
-export default BrandFilterToast;
+export default Toast;

@@ -45,7 +45,7 @@ const BrandImageWithFavorite = ({
           <BrandFavIcons
             width={23}
             height={23}
-            shape={optimisticFavorite ? 'fill' : 'gray'}
+            shape={optimisticFavorite ? 'empty' : 'gray'}
           />
         </Pressable>
       )}

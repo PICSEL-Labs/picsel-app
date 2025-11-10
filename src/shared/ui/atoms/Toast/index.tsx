@@ -7,6 +7,7 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
+  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,22 +24,44 @@ const GRADIENT_COLORS = [
 
 const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1] as number[];
 
+const TOAST_DURATION = 1500;
+
 const Toast = () => {
-  const { message, visible, hideToast, marginBottom } = useToastStore();
+  const { message, visible, hideToast, marginBottom, timerId, setTimerId } =
+    useToastStore();
   const animatedBottom = useSharedValue(-100);
+  const animatedOpacity = useSharedValue(1);
   const [shouldRender, setShouldRender] = useState(false);
+  const [displayMessage, setDisplayMessage] = useState('');
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
       setShouldRender(true);
 
+      if (timerId) {
+        clearTimeout(timerId);
+        setTimerId(null);
+      }
+
       const baseBottom = insets.bottom + (marginBottom ?? 48);
 
-      animatedBottom.value = withTiming(baseBottom, {
-        duration: 300,
-        easing: Easing.bezier(0.42, 0, 0.58, 1),
-      });
+      // 바로 메시지가 변경된 경우 자연스러운 인터렉션 추가
+      if (displayMessage && displayMessage !== message) {
+        animatedOpacity.value = withSequence(
+          withTiming(0.5, { duration: 100 }),
+          withTiming(1, { duration: 100 }),
+        );
+      }
+
+      setDisplayMessage(message);
+
+      if (animatedBottom.value < 0) {
+        animatedBottom.value = withTiming(baseBottom, {
+          duration: 300,
+          easing: Easing.bezier(0.42, 0, 0.58, 1),
+        });
+      }
 
       const timer = setTimeout(() => {
         animatedBottom.value = withTiming(
@@ -50,16 +73,25 @@ const Toast = () => {
           () => {
             runOnJS(hideToast)();
             runOnJS(setShouldRender)(false);
+            runOnJS(setTimerId)(null);
+            runOnJS(setDisplayMessage)('');
           },
         );
-      }, 1500);
+      }, TOAST_DURATION);
 
-      return () => clearTimeout(timer);
+      setTimerId(timer);
+
+      return () => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+      };
     }
-  }, [visible, marginBottom, insets.bottom]);
+  }, [visible, message, marginBottom, insets.bottom]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     bottom: animatedBottom.value,
+    opacity: animatedOpacity.value,
   }));
 
   if (!shouldRender) {
@@ -76,7 +108,9 @@ const Toast = () => {
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         className="h-[40px] w-[288px] items-center justify-center rounded-xl">
-        <Text className="text-center text-white body-rg-02">{message}</Text>
+        <Text className="text-center text-white body-rg-02">
+          {displayMessage}
+        </Text>
       </LinearGradient>
     </Animated.View>
   );

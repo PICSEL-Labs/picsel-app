@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import { useToggleFavoriteBrand } from '../mutations/useToggleFavoriteBrand';
 
@@ -16,9 +16,6 @@ export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
   const { mutate: toggleFavorite, isPending } = useToggleFavoriteBrand();
   const { showToast } = useToastStore();
 
-  const lastToggleTime = useRef(0);
-  const COOLDOWN_MS = 1500;
-
   const optimisticFavorite = brandId
     ? (optimisticFavorites[brandId] ?? isFavorite)
     : isFavorite;
@@ -34,12 +31,6 @@ export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
       return;
     }
 
-    const now = Date.now();
-    if (now - lastToggleTime.current < COOLDOWN_MS) {
-      return;
-    }
-
-    lastToggleTime.current = now;
     const action = optimisticFavorite ? 'REMOVE' : 'ADD';
     toggleOptimisticFavorite(brandId);
 

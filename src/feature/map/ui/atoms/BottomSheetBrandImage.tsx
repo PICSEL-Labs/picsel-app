@@ -22,7 +22,7 @@ const BottomSheetBrandImage = ({
     );
   }
 
-  return <BrandImage imageUrl={imageUrl} nearBy={nearBy} />;
+  return <BrandImage imageUrl={imageUrl} />;
 };
 
 export default BottomSheetBrandImage;

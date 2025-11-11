@@ -46,6 +46,6 @@ export const bottomSheetShadow = {
 export const favoriteShadow = {
   shadowColor: '#FF6C9A',
   shadowOffset: { width: 0, height: 0 },
-  shadowOpacity: 1,
-  shadowRadius: 7,
+  shadowOpacity: 0.8,
+  shadowRadius: 3,
 };

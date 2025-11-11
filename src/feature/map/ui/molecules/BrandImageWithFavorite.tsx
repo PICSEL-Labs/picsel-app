@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { View, Image, Pressable } from 'react-native';
-import Config from 'react-native-config';
+import { View, Pressable } from 'react-native';
+import { Shadow } from 'react-native-shadow-2';
 
 import { useFavoriteToggle } from '../../hooks/useFavoriteToggle';
+import BrandImage from '../atoms/BrandImage';
 
 import BrandFavIcons from '@/shared/icons/BrandFav';
 import { defaultShadow, favoriteShadow } from '@/styles/shadows';
@@ -27,15 +28,22 @@ const BrandImageWithFavorite = ({
       isFavorite,
     });
 
+  const shouldShowShadow = optimisticFavorite && !nearBy;
+
   return (
-    <View
-      style={optimisticFavorite && !nearBy ? favoriteShadow : defaultShadow}
-      className={nearBy ? 'items-center' : undefined}>
-      <Image
-        className="h-[60px] w-[60px] rounded-full"
-        source={{ uri: Config.IMAGE_URL + imageUrl }}
-        resizeMode="cover"
-      />
+    <View style={shouldShowShadow ? favoriteShadow : defaultShadow}>
+      {shouldShowShadow ? (
+        <Shadow
+          distance={4}
+          startColor="rgba(255, 153, 185, 0.85)"
+          offset={[0, 0]}
+          paintInside={false}
+          style={{ borderRadius: 9999 }}>
+          <BrandImage imageUrl={imageUrl} />
+        </Shadow>
+      ) : (
+        <BrandImage imageUrl={imageUrl} />
+      )}
 
       {brandId && (
         <Pressable

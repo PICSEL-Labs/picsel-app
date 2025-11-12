@@ -23,19 +23,19 @@
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* picselFE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = picselFE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = picselFE/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = picselFE/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = picselFE/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1E5D9344CE2848572F6CD18E /* libPods-picselFE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-picselFE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F155DED926C931AA4ED2A6F /* Pods-picselFE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picselFE.debug.xcconfig"; path = "Target Support Files/Pods-picselFE/Pods-picselFE.debug.xcconfig"; sourceTree = "<group>"; };
 		2BA6959569A6448F970AD12B /* NanumSquareRoundL.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundL.ttf; path = ../src/assets/fonts/NanumSquareRoundL.ttf; sourceTree = "<group>"; };
 		60858D83E8D9437789E93D7C /* NanumSquareRoundEB.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundEB.ttf; path = ../src/assets/fonts/NanumSquareRoundEB.ttf; sourceTree = "<group>"; };
+		667702382EAE1D6200922954 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ko; path = ko.lproj/Info.plist; sourceTree = "<group>"; };
+		667FF5422EC3872D000016DF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ko; path = ko.lproj/picselFE.entitlements; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = picselFE/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = picselFE/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		913408C35D394C6B9CB7977A /* NanumSquare_acR.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquare_acR.ttf; path = ../src/assets/fonts/NanumSquare_acR.ttf; sourceTree = "<group>"; };
 		94C1C11F852249E394CF3896 /* Config.xcconfig */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		9D163AA60E9349EFB18C19E1 /* NanumSquareRoundR.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundR.ttf; path = ../src/assets/fonts/NanumSquareRoundR.ttf; sourceTree = "<group>"; };
 		A8F98C9DCEE7F51DB0F1CFC2 /* Pods-picselFE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picselFE.release.xcconfig"; path = "Target Support Files/Pods-picselFE/Pods-picselFE.release.xcconfig"; sourceTree = "<group>"; };
-		CB804BCB2DD17B4100DD55B2 /* picselFE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = picselFE.entitlements; path = picselFE/picselFE.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F34C2A5EAE5040AA979D97A5 /* NanumSquareRoundB.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundB.ttf; path = ../src/assets/fonts/NanumSquareRoundB.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,10 +55,10 @@
 		13B07FAE1A68108700A75B9A /* picselFE */ = {
 			isa = PBXGroup;
 			children = (
-				CB804BCB2DD17B4100DD55B2 /* picselFE.entitlements */,
+				667FF5432EC3872D000016DF /* picselFE.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
-				13B07FB61A68108700A75B9A /* Info.plist */,
+				667702392EAE1D6200922954 /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 			);
@@ -165,11 +165,12 @@
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "picselFE" */;
 			compatibilityVersion = "Xcode 12.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -247,9 +248,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-picselFE/Pods-picselFE-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-picselFE/Pods-picselFE-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -264,9 +269,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-picselFE/Pods-picselFE-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-picselFE/Pods-picselFE-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -285,6 +294,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		667702392EAE1D6200922954 /* Info.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				667702382EAE1D6200922954 /* ko */,
+			);
+			name = Info.plist;
+			path = picselFE;
+			sourceTree = "<group>";
+		};
+		667FF5432EC3872D000016DF /* picselFE.entitlements */ = {
+			isa = PBXVariantGroup;
+			children = (
+				667FF5422EC3872D000016DF /* ko */,
+			);
+			name = picselFE.entitlements;
+			path = picselFE;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -331,7 +361,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Y343288YP2;
+				DEVELOPMENT_TEAM = KDJS4TCJHP;
 				INFOPLIST_FILE = picselFE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -423,10 +453,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -496,10 +523,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

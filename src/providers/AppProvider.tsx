@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
@@ -6,9 +6,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Text, TextInput } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import SplashScreen from 'react-native-splash-screen';
 
 import { useSplashScreen } from '@/shared/hooks/useSplashScreen';
 import { useUserConfig } from '@/shared/hooks/useUserConfig';
+import { useLocationStore } from '@/shared/store';
 import Toast from '@/shared/ui/atoms/Toast';
 
 interface AppProviderProps {
@@ -47,6 +49,27 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
   useSplashScreen();
   useUserConfig();
+
+  const fetchUserLocation = useLocationStore(state => state.fetchUserLocation);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const prepare = async () => {
+      try {
+        await fetchUserLocation();
+      } catch (e) {
+        console.warn('위치 정보를 불러올 수 없습니다.', e);
+      } finally {
+        setIsReady(true);
+        SplashScreen.hide();
+      }
+    };
+    prepare();
+  }, []);
+
+  if (!isReady) {
+    return null;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

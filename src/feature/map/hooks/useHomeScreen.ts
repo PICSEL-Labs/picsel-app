@@ -31,7 +31,7 @@ export const useHomeScreen = () => {
   const { closeModal, isModalOpen, openModal } = useModal();
   const { storeParams, searchStoresByLocation } = useMapSearch();
   const { data: stores } = useFetchStores(storeParams);
-  const { camera, handleMapIdle, hideSearchButton, INITIAL_CAMERA } =
+  const { camera, handleMapIdle, hideSearchButton, userLocation } =
     useMapCamera();
   const { selectedMarkerId, selectedStore, handleMarkerPress, clearSelection } =
     useMarker();
@@ -91,7 +91,7 @@ export const useHomeScreen = () => {
 
     // Camera
     handleMapIdle,
-    INITIAL_CAMERA,
+    userLocation,
 
     // Marker
     selectedMarkerId,

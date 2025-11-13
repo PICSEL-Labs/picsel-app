@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,47 +19,118 @@ const GRADIENT_COLORS = [
   'rgba(17, 17, 20, 1)',
   'rgba(17, 17, 20, 0.8)',
   'rgba(255, 255, 255, 1)',
-] as string[];
+];
 
-const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1] as number[];
+const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1];
+
+const ANIMATION_DURATION = 250;
+const TOAST_DISPLAY_DURATION = 1500;
 
 const Toast = () => {
   const { message, visible, hideToast, marginBottom } = useToastStore();
-  const animatedBottom = useSharedValue(-100);
-  const [shouldRender, setShouldRender] = useState(false);
   const insets = useSafeAreaInsets();
+
+  const [shouldRender, setShouldRender] = useState(false);
+  const [displayMessage, setDisplayMessage] = useState('');
+
+  const translateY = useSharedValue(100);
+  const opacity = useSharedValue(0);
+
+  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isAnimatingRef = useRef(false);
+
+  const clearHideTimer = () => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+  };
+
+  const setAnimatingFalse = () => {
+    isAnimatingRef.current = false;
+  };
+
+  const animateHide = (onComplete?: () => void) => {
+    isAnimatingRef.current = true;
+
+    translateY.value = withTiming(
+      100,
+      { duration: ANIMATION_DURATION, easing: Easing.in(Easing.cubic) },
+      () => {
+        runOnJS(setAnimatingFalse)();
+        runOnJS(setShouldRender)(false);
+        if (onComplete) {
+          runOnJS(onComplete)();
+        }
+      },
+    );
+
+    opacity.value = withTiming(0, { duration: ANIMATION_DURATION - 50 });
+  };
+
+  const animateShow = () => {
+    isAnimatingRef.current = true;
+
+    translateY.value = withTiming(
+      0,
+      { duration: ANIMATION_DURATION, easing: Easing.out(Easing.cubic) },
+      () => {
+        runOnJS(setAnimatingFalse)();
+      },
+    );
+
+    opacity.value = withTiming(1, { duration: ANIMATION_DURATION - 50 });
+  };
+
+  const scheduleHide = () => {
+    clearHideTimer();
+    hideTimerRef.current = setTimeout(() => {
+      animateHide(hideToast);
+    }, TOAST_DISPLAY_DURATION);
+  };
 
   useEffect(() => {
     if (visible) {
-      setShouldRender(true);
+      // 케이스 1: 이미 보이는 상태에서 새 메시지 → 즉시 업데이트
+      if (shouldRender && displayMessage !== message) {
+        clearHideTimer();
+        animateHide(() => {
+          setDisplayMessage(message);
+          setShouldRender(true);
 
-      const baseBottom = insets.bottom + (marginBottom ?? 48);
+          setTimeout(() => {
+            animateShow();
+            scheduleHide();
+          }, 50);
+        });
+      }
 
-      animatedBottom.value = withTiming(baseBottom, {
-        duration: 300,
-        easing: Easing.bezier(0.42, 0, 0.58, 1),
-      });
+      // 케이스 2: 최초 표시
+      else if (!shouldRender) {
+        setDisplayMessage(message);
+        setShouldRender(true);
 
-      const timer = setTimeout(() => {
-        animatedBottom.value = withTiming(
-          -100,
-          {
-            duration: 300,
-            easing: Easing.bezier(0.42, 0, 0.58, 1),
-          },
-          () => {
-            runOnJS(hideToast)();
-            runOnJS(setShouldRender)(false);
-          },
-        );
-      }, 1500);
+        translateY.value = 100;
+        opacity.value = 0;
 
-      return () => clearTimeout(timer);
+        animateShow();
+        scheduleHide();
+      }
+    } else {
+      clearHideTimer();
+      if (shouldRender) {
+        animateHide();
+      }
     }
-  }, [visible, marginBottom, insets.bottom]);
+
+    return () => {
+      clearHideTimer();
+    };
+  }, [visible, message]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    bottom: animatedBottom.value,
+    transform: [{ translateY: translateY.value }],
+    opacity: opacity.value,
   }));
 
   if (!shouldRender) {
@@ -68,15 +139,25 @@ const Toast = () => {
 
   return (
     <Animated.View
-      style={animatedStyle}
-      className="absolute z-50 w-full items-center">
+      style={[
+        animatedStyle,
+        {
+          position: 'absolute',
+          bottom: insets.bottom + (marginBottom ?? 48),
+          width: '100%',
+          zIndex: 9999,
+        },
+      ]}
+      className="items-center">
       <LinearGradient
         colors={GRADIENT_COLORS}
         locations={GRADIENT_LOCATIONS}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         className="h-[40px] w-[288px] items-center justify-center rounded-xl">
-        <Text className="text-center text-white body-rg-02">{message}</Text>
+        <Text className="text-center text-white body-rg-02">
+          {displayMessage}
+        </Text>
       </LinearGradient>
     </Animated.View>
   );

@@ -2,21 +2,13 @@ import { useCallback, useRef, useState } from 'react';
 
 import { Camera, Region } from '@mj-studio/react-native-naver-map';
 
-interface MapCamera {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-}
+import { DEFAULT_CAMERA } from '../constants/defaultLocation';
 
-// 이후 유저 위치 동의 받는 시점에 기본값 세팅 삭제
-export const INITIAL_CAMERA: MapCamera = {
-  latitude: 37.5666102,
-  longitude: 126.9783881,
-  zoom: 16,
-};
+import { useLocationStore } from '@/shared/store';
 
 export const useMapCamera = () => {
-  const [camera, setCamera] = useState<MapCamera>(INITIAL_CAMERA);
+  const { userLocation } = useLocationStore();
+  const [camera, setCamera] = useState(userLocation ?? DEFAULT_CAMERA);
   const [showSearchButton, setShowSearchButton] = useState(false);
 
   const handleCameraChanged = useCallback(
@@ -51,7 +43,7 @@ export const useMapCamera = () => {
     ) => {
       const { latitude, longitude, zoom } = navCamera;
 
-      handleCameraChanged(latitude, longitude, zoom ?? INITIAL_CAMERA.zoom);
+      handleCameraChanged(latitude, longitude, zoom ?? userLocation.zoom);
 
       const first = isFirstCameraIdle();
       if (first) {
@@ -71,6 +63,6 @@ export const useMapCamera = () => {
     handleCameraChanged,
     hideSearchButton,
     handleMapIdle,
-    INITIAL_CAMERA,
+    userLocation,
   };
 };

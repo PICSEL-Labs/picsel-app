@@ -2,6 +2,7 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import BottomTabBar from '@/navigation/tabs';
 import LoginScreen from '@/screens/login';
 import OnboardingScreen from '@/screens/onboarding';
 import NicknameInputScreen from '@/screens/signup/nicknameInput';
@@ -46,6 +47,14 @@ const SignupRoute = () => {
       <Stack.Screen
         name="SignupSuccess"
         component={SignupSuccessScreen}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="Home"
+        component={BottomTabBar}
         options={{
           gestureEnabled: false,
         }}

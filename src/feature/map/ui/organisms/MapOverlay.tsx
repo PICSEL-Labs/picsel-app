@@ -4,6 +4,7 @@ import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 import Config from 'react-native-config';
 
 import { BrandData, StoreData, StoreDetail } from '../../types';
+import { getFavoriteImageUrl } from '../../utils/imageUtils';
 
 import { useFavoriteStore } from '@/shared/store';
 
@@ -35,8 +36,12 @@ const MapOverlay = ({
       const brandInfo = brandMap.get(data.brandId);
       const brandIconUrl = brandInfo?.brandIconImageUrl;
       const isSelected = selectedMarkerId === data.storeId;
+      const isFavorite =
+        optimisticFavorites[data.brandId] ?? brandInfo?.isFavorite ?? false;
+
+      const finalImageUrl = getFavoriteImageUrl(brandIconUrl || '', isFavorite);
       const IMAGE_SIZE = isSelected ? 48 : 28;
-      const imageUri = `${Config.IMAGE_URL}${brandIconUrl}`;
+      const imageUri = `${Config.IMAGE_URL}${finalImageUrl}`;
 
       return (
         <NaverMapMarkerOverlay

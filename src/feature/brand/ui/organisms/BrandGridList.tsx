@@ -48,7 +48,7 @@ const BrandGridList = ({
                   <Pressable onPress={() => onPress(item.brandId, item.name)}>
                     <ImageBackground
                       source={{ uri: Config.IMAGE_URL + item.iconImageUrl }}
-                      className="h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full bg-white">
+                      className="h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full">
                       {isSelected && (
                         <View className="w-full flex-1 items-center justify-center rounded-full bg-black/30">
                           <CheckIcons shape="white" width={24} height={24} />

@@ -26,7 +26,6 @@ const HomeScreen = () => {
     filteredBrands,
     isFavorite,
     handleMapIdle,
-    INITIAL_CAMERA,
     selectedMarkerId,
     selectedStore,
     handleMarkerPress,
@@ -37,25 +36,28 @@ const HomeScreen = () => {
     showSheet,
     handleLocationSearch,
     handleNavigateSearch,
+    userLocation,
   } = useHomeScreen();
 
   return (
     <ScreenLayout>
       <NaverMapView
-        onCameraIdle={cam =>
+        onCameraIdle={cam => {
           handleMapIdle(cam, isFirst => {
             if (isFirst) {
-              return;
+              handleLocationSearch();
             }
-            if (!isModalOpen) {
-              setActiveButton('location');
-            }
-          })
-        }
+          });
+        }}
+        onCameraChanged={reason => {
+          if (reason.reason === 'Gesture' || reason.reason === 'Control') {
+            setActiveButton('location');
+          }
+        }}
         ref={mapRef}
         onTapMap={clearSelection}
         style={StyleSheet.absoluteFillObject}
-        initialCamera={INITIAL_CAMERA}>
+        initialCamera={userLocation ? userLocation : undefined}>
         <MapOverlay
           handleMarkerPress={handleMarkerPress}
           selectedMarkerId={selectedMarkerId}

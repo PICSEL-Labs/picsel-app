@@ -39,7 +39,7 @@ const SelectPhotoHeader = ({ variant, onReset, hasSelected }: Props) => {
       <View className="px-1 py-2">
         {isMain ? (
           <Text className="text-center text-gray-500 headline-01">
-            대표사진으로 지정할{' '}
+            대표사진으로 지정할
             <Text className="text-pink-500">네컷사진 1장</Text>을 골라주세요.
           </Text>
         ) : (

@@ -46,6 +46,7 @@ const HomeScreen = () => {
           handleMapIdle(cam, isFirst => {
             if (isFirst) {
               handleLocationSearch();
+              showSheet('nearby');
             }
           });
         }}

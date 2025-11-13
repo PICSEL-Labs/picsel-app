@@ -4,11 +4,6 @@ import Geolocation from '@react-native-community/geolocation';
 import { Alert, Platform } from 'react-native';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
-/**
- * issue:
- * 유저 위치 트래킹 쪽 테스팅은 실제 디바이스로 해봐야 할 것 같습니다.
- */
-
 export const useLocationPermission = () => {
   const requestLocationPermission = useCallback(async (): Promise<boolean> => {
     try {

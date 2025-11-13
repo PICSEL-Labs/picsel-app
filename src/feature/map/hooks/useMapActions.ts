@@ -4,7 +4,7 @@ import { useFilteredBrandsStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface UseMapActionsParams {
-  searchStoresByLocation: (lat: number, lng: number, zoom: number) => void;
+  searchStoresByLocation: (lat: number, lng: number, zoom?: number) => void;
   setSelectedMarkerId: (id: string | null) => void;
   hideSearchButton: () => void;
   setActiveButton: (button: 'brand' | 'location') => void;

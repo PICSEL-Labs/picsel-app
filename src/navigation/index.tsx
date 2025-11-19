@@ -14,7 +14,19 @@ export type MainNavigationProps = {
   Onboarding: undefined;
   Login: undefined;
   SignupRoute: undefined;
-  Home: undefined;
+  Home: {
+    targetLocation?: {
+      latitude: number;
+      longitude: number;
+      zoom: number;
+    };
+    selectedStore?: {
+      id: string;
+      kind: string;
+      title: string;
+      subtitle: string;
+    };
+  };
   StoreSearch: undefined;
   QrScan: undefined;
   QrPreview: { url: string };

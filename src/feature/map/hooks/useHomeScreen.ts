@@ -4,7 +4,6 @@ import { NaverMapViewRef } from '@mj-studio/react-native-naver-map';
 import { useNavigation } from '@react-navigation/native';
 
 import { useBottomSheetManager } from '../hooks/useBottomSheetManager';
-import { useLocationPermission } from '../hooks/useLocationPermission';
 import { useMapActions } from '../hooks/useMapActions';
 import { useMapCamera } from '../hooks/useMapCamera';
 import { useMapEffects } from '../hooks/useMapEffects';
@@ -21,7 +20,6 @@ import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 export const useHomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { getCurrentLocation } = useLocationPermission();
 
   const [brandName, setBrandName] = useState('');
   const [activeButton, setActiveButton] = useState<'brand' | 'location'>(
@@ -44,8 +42,6 @@ export const useHomeScreen = () => {
   } = useBottomSheetManager();
 
   useMapEffects({
-    getCurrentLocation,
-    mapRef,
     selectedMarkerId,
     hideSheet,
     showSheet,

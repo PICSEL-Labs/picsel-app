@@ -2,10 +2,9 @@ import { useMemo } from 'react';
 
 import { useSearchAutocomplete } from '@/feature/search/queries/useSearchAutoComplete';
 import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
+import { useLocationStore } from '@/shared/store';
 
 type UIState = 'hasResults' | 'noResults';
-
-const DEFAULT_COORDS = { latitude: 37.5666102, longitude: 126.9783881 };
 
 interface Props {
   minLen?: number;
@@ -16,12 +15,14 @@ interface Props {
 }
 
 export const useStoreSearch = (query: string, props: Props = {}) => {
+  const { userLocation } = useLocationStore();
+
   const {
     minLen = 2, // 최소 2글자로 요청
     debounceMs = 400, // 0.4초로 디바운스
     radius = 999, // 임시 반경값
-    latitude = DEFAULT_COORDS.latitude,
-    longitude = DEFAULT_COORDS.longitude,
+    latitude = userLocation.latitude,
+    longitude = userLocation.longitude,
   } = props;
 
   const debouncedQuery = useDebouncedValue(query, debounceMs);

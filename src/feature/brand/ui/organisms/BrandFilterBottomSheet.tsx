@@ -1,100 +1,102 @@
 import React, { useEffect } from 'react';
 
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { View } from 'react-native';
 
-import { useBrandFilterSheet } from '../../model/hooks/useBrandFilterSheet';
+import { useBrandFilterBottomSheet } from '../../model/hooks/useBrandFilterBottomSheet';
 import { useHandleScroll } from '../../model/hooks/useHandleScroll';
 import { useGetBrandsList } from '../../queries/useGetBrandList';
+import BrandFilterHeader from '../molecules/BrandFilterHeader';
 
 import BrandGridList from './BrandGridList';
 import SelectButton from './SelectButton';
 
-import ReplayIcons from '@/shared/icons/ReplayIcon';
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
-import BottomSheet from '@/shared/ui/molecules/BottomSheet';
+import { useToastStore } from '@/shared/store/ui/toast';
+import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
+import { bottomSheetShadow } from '@/styles/shadows';
 
 interface Props {
   visible: boolean;
-  onClose: () => void;
+  showSheet: () => void;
+  hideSheet: () => void;
 }
 
-const BrandFilterBottomSheet = ({ visible, onClose }: Props) => {
+const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
   const { data: brands } = useGetBrandsList();
   const { brandList, setBrandList } = useBrandListStore();
-  const { handleScroll, scrollViewRef } = useHandleScroll();
+  const { scrollViewRef, handleScroll } = useHandleScroll();
+
+  const { showToast } = useToastStore();
+
   const { tempFilteredList, filterBrand, resetFilter, applyFilter } =
     useFilteredBrandsStore();
-  // const { showToast } = useToastStore();
-  const { panGesture, animatedStyle } = useBrandFilterSheet({
-    visible,
-    onClose,
-  });
+
+  const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
+    useBrandFilterBottomSheet({ visible, showSheet, hideSheet });
 
   useEffect(() => {
     if (brands) {
       setBrandList(brands);
     }
-  }, [brands, setBrandList]);
+  }, [brands]);
 
-  const handleFilter = (brandId: string, name: string) => {
+  const handlePressBrand = (brandId: string, name: string) => {
     const success = filterBrand(brandId, name);
-
     if (!success) {
-      // showToast('브랜드는 최대 5개까지 선택 가능해요', 600); -> 바텀시트 리팩토링이 진행되지 않아 토스트 z-index가 묻혀서 바텀시트 뒤로 렌더링 되는거 같아요
-      // 일단 마진값 크게 줘서 토스트 정상 렌더링 확인하였습니다.
-      // 리팩토링 진행해주시면 토스트가 시트 위로 올라올 거 같아요.
+      showToast('브랜드는 최대 5개까지 선택할 수 있어요', 50);
+      return;
     }
   };
 
-  const handleApplyFilter = () => {
+  const handleApply = () => {
     applyFilter();
-    onClose();
+    hideSheet();
   };
 
   return (
-    <BottomSheet
-      title="브랜드 찾기"
-      headerRight={
-        <Pressable onPress={resetFilter}>
-          <View className="flex-row">
-            <Text
-              className={`mr-1 headline-02 ${
-                tempFilteredList.length > 0 ? 'text-pink-500' : 'text-gray-500'
-              }`}>
-              초기화
-            </Text>
-            <ReplayIcons
-              width={24}
-              height={24}
-              shape={tempFilteredList.length > 0 ? 'true' : 'false'}
+    <BottomSheetModal
+      ref={bottomSheetRef}
+      index={0}
+      enableDynamicSizing={false} // 동적 높이 조절 기능 Off -> 최대 높이 snapPoints의 index={1}
+      enableOverDrag={false}
+      style={bottomSheetShadow}
+      snapPoints={snapPoints}
+      handleIndicatorStyle={bottomSheetIndicator}
+      animationConfigs={animationConfigs}
+      enableContentPanningGesture={false} // 드래그로 시트 움직임 (기본 동작) 차단
+      onChange={handleSheetChange}
+      enablePanDownToClose>
+      <View className="flex-1">
+        <BrandFilterHeader
+          selectedCount={tempFilteredList.length}
+          onReset={resetFilter}
+        />
+
+        <BottomSheetScrollView
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          showsVerticalScrollIndicator={false}>
+          <View className="px-4 pt-2">
+            <BrandGridList
+              brandList={brandList}
+              selectedList={tempFilteredList}
+              onPress={handlePressBrand}
+              excludeNoneBrand
             />
           </View>
-        </Pressable>
-      }
-      visible={visible}
-      animatedStyle={animatedStyle}
-      panGesture={panGesture}>
-      <ScrollView
-        ref={scrollViewRef}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator
-        indicatorStyle="default">
-        <BrandGridList
-          brandList={brandList}
-          selectedList={tempFilteredList}
-          onPress={handleFilter}
-          excludeNoneBrand
-        />
-      </ScrollView>
+        </BottomSheetScrollView>
 
-      <SelectButton
-        actualSelectedCount={tempFilteredList.length}
-        disabled={!!tempFilteredList.length}
-        onPress={handleApplyFilter}
-      />
-    </BottomSheet>
+        <View className="p-5">
+          <SelectButton
+            actualSelectedCount={tempFilteredList.length}
+            disabled={tempFilteredList.length === 0}
+            onPress={handleApply}
+          />
+        </View>
+      </View>
+    </BottomSheetModal>
   );
 };
 

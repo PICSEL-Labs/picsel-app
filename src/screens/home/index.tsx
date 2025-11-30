@@ -19,9 +19,6 @@ const HomeScreen = () => {
     setBrandName,
     activeButton,
     setActiveButton,
-    isModalOpen,
-    openModal,
-    closeModal,
     filteredStores,
     filteredBrands,
     isFavorite,
@@ -32,6 +29,7 @@ const HomeScreen = () => {
     clearSelection,
     nearbyBrandVisible,
     detailBrandVisible,
+    brandFilterVisible,
     hideSheet,
     showSheet,
     handleLocationSearch,
@@ -82,14 +80,18 @@ const HomeScreen = () => {
         activeButton={activeButton}
         setActiveButton={setActiveButton}
         handleLocationSearch={handleLocationSearch}
-        isModalOpen={isModalOpen}
-        openModal={openModal}
-        closeModal={closeModal}
+        brandFilterVisible={brandFilterVisible}
+        showFilterSheet={() => showSheet('filter')}
+        hideFilterSheet={() => hideSheet('filter')}
         detailHideSheet={() => hideSheet('detail')}
         nearbyHideSheet={() => hideSheet('nearby')}
       />
 
-      <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
+      <BrandFilterBottomSheet
+        visible={brandFilterVisible}
+        hideSheet={() => hideSheet('filter')}
+        showSheet={() => showSheet('filter')}
+      />
 
       <NearbyBrandBottomSheet
         visible={nearbyBrandVisible}

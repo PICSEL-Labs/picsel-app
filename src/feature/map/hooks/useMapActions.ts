@@ -8,8 +8,8 @@ interface UseMapActionsParams {
   setSelectedMarkerId: (id: string | null) => void;
   hideSearchButton: () => void;
   setActiveButton: (button: 'brand' | 'location') => void;
-  showSheet: (type: 'nearby' | 'detail') => void;
-  hideAllSheet: () => void;
+  showSheet: () => void;
+  hideSheet: () => void;
   navigation: RootStackNavigationProp;
   camera: { latitude: number; longitude: number; zoom: number };
 }
@@ -20,7 +20,7 @@ export const useMapActions = ({
   hideSearchButton,
   setActiveButton,
   showSheet,
-  hideAllSheet,
+  hideSheet,
   navigation,
   camera,
 }: UseMapActionsParams) => {
@@ -32,7 +32,6 @@ export const useMapActions = ({
     setSelectedMarkerId(null);
     hideSearchButton();
     setActiveButton('brand');
-    showSheet('nearby');
   }, [
     searchStoresByLocation,
     camera,
@@ -44,8 +43,8 @@ export const useMapActions = ({
 
   const handleNavigateSearch = useCallback(() => {
     navigation.navigate('StoreSearch');
-    hideAllSheet();
-  }, [navigation, hideAllSheet]);
+    hideSheet();
+  }, [navigation, hideSheet]);
 
   return {
     handleLocationSearch,

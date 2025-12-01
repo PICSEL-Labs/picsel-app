@@ -33,13 +33,7 @@ export const useHomeScreen = () => {
     useMapCamera();
   const { selectedMarkerId, selectedStore, handleMarkerPress, clearSelection } =
     useMarker();
-  const {
-    nearbyBrandVisible,
-    detailBrandVisible,
-    hideAllSheet,
-    hideSheet,
-    showSheet,
-  } = useBottomSheetManager();
+  const { detailBrandVisible, hideSheet, showSheet } = useBottomSheetManager();
 
   useMapEffects({
     selectedMarkerId,
@@ -53,7 +47,7 @@ export const useHomeScreen = () => {
     hideSearchButton,
     setActiveButton,
     showSheet,
-    hideAllSheet,
+    hideSheet,
     navigation,
     camera,
   });
@@ -96,7 +90,6 @@ export const useHomeScreen = () => {
     clearSelection,
 
     // Bottom Sheets
-    nearbyBrandVisible,
     detailBrandVisible,
     hideSheet,
     showSheet,

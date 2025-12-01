@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
@@ -8,11 +8,14 @@ import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
-import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { useMapLocationStore } from '@/shared/store';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
+  const { targetLocation, selectedStoreId, clearTarget } =
+    useMapLocationStore();
+
   const {
     mapRef,
     brandName,
@@ -30,7 +33,7 @@ const HomeScreen = () => {
     selectedStore,
     handleMarkerPress,
     clearSelection,
-    nearbyBrandVisible,
+    // nearbyBrandVisible,
     detailBrandVisible,
     hideSheet,
     showSheet,
@@ -39,6 +42,46 @@ const HomeScreen = () => {
     userLocation,
   } = useHomeScreen();
 
+  useEffect(() => {
+    if (targetLocation) {
+      // 매장 검색인 경우 마커 선택
+      if (selectedStoreId && filteredStores) {
+        // 검색 완료 후 해당 매장 찾아서 마커 선택
+
+        const targetStore = filteredStores.find(
+          store => store.storeId === selectedStoreId,
+        );
+
+        if (targetStore) {
+          // 브랜드 정보 찾기
+          const brandInfo = filteredBrands?.find(
+            brand => brand.brandId === targetStore.brandId,
+          );
+
+          // handleMarkerPress 호출
+          handleMarkerPress({
+            storeId: targetStore.storeId,
+            storeName: targetStore.storeName,
+            brandId: targetStore.brandId,
+            brandName: brandInfo?.brandName,
+            address: targetStore.address,
+            distance: targetStore.distance,
+            brandIconImageUrl: brandInfo?.brandIconImageUrl,
+          });
+        }
+      }
+      clearTarget();
+    }
+  }, [
+    targetLocation,
+    selectedStoreId,
+    filteredStores,
+    filteredBrands,
+    clearTarget,
+    handleMarkerPress,
+    showSheet,
+  ]);
+
   return (
     <ScreenLayout>
       <NaverMapView
@@ -46,7 +89,6 @@ const HomeScreen = () => {
           handleMapIdle(cam, isFirst => {
             if (isFirst) {
               handleLocationSearch();
-              showSheet('nearby');
             }
           });
         }}
@@ -75,6 +117,7 @@ const HomeScreen = () => {
         placeholder="브랜드명, 매장명, 위치 검색"
         search
         close
+        editable={false}
         container="pb-[8px]"
       />
 
@@ -85,18 +128,10 @@ const HomeScreen = () => {
         isModalOpen={isModalOpen}
         openModal={openModal}
         closeModal={closeModal}
-        detailHideSheet={() => hideSheet('detail')}
-        nearbyHideSheet={() => hideSheet('nearby')}
+        detailHideSheet={() => hideSheet()}
       />
 
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
-
-      <NearbyBrandBottomSheet
-        visible={nearbyBrandVisible}
-        brands={filteredBrands}
-        showSheet={() => showSheet('nearby')}
-        hideSheet={() => hideSheet('nearby')}
-      />
 
       <BrandDetailBottomSheet
         visible={detailBrandVisible}

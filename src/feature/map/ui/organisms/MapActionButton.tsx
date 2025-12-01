@@ -8,37 +8,44 @@ interface Props {
   activeButton: 'brand' | 'location';
   setActiveButton: Dispatch<SetStateAction<'brand' | 'location'>>;
   handleLocationSearch: () => void;
-  isModalOpen: boolean;
-  openModal: () => void;
-  closeModal: () => void;
   detailHideSheet: () => void;
   nearbyHideSheet: () => void;
+  showFilterSheet: () => void;
+  brandFilterVisible: boolean;
+  hideFilterSheet: () => void;
 }
 
 const MapActionButton = ({
   setActiveButton,
   activeButton,
   handleLocationSearch,
-  isModalOpen,
-  openModal,
-  closeModal,
+  showFilterSheet,
+  brandFilterVisible,
   detailHideSheet,
   nearbyHideSheet,
+  hideFilterSheet,
 }: Props) => {
   const handleModal = useCallback(() => {
-    if (isModalOpen) {
-      closeModal();
+    if (brandFilterVisible) {
+      hideFilterSheet();
     } else {
       detailHideSheet();
       nearbyHideSheet();
-      openModal();
+      showFilterSheet();
       setActiveButton('brand');
     }
-  }, [isModalOpen, openModal, closeModal, setActiveButton]);
+  }, [
+    brandFilterVisible,
+    hideFilterSheet,
+    showFilterSheet,
+    detailHideSheet,
+    nearbyHideSheet,
+    setActiveButton,
+  ]);
 
   return activeButton === 'brand' ? (
     <BrandFilterButton
-      variant={isModalOpen ? 'active' : 'inactive'}
+      variant={brandFilterVisible ? 'active' : 'inactive'}
       onPress={handleModal}
     />
   ) : (

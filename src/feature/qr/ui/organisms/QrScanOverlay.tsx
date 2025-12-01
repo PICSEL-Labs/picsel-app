@@ -10,7 +10,7 @@ import { QrScanFrame } from '../molecules/QrScanFrame';
 
 const { width, height } = Dimensions.get('window');
 const BOX_SIZE = width * 0.7;
-const FRAME_TOP = (height - BOX_SIZE) / 2;
+const FRAME_TOP = (height - BOX_SIZE) / 2.5;
 const FRAME_LEFT = (width - BOX_SIZE) / 2;
 
 const QrScanOverlay = () => {

@@ -14,11 +14,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 const GRADIENT_COLORS = [
-  'rgba(255, 255, 255, 1)',
+  'rgba(17, 17, 20, 0.9)',
+  'rgba(17, 17, 20, 0.9)',
+  'rgba(17, 17, 20, 1.3)',
   'rgba(17, 17, 20, 0.8)',
-  'rgba(17, 17, 20, 1)',
   'rgba(17, 17, 20, 0.8)',
-  'rgba(255, 255, 255, 1)',
 ];
 
 const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1];

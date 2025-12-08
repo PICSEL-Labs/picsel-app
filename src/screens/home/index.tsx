@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native';
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
+import EmptyBottomSheet from '@/feature/map/ui/organisms/EmptyBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
@@ -34,6 +35,7 @@ const HomeScreen = () => {
     isFavorite,
     handleMapIdle,
     selectedMarkerId,
+    emptyBrandVisible,
     selectedStore,
     handleMarkerPress,
     clearSelection,
@@ -42,12 +44,11 @@ const HomeScreen = () => {
     handleLocationSearch,
     handleNavigateSearch,
     userLocation,
+    showSheet,
   } = useHomeScreen();
 
   useEffect(() => {
     if (targetLocation && isNavigatingToSearchResult && mapRef.current) {
-      console.log('📍 검색 위치로 이동:', targetLocation);
-
       mapRef.current.animateCameraTo({
         latitude: targetLocation.latitude,
         longitude: targetLocation.longitude,
@@ -96,6 +97,7 @@ const HomeScreen = () => {
           handleMapIdle(cam, isFirst => {
             if (isFirst) {
               handleLocationSearch();
+              showSheet('empty');
             }
           });
         }}
@@ -135,7 +137,8 @@ const HomeScreen = () => {
         isModalOpen={isModalOpen}
         openModal={openModal}
         closeModal={closeModal}
-        detailHideSheet={() => hideSheet()}
+        detailHideSheet={() => hideSheet('detail')}
+        nearbyHideSheet={() => hideSheet('empty')}
       />
 
       <BrandFilterBottomSheet visible={isModalOpen} onClose={closeModal} />
@@ -146,6 +149,14 @@ const HomeScreen = () => {
         isFavorite={isFavorite}
         onClose={clearSelection}
       />
+
+      {filteredBrands?.length === 0 && (
+        <EmptyBottomSheet
+          visible={emptyBrandVisible}
+          brands={filteredBrands}
+          hideSheet={() => hideSheet('empty')}
+        />
+      )}
     </ScreenLayout>
   );
 };

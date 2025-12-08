@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 
 interface UseMapEffectsParams {
   selectedMarkerId: string | null;
-  showSheet: () => void;
-  hideSheet: () => void;
+  showSheet: (type: 'empty' | 'detail') => void;
+  hideSheet: (type: 'empty' | 'detail') => void;
 }
 
 export const useMapEffects = ({
@@ -13,9 +13,9 @@ export const useMapEffects = ({
 }: UseMapEffectsParams) => {
   useEffect(() => {
     if (selectedMarkerId) {
-      showSheet();
+      showSheet('detail');
     } else {
-      hideSheet();
+      hideSheet('detail');
     }
   }, [selectedMarkerId, showSheet, hideSheet]);
 };

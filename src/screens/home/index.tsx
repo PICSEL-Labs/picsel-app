@@ -13,8 +13,12 @@ import { useMapLocationStore } from '@/shared/store';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
-  const { targetLocation, selectedStoreId, clearTarget } =
-    useMapLocationStore();
+  const {
+    targetLocation,
+    selectedStoreId,
+    isNavigatingToSearchResult,
+    clearTarget,
+  } = useMapLocationStore();
 
   const {
     mapRef,
@@ -33,53 +37,56 @@ const HomeScreen = () => {
     selectedStore,
     handleMarkerPress,
     clearSelection,
-    // nearbyBrandVisible,
     detailBrandVisible,
     hideSheet,
-    showSheet,
     handleLocationSearch,
     handleNavigateSearch,
     userLocation,
   } = useHomeScreen();
 
   useEffect(() => {
-    if (targetLocation) {
-      // 매장 검색인 경우 마커 선택
-      if (selectedStoreId && filteredStores) {
-        // 검색 완료 후 해당 매장 찾아서 마커 선택
+    if (targetLocation && isNavigatingToSearchResult && mapRef.current) {
+      console.log('📍 검색 위치로 이동:', targetLocation);
 
-        const targetStore = filteredStores.find(
-          store => store.storeId === selectedStoreId,
-        );
+      mapRef.current.animateCameraTo({
+        latitude: targetLocation.latitude,
+        longitude: targetLocation.longitude,
+        zoom: targetLocation.zoom,
+        duration: 500,
+      });
 
-        if (targetStore) {
-          // 브랜드 정보 찾기
-          const brandInfo = filteredBrands?.find(
-            brand => brand.brandId === targetStore.brandId,
+      setTimeout(() => {
+        if (selectedStoreId && filteredStores) {
+          const targetStore = filteredStores.find(
+            store => store.storeId === selectedStoreId,
           );
 
-          // handleMarkerPress 호출
-          handleMarkerPress({
-            storeId: targetStore.storeId,
-            storeName: targetStore.storeName,
-            brandId: targetStore.brandId,
-            brandName: brandInfo?.brandName,
-            address: targetStore.address,
-            distance: targetStore.distance,
-            brandIconImageUrl: brandInfo?.brandIconImageUrl,
-          });
+          if (targetStore) {
+            const brandInfo = filteredBrands?.find(
+              brand => brand.brandId === targetStore.brandId,
+            );
+
+            handleMarkerPress({
+              storeId: targetStore.storeId,
+              storeName: targetStore.storeName,
+              brandId: targetStore.brandId,
+              brandName: brandInfo?.brandName,
+              address: targetStore.address,
+              distance: targetStore.distance,
+              brandIconImageUrl: brandInfo?.brandIconImageUrl,
+            });
+          }
         }
-      }
-      clearTarget();
+
+        clearTarget();
+      }, 600);
     }
   }, [
     targetLocation,
+    isNavigatingToSearchResult,
     selectedStoreId,
     filteredStores,
     filteredBrands,
-    clearTarget,
-    handleMarkerPress,
-    showSheet,
   ]);
 
   return (

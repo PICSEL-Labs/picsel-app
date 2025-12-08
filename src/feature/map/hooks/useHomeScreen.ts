@@ -92,7 +92,6 @@ export const useHomeScreen = () => {
     // Bottom Sheets
     detailBrandVisible,
     hideSheet,
-    showSheet,
 
     // Actions
     handleLocationSearch,

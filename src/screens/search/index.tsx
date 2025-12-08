@@ -7,7 +7,7 @@ import NoResult from '@/feature/brand/ui/organisms/NoResult';
 import { useStoreSearch } from '@/feature/search/hooks/useStoreSearch';
 import SearchResultList from '@/feature/search/ui/organisms/SearchResultList';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { useMapLocationStore } from '@/shared/store';
+import { useLocationStore, useMapLocationStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
@@ -15,10 +15,10 @@ const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
   const { setTargetLocation } = useMapLocationStore();
-
+  const { setUserLocation } = useLocationStore();
   const { result, uiState, hasResults } = useStoreSearch(query);
 
-  const handleItemPress = (row: {
+  const handleResultPress = (row: {
     id: string;
     kind: string;
     title: string;
@@ -27,7 +27,10 @@ const StoreSearchScreen = () => {
     x: number;
     y: number;
   }) => {
-    // 전역 상태에 저장
+    const storeId = row.kind === 'store' ? row.id : null;
+
+    setUserLocation({ latitude: row.y, longitude: row.x, zoom: 15 });
+
     setTargetLocation(
       {
         latitude: row.y,
@@ -40,9 +43,9 @@ const StoreSearchScreen = () => {
         title: row.title,
         subtitle: row.subtitle,
       },
+      storeId,
     );
 
-    // Home으로 이동
     navigation.navigate('Home');
   };
 
@@ -66,7 +69,7 @@ const StoreSearchScreen = () => {
           <SearchResultList
             data={result}
             highlight={query.split(/\s+/)}
-            onPressItem={handleItemPress}
+            onPressItem={handleResultPress}
           />
           {!hasResults && <NoResult visible={uiState === 'noResults'} />}
         </View>

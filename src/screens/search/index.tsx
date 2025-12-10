@@ -14,7 +14,7 @@ import Input from '@/shared/ui/atoms/Input';
 const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
-  const { setTargetLocation, clearTarget } = useMapLocationStore();
+  const { setTargetLocation } = useMapLocationStore();
   const { setUserLocation } = useLocationStore();
   const { result, uiState, hasResults } = useStoreSearch(query);
 
@@ -27,8 +27,6 @@ const StoreSearchScreen = () => {
     x: number;
     y: number;
   }) => {
-    clearTarget();
-
     const storeId = row.kind === 'store' ? row.id : null;
 
     setUserLocation({ latitude: row.y, longitude: row.x, zoom: 15 });

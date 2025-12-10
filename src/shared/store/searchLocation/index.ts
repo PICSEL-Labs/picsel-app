@@ -23,7 +23,6 @@ interface MapLocationStore {
     storeId?: string | null,
   ) => void;
   setMapMode: (mode: MapMode) => void;
-  clearTarget: () => void;
   resetToDefault: () => void;
 }
 
@@ -44,13 +43,6 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
   setMapMode: mode =>
     set({
       mapMode: mode,
-    }),
-
-  clearTarget: () =>
-    set({
-      targetLocation: null,
-      searchedStore: null,
-      selectedStoreId: null,
     }),
 
   resetToDefault: () =>

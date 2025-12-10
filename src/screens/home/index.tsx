@@ -17,7 +17,6 @@ const HomeScreen = () => {
   const {
     targetLocation,
     selectedStoreId,
-    clearTarget,
     mapMode,
     resetToDefault,
     searchedStore,
@@ -53,7 +52,7 @@ const HomeScreen = () => {
     resetToDefault();
     setBrandName('');
     clearSelection();
-    clearTarget();
+    resetToDefault();
   };
 
   useEffect(() => {
@@ -62,7 +61,7 @@ const HomeScreen = () => {
         latitude: targetLocation.latitude,
         longitude: targetLocation.longitude,
         zoom: targetLocation.zoom,
-        duration: 500,
+        duration: 200,
       });
 
       setTimeout(() => {
@@ -87,7 +86,7 @@ const HomeScreen = () => {
             });
           }
         }
-      }, 600);
+      });
     }
   }, [targetLocation, selectedStoreId, filteredStores, filteredBrands]);
 

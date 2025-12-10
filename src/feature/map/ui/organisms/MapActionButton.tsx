@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import CurrentLocationSearch from './CurrentLocationSearch';
 
 import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
+import { useMapLocationStore } from '@/shared/store';
 
 interface Props {
   activeButton: 'brand' | 'location';
@@ -25,6 +26,8 @@ const MapActionButton = ({
   detailHideSheet,
   nearbyHideSheet,
 }: Props) => {
+  const { mapMode } = useMapLocationStore();
+
   const handleModal = useCallback(() => {
     if (isModalOpen) {
       closeModal();
@@ -36,13 +39,15 @@ const MapActionButton = ({
     }
   }, [isModalOpen, openModal, closeModal, setActiveButton]);
 
-  return activeButton === 'brand' ? (
+  return activeButton === 'brand' || mapMode === 'search' ? (
     <BrandFilterButton
       variant={isModalOpen ? 'active' : 'inactive'}
       onPress={handleModal}
     />
   ) : (
-    <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
+    mapMode === 'default' && (
+      <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
+    )
   );
 };
 

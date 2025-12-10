@@ -15,7 +15,6 @@ interface MapLocationStore {
     subtitle: string;
   } | null;
   selectedStoreId: string | null;
-  isNavigatingToSearchResult: boolean;
   mapMode: MapMode;
 
   setTargetLocation: (
@@ -23,7 +22,6 @@ interface MapLocationStore {
     store: MapLocationStore['searchedStore'],
     storeId?: string | null,
   ) => void;
-  setNavigating: (isNavigating: boolean) => void;
   setMapMode: (mode: MapMode) => void;
   clearTarget: () => void;
   resetToDefault: () => void;
@@ -33,7 +31,6 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
   targetLocation: null,
   searchedStore: null,
   selectedStoreId: null,
-  isNavigatingToSearchResult: false,
   mapMode: 'default',
 
   setTargetLocation: (location, store, storeId = null) =>
@@ -41,13 +38,7 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
       targetLocation: location,
       searchedStore: store,
       selectedStoreId: storeId,
-      isNavigatingToSearchResult: true,
       mapMode: 'search',
-    }),
-
-  setNavigating: isNavigating =>
-    set({
-      isNavigatingToSearchResult: isNavigating,
     }),
 
   setMapMode: mode =>
@@ -60,7 +51,6 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
       targetLocation: null,
       searchedStore: null,
       selectedStoreId: null,
-      isNavigatingToSearchResult: false,
     }),
 
   resetToDefault: () =>
@@ -68,7 +58,6 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
       targetLocation: null,
       searchedStore: null,
       selectedStoreId: null,
-      isNavigatingToSearchResult: false,
       mapMode: 'default',
     }),
 }));

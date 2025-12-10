@@ -17,7 +17,6 @@ const HomeScreen = () => {
   const {
     targetLocation,
     selectedStoreId,
-    isNavigatingToSearchResult,
     clearTarget,
     mapMode,
     resetToDefault,
@@ -47,7 +46,6 @@ const HomeScreen = () => {
     handleLocationSearch,
     handleNavigateSearch,
     userLocation,
-    showSheet,
   } = useHomeScreen();
 
   // 검색 모드 해제 핸들러
@@ -59,7 +57,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    if (targetLocation && isNavigatingToSearchResult && mapRef.current) {
+    if (targetLocation && mapRef.current) {
       mapRef.current.animateCameraTo({
         latitude: targetLocation.latitude,
         longitude: targetLocation.longitude,
@@ -91,13 +89,7 @@ const HomeScreen = () => {
         }
       }, 600);
     }
-  }, [
-    targetLocation,
-    isNavigatingToSearchResult,
-    selectedStoreId,
-    filteredStores,
-    filteredBrands,
-  ]);
+  }, [targetLocation, selectedStoreId, filteredStores, filteredBrands]);
 
   return (
     <ScreenLayout>
@@ -106,7 +98,6 @@ const HomeScreen = () => {
           handleMapIdle(cam, isFirst => {
             if (isFirst) {
               handleLocationSearch();
-              showSheet('empty');
             }
           });
         }}

@@ -1,7 +1,9 @@
 import React from 'react';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Pressable, PressableProps, Text } from 'react-native';
+import { Animated, Pressable, PressableProps, View } from 'react-native';
+
+import BrandFilterTooltip from './BrandFilterTooltip';
 
 import { FILTER_BUTTON_STYLE } from '@/shared/constants/styles/filterButton';
 import FilterIcons from '@/shared/icons/FilterIcons';
@@ -19,34 +21,31 @@ const buttonVariants = cva(FILTER_BUTTON_STYLE, {
     variant: 'inactive',
   },
 });
+interface Props extends PressableProps, VariantProps<typeof buttonVariants> {
+  showTooltip?: boolean;
+  fadeAnim?: Animated.Value;
+}
 
-const textVariants = cva('body-rg-02', {
-  variants: {
-    variant: {
-      active: 'text-neutral-white',
-      inactive: 'text-gray-900',
-    },
-  },
-  defaultVariants: {
-    variant: 'inactive',
-  },
-});
-
-interface Props extends PressableProps, VariantProps<typeof buttonVariants> {}
-
-const BrandFilterButton = ({ variant = 'inactive', ...props }: Props) => {
+const BrandFilterButton = ({
+  variant = 'inactive',
+  showTooltip = false,
+  fadeAnim,
+  ...props
+}: Props) => {
   return (
-    <Pressable
-      className={cn(buttonVariants({ variant }))}
-      style={[filterButtonShadow[variant]]}
-      {...props}>
-      <FilterIcons
-        shape={variant === 'active' ? 'white' : 'gray'}
-        width={24}
-        height={24}
-      />
-      <Text className={cn(textVariants({ variant }))}>브랜드 찾기</Text>
-    </Pressable>
+    <View>
+      <Pressable
+        className={cn(buttonVariants({ variant }))}
+        style={[filterButtonShadow[variant]]}
+        {...props}>
+        <FilterIcons
+          shape={variant === 'active' ? 'white' : 'gray'}
+          width={24}
+          height={24}
+        />
+      </Pressable>
+      {showTooltip && <BrandFilterTooltip fadeAnim={fadeAnim} />}
+    </View>
   );
 };
 

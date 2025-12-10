@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect } from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 import Config from 'react-native-config';
@@ -23,6 +23,17 @@ const MapOverlay = ({
 }: Props) => {
   const { optimisticFavorites } = useFavoriteStore();
   const { mapMode, searchedStore, selectedStoreId } = useMapLocationStore();
+
+  const hasBeenDeselectedRef = useRef(false);
+
+  useEffect(() => {
+    if (selectedStoreId && selectedMarkerId !== selectedStoreId) {
+      hasBeenDeselectedRef.current = true;
+    }
+    if (mapMode === 'default' || !selectedStoreId) {
+      hasBeenDeselectedRef.current = false;
+    }
+  }, [selectedMarkerId, selectedStoreId, mapMode]);
 
   const brandMap = useMemo(() => {
     return new Map(brand.map(b => [b.brandId, b]));
@@ -54,12 +65,23 @@ const MapOverlay = ({
       let imageConfig;
 
       if (isSearchedStore) {
-        // 검색된 매장 = SearchedMarker
-        // 옵션 1: HTTP URL 사용 (서버에 이미지가 있는 경우) -> 해당 방식 채택 -> 서버 및 디자인팀 요청
-        imageConfig = {
-          httpUri: `${Config.IMAGE_URL}/searched-marker.png`,
-        };
-        IMAGE_SIZE = 48;
+        const shouldShowBrandImage =
+          isSelected || !hasBeenDeselectedRef.current;
+
+        if (shouldShowBrandImage) {
+          const finalImageUrl = getFavoriteImageUrl(
+            brandIconUrl || '',
+            isFavorite,
+          );
+          imageConfig = { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` };
+          IMAGE_SIZE = 48;
+        } else {
+          // 검색 이미지 -> 서버에서 제공 받기 -> 디자인 서버 요청
+          imageConfig = {
+            httpUri: `${Config.IMAGE_URL}/searched-marker.png`,
+          };
+          IMAGE_SIZE = 48;
+        }
       } else {
         const finalImageUrl = getFavoriteImageUrl(
           brandIconUrl || '',

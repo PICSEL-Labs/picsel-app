@@ -19,6 +19,9 @@ const HomeScreen = () => {
     selectedStoreId,
     isNavigatingToSearchResult,
     clearTarget,
+    mapMode,
+    resetToDefault,
+    searchedStore,
   } = useMapLocationStore();
 
   const {
@@ -46,6 +49,14 @@ const HomeScreen = () => {
     userLocation,
     showSheet,
   } = useHomeScreen();
+
+  // 검색 모드 해제 핸들러
+  const handleResetToDefault = () => {
+    resetToDefault();
+    setBrandName('');
+    clearSelection();
+    clearTarget();
+  };
 
   useEffect(() => {
     if (targetLocation && isNavigatingToSearchResult && mapRef.current) {
@@ -78,8 +89,6 @@ const HomeScreen = () => {
             });
           }
         }
-
-        clearTarget();
       }, 600);
     }
   }, [
@@ -119,13 +128,15 @@ const HomeScreen = () => {
       </NaverMapView>
 
       <Input
-        value={brandName}
+        value={mapMode === 'search' ? searchedStore?.title : brandName}
         onChangeText={setBrandName}
-        handleClear={() => setBrandName('')}
+        handleClear={handleResetToDefault}
         onPress={handleNavigateSearch}
+        onPressLeft={handleResetToDefault}
         placeholder="브랜드명, 매장명, 위치 검색"
-        search
         close
+        arrow={mapMode === 'search'}
+        search={mapMode === 'default'}
         editable={false}
         container="pb-[8px]"
       />

@@ -61,7 +61,7 @@ const Input = ({
         {...props}
       />
 
-      {value.length > 0 && close && (
+      {(value?.length ?? 0) > 0 && close && (
         <Pressable
           className="absolute right-5 top-[11px]"
           onPressIn={handleClear}>

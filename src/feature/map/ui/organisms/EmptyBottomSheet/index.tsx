@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 
 import BrandEmptyState from './BrandEmptyState';
 
-import { useNearbyBrandBottomSheet } from '@/feature/map/hooks/useNearbyBrandBottomSheet';
+import { useEmptyBottomSheet } from '@/feature/map/hooks/useEmptyBottomSheet';
 import { BrandDetail } from '@/feature/map/types';
 import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/styles/shadows';
@@ -18,7 +18,7 @@ interface Props {
 
 const EmptyBottomSheet = ({ hideSheet, visible, brands }: Props) => {
   const { bottomSheetRef, animationConfigs, handleSheetChange } =
-    useNearbyBrandBottomSheet({
+    useEmptyBottomSheet({
       hideSheet,
     });
 

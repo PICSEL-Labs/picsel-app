@@ -1,4 +1,11 @@
-import React, { useMemo, useEffect, memo, useState } from 'react';
+import React, {
+  useMemo,
+  useEffect,
+  memo,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 import Config from 'react-native-config';
@@ -43,6 +50,22 @@ const MapOverlay = memo(
       mapMode === 'search' &&
       searchedStore?.kind === 'store' &&
       selectedStoreId;
+
+    const lastTapTimeRef = useRef(0);
+
+    const handleMarkerTap = useCallback(
+      (storeDetail: StoreDetail) => {
+        const now = Date.now();
+
+        if (now - lastTapTimeRef.current < 300) {
+          return;
+        }
+
+        lastTapTimeRef.current = now;
+        handleMarkerPress(storeDetail);
+      },
+      [handleMarkerPress],
+    );
 
     const markers = useMemo(() => {
       if (!store.length) {
@@ -100,7 +123,7 @@ const MapOverlay = memo(
             height={size}
             image={imageConfig}
             onTap={() =>
-              handleMarkerPress({
+              handleMarkerTap({
                 storeId: data.storeId,
                 storeName: data.storeName,
                 brandId: data.brandId,
@@ -124,6 +147,7 @@ const MapOverlay = memo(
       isStoreSearchMode,
       selectedStoreId,
       hasBeenSelected,
+      handleMarkerTap,
     ]);
 
     return <>{markers}</>;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
@@ -14,6 +14,10 @@ import { useMapLocationStore } from '@/shared/store';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
+  const hasAutoSelectedRef = useRef(false);
+  const lastSelectedStoreIdRef = useRef<string | null>(null);
+  const hasCameraMovedForCurrentSearchRef = useRef(false);
+
   const {
     targetLocation,
     selectedStoreId,
@@ -54,20 +58,28 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    if (targetLocation && mapRef.current) {
+    if (
+      targetLocation &&
+      mapRef.current &&
+      !hasCameraMovedForCurrentSearchRef.current
+    ) {
       mapRef.current.animateCameraTo({
         latitude: targetLocation.latitude,
         longitude: targetLocation.longitude,
         zoom: targetLocation.zoom,
-        duration: 200,
+        duration: 300,
       });
+
+      hasCameraMovedForCurrentSearchRef.current = true;
 
       const timeoutId = setTimeout(() => {
         if (
           selectedStoreId &&
           filteredStores &&
           filteredBrands &&
-          selectedMarkerId !== selectedStoreId
+          selectedMarkerId !== selectedStoreId &&
+          !hasAutoSelectedRef.current &&
+          lastSelectedStoreIdRef.current !== selectedStoreId
         ) {
           const targetStore = filteredStores.find(
             store => store.storeId === selectedStoreId,
@@ -87,6 +99,9 @@ const HomeScreen = () => {
               distance: targetStore.distance,
               brandIconImageUrl: brandInfo?.brandIconImageUrl,
             });
+
+            hasAutoSelectedRef.current = true;
+            lastSelectedStoreIdRef.current = selectedStoreId;
           }
         }
       }, 300);
@@ -101,6 +116,18 @@ const HomeScreen = () => {
     filteredBrands,
     handleMarkerPress,
   ]);
+
+  useEffect(() => {
+    if (mapMode === 'default') {
+      hasAutoSelectedRef.current = false;
+      lastSelectedStoreIdRef.current = null;
+      hasCameraMovedForCurrentSearchRef.current = false;
+    }
+  }, [mapMode]);
+
+  useEffect(() => {
+    hasCameraMovedForCurrentSearchRef.current = false;
+  }, [targetLocation]);
 
   return (
     <ScreenLayout>

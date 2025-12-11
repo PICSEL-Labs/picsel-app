@@ -7,16 +7,26 @@ export const useMarker = () => {
   const [selectedStore, setSelectedStore] = useState<StoreDetail | null>(null);
 
   const processingRef = useRef(false);
+  const lastActionTimeRef = useRef(0);
 
   const handleMarkerPress = useCallback(
     (store: StoreDetail) => {
+      const now = Date.now();
+
+      if (now - lastActionTimeRef.current < 300) {
+        return;
+      }
+
       if (processingRef.current) {
         return;
       }
 
+      lastActionTimeRef.current = now;
       processingRef.current = true;
 
       const isDeselecting = selectedMarkerId === store.storeId;
+
+      console.log(store.storeName, 'storeId:', store.storeId);
 
       if (isDeselecting) {
         setSelectedMarkerId(null);
@@ -28,12 +38,10 @@ export const useMarker = () => {
 
       setTimeout(() => {
         processingRef.current = false;
-      }, 100);
+      }, 300);
     },
     [selectedMarkerId],
   );
-
-  console.log(selectedMarkerId, selectedStore);
 
   const clearSelection = useCallback(() => {
     if (processingRef.current) {
@@ -46,7 +54,7 @@ export const useMarker = () => {
 
     setTimeout(() => {
       processingRef.current = false;
-    }, 100);
+    }, 300);
   }, []);
 
   return {

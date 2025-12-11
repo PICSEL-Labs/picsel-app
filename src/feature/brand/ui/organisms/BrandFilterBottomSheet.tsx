@@ -9,7 +9,6 @@ import { useGetBrandsList } from '../../queries/useGetBrandList';
 import BrandFilterHeader from '../molecules/BrandFilterHeader';
 
 import BrandGridList from './BrandGridList';
-import SelectButton from './SelectButton';
 
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
@@ -30,8 +29,13 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
 
   const { showToast } = useToastStore();
 
-  const { tempFilteredList, filterBrand, resetFilter, applyFilter } =
+  const { tempFilteredList, filterBrand, resetFilter } =
     useFilteredBrandsStore();
+
+  const handleReset = () => {
+    resetFilter();
+    showToast('선택한 브랜드가 모두 해제됐어요', 50);
+  };
 
   const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
     useBrandFilterBottomSheet({ visible, showSheet, hideSheet });
@@ -50,11 +54,6 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
     }
   };
 
-  const handleApply = () => {
-    applyFilter();
-    hideSheet();
-  };
-
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
@@ -69,32 +68,18 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
       onChange={handleSheetChange}
       enablePanDownToClose>
       <View className="flex-1">
-        <BrandFilterHeader
-          selectedCount={tempFilteredList.length}
-          onReset={resetFilter}
-        />
-
+        <BrandFilterHeader onReset={handleReset} />
         <BottomSheetScrollView
           ref={scrollViewRef}
           onScroll={handleScroll}
           showsVerticalScrollIndicator={false}>
-          <View className="px-4 pt-2">
-            <BrandGridList
-              brandList={brandList}
-              selectedList={tempFilteredList}
-              onPress={handlePressBrand}
-              excludeNoneBrand
-            />
-          </View>
-        </BottomSheetScrollView>
-
-        <View className="p-5">
-          <SelectButton
-            actualSelectedCount={tempFilteredList.length}
-            disabled={tempFilteredList.length === 0}
-            onPress={handleApply}
+          <BrandGridList
+            brandList={brandList}
+            selectedList={tempFilteredList}
+            onPress={handlePressBrand}
+            excludeNoneBrand
           />
-        </View>
+        </BottomSheetScrollView>
       </View>
     </BottomSheetModal>
   );

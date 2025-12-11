@@ -2,33 +2,44 @@ import React from 'react';
 
 import { Pressable, Text, View } from 'react-native';
 
-import ReplayIcons from '@/shared/icons/ReplayIcon';
+import { useFilteredBrandsStore } from '@/shared/store';
 
 interface Props {
-  selectedCount: number;
   onReset: () => void;
 }
 
-const BrandFilterHeader = ({ selectedCount, onReset }: Props) => {
+const BrandFilterHeader = ({ onReset }: Props) => {
+  const { applyFilter } = useFilteredBrandsStore();
   return (
-    <View className="relative my-1 w-full items-center justify-center px-4">
+    <View className="w-full flex-row items-center px-4 pb-2">
+      <View className="flex-1">
+        <Pressable onPress={onReset}>
+          <Text className="p-2 text-gray-600 headline-02">전체해제</Text>
+        </Pressable>
+      </View>
+
       <Text className="text-center text-gray-900 title-01">브랜드 찾기</Text>
 
-      <Pressable onPress={onReset} className="absolute right-5">
-        <View className="flex-row items-center">
-          <Text
-            className={`mr-1 headline-02 ${
-              selectedCount > 0 ? 'text-pink-500' : 'text-gray-500'
-            }`}>
-            초기화
-          </Text>
-          <ReplayIcons
-            width={24}
-            height={24}
-            shape={selectedCount > 0 ? 'true' : 'false'}
-          />
-        </View>
-      </Pressable>
+      <View className="flex-1 items-end">
+        <Pressable
+          onPress={applyFilter}
+          style={({ pressed }) => [
+            {
+              padding: 8,
+              borderRadius: 12,
+              backgroundColor: pressed ? '#FECDDD' : 'transparent',
+            },
+          ]}>
+          {({ pressed }) => (
+            <Text
+              className={`headline-02 ${
+                pressed ? 'text-white' : 'text-pink-500'
+              }`}>
+              적용하기
+            </Text>
+          )}
+        </Pressable>
+      </View>
     </View>
   );
 };

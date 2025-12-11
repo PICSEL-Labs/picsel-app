@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
+import { useBrandTooltipOnce } from '@/feature/brand/model/hooks/useBrandTooltipOnce';
 import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
@@ -47,6 +48,7 @@ const HomeScreen = () => {
     handleLocationSearch,
     handleNavigateSearch,
     userLocation,
+    showSheet,
     navigation,
   } = useHomeScreen();
 
@@ -126,6 +128,7 @@ const HomeScreen = () => {
   useEffect(() => {
     hasCameraMovedForCurrentSearchRef.current = false;
   }, [targetLocation]);
+  const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
 
   return (
     <ScreenLayout>
@@ -176,7 +179,9 @@ const HomeScreen = () => {
         showFilterSheet={() => showSheet('filter')}
         hideFilterSheet={() => hideSheet('filter')}
         detailHideSheet={() => hideSheet('detail')}
-        nearbyHideSheet={() => hideSheet('empty')}
+        emptyHideSheet={() => hideSheet('empty')}
+        showBrandTooltip={showBrandTooltip}
+        fadeAnim={fadeAnim}
       />
 
       <BrandFilterBottomSheet

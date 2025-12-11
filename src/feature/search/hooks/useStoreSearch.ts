@@ -17,19 +17,20 @@ interface Props {
 
 export const useStoreSearch = (query: string, props: Props = {}) => {
   const {
-    minLen = 2, // 최소 2글자로 요청
-    debounceMs = 400, // 0.4초로 디바운스
-    radius = 999, // 임시 반경값
+    minLen = 2,
+    debounceMs = 400,
+    radius = 999,
     latitude = DEFAULT_COORDS.latitude,
     longitude = DEFAULT_COORDS.longitude,
   } = props;
 
   const debouncedQuery = useDebouncedValue(query, debounceMs);
-  const hasQuery = debouncedQuery.trim().length >= minLen;
+  const safeQuery = debouncedQuery ?? '';
+  const hasQuery = safeQuery.trim().length >= minLen;
 
   const { data: result, isFetching } = useSearchAutocomplete(
     {
-      query: debouncedQuery,
+      query: safeQuery,
       latitude,
       longitude,
       radius,

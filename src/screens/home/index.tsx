@@ -45,6 +45,7 @@ const HomeScreen = () => {
     handleLocationSearch,
     handleNavigateSearch,
     userLocation,
+    navigation,
   } = useHomeScreen();
 
   // 검색 모드 해제 핸들러
@@ -122,7 +123,7 @@ const HomeScreen = () => {
         onChangeText={setBrandName}
         handleClear={handleResetToDefault}
         onPress={handleNavigateSearch}
-        onPressLeft={handleResetToDefault}
+        onPressLeft={() => navigation.goBack()}
         placeholder="브랜드명, 매장명, 위치 검색"
         close
         arrow={mapMode === 'search'}

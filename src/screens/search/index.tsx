@@ -14,7 +14,7 @@ import Input from '@/shared/ui/atoms/Input';
 const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
-  const { setTargetLocation } = useMapLocationStore();
+  const { setTargetLocation, mapMode, resetToDefault } = useMapLocationStore();
   const { setUserLocation } = useLocationStore();
   const { result, uiState, hasResults } = useStoreSearch(query);
 
@@ -46,7 +46,13 @@ const StoreSearchScreen = () => {
       storeId,
     );
 
+    setQuery(row.title);
     navigation.navigate('Home');
+  };
+
+  const handleSearchModeBack = () => {
+    resetToDefault();
+    navigation.goBack();
   };
 
   return (
@@ -61,14 +67,18 @@ const StoreSearchScreen = () => {
           onChangeText={setQuery}
           handleClear={() => setQuery('')}
           arrow
-          onPressLeft={() => navigation.goBack()}
+          onPressLeft={
+            mapMode === 'search'
+              ? handleSearchModeBack
+              : () => navigation.goBack()
+          }
           close
           autoFocus
         />
         <View className="flex-1">
           <SearchResultList
             data={result}
-            highlight={query.split(/\s+/)}
+            highlight={query?.split(/\s+/)}
             onPressItem={handleResultPress}
           />
           {!hasResults && <NoResult visible={uiState === 'noResults'} />}

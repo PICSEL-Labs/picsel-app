@@ -58,13 +58,13 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
     <BottomSheetModal
       ref={bottomSheetRef}
       index={0}
-      enableDynamicSizing={false} // 동적 높이 조절 기능 Off -> 최대 높이 snapPoints의 index={1}
+      enableDynamicSizing={false}
       enableOverDrag={false}
       style={bottomSheetShadow}
       snapPoints={snapPoints}
       handleIndicatorStyle={bottomSheetIndicator}
       animationConfigs={animationConfigs}
-      enableContentPanningGesture={false} // 드래그로 시트 움직임 (기본 동작) 차단
+      enableContentPanningGesture={false}
       onChange={handleSheetChange}
       enablePanDownToClose>
       <View className="flex-1">

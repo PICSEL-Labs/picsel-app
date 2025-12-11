@@ -19,6 +19,8 @@ const HomeScreen = () => {
   const lastSelectedStoreIdRef = useRef<string | null>(null);
   const hasCameraMovedForCurrentSearchRef = useRef(false);
 
+  const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
+
   const {
     targetLocation,
     selectedStoreId,
@@ -128,7 +130,6 @@ const HomeScreen = () => {
   useEffect(() => {
     hasCameraMovedForCurrentSearchRef.current = false;
   }, [targetLocation]);
-  const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
 
   return (
     <ScreenLayout>

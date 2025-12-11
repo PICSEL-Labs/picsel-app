@@ -8,9 +8,9 @@ import { formatDistance } from '@/shared/utils/distance';
 
 interface Props {
   kind: 'station' | 'store' | 'administrativeDistrict';
-  title: string; // 지하철역명/매장명/지역명
-  subtitle?: string; // 주소
-  distanceMeters?: number; // 거리
+  title: string;
+  subtitle?: string;
+  distanceMeters?: number;
   onPress?: () => void;
   highlightKeyword?: string | string[];
 }
@@ -53,7 +53,7 @@ const SearchResultItem = ({
               {subtitle}
             </Text>
           )}
-          {distanceMeters && (
+          {typeof distanceMeters === 'number' && !isNaN(distanceMeters) && (
             <Text className="text-gray-600 body-rg-01">
               {formatDistance(distanceMeters)}
             </Text>

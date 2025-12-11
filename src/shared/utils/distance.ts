@@ -3,7 +3,7 @@ export const formatDistance = (m?: number) => {
 
   if (meters >= 1000) {
     const km = meters / 1000;
-    const s = Number.isInteger(km) ? km.toFixed(0) : km.toFixed(1); // 정수면 소수점 제거
+    const s = Number.isInteger(km) ? km.toFixed(0) : km.toFixed(1);
     return `${s}KM`;
   }
   return `${Math.round(meters)}M`;

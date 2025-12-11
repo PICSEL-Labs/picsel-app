@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useFilteredBrandsStore } from '@/shared/store';
+import { useFilteredBrandsStore, useMapLocationStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface UseMapActionsParams {
@@ -25,6 +25,7 @@ export const useMapActions = ({
   camera,
 }: UseMapActionsParams) => {
   const { clearAppliedFilter } = useFilteredBrandsStore();
+  const { mapMode, resetToDefault } = useMapLocationStore();
 
   const handleLocationSearch = useCallback(() => {
     clearAppliedFilter();
@@ -43,12 +44,20 @@ export const useMapActions = ({
   ]);
 
   const handleNavigateSearch = useCallback(() => {
-    navigation.navigate('StoreSearch');
+    mapMode === 'search'
+      ? navigation.goBack()
+      : navigation.navigate('StoreSearch');
     hideAllSheet();
   }, [navigation, hideAllSheet]);
+
+  const handleSearchModeBack = () => {
+    resetToDefault();
+    navigation.goBack();
+  };
 
   return {
     handleLocationSearch,
     handleNavigateSearch,
+    handleSearchModeBack,
   };
 };

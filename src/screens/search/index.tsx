@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 
 import NoResult from '@/feature/brand/ui/organisms/NoResult';
+import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import { useStoreSearch } from '@/feature/search/hooks/useStoreSearch';
 import SearchResultList from '@/feature/search/ui/organisms/SearchResultList';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
@@ -14,9 +15,10 @@ import Input from '@/shared/ui/atoms/Input';
 const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
-  const { setTargetLocation, mapMode, resetToDefault } = useMapLocationStore();
+  const { setTargetLocation, mapMode } = useMapLocationStore();
   const { setUserLocation } = useLocationStore();
   const { result, uiState, hasResults } = useStoreSearch(query);
+  const { handleSearchModeBack } = useHomeScreen();
 
   const handleResultPress = (row: {
     id: string;
@@ -48,11 +50,6 @@ const StoreSearchScreen = () => {
 
     setQuery(row.title);
     navigation.navigate('Home');
-  };
-
-  const handleSearchModeBack = () => {
-    resetToDefault();
-    navigation.goBack();
   };
 
   return (

@@ -28,7 +28,7 @@ const SelectButton = ({
   return (
     <View className="w-full items-center">
       <Button
-        color={!disabled ? 'disabled' : 'active'}
+        color={disabled ? 'disabled' : 'active'}
         textColor="white"
         text={`선택 완료 (${actualSelectedCount})`}
         disabled={!disabled}

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { NaverMapViewRef } from '@mj-studio/react-native-naver-map';
 import { useNavigation } from '@react-navigation/native';
@@ -36,6 +36,7 @@ export const useHomeScreen = () => {
   const {
     emptyBrandVisible,
     detailBrandVisible,
+    brandFilterVisible,
     hideAllSheet,
     hideSheet,
     showSheet,
@@ -98,6 +99,7 @@ export const useHomeScreen = () => {
     // Bottom Sheets
     emptyBrandVisible,
     detailBrandVisible,
+    brandFilterVisible,
     hideSheet,
     showSheet,
 

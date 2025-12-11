@@ -24,80 +24,85 @@ const MapOverlay = ({
   const { optimisticFavorites } = useFavoriteStore();
   const { mapMode, searchedStore, selectedStoreId } = useMapLocationStore();
 
-  const hasBeenDeselectedRef = useRef(false);
+  const hasBeenSelectedRef = useRef(false);
 
   useEffect(() => {
-    if (selectedStoreId && selectedMarkerId !== selectedStoreId) {
-      hasBeenDeselectedRef.current = true;
+    const isSearchMode = mapMode === 'search' && selectedStoreId;
+
+    if (!isSearchMode) {
+      hasBeenSelectedRef.current = false;
+      return;
     }
-    if (mapMode === 'default' || !selectedStoreId) {
-      hasBeenDeselectedRef.current = false;
+
+    if (selectedMarkerId === selectedStoreId) {
+      hasBeenSelectedRef.current = true;
     }
   }, [selectedMarkerId, selectedStoreId, mapMode]);
 
-  const brandMap = useMemo(() => {
-    return new Map(brand.map(b => [b.brandId, b]));
-  }, [brand]);
+  const brandMap = useMemo(
+    () => new Map(brand.map(b => [b.brandId, b])),
+    [brand],
+  );
+
+  const isStoreSearchMode =
+    mapMode === 'search' && searchedStore?.kind === 'store' && selectedStoreId;
+
+  const getMarkerConfig = (
+    data: StoreData,
+    brandInfo: BrandData | undefined,
+  ) => {
+    const isSelected = selectedMarkerId === data.storeId;
+    const isSearchedStore =
+      isStoreSearchMode && data.storeId === selectedStoreId;
+    const isFavorite =
+      optimisticFavorites[data.brandId] ?? brandInfo?.isFavorite ?? false;
+    const brandIconUrl = brandInfo?.brandIconImageUrl || '';
+
+    // 검색된 스토어인 경우
+    if (isSearchedStore) {
+      const shouldShowBrandImage = isSelected || !hasBeenSelectedRef.current;
+
+      if (shouldShowBrandImage) {
+        const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
+        return {
+          imageConfig: { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` },
+          size: 48,
+          zIndex: 2000,
+        };
+      }
+
+      return {
+        imageConfig: { httpUri: `${Config.IMAGE_URL}/searched-marker.png` },
+        size: 48,
+        zIndex: 2000,
+      };
+    }
+
+    // 일반 스토어인 경우
+    const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
+    return {
+      imageConfig: { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` },
+      size: isSelected ? 48 : 28,
+      zIndex: isSelected ? 1000 : 0,
+    };
+  };
 
   const markers = useMemo(() => {
     if (!store.length) {
       return null;
     }
 
-    const isStoreSearchMode =
-      mapMode === 'search' &&
-      searchedStore?.kind === 'store' &&
-      selectedStoreId;
-
     return store.map(data => {
       const brandInfo = brandMap.get(data.brandId);
-      const brandIconUrl = brandInfo?.brandIconImageUrl;
-
-      const isSelected = selectedMarkerId === data.storeId;
-
-      const isSearchedStore =
-        isStoreSearchMode && data.storeId === selectedStoreId;
-
-      const isFavorite =
-        optimisticFavorites[data.brandId] ?? brandInfo?.isFavorite ?? false;
-
-      let IMAGE_SIZE;
-      let imageConfig;
-
-      if (isSearchedStore) {
-        const shouldShowBrandImage =
-          isSelected || !hasBeenDeselectedRef.current;
-
-        if (shouldShowBrandImage) {
-          const finalImageUrl = getFavoriteImageUrl(
-            brandIconUrl || '',
-            isFavorite,
-          );
-          imageConfig = { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` };
-          IMAGE_SIZE = 48;
-        } else {
-          // 검색 이미지 -> 서버에서 제공 받기 -> 디자인 서버 요청
-          imageConfig = {
-            httpUri: `${Config.IMAGE_URL}/searched-marker.png`,
-          };
-          IMAGE_SIZE = 48;
-        }
-      } else {
-        const finalImageUrl = getFavoriteImageUrl(
-          brandIconUrl || '',
-          isFavorite,
-        );
-        imageConfig = { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` };
-        IMAGE_SIZE = isSelected ? 48 : 28;
-      }
+      const { imageConfig, size, zIndex } = getMarkerConfig(data, brandInfo);
 
       return (
         <NaverMapMarkerOverlay
           key={data.storeId}
           latitude={data.y}
           longitude={data.x}
-          width={IMAGE_SIZE}
-          height={IMAGE_SIZE}
+          width={size}
+          height={size}
           image={imageConfig}
           onTap={() =>
             handleMarkerPress({
@@ -107,11 +112,11 @@ const MapOverlay = ({
               brandName: brandInfo?.brandName,
               address: data.address,
               distance: data.distance,
-              brandIconImageUrl: brandIconUrl,
+              brandIconImageUrl: brandInfo?.brandIconImageUrl,
             })
           }
           anchor={{ x: 0.5, y: 1 }}
-          zIndex={isSearchedStore ? 2000 : isSelected ? 1000 : 0}
+          zIndex={zIndex}
         />
       );
     });
@@ -119,10 +124,8 @@ const MapOverlay = ({
     store,
     brandMap,
     selectedMarkerId,
-    handleMarkerPress,
     optimisticFavorites,
-    mapMode,
-    searchedStore,
+    isStoreSearchMode,
     selectedStoreId,
   ]);
 

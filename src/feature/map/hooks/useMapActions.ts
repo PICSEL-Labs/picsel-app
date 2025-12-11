@@ -25,7 +25,7 @@ export const useMapActions = ({
   camera,
 }: UseMapActionsParams) => {
   const { clearAppliedFilter } = useFilteredBrandsStore();
-  const { mapMode, resetToDefault } = useMapLocationStore();
+  const { mapMode } = useMapLocationStore();
 
   const handleLocationSearch = useCallback(() => {
     clearAppliedFilter();
@@ -43,21 +43,15 @@ export const useMapActions = ({
     showSheet,
   ]);
 
-  const handleNavigateSearch = () => {
+  const handleNavigateSearch = useCallback(() => {
     mapMode === 'search'
       ? navigation.goBack()
       : navigation.navigate('StoreSearch');
     hideAllSheet();
-  };
-
-  const handleSearchModeBack = () => {
-    resetToDefault();
-    navigation.goBack();
-  };
+  }, [navigation, hideAllSheet, mapMode]);
 
   return {
     handleLocationSearch,
     handleNavigateSearch,
-    handleSearchModeBack,
   };
 };

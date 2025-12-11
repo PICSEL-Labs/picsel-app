@@ -18,6 +18,8 @@ export const useMarker = () => {
     setSelectedStore(null);
   }, []);
 
+  console.log(selectedMarkerId, selectedStore);
+
   return {
     handleMarkerPress,
     selectedMarkerId,

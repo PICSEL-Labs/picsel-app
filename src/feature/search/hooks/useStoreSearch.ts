@@ -25,8 +25,16 @@ export const useStoreSearch = (query: string, props: Props = {}) => {
   } = props;
 
   const debouncedQuery = useDebouncedValue(query, debounceMs);
-  const safeQuery = debouncedQuery ?? '';
-  const hasQuery = safeQuery.trim().length >= minLen;
+
+  const safeQuery = useMemo(() => {
+    const trimmed = (debouncedQuery ?? '').trim();
+    return trimmed;
+  }, [debouncedQuery]);
+
+  const hasQuery = useMemo(() => {
+    const has = safeQuery.length >= minLen;
+    return has;
+  }, [safeQuery, minLen]);
 
   const { data: result, isFetching } = useSearchAutocomplete(
     {
@@ -38,14 +46,17 @@ export const useStoreSearch = (query: string, props: Props = {}) => {
     hasQuery,
   );
 
-  const counts = useMemo(
-    () => ({
-      stations: result?.stations?.length ?? 0,
-      stores: result?.stores?.length ?? 0,
-      administrativeDistricts: result?.administrativeDistricts?.length ?? 0,
-    }),
-    [result],
-  );
+  const counts = useMemo(() => {
+    if (!result) {
+      return { stations: 0, stores: 0, administrativeDistricts: 0 };
+    }
+
+    return {
+      stations: result.stations?.length ?? 0,
+      stores: result.stores?.length ?? 0,
+      administrativeDistricts: result.administrativeDistricts?.length ?? 0,
+    };
+  }, [result]);
 
   const hasResults = useMemo(
     () => counts.stations + counts.stores + counts.administrativeDistricts > 0,

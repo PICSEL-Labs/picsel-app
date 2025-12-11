@@ -48,10 +48,7 @@ const HomeScreen = () => {
     navigation,
   } = useHomeScreen();
 
-  // 검색 모드 해제 핸들러
   const handleResetToDefault = () => {
-    resetToDefault();
-    setBrandName('');
     clearSelection();
     resetToDefault();
   };

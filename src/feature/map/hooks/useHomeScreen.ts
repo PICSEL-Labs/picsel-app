@@ -47,17 +47,16 @@ export const useHomeScreen = () => {
     showSheet,
   });
 
-  const { handleLocationSearch, handleNavigateSearch, handleSearchModeBack } =
-    useMapActions({
-      searchStoresByLocation,
-      setSelectedMarkerId: clearSelection,
-      hideSearchButton,
-      setActiveButton,
-      showSheet,
-      hideAllSheet,
-      navigation,
-      camera,
-    });
+  const { handleLocationSearch, handleNavigateSearch } = useMapActions({
+    searchStoresByLocation,
+    setSelectedMarkerId: clearSelection,
+    hideSearchButton,
+    setActiveButton,
+    showSheet,
+    hideAllSheet,
+    navigation,
+    camera,
+  });
 
   const { filteredStores, filteredBrands } = useFilteredData({
     stores: stores?.data?.content,
@@ -105,7 +104,6 @@ export const useHomeScreen = () => {
     // Actions
     handleLocationSearch,
     handleNavigateSearch,
-    handleSearchModeBack,
 
     // Navigation
     navigation,

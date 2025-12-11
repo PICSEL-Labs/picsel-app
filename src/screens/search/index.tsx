@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 
 import NoResult from '@/feature/brand/ui/organisms/NoResult';
-import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import { useStoreSearch } from '@/feature/search/hooks/useStoreSearch';
 import SearchResultList from '@/feature/search/ui/organisms/SearchResultList';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
@@ -15,54 +14,77 @@ import Input from '@/shared/ui/atoms/Input';
 const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
-  const { setTargetLocation, mapMode } = useMapLocationStore();
+  const { setTargetLocation, mapMode, resetToDefault } = useMapLocationStore();
   const { setUserLocation } = useLocationStore();
   const { result, uiState, hasResults } = useStoreSearch(query);
-  const { handleSearchModeBack } = useHomeScreen();
+  const composingRef = useRef(false);
 
-  const handleResultPress = (row: {
-    id: string;
-    kind: string;
-    title: string;
-    subtitle: string;
-    distanceMeters: number;
-    x: number;
-    y: number;
-  }) => {
-    const storeId = row.kind === 'store' ? row.id : null;
+  const handleSearchModeBack = useCallback(() => {
+    if (mapMode === 'search') {
+      resetToDefault();
+    }
+    navigation.goBack();
+  }, [mapMode, resetToDefault, navigation]);
 
-    setUserLocation({ latitude: row.y, longitude: row.x, zoom: 15 });
+  const handleChangeText = useCallback((text: string) => {
+    if (!composingRef.current) {
+      setQuery(text);
+    }
+  }, []);
 
-    setTargetLocation(
-      {
+  const handleResultPress = useCallback(
+    (row: {
+      id: string;
+      kind: string;
+      title: string;
+      subtitle: string;
+      distanceMeters: number;
+      x: number;
+      y: number;
+    }) => {
+      const storeId = row.kind === 'store' ? row.id : null;
+
+      const locationData = {
         latitude: row.y,
         longitude: row.x,
         zoom: 15,
-      },
-      {
-        id: row.id,
-        kind: row.kind,
-        title: row.title,
-        subtitle: row.subtitle,
-      },
-      storeId,
-    );
+      };
 
-    setQuery(row.title);
-    navigation.navigate('Home');
-  };
+      setUserLocation(locationData);
+
+      setTargetLocation(
+        locationData,
+        {
+          id: row.id,
+          kind: row.kind,
+          title: row.title,
+          subtitle: row.subtitle,
+        },
+        storeId,
+      );
+      setQuery(row.title);
+      navigation.navigate('Home');
+    },
+    [setUserLocation, setTargetLocation, navigation],
+  );
+
+  const handleClear = useCallback(() => {
+    setQuery('');
+  }, []);
+
+  const dismissKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
+
+  const highlight = React.useMemo(() => query?.split(/\s+/), [query]);
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-      accessible={false}>
+    <TouchableWithoutFeedback onPress={dismissKeyboard} accessible={false}>
       <ScreenLayout>
         <Input
           value={query}
-          onChangeText={setQuery}
-          handleClear={() => setQuery('')}
+          onChangeText={handleChangeText}
+          handleClear={handleClear}
           arrow
           onPressLeft={
             mapMode === 'search'
@@ -75,7 +97,7 @@ const StoreSearchScreen = () => {
         <View className="flex-1">
           <SearchResultList
             data={result}
-            highlight={query?.split(/\s+/)}
+            highlight={highlight}
             onPressItem={handleResultPress}
           />
           {!hasResults && <NoResult visible={uiState === 'noResults'} />}

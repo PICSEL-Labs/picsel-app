@@ -43,12 +43,12 @@ export const useMapActions = ({
     showSheet,
   ]);
 
-  const handleNavigateSearch = useCallback(() => {
+  const handleNavigateSearch = () => {
     mapMode === 'search'
       ? navigation.goBack()
       : navigation.navigate('StoreSearch');
     hideAllSheet();
-  }, [navigation, hideAllSheet]);
+  };
 
   const handleSearchModeBack = () => {
     resetToDefault();

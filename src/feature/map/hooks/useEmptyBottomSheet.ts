@@ -7,7 +7,7 @@ interface Props {
   hideSheet: () => void;
 }
 
-export const useNearbyBrandBottomSheet = ({ hideSheet }: Props) => {
+export const useEmptyBottomSheet = ({ hideSheet }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const animationConfigs = useMemo(

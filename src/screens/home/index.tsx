@@ -62,14 +62,19 @@ const HomeScreen = () => {
         duration: 200,
       });
 
-      setTimeout(() => {
-        if (selectedStoreId && filteredStores) {
+      const timeoutId = setTimeout(() => {
+        if (
+          selectedStoreId &&
+          filteredStores &&
+          filteredBrands &&
+          selectedMarkerId !== selectedStoreId
+        ) {
           const targetStore = filteredStores.find(
             store => store.storeId === selectedStoreId,
           );
 
           if (targetStore) {
-            const brandInfo = filteredBrands?.find(
+            const brandInfo = filteredBrands.find(
               brand => brand.brandId === targetStore.brandId,
             );
 
@@ -84,9 +89,18 @@ const HomeScreen = () => {
             });
           }
         }
-      });
+      }, 300);
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [targetLocation, selectedStoreId, filteredStores, filteredBrands]);
+  }, [
+    targetLocation,
+    selectedStoreId,
+    selectedMarkerId,
+    filteredStores,
+    filteredBrands,
+    handleMarkerPress,
+  ]);
 
   return (
     <ScreenLayout>

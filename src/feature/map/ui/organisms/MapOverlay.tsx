@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from 'react';
+import React, { useMemo, useEffect, memo, useState } from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
 import Config from 'react-native-config';
@@ -15,121 +15,119 @@ interface Props {
   handleMarkerPress: (store: StoreDetail) => void;
 }
 
-const MapOverlay = ({
-  brand = [],
-  store = [],
-  selectedMarkerId,
-  handleMarkerPress,
-}: Props) => {
-  const { optimisticFavorites } = useFavoriteStore();
-  const { mapMode, searchedStore, selectedStoreId } = useMapLocationStore();
+const MapOverlay = memo(
+  ({ brand = [], store = [], selectedMarkerId, handleMarkerPress }: Props) => {
+    const { optimisticFavorites } = useFavoriteStore();
+    const { mapMode, searchedStore, selectedStoreId } = useMapLocationStore();
+    const [hasBeenSelected, setHasBeenSelected] = useState(false);
 
-  const hasBeenSelectedRef = useRef(false);
+    useEffect(() => {
+      const isSearchMode = mapMode === 'search' && selectedStoreId;
 
-  useEffect(() => {
-    const isSearchMode = mapMode === 'search' && selectedStoreId;
+      if (!isSearchMode) {
+        setHasBeenSelected(false);
+        return;
+      }
 
-    if (!isSearchMode) {
-      hasBeenSelectedRef.current = false;
-      return;
-    }
+      if (selectedMarkerId === selectedStoreId) {
+        setHasBeenSelected(true);
+      }
+    }, [selectedMarkerId, selectedStoreId, mapMode]);
 
-    if (selectedMarkerId === selectedStoreId) {
-      hasBeenSelectedRef.current = true;
-    }
-  }, [selectedMarkerId, selectedStoreId, mapMode]);
+    const brandMap = useMemo(
+      () => new Map(brand.map(b => [b.brandId, b])),
+      [brand],
+    );
 
-  const brandMap = useMemo(
-    () => new Map(brand.map(b => [b.brandId, b])),
-    [brand],
-  );
+    const isStoreSearchMode =
+      mapMode === 'search' &&
+      searchedStore?.kind === 'store' &&
+      selectedStoreId;
 
-  const isStoreSearchMode =
-    mapMode === 'search' && searchedStore?.kind === 'store' && selectedStoreId;
+    const markers = useMemo(() => {
+      if (!store.length) {
+        return null;
+      }
 
-  const getMarkerConfig = (
-    data: StoreData,
-    brandInfo: BrandData | undefined,
-  ) => {
-    const isSelected = selectedMarkerId === data.storeId;
-    const isSearchedStore =
-      isStoreSearchMode && data.storeId === selectedStoreId;
-    const isFavorite =
-      optimisticFavorites[data.brandId] ?? brandInfo?.isFavorite ?? false;
-    const brandIconUrl = brandInfo?.brandIconImageUrl || '';
+      const getMarkerConfig = (
+        data: StoreData,
+        brandInfo: BrandData | undefined,
+      ) => {
+        const isSelected = selectedMarkerId === data.storeId;
+        const isSearchedStore =
+          isStoreSearchMode && data.storeId === selectedStoreId;
+        const isFavorite =
+          optimisticFavorites[data.brandId] ?? brandInfo?.isFavorite ?? false;
+        const brandIconUrl = brandInfo?.brandIconImageUrl || '';
+        const shouldShowBrandImage = isSelected || !hasBeenSelected; // ⭐ state 사용
 
-    // 검색된 스토어인 경우
-    if (isSearchedStore) {
-      const shouldShowBrandImage = isSelected || !hasBeenSelectedRef.current;
+        if (isSearchedStore) {
+          if (shouldShowBrandImage) {
+            const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
+            return {
+              imageConfig: { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` },
+              size: 48,
+              zIndex: 2000,
+            };
+          }
 
-      if (shouldShowBrandImage) {
+          return {
+            imageConfig: { httpUri: `${Config.IMAGE_URL}/searched-marker.png` },
+            size: 48,
+            zIndex: 2000,
+          };
+        }
+
+        // 일반 스토어인 경우
         const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
         return {
           imageConfig: { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` },
-          size: 48,
-          zIndex: 2000,
+          size: isSelected ? 48 : 28,
+          zIndex: isSelected ? 1000 : 0,
         };
-      }
-
-      return {
-        imageConfig: { httpUri: `${Config.IMAGE_URL}/searched-marker.png` },
-        size: 48,
-        zIndex: 2000,
       };
-    }
 
-    // 일반 스토어인 경우
-    const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
-    return {
-      imageConfig: { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` },
-      size: isSelected ? 48 : 28,
-      zIndex: isSelected ? 1000 : 0,
-    };
-  };
+      return store.map(data => {
+        const brandInfo = brandMap.get(data.brandId);
+        const { imageConfig, size, zIndex } = getMarkerConfig(data, brandInfo);
 
-  const markers = useMemo(() => {
-    if (!store.length) {
-      return null;
-    }
+        return (
+          <NaverMapMarkerOverlay
+            key={data.storeId}
+            latitude={data.y}
+            longitude={data.x}
+            width={size}
+            height={size}
+            image={imageConfig}
+            onTap={() =>
+              handleMarkerPress({
+                storeId: data.storeId,
+                storeName: data.storeName,
+                brandId: data.brandId,
+                brandName: brandInfo?.brandName,
+                address: data.address,
+                distance: data.distance,
+                brandIconImageUrl: brandInfo?.brandIconImageUrl,
+              })
+            }
+            anchor={{ x: 0.5, y: 1 }}
+            zIndex={zIndex}
+          />
+        );
+      });
+    }, [
+      store,
+      brandMap,
+      selectedMarkerId,
+      handleMarkerPress,
+      optimisticFavorites,
+      isStoreSearchMode,
+      selectedStoreId,
+      hasBeenSelected,
+    ]);
 
-    return store.map(data => {
-      const brandInfo = brandMap.get(data.brandId);
-      const { imageConfig, size, zIndex } = getMarkerConfig(data, brandInfo);
-
-      return (
-        <NaverMapMarkerOverlay
-          key={data.storeId}
-          latitude={data.y}
-          longitude={data.x}
-          width={size}
-          height={size}
-          image={imageConfig}
-          onTap={() =>
-            handleMarkerPress({
-              storeId: data.storeId,
-              storeName: data.storeName,
-              brandId: data.brandId,
-              brandName: brandInfo?.brandName,
-              address: data.address,
-              distance: data.distance,
-              brandIconImageUrl: brandInfo?.brandIconImageUrl,
-            })
-          }
-          anchor={{ x: 0.5, y: 1 }}
-          zIndex={zIndex}
-        />
-      );
-    });
-  }, [
-    store,
-    brandMap,
-    selectedMarkerId,
-    optimisticFavorites,
-    isStoreSearchMode,
-    selectedStoreId,
-  ]);
-
-  return <>{markers}</>;
-};
+    return <>{markers}</>;
+  },
+);
 
 export default MapOverlay;

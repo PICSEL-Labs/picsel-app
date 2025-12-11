@@ -17,5 +17,5 @@ export const useMapEffects = ({
     } else {
       hideSheet('detail');
     }
-  }, [selectedMarkerId, showSheet, hideSheet]);
+  }, [selectedMarkerId]);
 };

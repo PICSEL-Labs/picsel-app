@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 
-import { Animated } from 'react-native';
+import { Animated, View } from 'react-native';
 
+import BrandFilterButton from './BrandFilterBottomSheet/BrandFilterButton';
 import CurrentLocationSearch from './CurrentLocationSearch';
 
-import BrandFilterButton from '@/feature/map/ui/organisms/BrandFilterBottomSheet/BrandFilterButton';
 import { useMapLocationStore } from '@/shared/store';
 
 interface Props {
@@ -52,17 +52,20 @@ const MapActionButton = ({
     setActiveButton,
   ]);
 
-  return activeButton === 'brand' || mapMode === 'search' ? (
-    <BrandFilterButton
-      variant={brandFilterVisible ? 'active' : 'inactive'}
-      onPress={handleModal}
-      showTooltip={showBrandTooltip}
-      fadeAnim={fadeAnim}
-    />
-  ) : (
-    mapMode === 'default' && (
-      <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
-    )
+  return (
+    <View className="relative flex-row justify-center">
+      <View className="absolute left-0">
+        <BrandFilterButton
+          variant={brandFilterVisible ? 'active' : 'inactive'}
+          onPress={handleModal}
+          showTooltip={showBrandTooltip}
+          fadeAnim={fadeAnim}
+        />
+      </View>
+      {mapMode === 'default' && activeButton === 'location' && (
+        <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
+      )}
+    </View>
   );
 };
 

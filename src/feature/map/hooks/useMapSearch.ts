@@ -2,8 +2,11 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { MAP_SEARCH_CONFIG } from '@/feature/map/constants/mapConfig';
 import { StoreSearchParams } from '@/feature/map/types';
+import { useLocationStore } from '@/shared/store';
 
 export const useMapSearch = () => {
+  const { userLocation } = useLocationStore();
+
   const [storeParams, setStoreParams] = useState<StoreSearchParams>({
     minX: 0,
     maxX: 0,
@@ -48,20 +51,26 @@ export const useMapSearch = () => {
         ? MAP_SEARCH_CONFIG.MAX_OFFSET
         : getLimitedOffsetByZoom(zoom);
 
+      const actualUserLocation = userLocation || {
+        latitude,
+        longitude,
+        zoom,
+      };
+
       const newParams: StoreSearchParams = {
         minX: longitude - offset,
         maxX: longitude + offset,
         minY: latitude - offset,
         maxY: latitude + offset,
-        userX: longitude,
-        userY: latitude,
+        userX: actualUserLocation.longitude,
+        userY: actualUserLocation.latitude,
         page: 0,
         size: MAP_SEARCH_CONFIG.DEFAULT_PAGE_SIZE,
       };
 
       setStoreParams(newParams);
     },
-    [getLimitedOffsetByZoom],
+    [getLimitedOffsetByZoom, userLocation],
   );
 
   return {

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 
+import Geolocation from '@react-native-community/geolocation';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 
@@ -44,26 +45,53 @@ const StoreSearchScreen = () => {
     }) => {
       const storeId = row.kind === 'store' ? row.id : null;
 
-      const locationData = {
+      const targetLocationData = {
         latitude: row.y,
         longitude: row.x,
         zoom: 15,
       };
 
-      setUserLocation(locationData);
+      Geolocation.getCurrentPosition(
+        position => {
+          const currentUserLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            zoom: 15,
+          };
 
-      setTargetLocation(
-        locationData,
-        {
-          id: row.id,
-          kind: row.kind,
-          title: row.title,
-          subtitle: row.subtitle,
+          setUserLocation(currentUserLocation);
+
+          setTargetLocation(
+            targetLocationData,
+            {
+              id: row.id,
+              kind: row.kind,
+              title: row.title,
+              subtitle: row.subtitle,
+            },
+            storeId,
+          );
+
+          setQuery(row.title);
+          navigation.navigate('Home');
         },
-        storeId,
+        error => {
+          console.error('위치 가져오기 실패:', error);
+          setUserLocation(targetLocationData);
+          setTargetLocation(
+            targetLocationData,
+            {
+              id: row.id,
+              kind: row.kind,
+              title: row.title,
+              subtitle: row.subtitle,
+            },
+            storeId,
+          );
+          setQuery(row.title);
+          navigation.navigate('Home');
+        },
       );
-      setQuery(row.title);
-      navigation.navigate('Home');
     },
     [setUserLocation, setTargetLocation, navigation],
   );

@@ -29,7 +29,9 @@ export const useMapActions = ({
 
   const handleLocationSearch = useCallback(() => {
     clearAppliedFilter();
+
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
+
     setSelectedMarkerId(null);
     hideSearchButton();
     setActiveButton('brand');
@@ -41,6 +43,7 @@ export const useMapActions = ({
     hideSearchButton,
     setActiveButton,
     showSheet,
+    clearAppliedFilter,
   ]);
 
   const handleNavigateSearch = useCallback(() => {

@@ -11,20 +11,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import {
+  FADE_DURATION,
+  GRADIENT_COLORS,
+  GRADIENT_LOCATIONS,
+  SLIDE_DURATION,
+  TOAST_DISPLAY_DURATION,
+} from '@/shared/constants/styles/toast';
 import { useToastStore } from '@/shared/store/ui/toast';
-
-const GRADIENT_COLORS = [
-  'rgba(17, 17, 20, 0.9)',
-  'rgba(17, 17, 20, 0.9)',
-  'rgba(17, 17, 20, 1.3)',
-  'rgba(17, 17, 20, 0.8)',
-  'rgba(17, 17, 20, 0.8)',
-];
-
-const GRADIENT_LOCATIONS = [0, 0.2, 0.4, 0.95, 1];
-
-const ANIMATION_DURATION = 250;
-const TOAST_DISPLAY_DURATION = 1500;
 
 const Toast = () => {
   const { message, visible, hideToast, marginBottom } = useToastStore();
@@ -37,7 +31,7 @@ const Toast = () => {
   const opacity = useSharedValue(0);
 
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const isAnimatingRef = useRef(false);
+  const previousMessageRef = useRef<string>('');
 
   const clearHideTimer = () => {
     if (hideTimerRef.current) {
@@ -46,80 +40,88 @@ const Toast = () => {
     }
   };
 
-  const setAnimatingFalse = () => {
-    isAnimatingRef.current = false;
-  };
-
-  const animateHide = (onComplete?: () => void) => {
-    isAnimatingRef.current = true;
-
+  const slideOut = (onComplete?: () => void) => {
     translateY.value = withTiming(
-      100,
-      { duration: ANIMATION_DURATION, easing: Easing.in(Easing.cubic) },
+      150,
+      { duration: SLIDE_DURATION, easing: Easing.in(Easing.ease) },
       () => {
-        runOnJS(setAnimatingFalse)();
-        runOnJS(setShouldRender)(false);
         if (onComplete) {
           runOnJS(onComplete)();
         }
       },
     );
-
-    opacity.value = withTiming(0, { duration: ANIMATION_DURATION - 50 });
   };
 
-  const animateShow = () => {
-    isAnimatingRef.current = true;
+  const slideIn = () => {
+    translateY.value = withTiming(0, {
+      duration: SLIDE_DURATION,
+      easing: Easing.out(Easing.cubic),
+    });
+  };
 
-    translateY.value = withTiming(
-      0,
-      { duration: ANIMATION_DURATION, easing: Easing.out(Easing.cubic) },
-      () => {
-        runOnJS(setAnimatingFalse)();
-      },
-    );
+  const fadeOut = (onComplete?: () => void) => {
+    opacity.value = withTiming(0, { duration: FADE_DURATION }, () => {
+      if (onComplete) {
+        runOnJS(onComplete)();
+      }
+    });
+  };
 
-    opacity.value = withTiming(1, { duration: ANIMATION_DURATION - 50 });
+  const fadeIn = () => {
+    opacity.value = withTiming(1, { duration: FADE_DURATION });
   };
 
   const scheduleHide = () => {
     clearHideTimer();
     hideTimerRef.current = setTimeout(() => {
-      animateHide(hideToast);
+      slideOut(() => {
+        setShouldRender(false);
+        hideToast();
+      });
     }, TOAST_DISPLAY_DURATION);
   };
 
+  // 토스트 플로우 (최신 ver)
+  // 최초 - slide-in & out
+  // 연속 - fade-in & out
   useEffect(() => {
     if (visible) {
-      // 케이스 1: 이미 보이는 상태에서 새 메시지 → 즉시 업데이트
-      if (shouldRender && displayMessage !== message) {
+      const isNewMessage = previousMessageRef.current !== message;
+      const isAlreadyVisible = shouldRender;
+
+      if (isAlreadyVisible && isNewMessage) {
         clearHideTimer();
-        animateHide(() => {
+        fadeOut(() => {
           setDisplayMessage(message);
-          setShouldRender(true);
+          previousMessageRef.current = message;
 
           setTimeout(() => {
-            animateShow();
+            fadeIn();
             scheduleHide();
           }, 50);
         });
-      }
-
-      // 케이스 2: 최초 표시
-      else if (!shouldRender) {
+      } else if (!isAlreadyVisible) {
         setDisplayMessage(message);
-        setShouldRender(true);
+        previousMessageRef.current = message;
 
         translateY.value = 100;
-        opacity.value = 0;
+        opacity.value = 1;
 
-        animateShow();
-        scheduleHide();
+        requestAnimationFrame(() => {
+          setShouldRender(true);
+          requestAnimationFrame(() => {
+            slideIn();
+            scheduleHide();
+          });
+        });
       }
     } else {
       clearHideTimer();
       if (shouldRender) {
-        animateHide();
+        slideOut(() => {
+          setShouldRender(false);
+          previousMessageRef.current = '';
+        });
       }
     }
 

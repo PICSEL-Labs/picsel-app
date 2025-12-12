@@ -25,11 +25,11 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
   const { data: brands } = useGetBrandsList();
   const { brandList, setBrandList } = useBrandListStore();
   const { scrollViewRef, handleScroll } = useHandleScroll();
-
   const { showToast } = useToastStore();
-
   const { tempFilteredList, filterBrand, resetFilter } =
     useFilteredBrandsStore();
+  const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
+    useBrandFilterBottomSheet({ visible, showSheet, hideSheet });
 
   const handleReset = () => {
     if (tempFilteredList.length > 0) {
@@ -38,15 +38,6 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
     }
   };
 
-  const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
-    useBrandFilterBottomSheet({ visible, showSheet, hideSheet });
-
-  useEffect(() => {
-    if (brands) {
-      setBrandList(brands);
-    }
-  }, [brands]);
-
   const handlePressBrand = (brandId: string, name: string) => {
     const success = filterBrand(brandId, name);
     if (!success) {
@@ -54,6 +45,12 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
       return;
     }
   };
+
+  useEffect(() => {
+    if (brands) {
+      setBrandList(brands);
+    }
+  }, [brands]);
 
   return (
     <BottomSheetModal

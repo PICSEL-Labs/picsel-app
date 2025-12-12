@@ -32,8 +32,10 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
     useFilteredBrandsStore();
 
   const handleReset = () => {
-    resetFilter();
-    showToast('선택한 브랜드가 모두 해제됐어요', 50);
+    if (tempFilteredList.length > 0) {
+      resetFilter();
+      showToast('선택한 브랜드가 모두 해제됐어요', 50);
+    }
   };
 
   const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =

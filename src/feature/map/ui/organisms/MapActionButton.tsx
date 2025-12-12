@@ -4,7 +4,7 @@ import { Animated } from 'react-native';
 
 import CurrentLocationSearch from './CurrentLocationSearch';
 
-import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
+import BrandFilterButton from '@/feature/map/ui/organisms/BrandFilterBottomSheet/BrandFilterButton';
 import { useMapLocationStore } from '@/shared/store';
 
 interface Props {

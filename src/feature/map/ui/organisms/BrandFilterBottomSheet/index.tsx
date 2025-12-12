@@ -3,12 +3,11 @@ import React, { useEffect } from 'react';
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
-import { useBrandFilterBottomSheet } from '../../model/hooks/useBrandFilterBottomSheet';
-import { useHandleScroll } from '../../model/hooks/useHandleScroll';
-import { useGetBrandsList } from '../../queries/useGetBrandList';
-import BrandFilterHeader from '../molecules/BrandFilterHeader';
-
-import BrandGridList from './BrandGridList';
+import { useBrandFilterBottomSheet } from '../../../../brand/model/hooks/useBrandFilterBottomSheet';
+import { useHandleScroll } from '../../../../brand/model/hooks/useHandleScroll';
+import { useGetBrandsList } from '../../../../brand/queries/useGetBrandList';
+import BrandGridList from '../../../../brand/ui/organisms/BrandGridList';
+import BrandFilterHeader from '../../molecules/BrandFilterHeader';
 
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';

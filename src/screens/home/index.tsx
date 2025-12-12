@@ -4,9 +4,9 @@ import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
 import { useBrandTooltipOnce } from '@/feature/brand/model/hooks/useBrandTooltipOnce';
-import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
+import BrandFilterBottomSheet from '@/feature/map/ui/organisms/BrandFilterBottomSheet';
 import EmptyBottomSheet from '@/feature/map/ui/organisms/EmptyBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';

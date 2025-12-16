@@ -1,46 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Text } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  Camera,
-  useCameraDevice,
-  useCodeScanner,
-} from 'react-native-vision-camera';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 
 import { useCameraPermission } from '@/feature/qr/hooks/useCameraPermission';
+import { useQrScanner } from '@/feature/qr/hooks/useQrScanner';
 import QrScanOverlay from '@/feature/qr/ui/organisms/QrScanOverlay';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import NotchBackground from '@/shared/ui/atoms/NotchBackground';
 
 const QrScanScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
   const device = useCameraDevice('back');
   const permission = useCameraPermission();
 
-  const codeScanner = useCodeScanner({
-    codeTypes: ['qr'],
-    onCodeScanned: async codes => {
-      const url = codes?.[0]?.value;
-      if (!url) {
-        return;
-      }
+  const { codeScanner, resetScan } = useQrScanner();
 
-      navigation.navigate('QrPreview', { url });
-    },
-  });
+  useFocusEffect(
+    useCallback(() => {
+      resetScan(); // QR 화면에 다시 focus되면 스캔 초기화
+    }, [resetScan]),
+  );
 
-  if (!permission) {
-    return (
-      <ScreenLayout>
-        <Text>카메라 권한이 필요합니다.</Text>
-      </ScreenLayout>
-    );
-  }
-
-  if (!device) {
+  if (!device || !permission) {
     return (
       <SafeAreaView className="flex-1">
         <QrScanOverlay />

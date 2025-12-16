@@ -6,8 +6,8 @@ import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
 import SelectPhotoScreen from '@/screens/picselbook/selectPhoto';
-import QrPreviewScreen from '@/screens/qr/preview';
 import QrScanScreen from '@/screens/qr/scan';
+import QrViewerScreen from '@/screens/qr/viewer';
 import StoreSearchScreen from '@/screens/search';
 
 export type MainNavigationProps = {
@@ -17,7 +17,7 @@ export type MainNavigationProps = {
   Home: undefined;
   StoreSearch: undefined;
   QrScan: undefined;
-  QrPreview: { url: string };
+  QrViewer: { url: string };
   SelectPhoto: undefined;
 };
 
@@ -43,7 +43,7 @@ const MainRoute = () => {
         }}
       />
 
-      <Stack.Screen name="QrPreview" component={QrPreviewScreen} />
+      <Stack.Screen name="QrViewer" component={QrViewerScreen} />
 
       <Stack.Screen name="SelectPhoto" component={SelectPhotoScreen} />
     </Stack.Navigator>

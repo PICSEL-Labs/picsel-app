@@ -4,6 +4,7 @@ import { Pressable, Text, View } from 'react-native';
 
 import { HighlightedText } from '@/shared/components/HighlightedText';
 import SparkleImages from '@/shared/images/Sparkle';
+import { useLocationStore } from '@/shared/store';
 import { formatDistance } from '@/shared/utils/distance';
 
 interface Props {
@@ -23,7 +24,10 @@ const SearchResultItem = ({
   onPress,
   highlightKeyword,
 }: Props) => {
+  const { userLocation } = useLocationStore();
   const hasKeyword = kind === 'store' || kind === 'administrativeDistrict';
+
+  const displayDistance = userLocation ? distanceMeters : 0;
 
   return (
     <Pressable
@@ -53,9 +57,9 @@ const SearchResultItem = ({
               {subtitle}
             </Text>
           )}
-          {typeof distanceMeters === 'number' && !isNaN(distanceMeters) && (
+          {typeof displayDistance === 'number' && !isNaN(displayDistance) && (
             <Text className="text-gray-600 body-rg-01">
-              {formatDistance(distanceMeters)}
+              {formatDistance(displayDistance)}
             </Text>
           )}
         </View>

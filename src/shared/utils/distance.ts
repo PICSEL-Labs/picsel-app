@@ -1,5 +1,5 @@
 export const formatDistance = (m?: number) => {
-  const meters = m < 0 ? 0 : m;
+  const meters = m == null || m < 0 ? 0 : m;
 
   if (meters >= 1000) {
     const km = meters / 1000;

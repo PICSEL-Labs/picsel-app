@@ -13,5 +13,6 @@ export const splitAddress = (fullAddress: string) => {
 };
 
 export const formatDistance = (distance: number): string => {
-  return `${Math.round(distance * 1000)}m`;
+  const validDistance = distance ?? 0;
+  return `${Math.round(validDistance * 1000)}m`;
 };

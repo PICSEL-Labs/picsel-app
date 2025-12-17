@@ -1,6 +1,5 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 
-import Geolocation from '@react-native-community/geolocation';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 
@@ -16,9 +15,18 @@ const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
   const { setTargetLocation, mapMode, resetToDefault } = useMapLocationStore();
-  const { setUserLocation } = useLocationStore();
+  const { setSearchLocation } = useLocationStore();
   const { result, uiState, hasResults } = useStoreSearch(query);
   const composingRef = useRef(false);
+  const highlight = useMemo(() => query?.split(/\s+/), [query]);
+
+  const handleClear = useCallback(() => {
+    setQuery('');
+  }, []);
+
+  const dismissKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
 
   const handleSearchModeBack = useCallback(() => {
     if (mapMode === 'search') {
@@ -45,66 +53,29 @@ const StoreSearchScreen = () => {
     }) => {
       const storeId = row.kind === 'store' ? row.id : null;
 
-      const targetLocationData = {
+      const locationData = {
         latitude: row.y,
         longitude: row.x,
         zoom: 15,
       };
 
-      Geolocation.getCurrentPosition(
-        position => {
-          const currentUserLocation = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            zoom: 15,
-          };
+      setSearchLocation(locationData);
 
-          setUserLocation(currentUserLocation);
-
-          setTargetLocation(
-            targetLocationData,
-            {
-              id: row.id,
-              kind: row.kind,
-              title: row.title,
-              subtitle: row.subtitle,
-            },
-            storeId,
-          );
-
-          setQuery(row.title);
-          navigation.navigate('Home');
+      setTargetLocation(
+        locationData,
+        {
+          id: row.id,
+          kind: row.kind,
+          title: row.title,
+          subtitle: row.subtitle,
         },
-        error => {
-          console.error('위치 가져오기 실패:', error);
-          setUserLocation(targetLocationData);
-          setTargetLocation(
-            targetLocationData,
-            {
-              id: row.id,
-              kind: row.kind,
-              title: row.title,
-              subtitle: row.subtitle,
-            },
-            storeId,
-          );
-          setQuery(row.title);
-          navigation.navigate('Home');
-        },
+        storeId,
       );
+      setQuery(row.title);
+      navigation.navigate('Home');
     },
-    [setUserLocation, setTargetLocation, navigation],
+    [setSearchLocation, setTargetLocation, navigation],
   );
-
-  const handleClear = useCallback(() => {
-    setQuery('');
-  }, []);
-
-  const dismissKeyboard = useCallback(() => {
-    Keyboard.dismiss();
-  }, []);
-
-  const highlight = React.useMemo(() => query?.split(/\s+/), [query]);
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard} accessible={false}>

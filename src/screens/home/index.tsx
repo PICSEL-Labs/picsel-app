@@ -156,6 +156,7 @@ const HomeScreen = () => {
         search={mapMode === 'default'}
         editable={false}
         container="pb-[8px]"
+        className="w-80"
       />
 
       <MapActionButton

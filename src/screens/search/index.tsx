@@ -84,6 +84,7 @@ const StoreSearchScreen = () => {
           value={query}
           onChangeText={handleChangeText}
           handleClear={handleClear}
+          className="w-80"
           arrow
           onPressLeft={
             mapMode === 'search'

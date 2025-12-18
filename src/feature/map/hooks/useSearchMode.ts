@@ -122,7 +122,6 @@ export const useSearchMode = ({
     }
   }, [mapMode]);
 
-  // 바텀시트 닫기 핸들러
   const handleBottomSheetClose = useCallback(() => {
     if (mapMode === 'search' && searchedStore?.kind === 'store') {
       setKeepSearchedMarker(true);
@@ -132,7 +131,6 @@ export const useSearchMode = ({
     }
   }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
 
-  // 맵 탭 핸들러
   const handleMapTap = useCallback(() => {
     if (mapMode === 'search' && searchedStore?.kind === 'store') {
       setKeepSearchedMarker(true);

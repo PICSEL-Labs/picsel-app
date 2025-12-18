@@ -1,10 +1,10 @@
-import { RefObject, useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { NaverMapViewRef } from '@mj-studio/react-native-naver-map';
 
 import { BrandData, StoreData, StoreDetail } from '../types';
 
-interface Props {
+interface UseSearchModeParams {
   targetLocation: { latitude: number; longitude: number; zoom: number } | null;
   mapMode: 'default' | 'search';
   searchedStore: {
@@ -20,7 +20,7 @@ interface Props {
   handleMarkerPress: (store: StoreDetail, isFromSearch?: boolean) => void;
   clearSelection: (keepSearched?: boolean) => void;
   setKeepSearchedMarker: (keep: boolean) => void;
-  mapRef: RefObject<NaverMapViewRef>;
+  mapRef: React.RefObject<NaverMapViewRef>;
 }
 
 export const useSearchMode = ({
@@ -35,12 +35,15 @@ export const useSearchMode = ({
   clearSelection,
   setKeepSearchedMarker,
   mapRef,
-}: Props) => {
+}: UseSearchModeParams) => {
   const hasAutoSelectedRef = useRef(false);
   const lastSelectedStoreIdRef = useRef<string | null>(null);
   const hasCameraMovedForCurrentSearchRef = useRef(false);
   const hasSearchedForCurrentLocationRef = useRef(false);
+  const autoSelectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const processingAutoSelectRef = useRef(false);
 
+  // 카메라 이동
   useEffect(() => {
     if (
       targetLocation &&
@@ -63,8 +66,11 @@ export const useSearchMode = ({
     }
   }, [targetLocation, mapRef]);
 
-  // 매장 자동 선택 (filteredStores 업데이트 시)
   useEffect(() => {
+    if (processingAutoSelectRef.current) {
+      return;
+    }
+
     if (
       mapMode === 'search' &&
       searchedStore?.kind === 'store' &&
@@ -81,27 +87,50 @@ export const useSearchMode = ({
       );
 
       if (targetStore) {
-        const brandInfo = filteredBrands.find(
-          brand => brand.brandId === targetStore.brandId,
-        );
+        // 처리 시작 플래그 설정
+        processingAutoSelectRef.current = true;
 
-        handleMarkerPress(
-          {
-            storeId: targetStore.storeId,
-            storeName: targetStore.storeName,
-            brandId: targetStore.brandId,
-            brandName: brandInfo?.brandName,
-            address: targetStore.address,
-            distance: targetStore.distance,
-            brandIconImageUrl: brandInfo?.brandIconImageUrl,
-          },
-          true,
-        );
+        // 기존 timeout 제거
+        if (autoSelectTimeoutRef.current) {
+          clearTimeout(autoSelectTimeoutRef.current);
+        }
 
-        hasAutoSelectedRef.current = true;
-        lastSelectedStoreIdRef.current = selectedStoreId;
+        // 200ms debounce로 중복 실행 방지
+        autoSelectTimeoutRef.current = setTimeout(() => {
+          const brandInfo = filteredBrands.find(
+            brand => brand.brandId === targetStore.brandId,
+          );
+
+          handleMarkerPress(
+            {
+              storeId: targetStore.storeId,
+              storeName: targetStore.storeName,
+              brandId: targetStore.brandId,
+              brandName: brandInfo?.brandName,
+              address: targetStore.address,
+              distance: targetStore.distance,
+              brandIconImageUrl: brandInfo?.brandIconImageUrl,
+            },
+            true,
+          );
+
+          hasAutoSelectedRef.current = true;
+          lastSelectedStoreIdRef.current = selectedStoreId;
+
+          // 처리 완료 후 플래그 해제
+          setTimeout(() => {
+            processingAutoSelectRef.current = false;
+          }, 300);
+        }, 200);
       }
     }
+
+    // cleanup: timeout 정리
+    return () => {
+      if (autoSelectTimeoutRef.current) {
+        clearTimeout(autoSelectTimeoutRef.current);
+      }
+    };
   }, [
     mapMode,
     searchedStore,
@@ -115,10 +144,17 @@ export const useSearchMode = ({
   // 기본 모드로 전환 시 ref 리셋
   useEffect(() => {
     if (mapMode === 'default') {
+      // 진행 중인 timeout 취소
+      if (autoSelectTimeoutRef.current) {
+        clearTimeout(autoSelectTimeoutRef.current);
+        autoSelectTimeoutRef.current = null;
+      }
+
       hasAutoSelectedRef.current = false;
       lastSelectedStoreIdRef.current = null;
       hasCameraMovedForCurrentSearchRef.current = false;
       hasSearchedForCurrentLocationRef.current = false;
+      processingAutoSelectRef.current = false;
     }
   }, [mapMode]);
 

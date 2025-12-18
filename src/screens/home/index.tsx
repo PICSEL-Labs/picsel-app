@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback } from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
 import { useBrandTooltipOnce } from '@/feature/brand/model/hooks/useBrandTooltipOnce';
 import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
+import { useSearchMode } from '@/feature/map/hooks/useSearchMode';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
 import BrandFilterBottomSheet from '@/feature/map/ui/organisms/BrandFilterBottomSheet';
 import EmptyBottomSheet from '@/feature/map/ui/organisms/EmptyBottomSheet';
@@ -15,11 +16,6 @@ import { useMapLocationStore } from '@/shared/store';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
-  const hasAutoSelectedRef = useRef(false);
-  const lastSelectedStoreIdRef = useRef<string | null>(null);
-  const hasCameraMovedForCurrentSearchRef = useRef(false);
-  const hasSearchedForCurrentLocationRef = useRef(false);
-
   const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
 
   const {
@@ -57,89 +53,13 @@ const HomeScreen = () => {
     searchStoresByLocation,
   } = useHomeScreen();
 
-  const handleResetToDefault = () => {
-    clearSelection();
-    resetToDefault();
-  };
-
-  const handleBottomSheetClose = useCallback(() => {
-    if (mapMode === 'search' && searchedStore?.kind === 'store') {
-      setKeepSearchedMarker(true);
-      clearSelection(true);
-    } else {
-      clearSelection(false);
-    }
-  }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
-
-  const handleMapTap = useCallback(() => {
-    if (mapMode === 'search' && searchedStore?.kind === 'store') {
-      setKeepSearchedMarker(true);
-      clearSelection(true);
-    } else {
-      clearSelection(false);
-    }
-  }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
-
-  useEffect(() => {
-    if (
-      targetLocation &&
-      mapRef.current &&
-      !hasCameraMovedForCurrentSearchRef.current
-    ) {
-      hasSearchedForCurrentLocationRef.current = false;
-      hasAutoSelectedRef.current = false;
-      lastSelectedStoreIdRef.current = null;
-
-      mapRef.current.animateCameraTo({
-        latitude: targetLocation.latitude,
-        longitude: targetLocation.longitude,
-        zoom: targetLocation.zoom,
-        duration: 300,
-      });
-
-      hasCameraMovedForCurrentSearchRef.current = true;
-    }
-  }, [targetLocation]);
-
-  useEffect(() => {
-    if (
-      mapMode === 'search' &&
-      searchedStore?.kind === 'store' &&
-      selectedStoreId &&
-      filteredStores &&
-      filteredBrands &&
-      selectedMarkerId !== selectedStoreId &&
-      !hasAutoSelectedRef.current &&
-      lastSelectedStoreIdRef.current !== selectedStoreId &&
-      hasCameraMovedForCurrentSearchRef.current
-    ) {
-      const targetStore = filteredStores.find(
-        store => store.storeId === selectedStoreId,
-      );
-
-      if (targetStore) {
-        const brandInfo = filteredBrands.find(
-          brand => brand.brandId === targetStore.brandId,
-        );
-
-        handleMarkerPress(
-          {
-            storeId: targetStore.storeId,
-            storeName: targetStore.storeName,
-            brandId: targetStore.brandId,
-            brandName: brandInfo?.brandName,
-            address: targetStore.address,
-            distance: targetStore.distance,
-            brandIconImageUrl: brandInfo?.brandIconImageUrl,
-          },
-          true,
-        );
-
-        hasAutoSelectedRef.current = true;
-        lastSelectedStoreIdRef.current = selectedStoreId;
-      }
-    }
-  }, [
+  const {
+    hasCameraMovedForCurrentSearchRef,
+    hasSearchedForCurrentLocationRef,
+    handleBottomSheetClose,
+    handleMapTap,
+  } = useSearchMode({
+    targetLocation,
     mapMode,
     searchedStore,
     selectedStoreId,
@@ -147,51 +67,66 @@ const HomeScreen = () => {
     filteredBrands,
     selectedMarkerId,
     handleMarkerPress,
-  ]);
+    clearSelection,
+    setKeepSearchedMarker,
+    mapRef,
+  });
 
-  useEffect(() => {
-    if (mapMode === 'default') {
-      hasAutoSelectedRef.current = false;
-      lastSelectedStoreIdRef.current = null;
-      hasCameraMovedForCurrentSearchRef.current = false;
-      hasSearchedForCurrentLocationRef.current = false;
-    }
-  }, [mapMode]);
+  const handleResetToDefault = () => {
+    clearSelection();
+    resetToDefault();
+  };
+
+  const handleCameraIdle = useCallback(
+    (cam: any) => {
+      // 첫 번째 idle 시 위치 검색
+      handleMapIdle(cam, isFirst => {
+        if (isFirst) {
+          handleLocationSearch();
+        }
+      });
+
+      // 검색 모드에서 카메라 이동 후 주변 매장 검색
+      if (
+        mapMode === 'search' &&
+        searchedStore &&
+        targetLocation &&
+        hasCameraMovedForCurrentSearchRef.current &&
+        !hasSearchedForCurrentLocationRef.current
+      ) {
+        hasSearchedForCurrentLocationRef.current = true;
+
+        searchStoresByLocation(
+          targetLocation.latitude,
+          targetLocation.longitude,
+          targetLocation.zoom,
+        );
+
+        if (searchedStore.kind !== 'store') {
+          setTimeout(() => {
+            if (filteredStores?.length === 0) {
+              showSheet('empty');
+            }
+          }, 500);
+        }
+      }
+    },
+    [
+      handleMapIdle,
+      handleLocationSearch,
+      mapMode,
+      searchedStore,
+      targetLocation,
+      searchStoresByLocation,
+      filteredStores,
+      showSheet,
+    ],
+  );
 
   return (
     <ScreenLayout>
       <NaverMapView
-        onCameraIdle={cam => {
-          handleMapIdle(cam, isFirst => {
-            if (isFirst) {
-              handleLocationSearch();
-            }
-          });
-
-          if (
-            mapMode === 'search' &&
-            searchedStore &&
-            targetLocation &&
-            hasCameraMovedForCurrentSearchRef.current &&
-            !hasSearchedForCurrentLocationRef.current
-          ) {
-            hasSearchedForCurrentLocationRef.current = true;
-
-            searchStoresByLocation(
-              targetLocation.latitude,
-              targetLocation.longitude,
-              targetLocation.zoom,
-            );
-
-            if (searchedStore.kind !== 'store') {
-              setTimeout(() => {
-                if (filteredStores?.length === 0) {
-                  showSheet('empty');
-                }
-              }, 500);
-            }
-          }
-        }}
+        onCameraIdle={handleCameraIdle}
         onCameraChanged={reason => {
           if (reason.reason === 'Gesture' || reason.reason === 'Control') {
             setActiveButton('location');

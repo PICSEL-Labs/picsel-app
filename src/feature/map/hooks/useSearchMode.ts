@@ -23,15 +23,6 @@ interface Props {
   mapRef: RefObject<NaverMapViewRef>;
 }
 
-/**
- * 검색 모드 관련 로직을 관리하는 커스텀 훅
- *
- * 역할:
- * 1. 검색 시 카메라 이동
- * 2. 매장 검색 시 자동 선택
- * 3. 검색 상태 ref 관리
- * 4. 바텀시트/맵 탭 핸들러 제공
- */
 export const useSearchMode = ({
   targetLocation,
   mapMode,
@@ -45,13 +36,11 @@ export const useSearchMode = ({
   setKeepSearchedMarker,
   mapRef,
 }: Props) => {
-  // 검색 상태 관리 refs
   const hasAutoSelectedRef = useRef(false);
   const lastSelectedStoreIdRef = useRef<string | null>(null);
   const hasCameraMovedForCurrentSearchRef = useRef(false);
   const hasSearchedForCurrentLocationRef = useRef(false);
 
-  // 카메라 이동
   useEffect(() => {
     if (
       targetLocation &&
@@ -154,7 +143,7 @@ export const useSearchMode = ({
   }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
 
   return {
-    // Refs (카메라 idle 핸들러에서 사용)
+    // Refs
     hasCameraMovedForCurrentSearchRef,
     hasSearchedForCurrentLocationRef,
 

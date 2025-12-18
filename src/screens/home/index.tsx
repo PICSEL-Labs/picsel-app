@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
@@ -18,6 +18,7 @@ const HomeScreen = () => {
   const hasAutoSelectedRef = useRef(false);
   const lastSelectedStoreIdRef = useRef<string | null>(null);
   const hasCameraMovedForCurrentSearchRef = useRef(false);
+  const hasSearchedForCurrentLocationRef = useRef(false);
 
   const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
 
@@ -27,6 +28,7 @@ const HomeScreen = () => {
     mapMode,
     resetToDefault,
     searchedStore,
+    setKeepSearchedMarker,
   } = useMapLocationStore();
 
   const {
@@ -52,6 +54,7 @@ const HomeScreen = () => {
     userLocation,
     showSheet,
     navigation,
+    searchStoresByLocation,
   } = useHomeScreen();
 
   const handleResetToDefault = () => {
@@ -59,12 +62,34 @@ const HomeScreen = () => {
     resetToDefault();
   };
 
+  const handleBottomSheetClose = useCallback(() => {
+    if (mapMode === 'search' && searchedStore?.kind === 'store') {
+      setKeepSearchedMarker(true);
+      clearSelection(true);
+    } else {
+      clearSelection(false);
+    }
+  }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
+
+  const handleMapTap = useCallback(() => {
+    if (mapMode === 'search' && searchedStore?.kind === 'store') {
+      setKeepSearchedMarker(true);
+      clearSelection(true);
+    } else {
+      clearSelection(false);
+    }
+  }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
+
   useEffect(() => {
     if (
       targetLocation &&
       mapRef.current &&
       !hasCameraMovedForCurrentSearchRef.current
     ) {
+      hasSearchedForCurrentLocationRef.current = false;
+      hasAutoSelectedRef.current = false;
+      lastSelectedStoreIdRef.current = null;
+
       mapRef.current.animateCameraTo({
         latitude: targetLocation.latitude,
         longitude: targetLocation.longitude,
@@ -73,49 +98,54 @@ const HomeScreen = () => {
       });
 
       hasCameraMovedForCurrentSearchRef.current = true;
+    }
+  }, [targetLocation]);
 
-      const timeoutId = setTimeout(() => {
-        if (
-          selectedStoreId &&
-          filteredStores &&
-          filteredBrands &&
-          selectedMarkerId !== selectedStoreId &&
-          !hasAutoSelectedRef.current &&
-          lastSelectedStoreIdRef.current !== selectedStoreId
-        ) {
-          const targetStore = filteredStores.find(
-            store => store.storeId === selectedStoreId,
-          );
+  useEffect(() => {
+    if (
+      mapMode === 'search' &&
+      searchedStore?.kind === 'store' &&
+      selectedStoreId &&
+      filteredStores &&
+      filteredBrands &&
+      selectedMarkerId !== selectedStoreId &&
+      !hasAutoSelectedRef.current &&
+      lastSelectedStoreIdRef.current !== selectedStoreId &&
+      hasCameraMovedForCurrentSearchRef.current
+    ) {
+      const targetStore = filteredStores.find(
+        store => store.storeId === selectedStoreId,
+      );
 
-          if (targetStore) {
-            const brandInfo = filteredBrands.find(
-              brand => brand.brandId === targetStore.brandId,
-            );
+      if (targetStore) {
+        const brandInfo = filteredBrands.find(
+          brand => brand.brandId === targetStore.brandId,
+        );
 
-            handleMarkerPress({
-              storeId: targetStore.storeId,
-              storeName: targetStore.storeName,
-              brandId: targetStore.brandId,
-              brandName: brandInfo?.brandName,
-              address: targetStore.address,
-              distance: targetStore.distance,
-              brandIconImageUrl: brandInfo?.brandIconImageUrl,
-            });
+        handleMarkerPress(
+          {
+            storeId: targetStore.storeId,
+            storeName: targetStore.storeName,
+            brandId: targetStore.brandId,
+            brandName: brandInfo?.brandName,
+            address: targetStore.address,
+            distance: targetStore.distance,
+            brandIconImageUrl: brandInfo?.brandIconImageUrl,
+          },
+          true,
+        );
 
-            hasAutoSelectedRef.current = true;
-            lastSelectedStoreIdRef.current = selectedStoreId;
-          }
-        }
-      }, 300);
-
-      return () => clearTimeout(timeoutId);
+        hasAutoSelectedRef.current = true;
+        lastSelectedStoreIdRef.current = selectedStoreId;
+      }
     }
   }, [
-    targetLocation,
+    mapMode,
+    searchedStore,
     selectedStoreId,
-    selectedMarkerId,
     filteredStores,
     filteredBrands,
+    selectedMarkerId,
     handleMarkerPress,
   ]);
 
@@ -124,12 +154,9 @@ const HomeScreen = () => {
       hasAutoSelectedRef.current = false;
       lastSelectedStoreIdRef.current = null;
       hasCameraMovedForCurrentSearchRef.current = false;
+      hasSearchedForCurrentLocationRef.current = false;
     }
   }, [mapMode]);
-
-  useEffect(() => {
-    hasCameraMovedForCurrentSearchRef.current = false;
-  }, [targetLocation]);
 
   return (
     <ScreenLayout>
@@ -140,6 +167,30 @@ const HomeScreen = () => {
               handleLocationSearch();
             }
           });
+
+          if (
+            mapMode === 'search' &&
+            searchedStore &&
+            targetLocation &&
+            hasCameraMovedForCurrentSearchRef.current &&
+            !hasSearchedForCurrentLocationRef.current
+          ) {
+            hasSearchedForCurrentLocationRef.current = true;
+
+            searchStoresByLocation(
+              targetLocation.latitude,
+              targetLocation.longitude,
+              targetLocation.zoom,
+            );
+
+            if (searchedStore.kind !== 'store') {
+              setTimeout(() => {
+                if (filteredStores?.length === 0) {
+                  showSheet('empty');
+                }
+              }, 500);
+            }
+          }
         }}
         onCameraChanged={reason => {
           if (reason.reason === 'Gesture' || reason.reason === 'Control') {
@@ -147,7 +198,7 @@ const HomeScreen = () => {
           }
         }}
         ref={mapRef}
-        onTapMap={clearSelection}
+        onTapMap={handleMapTap}
         style={StyleSheet.absoluteFillObject}
         initialCamera={userLocation ? userLocation : undefined}>
         <MapOverlay
@@ -195,7 +246,7 @@ const HomeScreen = () => {
         visible={detailBrandVisible}
         storeDetail={selectedStore}
         isFavorite={isFavorite}
-        onClose={clearSelection}
+        onClose={handleBottomSheetClose}
       />
 
       {filteredBrands?.length === 0 && (

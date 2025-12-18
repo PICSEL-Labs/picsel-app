@@ -16,6 +16,7 @@ interface MapLocationStore {
   } | null;
   selectedStoreId: string | null;
   mapMode: MapMode;
+  keepSearchedMarker: boolean;
 
   setTargetLocation: (
     location: MapLocationStore['targetLocation'],
@@ -23,6 +24,7 @@ interface MapLocationStore {
     storeId?: string | null,
   ) => void;
   setMapMode: (mode: MapMode) => void;
+  setKeepSearchedMarker: (keep: boolean) => void;
   resetToDefault: () => void;
 }
 
@@ -31,6 +33,7 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
   searchedStore: null,
   selectedStoreId: null,
   mapMode: 'default',
+  keepSearchedMarker: false,
 
   setTargetLocation: (location, store, storeId = null) =>
     set({
@@ -38,11 +41,17 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
       searchedStore: store,
       selectedStoreId: storeId,
       mapMode: 'search',
+      keepSearchedMarker: false,
     }),
 
   setMapMode: mode =>
     set({
       mapMode: mode,
+    }),
+
+  setKeepSearchedMarker: keep =>
+    set({
+      keepSearchedMarker: keep,
     }),
 
   resetToDefault: () =>
@@ -51,5 +60,6 @@ export const useMapLocationStore = create<MapLocationStore>(set => ({
       searchedStore: null,
       selectedStoreId: null,
       mapMode: 'default',
+      keepSearchedMarker: false,
     }),
 }));

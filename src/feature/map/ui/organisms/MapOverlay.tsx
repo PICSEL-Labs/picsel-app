@@ -19,13 +19,14 @@ interface Props {
   store?: StoreData[];
   brand?: BrandData[];
   selectedMarkerId: string | null;
-  handleMarkerPress: (store: StoreDetail) => void;
+  handleMarkerPress: (store: StoreDetail, isFromSearch?: boolean) => void;
 }
 
 const MapOverlay = memo(
   ({ brand = [], store = [], selectedMarkerId, handleMarkerPress }: Props) => {
     const { optimisticFavorites } = useFavoriteStore();
-    const { mapMode, searchedStore, selectedStoreId } = useMapLocationStore();
+    const { mapMode, searchedStore, selectedStoreId, keepSearchedMarker } =
+      useMapLocationStore();
     const [hasBeenSelected, setHasBeenSelected] = useState(false);
 
     useEffect(() => {
@@ -49,12 +50,12 @@ const MapOverlay = memo(
     const isStoreSearchMode =
       mapMode === 'search' &&
       searchedStore?.kind === 'store' &&
-      selectedStoreId;
+      selectedStoreId !== null;
 
     const lastTapTimeRef = useRef(0);
 
     const handleMarkerTap = useCallback(
-      (storeDetail: StoreDetail) => {
+      (storeDetail: StoreDetail, isFromSearch: boolean) => {
         const now = Date.now();
 
         if (now - lastTapTimeRef.current < 300) {
@@ -62,7 +63,7 @@ const MapOverlay = memo(
         }
 
         lastTapTimeRef.current = now;
-        handleMarkerPress(storeDetail);
+        handleMarkerPress(storeDetail, isFromSearch);
       },
       [handleMarkerPress],
     );
@@ -82,7 +83,8 @@ const MapOverlay = memo(
         const isFavorite =
           optimisticFavorites[data.brandId] ?? brandInfo?.isFavorite ?? false;
         const brandIconUrl = brandInfo?.brandIconImageUrl || '';
-        const shouldShowBrandImage = isSelected || !hasBeenSelected; // ⭐ state 사용
+        const shouldShowBrandImage =
+          isSelected || (!hasBeenSelected && !keepSearchedMarker);
 
         if (isSearchedStore) {
           if (shouldShowBrandImage) {
@@ -95,7 +97,9 @@ const MapOverlay = memo(
           }
 
           return {
-            imageConfig: { httpUri: `${Config.IMAGE_URL}/searched-marker.png` },
+            imageConfig: {
+              httpUri: `${Config.IMAGE_URL}/common/search-marker.png`,
+            },
             size: 48,
             zIndex: 2000,
           };
@@ -123,15 +127,18 @@ const MapOverlay = memo(
             height={size}
             image={imageConfig}
             onTap={() =>
-              handleMarkerTap({
-                storeId: data.storeId,
-                storeName: data.storeName,
-                brandId: data.brandId,
-                brandName: brandInfo?.brandName,
-                address: data.address,
-                distance: data.distance,
-                brandIconImageUrl: brandInfo?.brandIconImageUrl,
-              })
+              handleMarkerTap(
+                {
+                  storeId: data.storeId,
+                  storeName: data.storeName,
+                  brandId: data.brandId,
+                  brandName: brandInfo?.brandName,
+                  address: data.address,
+                  distance: data.distance,
+                  brandIconImageUrl: brandInfo?.brandIconImageUrl,
+                },
+                isStoreSearchMode,
+              )
             }
             anchor={{ x: 0.5, y: 1 }}
             zIndex={zIndex}
@@ -147,6 +154,7 @@ const MapOverlay = memo(
       isStoreSearchMode,
       selectedStoreId,
       hasBeenSelected,
+      keepSearchedMarker,
       handleMarkerTap,
     ]);
 

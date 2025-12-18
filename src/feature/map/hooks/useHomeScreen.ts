@@ -31,8 +31,13 @@ export const useHomeScreen = () => {
   const { data: stores } = useFetchStores(storeParams);
   const { camera, handleMapIdle, hideSearchButton, userLocation } =
     useMapCamera();
-  const { selectedMarkerId, selectedStore, handleMarkerPress, clearSelection } =
-    useMarker();
+  const {
+    selectedMarkerId,
+    selectedStore,
+    handleMarkerPress,
+    clearSelection,
+    setSelectedMarkerId,
+  } = useMarker();
   const {
     emptyBrandVisible,
     detailBrandVisible,
@@ -50,7 +55,7 @@ export const useHomeScreen = () => {
 
   const { handleLocationSearch, handleNavigateSearch } = useMapActions({
     searchStoresByLocation,
-    setSelectedMarkerId: clearSelection,
+    setSelectedMarkerId,
     hideSearchButton,
     setActiveButton,
     showSheet,
@@ -106,6 +111,7 @@ export const useHomeScreen = () => {
     // Actions
     handleLocationSearch,
     handleNavigateSearch,
+    searchStoresByLocation,
 
     // Navigation
     navigation,

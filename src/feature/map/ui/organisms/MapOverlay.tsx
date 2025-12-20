@@ -100,7 +100,7 @@ const MapOverlay = memo(
             imageConfig: {
               httpUri: `${Config.IMAGE_URL}/common/search-marker.png`,
             },
-            size: 48,
+            size: 22,
             zIndex: 2000,
           };
         }

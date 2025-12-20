@@ -1,6 +1,10 @@
 import React, { useCallback } from 'react';
 
-import { NaverMapView } from '@mj-studio/react-native-naver-map';
+import {
+  Camera,
+  NaverMapView,
+  Region,
+} from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
 import { useBrandTooltipOnce } from '@/feature/brand/model/hooks/useBrandTooltipOnce';
@@ -78,8 +82,7 @@ const HomeScreen = () => {
   };
 
   const handleCameraIdle = useCallback(
-    (cam: any) => {
-      // 첫 번째 idle 시 위치 검색
+    (cam: Camera & { region: Region }) => {
       handleMapIdle(cam, isFirst => {
         if (isFirst) {
           handleLocationSearch();

@@ -27,24 +27,18 @@ export const useMapActions = ({
   const { clearAppliedFilter } = useFilteredBrandsStore();
   const { mapMode } = useMapLocationStore();
 
-  const handleLocationSearch = useCallback(() => {
-    clearAppliedFilter();
-
-    searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
-
+  const resetSearchUI = useCallback(() => {
     setSelectedMarkerId(null);
     hideSearchButton();
     setActiveButton('brand');
     showSheet('empty');
-  }, [
-    searchStoresByLocation,
-    camera,
-    setSelectedMarkerId,
-    hideSearchButton,
-    setActiveButton,
-    showSheet,
-    clearAppliedFilter,
-  ]);
+  }, [setSelectedMarkerId, hideSearchButton, setActiveButton, showSheet]);
+
+  const handleLocationSearch = useCallback(() => {
+    clearAppliedFilter();
+    searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
+    resetSearchUI();
+  }, [searchStoresByLocation, camera, clearAppliedFilter, resetSearchUI]);
 
   const handleNavigateSearch = useCallback(() => {
     mapMode === 'search'

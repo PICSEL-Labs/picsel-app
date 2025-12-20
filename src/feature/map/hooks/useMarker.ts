@@ -2,7 +2,7 @@ import { useCallback, useState, useRef } from 'react';
 
 import { StoreDetail } from '../types';
 
-interface Props {
+interface UseMarkerReturn {
   handleMarkerPress: (store: StoreDetail, isFromSearch?: boolean) => void;
   selectedMarkerId: string | null;
   selectedStore: StoreDetail | null;
@@ -10,12 +10,13 @@ interface Props {
   clearSelection: (keepSearched?: boolean) => void;
 }
 
-export const useMarker = (): Props => {
+export const useMarker = (): UseMarkerReturn => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [selectedStore, setSelectedStore] = useState<StoreDetail | null>(null);
 
   const processingRef = useRef(false);
   const lastActionTimeRef = useRef(0);
+  const lastMarkerSelectTimeRef = useRef(0);
 
   const handleMarkerPress = useCallback(
     (store: StoreDetail, _isFromSearch = false) => {
@@ -38,6 +39,7 @@ export const useMarker = (): Props => {
         setSelectedMarkerId(null);
         setSelectedStore(null);
       } else {
+        lastMarkerSelectTimeRef.current = now;
         setSelectedMarkerId(store.storeId);
         setSelectedStore(store);
       }
@@ -50,6 +52,13 @@ export const useMarker = (): Props => {
   );
 
   const clearSelection = useCallback(() => {
+    const now = Date.now();
+
+    // 마커 선택 후 500ms 이내에는 clearSelection 차단 (바텀시트 열리는 시간 확보)
+    if (now - lastMarkerSelectTimeRef.current < 500) {
+      return;
+    }
+
     if (processingRef.current) {
       return;
     }

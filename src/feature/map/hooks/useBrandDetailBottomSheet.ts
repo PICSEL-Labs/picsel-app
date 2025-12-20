@@ -23,29 +23,31 @@ export const useBrandDetailBottomSheet = ({ visible, storeDetail }: Props) => {
 
   useEffect(() => {
     const now = Date.now();
+    const shouldOpen = visible && storeDetail;
+    const shouldClose = !visible && isOpenRef.current;
 
-    if (now - lastActionTimeRef.current < 150) {
+    if (shouldClose) {
+      bottomSheetModalRef.current?.dismiss();
+      isOpenRef.current = false;
+      lastStoreIdRef.current = null;
+      lastActionTimeRef.current = now;
+      setOpenCopy(false);
       return;
     }
 
-    const shouldOpen = visible && storeDetail;
-    const shouldClose = !visible && isOpenRef.current;
+    if (now - lastActionTimeRef.current < 300) {
+      return;
+    }
 
     if (shouldOpen) {
       const isDifferentStore = lastStoreIdRef.current !== storeDetail.storeId;
 
       if (!isOpenRef.current || isDifferentStore) {
-        lastActionTimeRef.current = now;
         bottomSheetModalRef.current?.present();
         isOpenRef.current = true;
         lastStoreIdRef.current = storeDetail.storeId;
+        lastActionTimeRef.current = now;
       }
-    } else if (shouldClose) {
-      lastActionTimeRef.current = now;
-      bottomSheetModalRef.current?.dismiss();
-      isOpenRef.current = false;
-      lastStoreIdRef.current = null;
-      setOpenCopy(false);
     }
   }, [visible, storeDetail?.storeId]);
 

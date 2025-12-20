@@ -70,9 +70,11 @@ const HomeScreen = () => {
     filteredStores,
     filteredBrands,
     selectedMarkerId,
+    detailBrandVisible,
     handleMarkerPress,
     clearSelection,
     setKeepSearchedMarker,
+    hideSheet,
     mapRef,
   });
 

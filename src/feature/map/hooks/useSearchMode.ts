@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { NaverMapViewRef } from '@mj-studio/react-native-naver-map';
 
-import { BrandData, StoreData, StoreDetail } from '../types';
+import { StoreDetail } from '../types';
+import { BrandData, StoreData } from '../types';
 
 interface UseSearchModeParams {
   targetLocation: { latitude: number; longitude: number; zoom: number } | null;
@@ -17,9 +18,11 @@ interface UseSearchModeParams {
   filteredStores: StoreData[] | undefined;
   filteredBrands: BrandData[] | undefined;
   selectedMarkerId: string | null;
+  detailBrandVisible: boolean;
   handleMarkerPress: (store: StoreDetail, isFromSearch?: boolean) => void;
   clearSelection: (keepSearched?: boolean) => void;
   setKeepSearchedMarker: (keep: boolean) => void;
+  hideSheet: (type: 'empty' | 'detail' | 'filter') => void;
   mapRef: React.RefObject<NaverMapViewRef>;
 }
 
@@ -31,6 +34,7 @@ export const useSearchMode = ({
   filteredStores,
   filteredBrands,
   selectedMarkerId,
+  detailBrandVisible,
   handleMarkerPress,
   clearSelection,
   setKeepSearchedMarker,
@@ -42,6 +46,7 @@ export const useSearchMode = ({
   const hasSearchedForCurrentLocationRef = useRef(false);
   const autoSelectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const processingAutoSelectRef = useRef(false);
+  const bottomSheetOpenTimeRef = useRef(0);
 
   // 카메라 이동
   useEffect(() => {
@@ -95,6 +100,7 @@ export const useSearchMode = ({
           clearTimeout(autoSelectTimeoutRef.current);
         }
 
+        // 200ms debounce로 중복 실행 방지
         autoSelectTimeoutRef.current = setTimeout(() => {
           const brandInfo = filteredBrands.find(
             brand => brand.brandId === targetStore.brandId,
@@ -119,11 +125,12 @@ export const useSearchMode = ({
           // 처리 완료 후 플래그 해제
           setTimeout(() => {
             processingAutoSelectRef.current = false;
-          }, 200);
-        }, 100);
+          }, 300);
+        }, 200);
       }
     }
 
+    // cleanup: timeout 정리
     return () => {
       if (autoSelectTimeoutRef.current) {
         clearTimeout(autoSelectTimeoutRef.current);
@@ -153,10 +160,21 @@ export const useSearchMode = ({
       hasCameraMovedForCurrentSearchRef.current = false;
       hasSearchedForCurrentLocationRef.current = false;
       processingAutoSelectRef.current = false;
+      bottomSheetOpenTimeRef.current = 0;
     }
   }, [mapMode]);
 
-  const handleBottomSheetClose = useCallback(() => {
+  // 바텀시트 열림 시간 추적
+  useEffect(() => {
+    if (detailBrandVisible) {
+      bottomSheetOpenTimeRef.current = Date.now();
+    } else {
+      bottomSheetOpenTimeRef.current = 0;
+    }
+  }, [detailBrandVisible]);
+
+  // 공통 선택 해제 로직
+  const handleClearSelection = useCallback(() => {
     if (mapMode === 'search' && searchedStore?.kind === 'store') {
       setKeepSearchedMarker(true);
       clearSelection(true);
@@ -165,17 +183,33 @@ export const useSearchMode = ({
     }
   }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
 
+  // 바텀시트 닫기 핸들러
+  const handleBottomSheetClose = useCallback(() => {
+    handleClearSelection();
+  }, [handleClearSelection]);
+
+  // 맵 탭 핸들러 (바텀시트가 완전히 열린 후에만 동작)
   const handleMapTap = useCallback(() => {
-    if (mapMode === 'search' && searchedStore?.kind === 'store') {
-      setKeepSearchedMarker(true);
-      clearSelection(true);
-    } else {
-      clearSelection(false);
+    const now = Date.now();
+
+    // 바텀시트가 열려있지 않으면 아무것도 하지 않음
+    if (!detailBrandVisible) {
+      console.log('⏰ 바텀시트 닫혀있음 - 맵탭 무시');
+      return;
     }
-  }, [mapMode, searchedStore, setKeepSearchedMarker, clearSelection]);
+
+    // 바텀시트가 열린 지 500ms 미만이면 무시 (안정화 대기)
+    if (now - bottomSheetOpenTimeRef.current < 500) {
+      console.log('⏰ 바텀시트 열린 직후 - 맵탭 무시');
+      return;
+    }
+
+    console.log('✅ 맵탭 처리 - clearSelection 호출');
+    handleClearSelection();
+  }, [detailBrandVisible, handleClearSelection]);
 
   return {
-    // Refs
+    // Refs (카메라 idle 핸들러에서 사용)
     hasCameraMovedForCurrentSearchRef,
     hasSearchedForCurrentLocationRef,
 

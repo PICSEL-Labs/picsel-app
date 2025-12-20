@@ -24,7 +24,7 @@ export const useBrandDetailBottomSheet = ({ visible, storeDetail }: Props) => {
   useEffect(() => {
     const now = Date.now();
 
-    if (now - lastActionTimeRef.current < 300) {
+    if (now - lastActionTimeRef.current < 150) {
       return;
     }
 

@@ -95,7 +95,6 @@ export const useSearchMode = ({
           clearTimeout(autoSelectTimeoutRef.current);
         }
 
-        // 200ms debounce로 중복 실행 방지
         autoSelectTimeoutRef.current = setTimeout(() => {
           const brandInfo = filteredBrands.find(
             brand => brand.brandId === targetStore.brandId,
@@ -120,12 +119,11 @@ export const useSearchMode = ({
           // 처리 완료 후 플래그 해제
           setTimeout(() => {
             processingAutoSelectRef.current = false;
-          }, 300);
-        }, 200);
+          }, 200);
+        }, 100);
       }
     }
 
-    // cleanup: timeout 정리
     return () => {
       if (autoSelectTimeoutRef.current) {
         clearTimeout(autoSelectTimeoutRef.current);

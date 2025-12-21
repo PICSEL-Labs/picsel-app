@@ -47,18 +47,22 @@ export const useSearchMode = ({
   const autoSelectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const processingAutoSelectRef = useRef(false);
   const bottomSheetOpenTimeRef = useRef(0);
+  const lastTargetLocationRef = useRef<typeof targetLocation>(null);
 
   // 카메라 이동
   useEffect(() => {
-    if (
-      targetLocation &&
-      mapRef.current &&
-      !hasCameraMovedForCurrentSearchRef.current
-    ) {
+    // 새로운 검색인지 확인 (targetLocation이 변경되었는지)
+    const isNewSearch =
+      !lastTargetLocationRef.current ||
+      lastTargetLocationRef.current.latitude !== targetLocation?.latitude ||
+      lastTargetLocationRef.current.longitude !== targetLocation?.longitude;
+
+    if (targetLocation && mapRef.current && isNewSearch) {
       // 새로운 검색이므로 모든 ref 리셋
       hasSearchedForCurrentLocationRef.current = false;
       hasAutoSelectedRef.current = false;
       lastSelectedStoreIdRef.current = null;
+      hasCameraMovedForCurrentSearchRef.current = false;
 
       mapRef.current.animateCameraTo({
         latitude: targetLocation.latitude,
@@ -68,6 +72,7 @@ export const useSearchMode = ({
       });
 
       hasCameraMovedForCurrentSearchRef.current = true;
+      lastTargetLocationRef.current = targetLocation;
     }
   }, [targetLocation, mapRef]);
 
@@ -95,7 +100,6 @@ export const useSearchMode = ({
         // 처리 시작 플래그 설정
         processingAutoSelectRef.current = true;
 
-        // 기존 timeout 제거
         if (autoSelectTimeoutRef.current) {
           clearTimeout(autoSelectTimeoutRef.current);
         }
@@ -130,7 +134,6 @@ export const useSearchMode = ({
       }
     }
 
-    // cleanup: timeout 정리
     return () => {
       if (autoSelectTimeoutRef.current) {
         clearTimeout(autoSelectTimeoutRef.current);
@@ -194,22 +197,19 @@ export const useSearchMode = ({
 
     // 바텀시트가 열려있지 않으면 아무것도 하지 않음
     if (!detailBrandVisible) {
-      console.log('⏰ 바텀시트 닫혀있음 - 맵탭 무시');
       return;
     }
 
     // 바텀시트가 열린 지 500ms 미만이면 무시 (안정화 대기)
     if (now - bottomSheetOpenTimeRef.current < 500) {
-      console.log('⏰ 바텀시트 열린 직후 - 맵탭 무시');
       return;
     }
 
-    console.log('✅ 맵탭 처리 - clearSelection 호출');
     handleClearSelection();
   }, [detailBrandVisible, handleClearSelection]);
 
   return {
-    // Refs (카메라 idle 핸들러에서 사용)
+    // Refs
     hasCameraMovedForCurrentSearchRef,
     hasSearchedForCurrentLocationRef,
 

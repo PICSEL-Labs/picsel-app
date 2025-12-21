@@ -10,6 +10,7 @@ import CopyAddress from './CopyAddress';
 
 import { MapBottomSheetProps, StoreDetail } from '@/feature/map/types';
 import { formatDistance, splitAddress } from '@/feature/map/utils/addressUtils';
+import { useLocationStore } from '@/shared/store';
 
 interface Props extends MapBottomSheetProps {
   storeDetail: StoreDetail;
@@ -26,8 +27,12 @@ const BrandDetailContent = ({
   handleCopyButton,
   handleCopyAddress,
 }: Props) => {
+  const { userLocation } = useLocationStore();
   const { location, detailLocation } = splitAddress(storeDetail.address);
-  const distanceText = formatDistance(storeDetail.distance);
+
+  const distanceText = userLocation
+    ? formatDistance(storeDetail.distance)
+    : formatDistance(0);
 
   return (
     <View className="mt-1 h-[270px] flex-1 items-center justify-center">

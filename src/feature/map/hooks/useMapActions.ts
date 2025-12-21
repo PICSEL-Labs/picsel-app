@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useFilteredBrandsStore } from '@/shared/store';
+import { useFilteredBrandsStore, useMapLocationStore } from '@/shared/store';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface UseMapActionsParams {
@@ -8,7 +8,7 @@ interface UseMapActionsParams {
   setSelectedMarkerId: (id: string | null) => void;
   hideSearchButton: () => void;
   setActiveButton: (button: 'brand' | 'location') => void;
-  showSheet: (type: 'nearby' | 'detail') => void;
+  showSheet: (type: 'empty' | 'detail') => void;
   hideAllSheet: () => void;
   navigation: RootStackNavigationProp;
   camera: { latitude: number; longitude: number; zoom: number };
@@ -25,27 +25,27 @@ export const useMapActions = ({
   camera,
 }: UseMapActionsParams) => {
   const { clearAppliedFilter } = useFilteredBrandsStore();
+  const { mapMode } = useMapLocationStore();
+
+  const resetSearchUI = useCallback(() => {
+    setSelectedMarkerId(null);
+    hideSearchButton();
+    setActiveButton('brand');
+    showSheet('empty');
+  }, [setSelectedMarkerId, hideSearchButton, setActiveButton, showSheet]);
 
   const handleLocationSearch = useCallback(() => {
     clearAppliedFilter();
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
-    setSelectedMarkerId(null);
-    hideSearchButton();
-    setActiveButton('brand');
-    showSheet('nearby');
-  }, [
-    searchStoresByLocation,
-    camera,
-    setSelectedMarkerId,
-    hideSearchButton,
-    setActiveButton,
-    showSheet,
-  ]);
+    resetSearchUI();
+  }, [searchStoresByLocation, camera, clearAppliedFilter, resetSearchUI]);
 
   const handleNavigateSearch = useCallback(() => {
-    navigation.navigate('StoreSearch');
+    mapMode === 'search'
+      ? navigation.goBack()
+      : navigation.navigate('StoreSearch');
     hideAllSheet();
-  }, [navigation, hideAllSheet]);
+  }, [navigation, hideAllSheet, mapMode]);
 
   return {
     handleLocationSearch,

@@ -8,6 +8,8 @@ export type SearchResultView = {
   title: string;
   subtitle?: string;
   distanceMeters?: number;
+  x: number;
+  y: number;
 };
 
 const toMeters = (distance?: number) =>
@@ -19,6 +21,8 @@ const stationView = (s: AcStation): SearchResultView => ({
   title: `${s.stationName} ${s.lineName}`.trim(),
   subtitle: s.address,
   distanceMeters: toMeters(s.distance),
+  x: s.x,
+  y: s.y,
 });
 
 const storeView = (s: AcStore): SearchResultView => ({
@@ -26,6 +30,8 @@ const storeView = (s: AcStore): SearchResultView => ({
   kind: 'store',
   title: s.storeName,
   subtitle: s.address,
+  x: s.x,
+  y: s.y,
   distanceMeters: toMeters(s.distance),
 });
 
@@ -35,6 +41,8 @@ const administrativeDistrictView = (
   id: String(d.districtId),
   kind: 'administrativeDistrict',
   title: d.districtAddress,
+  x: d.x,
+  y: d.y,
 });
 
 export const useSearchResultSections = (data?: {

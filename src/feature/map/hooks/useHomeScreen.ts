@@ -4,7 +4,6 @@ import { NaverMapViewRef } from '@mj-studio/react-native-naver-map';
 import { useNavigation } from '@react-navigation/native';
 
 import { useBottomSheetManager } from '../hooks/useBottomSheetManager';
-import { useLocationPermission } from '../hooks/useLocationPermission';
 import { useMapActions } from '../hooks/useMapActions';
 import { useMapCamera } from '../hooks/useMapCamera';
 import { useMapEffects } from '../hooks/useMapEffects';
@@ -21,7 +20,6 @@ import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 export const useHomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { getCurrentLocation } = useLocationPermission();
 
   const [brandName, setBrandName] = useState('');
   const [activeButton, setActiveButton] = useState<'brand' | 'location'>(
@@ -33,10 +31,15 @@ export const useHomeScreen = () => {
   const { data: stores } = useFetchStores(storeParams);
   const { camera, handleMapIdle, hideSearchButton, userLocation } =
     useMapCamera();
-  const { selectedMarkerId, selectedStore, handleMarkerPress, clearSelection } =
-    useMarker();
   const {
-    nearbyBrandVisible,
+    selectedMarkerId,
+    selectedStore,
+    handleMarkerPress,
+    clearSelection,
+    setSelectedMarkerId,
+  } = useMarker();
+  const {
+    emptyBrandVisible,
     detailBrandVisible,
     brandFilterVisible,
     hideAllSheet,
@@ -45,8 +48,6 @@ export const useHomeScreen = () => {
   } = useBottomSheetManager();
 
   useMapEffects({
-    getCurrentLocation,
-    mapRef,
     selectedMarkerId,
     hideSheet,
     showSheet,
@@ -54,7 +55,7 @@ export const useHomeScreen = () => {
 
   const { handleLocationSearch, handleNavigateSearch } = useMapActions({
     searchStoresByLocation,
-    setSelectedMarkerId: clearSelection,
+    setSelectedMarkerId,
     hideSearchButton,
     setActiveButton,
     showSheet,
@@ -101,7 +102,7 @@ export const useHomeScreen = () => {
     clearSelection,
 
     // Bottom Sheets
-    nearbyBrandVisible,
+    emptyBrandVisible,
     detailBrandVisible,
     brandFilterVisible,
     hideSheet,
@@ -110,5 +111,9 @@ export const useHomeScreen = () => {
     // Actions
     handleLocationSearch,
     handleNavigateSearch,
+    searchStoresByLocation,
+
+    // Navigation
+    navigation,
   };
 };

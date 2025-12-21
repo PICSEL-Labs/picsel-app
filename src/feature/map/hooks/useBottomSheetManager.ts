@@ -1,35 +1,35 @@
 import { useCallback, useState } from 'react';
 
-export type BottomSheetType = 'nearby' | 'detail' | 'filter'; // 브랜드 찾기 타입 추가
+export type BottomSheetType = 'empty' | 'detail' | 'filter'; // 브랜드 찾기 타입 추가
 
 export const useBottomSheetManager = () => {
-  const [nearbyBrandVisible, setNearbyBrandVisible] = useState(false);
+  const [emptyBrandVisible, setEmptyBrandVisible] = useState(false);
   const [detailBrandVisible, setDetailBrandVisible] = useState(false);
   const [brandFilterVisible, setBrandFilterVisible] = useState(false);
 
   const hideAllSheet = useCallback(() => {
-    setNearbyBrandVisible(false);
+    setEmptyBrandVisible(false);
     setDetailBrandVisible(false);
     setBrandFilterVisible(false);
   }, []);
 
   const showSheet = useCallback((type: BottomSheetType) => {
     switch (type) {
-      case 'nearby':
-        setNearbyBrandVisible(true);
+      case 'empty':
+        setEmptyBrandVisible(true);
         setDetailBrandVisible(false);
         setBrandFilterVisible(false);
         break;
 
       case 'detail':
         setDetailBrandVisible(true);
-        setNearbyBrandVisible(false);
+        setEmptyBrandVisible(false);
         setBrandFilterVisible(false);
         break;
 
       case 'filter':
         setBrandFilterVisible(true);
-        setNearbyBrandVisible(false);
+        setEmptyBrandVisible(false);
         setDetailBrandVisible(false);
         break;
     }
@@ -37,8 +37,8 @@ export const useBottomSheetManager = () => {
 
   const hideSheet = useCallback((type: BottomSheetType) => {
     switch (type) {
-      case 'nearby':
-        setNearbyBrandVisible(false);
+      case 'empty':
+        setEmptyBrandVisible(false);
         break;
       case 'detail':
         setDetailBrandVisible(false);
@@ -50,7 +50,7 @@ export const useBottomSheetManager = () => {
   }, []);
 
   return {
-    nearbyBrandVisible,
+    emptyBrandVisible,
     detailBrandVisible,
     brandFilterVisible,
     hideAllSheet,

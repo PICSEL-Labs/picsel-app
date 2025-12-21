@@ -1,17 +1,18 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 
-import { Animated } from 'react-native';
+import { Animated, View } from 'react-native';
 
+import BrandFilterButton from './BrandFilterBottomSheet/BrandFilterButton';
 import CurrentLocationSearch from './CurrentLocationSearch';
 
-import BrandFilterButton from '@/feature/brand/ui/organisms/BrandFilterButton';
+import { useMapLocationStore } from '@/shared/store';
 
 interface Props {
   activeButton: 'brand' | 'location';
   setActiveButton: Dispatch<SetStateAction<'brand' | 'location'>>;
   handleLocationSearch: () => void;
   detailHideSheet: () => void;
-  nearbyHideSheet: () => void;
+  emptyHideSheet: () => void;
   showFilterSheet: () => void;
   brandFilterVisible: boolean;
   hideFilterSheet: () => void;
@@ -26,17 +27,19 @@ const MapActionButton = ({
   showFilterSheet,
   brandFilterVisible,
   detailHideSheet,
-  nearbyHideSheet,
+  emptyHideSheet,
   hideFilterSheet,
   showBrandTooltip,
   fadeAnim,
 }: Props) => {
+  const { mapMode } = useMapLocationStore();
+
   const handleModal = useCallback(() => {
     if (brandFilterVisible) {
       hideFilterSheet();
     } else {
       detailHideSheet();
-      nearbyHideSheet();
+      emptyHideSheet();
       showFilterSheet();
       setActiveButton('brand');
     }
@@ -45,19 +48,24 @@ const MapActionButton = ({
     hideFilterSheet,
     showFilterSheet,
     detailHideSheet,
-    nearbyHideSheet,
+    emptyHideSheet,
     setActiveButton,
   ]);
 
-  return activeButton === 'brand' ? (
-    <BrandFilterButton
-      variant={brandFilterVisible ? 'active' : 'inactive'}
-      onPress={handleModal}
-      showTooltip={showBrandTooltip}
-      fadeAnim={fadeAnim}
-    />
-  ) : (
-    <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
+  return (
+    <View className="relative flex-row justify-center">
+      <View className="absolute left-0">
+        <BrandFilterButton
+          variant={brandFilterVisible ? 'active' : 'inactive'}
+          onPress={handleModal}
+          showTooltip={showBrandTooltip}
+          fadeAnim={fadeAnim}
+        />
+      </View>
+      {mapMode === 'default' && activeButton === 'location' && (
+        <CurrentLocationSearch onLocationSearch={handleLocationSearch} />
+      )}
+    </View>
   );
 };
 

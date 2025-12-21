@@ -7,8 +7,8 @@ export const useFetchStores = (params: StoreSearchParams) => {
   return useQuery({
     queryKey: ['stores', params],
     queryFn: () => fetchStores(params),
-    enabled: !!params.minX && !!params.minY,
-    staleTime: 1000 * 60,
+    enabled: !!params.minX && !!params.minY && !!params.userX && !!params.userY,
+    staleTime: 1000 * 30,
     retry: 2,
   });
 };

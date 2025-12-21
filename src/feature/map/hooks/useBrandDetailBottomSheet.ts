@@ -17,22 +17,45 @@ export const useBrandDetailBottomSheet = ({ visible, storeDetail }: Props) => {
   const [openCopy, setOpenCopy] = useState(false);
   const { showToast } = useToastStore();
 
+  const isOpenRef = useRef(false);
+  const lastStoreIdRef = useRef<string | null>(null);
+  const lastActionTimeRef = useRef(0);
+
   useEffect(() => {
-    if (visible) {
-      bottomSheetModalRef.current?.present();
-    } else {
+    const now = Date.now();
+    const shouldOpen = visible && storeDetail;
+    const shouldClose = !visible && isOpenRef.current;
+
+    if (shouldClose) {
       bottomSheetModalRef.current?.dismiss();
+      isOpenRef.current = false;
+      lastStoreIdRef.current = null;
+      lastActionTimeRef.current = now;
       setOpenCopy(false);
+      return;
     }
-  }, [visible]);
+
+    if (now - lastActionTimeRef.current < 300) {
+      return;
+    }
+
+    if (shouldOpen) {
+      const isDifferentStore = lastStoreIdRef.current !== storeDetail.storeId;
+
+      if (!isOpenRef.current || isDifferentStore) {
+        bottomSheetModalRef.current?.present();
+        isOpenRef.current = true;
+        lastStoreIdRef.current = storeDetail.storeId;
+        lastActionTimeRef.current = now;
+      }
+    }
+  }, [visible, storeDetail?.storeId]);
 
   useEffect(() => {
     setOpenCopy(false);
   }, [storeDetail?.storeId]);
 
   const handleCopyButton = () => {
-    if (!openCopy) {
-    }
     setOpenCopy(prev => !prev);
   };
 

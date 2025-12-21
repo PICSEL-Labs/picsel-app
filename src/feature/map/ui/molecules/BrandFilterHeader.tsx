@@ -10,6 +10,7 @@ interface Props {
 
 const BrandFilterHeader = ({ onReset }: Props) => {
   const { applyFilter } = useFilteredBrandsStore();
+
   return (
     <View className="w-full flex-row items-center px-4 pb-2">
       <View className="flex-1">

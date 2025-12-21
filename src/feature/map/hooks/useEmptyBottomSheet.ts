@@ -1,22 +1,14 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import BottomSheet from '@gorhom/bottom-sheet';
 import { Easing } from 'react-native-reanimated';
 
 interface Props {
-  visible: boolean;
-  showSheet: () => void;
   hideSheet: () => void;
 }
 
-export const useNearbyBrandBottomSheet = ({
-  visible,
-  showSheet,
-  hideSheet,
-}: Props) => {
+export const useEmptyBottomSheet = ({ hideSheet }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const snapPoints = useMemo(() => ['5%', '25%'], []);
 
   const animationConfigs = useMemo(
     () => ({
@@ -26,25 +18,14 @@ export const useNearbyBrandBottomSheet = ({
     [],
   );
 
-  useEffect(() => {
-    if (visible) {
-      bottomSheetRef.current?.snapToIndex(1);
-    } else {
-      bottomSheetRef.current?.snapToIndex(0);
-    }
-  }, [visible]);
-
   const handleSheetChange = (index: number) => {
-    if (index === 0) {
+    if (index === -1) {
       hideSheet();
-    } else {
-      showSheet();
     }
   };
 
   return {
     bottomSheetRef,
-    snapPoints,
     animationConfigs,
     handleSheetChange,
   };

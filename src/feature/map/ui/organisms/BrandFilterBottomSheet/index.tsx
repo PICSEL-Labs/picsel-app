@@ -3,12 +3,11 @@ import React, { useEffect } from 'react';
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
-import { useBrandFilterBottomSheet } from '../../model/hooks/useBrandFilterBottomSheet';
-import { useHandleScroll } from '../../model/hooks/useHandleScroll';
-import { useGetBrandsList } from '../../queries/useGetBrandList';
-import BrandFilterHeader from '../molecules/BrandFilterHeader';
-
-import BrandGridList from './BrandGridList';
+import { useBrandFilterBottomSheet } from '../../../../brand/model/hooks/useBrandFilterBottomSheet';
+import { useHandleScroll } from '../../../../brand/model/hooks/useHandleScroll';
+import { useGetBrandsList } from '../../../../brand/queries/useGetBrandList';
+import BrandGridList from '../../../../brand/ui/organisms/BrandGridList';
+import BrandFilterHeader from '../../molecules/BrandFilterHeader';
 
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
@@ -26,25 +25,18 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
   const { data: brands } = useGetBrandsList();
   const { brandList, setBrandList } = useBrandListStore();
   const { scrollViewRef, handleScroll } = useHandleScroll();
-
   const { showToast } = useToastStore();
-
   const { tempFilteredList, filterBrand, resetFilter } =
     useFilteredBrandsStore();
-
-  const handleReset = () => {
-    resetFilter();
-    showToast('선택한 브랜드가 모두 해제됐어요', 50);
-  };
-
   const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
     useBrandFilterBottomSheet({ visible, showSheet, hideSheet });
 
-  useEffect(() => {
-    if (brands) {
-      setBrandList(brands);
+  const handleReset = () => {
+    if (tempFilteredList.length > 0) {
+      resetFilter();
+      showToast('선택한 브랜드가 모두 해제됐어요', 50);
     }
-  }, [brands]);
+  };
 
   const handlePressBrand = (brandId: string, name: string) => {
     const success = filterBrand(brandId, name);
@@ -54,17 +46,23 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
     }
   };
 
+  useEffect(() => {
+    if (brands) {
+      setBrandList(brands);
+    }
+  }, [brands]);
+
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
       index={0}
-      enableDynamicSizing={false} // 동적 높이 조절 기능 Off -> 최대 높이 snapPoints의 index={1}
+      enableDynamicSizing={false}
       enableOverDrag={false}
       style={bottomSheetShadow}
       snapPoints={snapPoints}
       handleIndicatorStyle={bottomSheetIndicator}
       animationConfigs={animationConfigs}
-      enableContentPanningGesture={false} // 드래그로 시트 움직임 (기본 동작) 차단
+      enableContentPanningGesture={false}
       onChange={handleSheetChange}
       enablePanDownToClose>
       <View className="flex-1">

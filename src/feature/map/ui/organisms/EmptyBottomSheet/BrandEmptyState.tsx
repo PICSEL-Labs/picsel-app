@@ -4,7 +4,9 @@ import { Text, View } from 'react-native';
 
 import SparkleImages from '@/shared/images/Sparkle';
 
-const NearbyBrandEmptyState = () => {
+/* eslint-disable jsx-a11y/accessible-emoji */
+
+const BrandEmptyState = () => {
   return (
     <View className="h-[120px] items-center space-y-2">
       <Text className="mt-5 text-gray-900 headline-03">
@@ -18,4 +20,4 @@ const NearbyBrandEmptyState = () => {
   );
 };
 
-export default NearbyBrandEmptyState;
+export default BrandEmptyState;

@@ -4,3 +4,4 @@ export { useFilteredBrandsStore } from './brand/filterBrands';
 export { useFavoriteStore } from './brand/favoriteBrand';
 export { useUserStore } from './user';
 export { useLocationStore } from './location';
+export { useMapLocationStore } from './searchLocation';

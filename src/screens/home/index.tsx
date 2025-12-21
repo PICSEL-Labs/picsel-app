@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import { NaverMapView } from '@mj-studio/react-native-naver-map';
+import {
+  Camera,
+  NaverMapView,
+  Region,
+} from '@mj-studio/react-native-naver-map';
 import { StyleSheet } from 'react-native';
 
 import { useBrandTooltipOnce } from '@/feature/brand/model/hooks/useBrandTooltipOnce';
-import BrandFilterBottomSheet from '@/feature/brand/ui/organisms/BrandFilterBottomSheet';
 import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
+import { useSearchMode } from '@/feature/map/hooks/useSearchMode';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
+import BrandFilterBottomSheet from '@/feature/map/ui/organisms/BrandFilterBottomSheet';
+import EmptyBottomSheet from '@/feature/map/ui/organisms/EmptyBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
-import NearbyBrandBottomSheet from '@/feature/map/ui/organisms/NearbyBottomSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { useMapLocationStore } from '@/shared/store';
 import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
+  const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
+
+  const {
+    targetLocation,
+    selectedStoreId,
+    mapMode,
+    resetToDefault,
+    searchedStore,
+    setKeepSearchedMarker,
+  } = useMapLocationStore();
+
   const {
     mapRef,
     brandName,
@@ -25,39 +42,103 @@ const HomeScreen = () => {
     isFavorite,
     handleMapIdle,
     selectedMarkerId,
+    emptyBrandVisible,
     selectedStore,
     handleMarkerPress,
     clearSelection,
-    nearbyBrandVisible,
     detailBrandVisible,
     brandFilterVisible,
     hideSheet,
-    showSheet,
     handleLocationSearch,
     handleNavigateSearch,
     userLocation,
+    showSheet,
+    navigation,
+    searchStoresByLocation,
   } = useHomeScreen();
 
-  const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
+  const {
+    hasCameraMovedForCurrentSearchRef,
+    hasSearchedForCurrentLocationRef,
+    handleBottomSheetClose,
+    handleMapTap,
+  } = useSearchMode({
+    targetLocation,
+    mapMode,
+    searchedStore,
+    selectedStoreId,
+    filteredStores,
+    filteredBrands,
+    selectedMarkerId,
+    detailBrandVisible,
+    handleMarkerPress,
+    clearSelection,
+    setKeepSearchedMarker,
+    hideSheet,
+    mapRef,
+  });
+
+  const handleResetToDefault = () => {
+    clearSelection();
+    resetToDefault();
+  };
+
+  const handleCameraIdle = useCallback(
+    (cam: Camera & { region: Region }) => {
+      handleMapIdle(cam, isFirst => {
+        if (isFirst) {
+          handleLocationSearch();
+        }
+      });
+
+      // 검색 모드에서 카메라 이동 후 주변 매장 검색
+      if (
+        mapMode === 'search' &&
+        searchedStore &&
+        targetLocation &&
+        hasCameraMovedForCurrentSearchRef.current &&
+        !hasSearchedForCurrentLocationRef.current
+      ) {
+        hasSearchedForCurrentLocationRef.current = true;
+
+        searchStoresByLocation(
+          targetLocation.latitude,
+          targetLocation.longitude,
+          targetLocation.zoom,
+        );
+
+        if (searchedStore.kind !== 'store') {
+          setTimeout(() => {
+            if (filteredStores?.length === 0) {
+              showSheet('empty');
+            }
+          }, 500);
+        }
+      }
+    },
+    [
+      handleMapIdle,
+      handleLocationSearch,
+      mapMode,
+      searchedStore,
+      targetLocation,
+      searchStoresByLocation,
+      filteredStores,
+      showSheet,
+    ],
+  );
 
   return (
     <ScreenLayout>
       <NaverMapView
-        onCameraIdle={cam => {
-          handleMapIdle(cam, isFirst => {
-            if (isFirst) {
-              handleLocationSearch();
-              showSheet('nearby');
-            }
-          });
-        }}
+        onCameraIdle={handleCameraIdle}
         onCameraChanged={reason => {
           if (reason.reason === 'Gesture' || reason.reason === 'Control') {
             setActiveButton('location');
           }
         }}
         ref={mapRef}
-        onTapMap={clearSelection}
+        onTapMap={handleMapTap}
         style={StyleSheet.absoluteFillObject}
         initialCamera={userLocation ? userLocation : undefined}>
         <MapOverlay
@@ -69,14 +150,18 @@ const HomeScreen = () => {
       </NaverMapView>
 
       <Input
-        value={brandName}
+        value={mapMode === 'search' ? searchedStore?.title : brandName}
         onChangeText={setBrandName}
-        handleClear={() => setBrandName('')}
+        handleClear={handleResetToDefault}
         onPress={handleNavigateSearch}
+        onPressLeft={() => navigation.goBack()}
         placeholder="브랜드명, 매장명, 위치 검색"
-        search
         close
+        arrow={mapMode === 'search'}
+        search={mapMode === 'default'}
+        editable={false}
         container="pb-[8px]"
+        className="w-80"
       />
 
       <MapActionButton
@@ -87,7 +172,7 @@ const HomeScreen = () => {
         showFilterSheet={() => showSheet('filter')}
         hideFilterSheet={() => hideSheet('filter')}
         detailHideSheet={() => hideSheet('detail')}
-        nearbyHideSheet={() => hideSheet('nearby')}
+        emptyHideSheet={() => hideSheet('empty')}
         showBrandTooltip={showBrandTooltip}
         fadeAnim={fadeAnim}
       />
@@ -98,19 +183,20 @@ const HomeScreen = () => {
         showSheet={() => showSheet('filter')}
       />
 
-      <NearbyBrandBottomSheet
-        visible={nearbyBrandVisible}
-        brands={filteredBrands}
-        showSheet={() => showSheet('nearby')}
-        hideSheet={() => hideSheet('nearby')}
-      />
-
       <BrandDetailBottomSheet
         visible={detailBrandVisible}
         storeDetail={selectedStore}
         isFavorite={isFavorite}
-        onClose={clearSelection}
+        onClose={handleBottomSheetClose}
       />
+
+      {filteredBrands?.length === 0 && (
+        <EmptyBottomSheet
+          visible={emptyBrandVisible}
+          brands={filteredBrands}
+          hideSheet={() => hideSheet('empty')}
+        />
+      )}
     </ScreenLayout>
   );
 };

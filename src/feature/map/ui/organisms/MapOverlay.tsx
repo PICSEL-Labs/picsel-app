@@ -148,6 +148,7 @@ const MapOverlay = memo(
     }, [
       store,
       brandMap,
+      brand,
       selectedMarkerId,
       handleMarkerPress,
       optimisticFavorites,

@@ -81,6 +81,9 @@ const HomeScreen = () => {
   const handleResetToDefault = () => {
     clearSelection();
     resetToDefault();
+    hideSheet('detail');
+    hideSheet('empty');
+    hideSheet('filter');
   };
 
   const handleCameraIdle = useCallback(

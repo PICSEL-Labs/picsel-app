@@ -46,12 +46,10 @@ export const useSearchMode = ({
   const hasSearchedForCurrentLocationRef = useRef(false);
   const autoSelectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const processingAutoSelectRef = useRef(false);
-  const bottomSheetOpenTimeRef = useRef(0);
   const lastTargetLocationRef = useRef<typeof targetLocation>(null);
 
   // 카메라 이동
   useEffect(() => {
-    // 새로운 검색인지 확인 (targetLocation이 변경되었는지)
     const isNewSearch =
       !lastTargetLocationRef.current ||
       lastTargetLocationRef.current.latitude !== targetLocation?.latitude ||
@@ -99,7 +97,10 @@ export const useSearchMode = ({
       if (targetStore) {
         // 처리 시작 플래그 설정
         processingAutoSelectRef.current = true;
+        hasAutoSelectedRef.current = true;
+        lastSelectedStoreIdRef.current = selectedStoreId;
 
+        // 기존 timeout 제거
         if (autoSelectTimeoutRef.current) {
           clearTimeout(autoSelectTimeoutRef.current);
         }
@@ -122,9 +123,6 @@ export const useSearchMode = ({
             },
             true,
           );
-
-          hasAutoSelectedRef.current = true;
-          lastSelectedStoreIdRef.current = selectedStoreId;
 
           // 처리 완료 후 플래그 해제
           setTimeout(() => {
@@ -163,18 +161,8 @@ export const useSearchMode = ({
       hasCameraMovedForCurrentSearchRef.current = false;
       hasSearchedForCurrentLocationRef.current = false;
       processingAutoSelectRef.current = false;
-      bottomSheetOpenTimeRef.current = 0;
     }
   }, [mapMode]);
-
-  // 바텀시트 열림 시간 추적
-  useEffect(() => {
-    if (detailBrandVisible) {
-      bottomSheetOpenTimeRef.current = Date.now();
-    } else {
-      bottomSheetOpenTimeRef.current = 0;
-    }
-  }, [detailBrandVisible]);
 
   // 공통 선택 해제 로직
   const handleClearSelection = useCallback(() => {
@@ -191,17 +179,9 @@ export const useSearchMode = ({
     handleClearSelection();
   }, [handleClearSelection]);
 
-  // 맵 탭 핸들러 (바텀시트가 완전히 열린 후에만 동작)
+  // 맵 탭 핸들러
   const handleMapTap = useCallback(() => {
-    const now = Date.now();
-
-    // 바텀시트가 열려있지 않으면 아무것도 하지 않음
     if (!detailBrandVisible) {
-      return;
-    }
-
-    // 바텀시트가 열린 지 500ms 미만이면 무시 (안정화 대기)
-    if (now - bottomSheetOpenTimeRef.current < 500) {
       return;
     }
 
@@ -209,7 +189,7 @@ export const useSearchMode = ({
   }, [detailBrandVisible, handleClearSelection]);
 
   return {
-    // Refs
+    // Refs (카메라 idle 핸들러에서 사용)
     hasCameraMovedForCurrentSearchRef,
     hasSearchedForCurrentLocationRef,
 

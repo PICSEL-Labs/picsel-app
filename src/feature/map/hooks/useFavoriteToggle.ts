@@ -21,10 +21,10 @@ export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
     : isFavorite;
 
   useEffect(() => {
-    if (brandId) {
+    if (brandId && optimisticFavorites[brandId] === undefined) {
       syncFavorite(brandId, isFavorite);
     }
-  }, [brandId, isFavorite, syncFavorite]);
+  }, [brandId, isFavorite, syncFavorite, optimisticFavorites]);
 
   const handleToggleFavorite = (margin: number) => {
     if (isPending || !brandId) {

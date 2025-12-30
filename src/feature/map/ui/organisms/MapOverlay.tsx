@@ -24,10 +24,20 @@ interface Props {
 
 const MapOverlay = memo(
   ({ brand = [], store = [], selectedMarkerId, handleMarkerPress }: Props) => {
-    const { optimisticFavorites } = useFavoriteStore();
+    const { optimisticFavorites, syncFavorite } = useFavoriteStore();
     const { mapMode, searchedStore, selectedStoreId, keepSearchedMarker } =
       useMapLocationStore();
     const [hasBeenSelected, setHasBeenSelected] = useState(false);
+
+    useEffect(() => {
+      if (brand.length > 0) {
+        brand.forEach(b => {
+          if (optimisticFavorites[b.brandId] === undefined) {
+            syncFavorite(b.brandId, b.isFavorite);
+          }
+        });
+      }
+    }, [brand, optimisticFavorites, syncFavorite]);
 
     useEffect(() => {
       const isSearchMode = mapMode === 'search' && selectedStoreId;

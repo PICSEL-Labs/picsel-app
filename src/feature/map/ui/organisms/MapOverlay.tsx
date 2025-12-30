@@ -152,6 +152,8 @@ const MapOverlay = memo(
             }
             anchor={{ x: 0.5, y: 1 }}
             zIndex={zIndex}
+            minZoom={5}
+            maxZoom={21}
           />
         );
       });

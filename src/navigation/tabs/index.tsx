@@ -6,7 +6,7 @@ import { Text, View } from 'react-native';
 import TabBarIcon from './TabBarIcon';
 
 import HomeScreen from '@/screens/home';
-import PicselBookScreen from '@/screens/picselbook';
+import PicselBookScreen from '@/screens/picsel/picselBook';
 
 const Tab = createBottomTabNavigator();
 

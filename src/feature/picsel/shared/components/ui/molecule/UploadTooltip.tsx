@@ -16,10 +16,10 @@ const UploadTooltip = () => {
 
   return (
     <Animated.View
-      className="items-center rounded-3xl bg-primary-pink px-3 py-2"
+      className="mb-4 items-center rounded-3xl bg-primary-pink px-3 py-2"
       style={{
         width: scale(155),
-        boxShadow: insetShadow.default,
+        boxShadow: `${insetShadow.default}, 0 2px 4px 0 rgba(0, 0, 0, 0.20), -2px -4px 12px 0 rgba(255, 255, 255, 0.10)`,
         transform: [{ translateY }],
       }}>
       <Text className="text-white body-rg-02">네컷사진을 올려볼까요?</Text>

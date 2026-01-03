@@ -4,11 +4,11 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
-import { usePhotoPicker } from '@/feature/picselbook/hooks/usePhotoPicker';
-import { PhotoGrid } from '@/feature/picselbook/ui/organisms/PhotoGrid';
-import SelectPhotoHeader from '@/feature/picselbook/ui/organisms/PhotoSelectHeader';
+import { PhotoGrid } from '@/feature/uploadPhoto/components/ui/organisms/PhotoGrid';
+import SelectPhotoHeader from '@/feature/uploadPhoto/components/ui/organisms/UploadPhotoHeader';
+import { usePhotoPicker } from '@/feature/uploadPhoto/hooks/usePhotoPicker';
 
-const SelectPhotoScreen = () => {
+const PhotoUploadScreen = () => {
   const {
     photos,
     selectedUri,
@@ -51,4 +51,4 @@ const SelectPhotoScreen = () => {
   );
 };
 
-export default SelectPhotoScreen;
+export default PhotoUploadScreen;

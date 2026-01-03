@@ -1,41 +1,25 @@
 import React from 'react';
 
-import { Pressable, Text, View, useWindowDimensions } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import Animated, {
+  SharedValue,
   useAnimatedStyle,
-  withTiming,
-  useSharedValue,
 } from 'react-native-reanimated';
 
 import BookIcons from '@/shared/icons/BookIcons';
 import PicselPhotoIcons from '@/shared/icons/PicselPhotoIcons';
 
-interface PicselBookTabHeaderProps {
+interface Props {
   activeTab: 'my' | 'book';
   onTabChange: (tab: 'my' | 'book') => void;
+  indicatorPosition: SharedValue<number>;
 }
 
 const PicselBookTabHeader = ({
   activeTab,
   onTabChange,
-}: PicselBookTabHeaderProps) => {
-  const { width: screenWidth } = useWindowDimensions();
-  const tabWidth = screenWidth / 2;
-  const indicatorWidth = 167;
-  const centerOffset = (tabWidth - indicatorWidth) / 2;
-
-  const indicatorPosition = useSharedValue(
-    activeTab === 'my' ? centerOffset : tabWidth + centerOffset,
-  );
-
-  const handleTabPress = (tab: 'my' | 'book') => {
-    onTabChange(tab);
-    indicatorPosition.value = withTiming(
-      tab === 'my' ? centerOffset : tabWidth + centerOffset,
-      { duration: 250 },
-    );
-  };
-
+  indicatorPosition,
+}: Props) => {
   const indicatorStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: indicatorPosition.value }],
   }));
@@ -43,7 +27,7 @@ const PicselBookTabHeader = ({
   return (
     <View className="relative flex-row items-center border-b border-gray-50">
       <Pressable
-        onPress={() => handleTabPress('my')}
+        onPress={() => onTabChange('my')}
         className="flex-1 flex-row items-center justify-center space-x-1 py-4"
         style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
         <PicselPhotoIcons
@@ -62,7 +46,7 @@ const PicselBookTabHeader = ({
       </Pressable>
 
       <Pressable
-        onPress={() => handleTabPress('book')}
+        onPress={() => onTabChange('book')}
         className="flex-1 flex-row items-center justify-center space-x-1 py-4"
         style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
         <BookIcons

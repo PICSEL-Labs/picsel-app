@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
@@ -8,18 +7,10 @@ import EmptyMessage from '../../molecule/EmptyMessage';
 
 import FloatingAddButton from '@/feature/picsel/shared/components/ui/atoms/FloatingAddButton';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 
 const PicselBookTemplate = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-
-  const handleAddPicsel = () => {
-    navigation.navigate('PhotoUpload');
-  };
-
-  const handleAddBook = () => {
-    console.log('북 클릭');
-  };
+  const { handleAddPicsel, handleAddBook } = usePicselBookActions();
 
   return (
     <EmptyStateLayout

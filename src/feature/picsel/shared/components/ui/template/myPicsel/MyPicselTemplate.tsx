@@ -1,20 +1,14 @@
 import React from 'react';
 
-import { useNavigation } from '@react-navigation/native';
-
+import FloatingAddButton from '../../atoms/FloatingAddButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecule/EmptyMessage';
 import UploadTooltip from '../../molecule/UploadTooltip';
 
-import FloatingAddButton from '@/feature/picsel/shared/components/ui/atoms/FloatingAddButton';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 
 const MyPicselTemplate = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-
-  const handleAddPicsel = () => {
-    navigation.navigate('PhotoUpload');
-  };
+  const { handleAddPicsel } = usePicselBookActions();
 
   return (
     <EmptyStateLayout

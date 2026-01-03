@@ -13,7 +13,7 @@ interface Props {
   hasSelected?: boolean;
 }
 
-const SelectPhotoHeader = ({ variant, onReset, hasSelected }: Props) => {
+const UploadPhotoHeader = ({ variant, onReset, hasSelected }: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isMain = variant === 'main'; // 대표 사진을 선택하는 화면인 경우
 
@@ -53,4 +53,4 @@ const SelectPhotoHeader = ({ variant, onReset, hasSelected }: Props) => {
   );
 };
 
-export default SelectPhotoHeader;
+export default UploadPhotoHeader;

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import {
   FlatList,
   ImageBackground,
@@ -12,6 +13,7 @@ import FloatingAddButton from '../../atoms/AddButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecule/EmptyMessage';
 import UploadTooltip from '../../molecule/UploadTooltip';
+import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
 import DeleteConfirmModal from '@/feature/picsel/myPicsel/ui/organisms/DeleteConfirmModal';
@@ -35,12 +37,22 @@ const MyPicselTemplate = () => {
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [showUpButton, setShowUpButton] = useState(false);
   const flatListRef = useRef<FlatList>(null);
+  const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
   const { showToast } = useToastStore();
 
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 -> 이후 query로 교체
 
   const totalPhotos = 19; // TODO: 실제 데이터로 교체
   const hasPhotos = totalPhotos > 0;
+
+  // 선택 모드 변경 시 바텀시트 제어
+  useEffect(() => {
+    if (isSelecting) {
+      selectionBottomSheetRef.current?.present();
+    } else {
+      selectionBottomSheetRef.current?.dismiss();
+    }
+  }, [isSelecting]);
 
   // 시뮬레이션: 데이터 로딩 (실제로는 API 호출)
   useEffect(() => {
@@ -146,8 +158,6 @@ const MyPicselTemplate = () => {
         selectedCount={selectedPhotos.length}
         onToggleSelecting={() => setIsSelecting(!isSelecting)}
         onSelectAll={handleSelectAll}
-        onDelete={handleDelete}
-        onMove={handleMove}
         onClose={() => {
           setIsSelecting(false);
           setSelectedPhotos([]);
@@ -175,6 +185,13 @@ const MyPicselTemplate = () => {
           <FloatingAddButton onPress={handleAddPicsel} />
         </View>
       )}
+
+      {/* Selection Bottom Sheet */}
+      <SelectionBottomSheet
+        ref={selectionBottomSheetRef}
+        onDelete={handleDelete}
+        onMove={handleMove}
+      />
 
       {/* Modals */}
       <DeleteConfirmModal

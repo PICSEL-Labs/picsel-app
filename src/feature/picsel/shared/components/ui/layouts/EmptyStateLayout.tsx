@@ -18,7 +18,7 @@ const EmptyStateLayout = ({ children, floatingButton }: Props) => {
       imageStyle={{ alignSelf: 'center' }}>
       {children}
 
-      <View className="absolute -bottom-4 right-6 space-y-5">
+      <View className="absolute -bottom-4 right-4 space-y-5">
         {floatingButton}
       </View>
     </ImageBackground>

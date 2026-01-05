@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecule/EmptyMessage';
 
-import FloatingAddButton from '@/feature/picsel/shared/components/ui/atoms/FloatingAddButton';
+import AddButton from '@/feature/picsel/shared/components/ui/atoms/AddButton';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 
@@ -13,8 +13,7 @@ const PicselBookTemplate = () => {
   const { handleAddPicsel, handleAddBook } = usePicselBookActions();
 
   return (
-    <EmptyStateLayout
-      floatingButton={<FloatingAddButton onPress={handleAddPicsel} />}>
+    <EmptyStateLayout floatingButton={<AddButton onPress={handleAddPicsel} />}>
       <View className="flex-1">
         <AddBookButton onPress={handleAddBook} />
         <EmptyMessage

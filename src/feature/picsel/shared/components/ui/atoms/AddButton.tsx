@@ -9,7 +9,7 @@ interface Props {
   onPress: () => void;
 }
 
-const FloatingAddButton = ({ onPress }: Props) => {
+const AddButton = ({ onPress }: Props) => {
   return (
     <Pressable
       onPress={onPress}
@@ -22,4 +22,4 @@ const FloatingAddButton = ({ onPress }: Props) => {
   );
 };
 
-export default FloatingAddButton;
+export default AddButton;

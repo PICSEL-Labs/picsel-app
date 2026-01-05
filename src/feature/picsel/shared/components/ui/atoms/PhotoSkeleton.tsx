@@ -2,7 +2,12 @@ import React, { useEffect, useRef } from 'react';
 
 import { Animated, View } from 'react-native';
 
-const PhotoSkeleton = () => {
+interface Props {
+  imageWidth: number;
+  imageHeight: number;
+}
+
+const PhotoSkeleton = ({ imageWidth, imageHeight }: Props) => {
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -28,17 +33,17 @@ const PhotoSkeleton = () => {
   });
 
   return (
-    <View className="mb-6 px-2" style={{ width: '50%' }}>
+    <View className="mb-6">
       {/* 날짜 스켈레톤 */}
       <Animated.View
         className="mb-2 h-4 w-24 rounded bg-gray-200"
         style={{ opacity }}
       />
 
-      {/* 사진 스켈레톤 - w:160, h:240 */}
+      {/* 사진 스켈레톤 */}
       <Animated.View
         className="overflow-hidden rounded-lg bg-gray-200"
-        style={{ width: 160, height: 240, opacity }}
+        style={{ width: imageWidth, height: imageHeight, opacity }}
       />
 
       {/* 매장명 스켈레톤 */}

@@ -10,7 +10,7 @@ interface Props {
 
 const UpButton = ({ onPress }: Props) => {
   return (
-    <View className="absolute bottom-14 left-[4.7px]">
+    <View className="absolute bottom-14 left-[5px]">
       <Pressable onPress={onPress}>
         <FloatingButton shape="floating" />
       </Pressable>

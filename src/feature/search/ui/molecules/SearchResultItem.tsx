@@ -25,8 +25,10 @@ const SearchResultItem = ({
   highlightKeyword,
 }: Props) => {
   const { userLocation } = useLocationStore();
-  const hasKeyword = kind === 'store' || kind === 'administrativeDistrict';
+  const hasKeyword =
+    kind === 'store' || kind === 'administrativeDistrict' || kind === 'station';
 
+  // 위치 권한이 없으면 거리를 0으로 표시
   const displayDistance = userLocation ? distanceMeters : 0;
 
   return (

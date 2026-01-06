@@ -14,10 +14,7 @@ export const useToastStore = create<ToastStore>(set => ({
   marginBottom: 12,
 
   showToast: (message, marginBottom = 12) =>
-    set(state => {
-      if (state.visible) {
-        return { message, marginBottom };
-      }
+    set(() => {
       return { message, marginBottom, visible: true };
     }),
 

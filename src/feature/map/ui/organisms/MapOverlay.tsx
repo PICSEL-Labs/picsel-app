@@ -24,10 +24,20 @@ interface Props {
 
 const MapOverlay = memo(
   ({ brand = [], store = [], selectedMarkerId, handleMarkerPress }: Props) => {
-    const { optimisticFavorites } = useFavoriteStore();
+    const { optimisticFavorites, syncFavorite } = useFavoriteStore();
     const { mapMode, searchedStore, selectedStoreId, keepSearchedMarker } =
       useMapLocationStore();
     const [hasBeenSelected, setHasBeenSelected] = useState(false);
+
+    useEffect(() => {
+      if (brand.length > 0) {
+        brand.forEach(b => {
+          if (optimisticFavorites[b.brandId] === undefined) {
+            syncFavorite(b.brandId, b.isFavorite);
+          }
+        });
+      }
+    }, [brand, optimisticFavorites, syncFavorite]);
 
     useEffect(() => {
       const isSearchMode = mapMode === 'search' && selectedStoreId;
@@ -142,12 +152,15 @@ const MapOverlay = memo(
             }
             anchor={{ x: 0.5, y: 1 }}
             zIndex={zIndex}
+            minZoom={5}
+            maxZoom={21}
           />
         );
       });
     }, [
       store,
       brandMap,
+      brand,
       selectedMarkerId,
       handleMarkerPress,
       optimisticFavorites,

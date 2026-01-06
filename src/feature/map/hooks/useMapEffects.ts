@@ -14,10 +14,8 @@ export const useMapEffects = ({
   const lastSelectedMarkerIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (
-      selectedMarkerId === lastSelectedMarkerIdRef.current &&
-      lastSelectedMarkerIdRef.current !== null
-    ) {
+    // 같은 값이면 스킵 (null → null 포함)
+    if (selectedMarkerId === lastSelectedMarkerIdRef.current) {
       return;
     }
 

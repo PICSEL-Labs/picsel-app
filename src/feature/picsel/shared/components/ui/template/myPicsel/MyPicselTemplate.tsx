@@ -17,7 +17,6 @@ import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomShe
 import PixelToolbar from '../../organisms/PixelToolbar';
 
 import DeleteConfirmModal from '@/feature/picsel/myPicsel/ui/organisms/DeleteConfirmModal';
-import MovePhotoModal from '@/feature/picsel/myPicsel/ui/organisms/MovePhotoModal';
 import PhotoListView, {
   MOCK_PHOTOS,
 } from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
@@ -33,7 +32,6 @@ const MyPicselTemplate = () => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [photoData, setPhotoData] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showMoveModal, setShowMoveModal] = useState(false);
   const [showSortSheet, setShowSortSheet] = useState(false);
   const [showUpButton, setShowUpButton] = useState(false);
   const flatListRef = useRef<FlatList>(null);
@@ -111,19 +109,7 @@ const MyPicselTemplate = () => {
   };
 
   const handleMove = () => {
-    if (selectedPhotos.length === 0) {
-      showToast('사진을 옮길 픽셀북을 선택해주세요', 60);
-      return;
-    }
-    setShowMoveModal(true);
-  };
-
-  const handleConfirmMove = () => {
-    // TODO: 실제 이동 로직
-    setShowMoveModal(false);
-    showToast('선택한 픽셀북으로 사진을 옮겼어요', 60);
-    setSelectedPhotos([]);
-    setIsSelecting(false);
+    // 다른 픽셀북 화면으로 이동
   };
 
   const handleSort = () => {
@@ -199,13 +185,6 @@ const MyPicselTemplate = () => {
         photoCount={selectedPhotos.length}
         onConfirm={handleConfirmDelete}
         onCancel={() => setShowDeleteModal(false)}
-      />
-
-      <MovePhotoModal
-        visible={showMoveModal}
-        picselBookName="선택한 픽셀북" // TODO: 실제 선택된 픽셀북 이름
-        onConfirm={handleConfirmMove}
-        onCancel={() => setShowMoveModal(false)}
       />
 
       <SortActionSheet

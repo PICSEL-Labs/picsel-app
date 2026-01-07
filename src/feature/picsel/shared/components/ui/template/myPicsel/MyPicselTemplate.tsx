@@ -21,6 +21,10 @@ import PhotoListView, {
 } from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
+import {
+  SortType,
+  useSortActionSheet,
+} from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import { IMAGES } from '@/shared/constants/images';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
@@ -109,9 +113,25 @@ const MyPicselTemplate = () => {
     // 다른 픽셀북 화면으로 이동
   };
 
-  // const handleSort = () => {
-  //   // TODO: 정렬 로직
-  // };
+  const handleSort = (sortType: SortType) => {
+    console.log('정렬 타입:', sortType);
+    // TODO: 정렬 로직 구현
+    switch (sortType) {
+      case 'latest':
+        // 최근 생성 순 정렬
+        break;
+      case 'name':
+        // 이름 순 정렬
+        break;
+      case 'date':
+        // 사진 게재 순 정렬
+        break;
+    }
+  };
+
+  const { showSortSheet } = useSortActionSheet({
+    onSort: handleSort,
+  });
 
   // Empty state (로딩 중이 아닐 때만 표시)
   if (!isLoading && !hasPhotos) {
@@ -145,7 +165,7 @@ const MyPicselTemplate = () => {
           setIsSelecting(false);
           setSelectedPhotos([]);
         }}
-        // onSort={() => setShowSortSheet(true)}
+        onSort={showSortSheet}
         onFilter={() => {
           // TODO: 브랜드 필터 바텀시트
         }}

@@ -26,6 +26,7 @@ import {
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import { IMAGES } from '@/shared/constants/images';
+import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
@@ -166,9 +167,7 @@ const MyPicselTemplate = () => {
           setSelectedPhotos([]);
         }}
         onSort={showSortSheet}
-        onFilter={() => {
-          // TODO: 브랜드 필터 바텀시트
-        }}
+        onFilter={showBrandFilterSheet}
       />
 
       {/* 콘텐츠 - FlatList를 직접 사용 */}

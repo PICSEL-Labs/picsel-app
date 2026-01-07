@@ -6,6 +6,7 @@ import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
 import PhotoUploadScreen from '@/screens/photoUpload';
+import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
 import PicselBookScreen from '@/screens/picsel/picselBook';
 import QrScanScreen from '@/screens/qr/scan';
 import QrViewerScreen from '@/screens/qr/viewer';
@@ -21,6 +22,7 @@ export type MainNavigationProps = {
   QrViewer: { url: string };
   PhotoUpload: undefined;
   PicselBook: undefined;
+  YearFolder: { year: string };
 };
 
 const MainRoute = () => {
@@ -50,6 +52,8 @@ const MainRoute = () => {
       <Stack.Screen name="PhotoUpload" component={PhotoUploadScreen} />
 
       <Stack.Screen name="PicselBook" component={PicselBookScreen} />
+
+      <Stack.Screen name="YearFolder" component={YearFolderScreen} />
     </Stack.Navigator>
   );
 };

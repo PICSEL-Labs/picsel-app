@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import FloatingAddButton from '../../atoms/AddButton';
+import DateFilterButton, { DateFilterType } from '../../atoms/DateFilterButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecule/EmptyMessage';
 import UploadTooltip from '../../molecule/UploadTooltip';
@@ -36,6 +37,7 @@ const MyPicselTemplate = () => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [photoData, setPhotoData] = useState([]);
   const [showUpButton, setShowUpButton] = useState(false);
+  const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
   const flatListRef = useRef<FlatList>(null);
   const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
   const { showToast } = useToastStore();
@@ -134,6 +136,12 @@ const MyPicselTemplate = () => {
     onSort: handleSort,
   });
 
+  const handleDateFilterChange = (type: DateFilterType) => {
+    setDateFilter(type);
+    console.log('날짜 필터:', type);
+    // TODO: 날짜 필터링 로직 구현
+  };
+
   // Empty state (로딩 중이 아닐 때만 표시)
   if (!isLoading && !hasPhotos) {
     return (
@@ -180,12 +188,23 @@ const MyPicselTemplate = () => {
         onScroll={handleScroll}
       />
 
-      {/* Floating Button */}
+      {/* Floating Buttons */}
       {!isSelecting && (
-        <View className="absolute bottom-[43px] right-4">
-          {showUpButton && <UpButton onPress={handleScrollToTop} />}
-          <FloatingAddButton onPress={handleAddPicsel} />
-        </View>
+        <>
+          {/* Date Filter - Center */}
+          <View className="absolute bottom-[43px] left-0 right-0 items-center">
+            <DateFilterButton
+              selected={dateFilter}
+              onSelect={handleDateFilterChange}
+            />
+          </View>
+
+          {/* Add Button - Right */}
+          <View className="absolute bottom-[43px] right-4">
+            {showUpButton && <UpButton onPress={handleScrollToTop} />}
+            <FloatingAddButton onPress={handleAddPicsel} />
+          </View>
+        </>
       )}
 
       {/* Selection Bottom Sheet */}

@@ -16,14 +16,13 @@ import UploadTooltip from '../../molecule/UploadTooltip';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
-import DeleteConfirmModal from '@/feature/picsel/myPicsel/ui/organisms/DeleteConfirmModal';
 import PhotoListView, {
   MOCK_PHOTOS,
 } from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
-import SortActionSheet from '@/feature/picsel/shared/components/ui/organisms/SortActionSheet';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import { IMAGES } from '@/shared/constants/images';
+import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 const MyPicselTemplate = () => {
@@ -31,8 +30,6 @@ const MyPicselTemplate = () => {
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
   const [photoData, setPhotoData] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showSortSheet, setShowSortSheet] = useState(false);
   const [showUpButton, setShowUpButton] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
@@ -97,12 +94,12 @@ const MyPicselTemplate = () => {
       showToast('삭제할 픽셀북을 선택해주세요', 60);
       return;
     }
-    setShowDeleteModal(true);
+
+    showDeleteConfirmModal(selectedPhotos.length, handleConfirmDelete);
   };
 
   const handleConfirmDelete = () => {
     // TODO: 실제 삭제 로직
-    setShowDeleteModal(false);
     showToast(`${selectedPhotos.length}장의 사진을 삭제했어요`, 60);
     setSelectedPhotos([]);
     setIsSelecting(false);
@@ -112,9 +109,9 @@ const MyPicselTemplate = () => {
     // 다른 픽셀북 화면으로 이동
   };
 
-  const handleSort = () => {
-    // TODO: 정렬 로직
-  };
+  // const handleSort = () => {
+  //   // TODO: 정렬 로직
+  // };
 
   // Empty state (로딩 중이 아닐 때만 표시)
   if (!isLoading && !hasPhotos) {
@@ -148,7 +145,7 @@ const MyPicselTemplate = () => {
           setIsSelecting(false);
           setSelectedPhotos([]);
         }}
-        onSort={() => setShowSortSheet(true)}
+        // onSort={() => setShowSortSheet(true)}
         onFilter={() => {
           // TODO: 브랜드 필터 바텀시트
         }}
@@ -177,20 +174,6 @@ const MyPicselTemplate = () => {
         ref={selectionBottomSheetRef}
         onDelete={handleDelete}
         onMove={handleMove}
-      />
-
-      {/* Modals */}
-      <DeleteConfirmModal
-        visible={showDeleteModal}
-        photoCount={selectedPhotos.length}
-        onConfirm={handleConfirmDelete}
-        onCancel={() => setShowDeleteModal(false)}
-      />
-
-      <SortActionSheet
-        visible={showSortSheet}
-        onSelect={handleSort}
-        onCancel={() => setShowSortSheet(false)}
       />
     </ImageBackground>
   );

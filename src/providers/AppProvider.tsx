@@ -12,6 +12,7 @@ import { useSplashScreen } from '@/shared/hooks/useSplashScreen';
 import { useUserConfig } from '@/shared/hooks/useUserConfig';
 import { useLocationStore } from '@/shared/store';
 import Toast from '@/shared/ui/atoms/Toast';
+import ConfirmModal from '@/shared/ui/molecules/ConfirmModal';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -78,6 +79,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
           <BottomSheetModalProvider>
             <NavigationContainer>{children}</NavigationContainer>
             <Toast />
+            <ConfirmModal />
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

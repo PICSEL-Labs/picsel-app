@@ -23,10 +23,10 @@ import {
   SortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
+import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { IMAGES } from '@/shared/constants/images';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
-import { cn } from '@/shared/lib/cn';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
@@ -123,61 +123,64 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
   });
 
   return (
-    <ImageBackground
-      source={IMAGES.SPARKLE.BACKGROUND_OPACITY}
-      resizeMode="contain"
-      imageStyle={{ alignSelf: 'center' }}>
-      {/* 헤더 */}
-      <View className={cn('flex-row items-center bg-white px-6 py-4')}>
-        <Pressable onPress={onBack} className="mr-4">
-          <ArrowIcons shape="back" width={24} height={24} />
-        </Pressable>
-        <Text className={cn('flex-1 text-center text-gray-900 headline-03')}>
-          {year}
-        </Text>
-        <View className="w-6" />
-      </View>
+    <ScreenLayout>
+      <ImageBackground
+        source={IMAGES.SPARKLE.BACKGROUND_OPACITY}
+        resizeMode="contain"
+        imageStyle={{ alignSelf: 'center' }}
+        className="flex-1">
+        {/* 헤더 */}
+        <View className="flex-row items-center bg-white px-6 pt-4">
+          <Pressable onPress={onBack}>
+            <ArrowIcons shape="back" width={24} height={24} />
+          </Pressable>
+          <Text className="flex-1 text-center text-gray-900 headline-03">
+            {year}년
+          </Text>
+          <View className="w-6" />
+        </View>
 
-      {/* 툴바 */}
-      <PixelToolbar
-        totalPhotos={totalPhotos}
-        isSelecting={isSelecting}
-        selectedCount={selectedPhotos.length}
-        onToggleSelecting={() => setIsSelecting(!isSelecting)}
-        onSelectAll={handleSelectAll}
-        onClose={() => {
-          setIsSelecting(false);
-          setSelectedPhotos([]);
-        }}
-        onSort={showSortSheet}
-        onFilter={showBrandFilterSheet}
-      />
+        {/* 툴바 */}
+        <PixelToolbar
+          totalPhotos={totalPhotos}
+          isSelecting={isSelecting}
+          selectedCount={selectedPhotos.length}
+          onToggleSelecting={() => setIsSelecting(!isSelecting)}
+          onSelectAll={handleSelectAll}
+          onClose={() => {
+            setIsSelecting(false);
+            setSelectedPhotos([]);
+          }}
+          onSort={showSortSheet}
+          onFilter={showBrandFilterSheet}
+        />
 
-      {/* 콘텐츠 */}
-      <PhotoListView
-        ref={flatListRef}
-        isSelecting={isSelecting}
-        selectedPhotos={selectedPhotos}
-        onToggleSelection={handleToggleSelection}
-        isLoading={isLoading}
-        onScroll={handleScroll}
-      />
+        {/* 콘텐츠 */}
+        <PhotoListView
+          ref={flatListRef}
+          isSelecting={isSelecting}
+          selectedPhotos={selectedPhotos}
+          onToggleSelection={handleToggleSelection}
+          isLoading={isLoading}
+          onScroll={handleScroll}
+        />
 
-      {/* Floating Buttons */}
+        {/* Selection Bottom Sheet */}
+        <SelectionBottomSheet
+          ref={selectionBottomSheetRef}
+          onDelete={handleDelete}
+          onMove={handleMove}
+        />
+      </ImageBackground>
+
+      {/* Floating Buttons - 항상 하단 고정 */}
       {!isSelecting && (
         <View className="absolute bottom-[43px] right-4">
           {showUpButton && <UpButton onPress={handleScrollToTop} />}
           <FloatingAddButton onPress={handleAddPicsel} />
         </View>
       )}
-
-      {/* Selection Bottom Sheet */}
-      <SelectionBottomSheet
-        ref={selectionBottomSheetRef}
-        onDelete={handleDelete}
-        onMove={handleMove}
-      />
-    </ImageBackground>
+    </ScreenLayout>
   );
 };
 

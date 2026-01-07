@@ -33,7 +33,7 @@ const ConfirmModal = () => {
         <View className="flex-1 items-center justify-center bg-[#111114]/50">
           <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
             <View
-              className="rounded-[22px] bg-white px-6 pb-6 pt-8"
+              className="rounded-[24px] bg-white px-6 pb-6 pt-8"
               style={{ width: MODAL_WIDTH }}>
               {/* Title */}
               {title && (
@@ -52,14 +52,14 @@ const ConfirmModal = () => {
               <View className="flex-row space-x-2">
                 <Pressable
                   onPress={cancel}
-                  className="flex-1 rounded-[15px] bg-gray-50 py-3">
+                  className="flex-1 rounded-[12px] bg-gray-50 py-3">
                   <Text className="text-center text-gray-600 headline-02">
                     {cancelText}
                   </Text>
                 </Pressable>
                 <Pressable
                   onPress={confirm}
-                  className="flex-1 rounded-[15px] bg-primary-pink py-3">
+                  className="flex-1 rounded-[12px] bg-primary-pink py-3">
                   <Text className="text-center text-white headline-02">
                     {confirmText}
                   </Text>

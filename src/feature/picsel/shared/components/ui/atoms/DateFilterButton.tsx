@@ -48,7 +48,7 @@ const FilterTab = ({
         onPressOut={handlePressOut}
         style={isSelected ? defaultButtonShadow : undefined}
         className={cn(
-          'px-5 py-1.5',
+          'flex h-[32px] w-[60px] flex-shrink-0 items-center justify-center px-3 py-1',
           !isLast && 'mr-1',
           isSelected && 'rounded-full bg-white',
         )}>
@@ -74,8 +74,11 @@ const DateFilterButton = ({ selected, onSelect }: Props) => {
 
   return (
     <View
-      className={cn('flex-row rounded-full bg-white/90 p-1.5 px-2')}
-      style={defaultButtonShadow}>
+      className="flex h-[40px] w-[200px] flex-row items-center justify-between rounded-full bg-[#FFFFFFE5] p-1"
+      style={{
+        boxShadow:
+          '0 -2px 8px 0 rgba(0, 0, 0, 0.05) inset, 0 -2px 8px 2px rgba(0, 0, 0, 0.10), 2px 4px 8px 0 rgba(255, 255, 255, 0.25) inset',
+      }}>
       {filters.map((filter, index) => (
         <FilterTab
           key={filter.type}

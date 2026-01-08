@@ -12,6 +12,7 @@ import {
 
 import FloatingAddButton from '../../atoms/AddButton';
 import DateFilterButton, { DateFilterType } from '../../atoms/DateFilterButton';
+import FunctionButton from '../../atoms/FunctionButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecule/EmptyMessage';
 import UploadTooltip from '../../molecule/UploadTooltip';
@@ -45,6 +46,8 @@ const MyPicselTemplate = () => {
   const flatListRef = useRef<FlatList>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
+  const [showFunctionButtons, setShowFunctionButtons] = useState(false);
+
   const { showToast } = useToastStore();
 
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 -> 이후 query로 교체
@@ -125,6 +128,26 @@ const MyPicselTemplate = () => {
     // 다른 픽셀북 화면으로 이동
   };
 
+  const handleToggleFunctionButtons = () => {
+    setShowFunctionButtons(!showFunctionButtons);
+  };
+
+  const handleAlbumPress = () => {
+    console.log('앨범에서 선택');
+    // TODO: 앨범에서 사진 선택 로직
+    setShowFunctionButtons(false);
+  };
+
+  const handleQrPress = () => {
+    console.log('QR 스캔');
+    // TODO: QR 스캔 로직
+    setShowFunctionButtons(false);
+  };
+
+  const handleCloseFunctionButtons = () => {
+    setShowFunctionButtons(false);
+  };
+
   const handleSort = (sortType: SortType) => {
     console.log('정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
@@ -190,11 +213,6 @@ const MyPicselTemplate = () => {
   // Content state (로딩 중이거나 사진이 있을 때)
   return (
     <View className="flex-1">
-      {/* <ImageBackground
-        source={IMAGES.SPARKLE.BACKGROUND_OPACITY}
-        resizeMode="contain"
-        imageStyle={{ alignSelf: 'center' }}
-        className="flex-1"> */}
       {/* 툴바 (년 필터가 아닐 때만 표시) */}
       {dateFilter !== 'year' && (
         <PixelToolbar
@@ -239,7 +257,6 @@ const MyPicselTemplate = () => {
         onDelete={handleDelete}
         onMove={handleMove}
       />
-      {/* </ImageBackground> */}
 
       {/* Floating Buttons - 항상 하단 고정 */}
       {!isSelecting && (
@@ -255,7 +272,15 @@ const MyPicselTemplate = () => {
           {/* Add Button - Right */}
           <View className="absolute -bottom-4 right-4">
             {showUpButton && <UpButton onPress={handleScrollToTop} />}
-            <FloatingAddButton onPress={handleAddPicsel} />
+            {showFunctionButtons ? (
+              <FunctionButton
+                onAlbumPress={handleAlbumPress}
+                onQrPress={handleQrPress}
+                onClose={handleCloseFunctionButtons}
+              />
+            ) : (
+              <FloatingAddButton onPress={handleToggleFunctionButtons} />
+            )}
           </View>
         </>
       )}

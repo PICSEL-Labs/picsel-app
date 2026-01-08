@@ -24,6 +24,8 @@ export const insetShadow = {
     '-2px -4px 12px 0px rgba(255, 255, 255, 0.10) inset, -2px -2px 8px 0px rgba(0, 0, 0, 0.20) inset, 2px 4px 8px 0px rgba(255, 255, 255, 0.25) inset',
   dateFilter:
     '0 -2px 8px 0 rgba(0, 0, 0, 0.05) inset, 0 -2px 8px 2px rgba(0, 0, 0, 0.10), 2px 4px 8px 0 rgba(255, 255, 255, 0.25) inset',
+  floatingFunctionButton:
+    '0 2px 4px 0 rgba(0, 0, 0, 0.20), -2px -4px 12px 0 rgba(255, 255, 255, 0.10) inset, -2px -2px 8px 0 rgba(0, 0, 0, 0.20) inset, 2px 4px 8px 0 rgba(255, 255, 255, 0.25) inset',
 };
 
 export const filterButtonShadow = {

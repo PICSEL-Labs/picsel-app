@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 
+import FunctionButton from '../../atoms/FunctionButton';
+
 import PhotoListView, {
   MOCK_PHOTOS,
 } from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
@@ -17,7 +19,6 @@ import FloatingAddButton from '@/feature/picsel/shared/components/ui/atoms/AddBu
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
-import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import {
   SortType,
   useSortActionSheet,
@@ -34,7 +35,6 @@ interface Props {
 }
 
 const YearFolderTemplate = ({ year, onBack }: Props) => {
-  const { handleAddPicsel } = usePicselBookActions();
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
   const [photoData, setPhotoData] = useState([]);
@@ -42,6 +42,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
   const flatListRef = useRef<FlatList>(null);
   const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
   const { showToast } = useToastStore();
+  const [showFunctionButtons, setShowFunctionButtons] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
   const totalPhotos = 19; // TODO: 실제 데이터로 교체
@@ -120,6 +121,26 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     onSort: handleSort,
   });
 
+  const handleToggleFunctionButtons = () => {
+    setShowFunctionButtons(!showFunctionButtons);
+  };
+
+  const handleAlbumPress = () => {
+    console.log('앨범에서 선택');
+    // TODO: 앨범에서 사진 선택 로직
+    setShowFunctionButtons(false);
+  };
+
+  const handleQrPress = () => {
+    console.log('QR 스캔');
+    // TODO: QR 스캔 로직
+    setShowFunctionButtons(false);
+  };
+
+  const handleCloseFunctionButtons = () => {
+    setShowFunctionButtons(false);
+  };
+
   return (
     <ScreenLayout>
       {/* 헤더 */}
@@ -167,10 +188,28 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
 
       {/* Floating Buttons - 항상 하단 고정 */}
       {!isSelecting && (
-        <View className="absolute bottom-[43px] right-4">
-          {showUpButton && <UpButton onPress={handleScrollToTop} />}
-          <FloatingAddButton onPress={handleAddPicsel} />
-        </View>
+        <>
+          {/* Add Button - Right */}
+          <View className="absolute bottom-11 right-4">
+            {showUpButton && (
+              <View
+                style={{
+                  marginBottom: showFunctionButtons ? 60 : 56,
+                }}>
+                <UpButton onPress={handleScrollToTop} />
+              </View>
+            )}
+            {showFunctionButtons ? (
+              <FunctionButton
+                onAlbumPress={handleAlbumPress}
+                onQrPress={handleQrPress}
+                onClose={handleCloseFunctionButtons}
+              />
+            ) : (
+              <FloatingAddButton onPress={handleToggleFunctionButtons} />
+            )}
+          </View>
+        </>
       )}
     </ScreenLayout>
   );

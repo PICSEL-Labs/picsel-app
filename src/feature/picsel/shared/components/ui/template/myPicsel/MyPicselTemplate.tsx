@@ -274,7 +274,7 @@ const MyPicselTemplate = () => {
             {showUpButton && (
               <View
                 style={{
-                  marginBottom: showFunctionButtons ? 70 : 56,
+                  marginBottom: showFunctionButtons ? 60 : 56,
                 }}>
                 <UpButton onPress={handleScrollToTop} />
               </View>

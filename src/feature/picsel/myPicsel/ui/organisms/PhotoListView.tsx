@@ -13,7 +13,7 @@ import {
 
 import PhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/PhotoSkeleton';
 import CheckIcons from '@/shared/icons/CheckIcons';
-import SparkleIcons from '@/shared/icons/SparkleIcons';
+import SparkleImages from '@/shared/images/Sparkle';
 import { defaultButtonShadow } from '@/styles/shadows';
 
 interface Photo {
@@ -149,8 +149,8 @@ export const MOCK_PHOTOS: Photo[] = [
   },
 ];
 
-const HORIZONTAL_PADDING = 24; // 좌우 패딩 줄임
-const ITEM_SPACING = 8; // 아이템 간 간격 줄임
+const HORIZONTAL_PADDING = 24;
+const ITEM_SPACING = 8;
 
 const PhotoListView = forwardRef<FlatList, Props>(
   (
@@ -264,8 +264,8 @@ const PhotoListView = forwardRef<FlatList, Props>(
 
             {/* 매장명 */}
             <View className="mt-1 flex-row items-center">
-              <SparkleIcons shape="on" width={20} height={20} />
-              <Text className="ml-1 text-gray-900 body-rg-03" numberOfLines={1}>
+              <SparkleImages shape="icon-one" height={24} width={24} />
+              <Text className="text-gray-900 body-rg-03" numberOfLines={1}>
                 {photo.storeName}
               </Text>
             </View>

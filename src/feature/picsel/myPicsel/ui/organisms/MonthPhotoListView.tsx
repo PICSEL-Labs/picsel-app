@@ -15,7 +15,7 @@ import { YearGroup } from './MOCK_YEAR_DATA';
 
 import PhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/PhotoSkeleton';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
-import SparkleIcons from '@/shared/icons/SparkleIcons';
+import SparkleImages from '@/shared/images/Sparkle';
 
 interface Props {
   yearGroups: YearGroup[];
@@ -175,7 +175,11 @@ const MonthPhotoListView = ({
 
                         {/* 매장명 */}
                         <View className="mt-1 flex-row items-center">
-                          <SparkleIcons shape="on" width={20} height={20} />
+                          <SparkleImages
+                            shape="icon-one"
+                            height={24}
+                            width={24}
+                          />
                           <Text
                             className="ml-1 text-gray-900 body-rg-03"
                             numberOfLines={1}>

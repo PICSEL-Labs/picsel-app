@@ -6,7 +6,7 @@ import { IMAGES } from '@/shared/constants/images';
 import { useBlinkingAnimation } from '@/shared/hooks/useBlinkingAnimation';
 
 interface Props {
-  shape: 'icon' | 'bg' | 'bg-opacity';
+  shape: 'icon' | 'bg' | 'bg-opacity' | 'icon-one';
   width?: number;
   height?: number;
   animationType?: boolean;
@@ -23,6 +23,8 @@ const SparkleImages = ({ shape, width, height, animationType }: Props) => {
         return IMAGES.SPARKLE.BACKGROUND_OPACITY;
       case 'icon':
         return IMAGES.SPARKLE.ICON;
+      case 'icon-one':
+        return IMAGES.SPARKLE.ICON_ONE;
       default:
         return IMAGES.SPARKLE.BACKGROUND;
     }

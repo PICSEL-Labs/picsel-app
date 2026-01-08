@@ -271,7 +271,14 @@ const MyPicselTemplate = () => {
 
           {/* Add Button - Right */}
           <View className="absolute -bottom-4 right-4">
-            {showUpButton && <UpButton onPress={handleScrollToTop} />}
+            {showUpButton && (
+              <View
+                style={{
+                  marginBottom: showFunctionButtons ? 70 : 56,
+                }}>
+                <UpButton onPress={handleScrollToTop} />
+              </View>
+            )}
             {showFunctionButtons ? (
               <FunctionButton
                 onAlbumPress={handleAlbumPress}

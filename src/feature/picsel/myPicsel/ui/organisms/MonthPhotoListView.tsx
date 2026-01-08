@@ -62,9 +62,9 @@ const MonthPhotoListView = ({
           paddingTop: 12,
         }}>
         {Array.from({ length: 2 }).map((__, yearIndex) => (
-          <View key={`skeleton-year-${yearIndex}`} className="mb-8 pt-1">
+          <View key={`skeleton-year-${yearIndex}`}>
             {/* Year Header Skeleton */}
-            <View className="mb-4 flex-row items-center justify-between">
+            <View className="mb-4 mt-2 flex-row items-center justify-between">
               <View className="h-7 w-20 rounded bg-gray-200" />
               <View className="h-5 w-16 rounded bg-gray-200" />
             </View>
@@ -116,9 +116,9 @@ const MonthPhotoListView = ({
         paddingTop: 12,
       }}>
       {yearGroups.map((yearGroup, yearIndex) => (
-        <View key={`${yearGroup.year}-${yearIndex}`} className="mb-8 pt-1">
+        <View key={`${yearGroup.year}-${yearIndex}`}>
           {/* Year Header with 전체보기 */}
-          <View className="mb-4 flex-row items-center justify-between">
+          <View className="mb-4 mt-2 flex-row items-center justify-between">
             <Text className="text-gray-900 headline-02">
               {yearGroup.year}년
             </Text>

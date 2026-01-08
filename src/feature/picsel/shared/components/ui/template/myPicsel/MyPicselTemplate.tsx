@@ -21,9 +21,7 @@ import PixelToolbar from '../../organisms/PixelToolbar';
 
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
 import MonthPhotoListView from '@/feature/picsel/myPicsel/ui/organisms/MonthPhotoListView';
-import PhotoListView, {
-  MOCK_PHOTOS,
-} from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
+import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import {
@@ -43,16 +41,15 @@ const MyPicselTemplate = () => {
   const [photoData, setPhotoData] = useState([]);
   const [showUpButton, setShowUpButton] = useState(false);
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
+  const [showFunctionButtons, setShowFunctionButtons] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
-  const [showFunctionButtons, setShowFunctionButtons] = useState(false);
-
   const { showToast } = useToastStore();
 
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 -> 이후 query로 교체
 
-  const totalPhotos = 19; // TODO: 실제 데이터로 교체
+  const totalPhotos = photoData.length;
   const hasPhotos = totalPhotos > 0;
 
   // 선택 모드 변경 시 바텀시트 제어
@@ -68,7 +65,11 @@ const MyPicselTemplate = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-      setPhotoData(MOCK_PHOTOS);
+      // MOCK_YEAR_DATA에서 모든 사진 가져오기
+      const allPhotos = MOCK_YEAR_DATA.flatMap(yearData =>
+        yearData.months.flatMap(month => month.photos),
+      );
+      setPhotoData(allPhotos);
     }, 2000); // 2초 후 로딩 완료
 
     return () => clearTimeout(timer);
@@ -85,7 +86,6 @@ const MyPicselTemplate = () => {
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = event.nativeEvent.contentOffset.y;
-    // 스크롤이 100px 이상 내려가면 버튼 표시
     setShowUpButton(offsetY > 100);
   };
 
@@ -126,26 +126,6 @@ const MyPicselTemplate = () => {
 
   const handleMove = () => {
     // 다른 픽셀북 화면으로 이동
-  };
-
-  const handleToggleFunctionButtons = () => {
-    setShowFunctionButtons(!showFunctionButtons);
-  };
-
-  const handleAlbumPress = () => {
-    console.log('앨범에서 선택');
-    // TODO: 앨범에서 사진 선택 로직
-    setShowFunctionButtons(false);
-  };
-
-  const handleQrPress = () => {
-    console.log('QR 스캔');
-    // TODO: QR 스캔 로직
-    setShowFunctionButtons(false);
-  };
-
-  const handleCloseFunctionButtons = () => {
-    setShowFunctionButtons(false);
   };
 
   const handleSort = (sortType: SortType) => {
@@ -193,6 +173,26 @@ const MyPicselTemplate = () => {
   const handleMonthViewMore = (month: string) => {
     console.log('더보기 클릭:', month);
     // TODO: 월별 상세 페이지로 이동
+  };
+
+  const handleToggleFunctionButtons = () => {
+    setShowFunctionButtons(!showFunctionButtons);
+  };
+
+  const handleAlbumPress = () => {
+    console.log('앨범에서 선택');
+    // TODO: 앨범에서 사진 선택 로직
+    setShowFunctionButtons(false);
+  };
+
+  const handleQrPress = () => {
+    console.log('QR 스캔');
+    // TODO: QR 스캔 로직
+    setShowFunctionButtons(false);
+  };
+
+  const handleCloseFunctionButtons = () => {
+    setShowFunctionButtons(false);
   };
 
   // Empty state (로딩 중이 아닐 때만 표시)
@@ -243,6 +243,7 @@ const MyPicselTemplate = () => {
       ) : (
         <PhotoListView
           ref={flatListRef}
+          data={photoData}
           isSelecting={isSelecting}
           selectedPhotos={selectedPhotos}
           onToggleSelection={handleToggleSelection}
@@ -274,7 +275,7 @@ const MyPicselTemplate = () => {
             {showUpButton && (
               <View
                 style={{
-                  marginBottom: showFunctionButtons ? 60 : 56,
+                  marginBottom: showFunctionButtons ? 56 : 56,
                 }}>
                 <UpButton onPress={handleScrollToTop} />
               </View>

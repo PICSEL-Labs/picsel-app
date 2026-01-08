@@ -12,9 +12,8 @@ import {
 
 import FunctionButton from '../../atoms/FunctionButton';
 
-import PhotoListView, {
-  MOCK_PHOTOS,
-} from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
+import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
 import FloatingAddButton from '@/feature/picsel/shared/components/ui/atoms/AddButton';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
@@ -45,7 +44,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
   const [showFunctionButtons, setShowFunctionButtons] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
-  const totalPhotos = 19; // TODO: 실제 데이터로 교체
+  const totalPhotos = photoData.length;
 
   // 선택 모드 변경 시 바텀시트 제어
   useEffect(() => {
@@ -56,15 +55,23 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     }
   }, [isSelecting]);
 
-  // 데이터 로딩
+  // 데이터 로딩 및 년도별 필터링
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-      setPhotoData(MOCK_PHOTOS);
+
+      // 해당 년도의 모든 사진 가져오기
+      const yearData = MOCK_YEAR_DATA.find(data => data.year === year);
+      if (yearData) {
+        const allPhotos = yearData.months.flatMap(month => month.photos);
+        setPhotoData(allPhotos);
+      } else {
+        setPhotoData([]);
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [year]);
 
   const handleScrollToTop = () => {
     setShowUpButton(false);
@@ -172,6 +179,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
       {/* 콘텐츠 */}
       <PhotoListView
         ref={flatListRef}
+        data={photoData}
         isSelecting={isSelecting}
         selectedPhotos={selectedPhotos}
         onToggleSelection={handleToggleSelection}
@@ -192,10 +200,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
           {/* Add Button - Right */}
           <View className="absolute bottom-11 right-4">
             {showUpButton && (
-              <View
-                style={{
-                  marginBottom: showFunctionButtons ? 60 : 56,
-                }}>
+              <View className="mb-14">
                 <UpButton onPress={handleScrollToTop} />
               </View>
             )}

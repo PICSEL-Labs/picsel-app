@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 import { useActionSheetStore } from '@/shared/store/ui/actionSheet';
 
 export interface ActionSheetOption {
@@ -23,16 +24,17 @@ const OPTION_WIDTH = Math.min(SCREEN_WIDTH - 32, 400);
 const ActionSheet = () => {
   const { visible, config, hideActionSheet } = useActionSheetStore();
   const insets = useSafeAreaInsets();
+  const { isVisible, currentConfig } = useModalAnimation(visible, config);
 
-  if (!visible || !config) {
+  if (!currentConfig) {
     return null;
   }
 
-  const { options, cancelText = '취소' } = config;
+  const { options, cancelText = '취소' } = currentConfig;
 
   return (
     <Modal
-      visible={visible}
+      visible={isVisible}
       transparent
       animationType="fade"
       onRequestClose={hideActionSheet}>
@@ -44,7 +46,7 @@ const ActionSheet = () => {
               style={{ paddingBottom: insets.bottom + 10 }}>
               {/* Options */}
               <View
-                className="mb-2 overflow-hidden rounded-[15px] bg-[#d7d7d7]"
+                className="mb-2 overflow-hidden rounded-[12px] bg-[#d7d7d7]"
                 style={{ width: OPTION_WIDTH }}>
                 {options.map((option, index) => (
                   <Fragment key={index}>
@@ -66,7 +68,7 @@ const ActionSheet = () => {
               {/* Cancel Button */}
               <Pressable
                 onPress={hideActionSheet}
-                className="rounded-[15px] bg-white py-4"
+                className="rounded-[12px] bg-white py-4"
                 style={{ width: OPTION_WIDTH }}>
                 <Text className="text-center text-[#007AFF] headline-02">
                   {cancelText}

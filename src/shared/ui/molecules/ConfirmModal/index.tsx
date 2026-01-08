@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 import { useConfirmModalStore } from '@/shared/store/ui/confirmModal';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -16,16 +17,22 @@ const MODAL_WIDTH = Math.min(SCREEN_WIDTH * 0.8, 400);
 
 const ConfirmModal = () => {
   const { visible, config, confirm, cancel } = useConfirmModalStore();
+  const { isVisible, currentConfig } = useModalAnimation(visible, config);
 
-  if (!visible || !config) {
+  if (!currentConfig) {
     return null;
   }
 
-  const { title, message, confirmText = '확인', cancelText = '취소' } = config;
+  const {
+    title,
+    message,
+    confirmText = '확인',
+    cancelText = '취소',
+  } = currentConfig;
 
   return (
     <Modal
-      visible={visible}
+      visible={isVisible}
       transparent
       animationType="fade"
       onRequestClose={cancel}>
@@ -33,7 +40,7 @@ const ConfirmModal = () => {
         <View className="flex-1 items-center justify-center bg-[#11111480]">
           <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
             <View
-              className="rounded-[24px] bg-white px-6 pb-6 pt-8"
+              className="rounded-[22px] bg-white px-6 pb-6 pt-8"
               style={{ width: MODAL_WIDTH }}>
               {/* Title */}
               {title && (
@@ -52,14 +59,14 @@ const ConfirmModal = () => {
               <View className="flex-row space-x-2">
                 <Pressable
                   onPress={cancel}
-                  className="flex-1 rounded-[12px] bg-gray-50 py-3">
+                  className="flex-1 rounded-[15px] bg-gray-50 py-3">
                   <Text className="text-center text-gray-600 headline-02">
                     {cancelText}
                   </Text>
                 </Pressable>
                 <Pressable
                   onPress={confirm}
-                  className="flex-1 rounded-[12px] bg-primary-pink py-3">
+                  className="flex-1 rounded-[15px] bg-primary-pink py-3">
                   <Text className="text-center text-white headline-02">
                     {confirmText}
                   </Text>

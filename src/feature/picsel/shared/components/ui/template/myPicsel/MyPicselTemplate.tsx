@@ -4,11 +4,9 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import {
   FlatList,
-  ImageBackground,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Pressable,
-  Text,
+  ScrollView,
   View,
 } from 'react-native';
 
@@ -20,10 +18,7 @@ import UploadTooltip from '../../molecule/UploadTooltip';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
-import {
-  MOCK_YEAR_DATA,
-  MonthGroup,
-} from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
 import MonthPhotoListView from '@/feature/picsel/myPicsel/ui/organisms/MonthPhotoListView';
 import PhotoListView, {
   MOCK_PHOTOS,
@@ -34,7 +29,6 @@ import {
   SortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
-import { IMAGES } from '@/shared/constants/images';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
@@ -49,6 +43,7 @@ const MyPicselTemplate = () => {
   const [showUpButton, setShowUpButton] = useState(false);
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
   const flatListRef = useRef<FlatList>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
   const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
   const { showToast } = useToastStore();
 
@@ -78,7 +73,11 @@ const MyPicselTemplate = () => {
 
   const handleScrollToTop = () => {
     setShowUpButton(false);
-    flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    if (dateFilter === 'year') {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+    } else {
+      flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -153,36 +152,24 @@ const MyPicselTemplate = () => {
     // 필터 변경 시 로딩 상태 시뮬레이션
     setIsLoading(true);
     setTimeout(() => {
+      setShowUpButton(false);
+    }, 10);
+
+    setTimeout(() => {
       setIsLoading(false);
+      setShowUpButton(false);
     }, 1000);
 
     // TODO: 날짜 필터링 로직 구현
   };
 
-  const handleViewAll = () => {
-    const currentYear = new Date().getFullYear().toString();
-    navigation.navigate('YearFolder', { year: currentYear });
+  const handleViewAllYear = (year: string) => {
+    navigation.navigate('YearFolder', { year });
   };
 
   const handleMonthViewMore = (month: string) => {
     console.log('더보기 클릭:', month);
     // TODO: 월별 상세 페이지로 이동
-  };
-
-  // Get all months from all years for the year view
-  const getAllMonthsGrouped = (): MonthGroup[] => {
-    const allMonths: MonthGroup[] = [];
-
-    MOCK_YEAR_DATA.forEach(yearData => {
-      yearData.months.forEach(monthGroup => {
-        allMonths.push({
-          month: `${yearData.year}년 ${monthGroup.month}`,
-          photos: monthGroup.photos,
-        });
-      });
-    });
-
-    return allMonths;
   };
 
   // Empty state (로딩 중이 아닐 때만 표시)
@@ -203,69 +190,56 @@ const MyPicselTemplate = () => {
   // Content state (로딩 중이거나 사진이 있을 때)
   return (
     <View className="flex-1">
-      <ImageBackground
+      {/* <ImageBackground
         source={IMAGES.SPARKLE.BACKGROUND_OPACITY}
         resizeMode="contain"
         imageStyle={{ alignSelf: 'center' }}
-        className="flex-1">
-        {/* 년 필터일 때 헤더 */}
-        {dateFilter === 'year' && (
-          <View className="flex-row items-center bg-white px-6 pb-2 pt-6">
-            <Text className="flex-1 text-gray-900 headline-02">
-              {new Date().getFullYear()}년
-            </Text>
-            <Pressable onPress={handleViewAll}>
-              <View className="flex-row items-center">
-                <Text className="mr-1 text-primary-pink body-rg-01">
-                  전체보기
-                </Text>
-              </View>
-            </Pressable>
-          </View>
-        )}
-
-        {/* 툴바 (년 필터가 아닐 때만 표시) */}
-        {dateFilter !== 'year' && (
-          <PixelToolbar
-            totalPhotos={totalPhotos}
-            isSelecting={isSelecting}
-            selectedCount={selectedPhotos.length}
-            onToggleSelecting={() => setIsSelecting(!isSelecting)}
-            onSelectAll={handleSelectAll}
-            onClose={() => {
-              setIsSelecting(false);
-              setSelectedPhotos([]);
-            }}
-            onSort={showSortSheet}
-            onFilter={showBrandFilterSheet}
-          />
-        )}
-
-        {/* 콘텐츠 */}
-        {dateFilter === 'year' ? (
-          <MonthPhotoListView
-            monthGroups={getAllMonthsGrouped()}
-            isLoading={isLoading}
-            onViewMore={handleMonthViewMore}
-          />
-        ) : (
-          <PhotoListView
-            ref={flatListRef}
-            isSelecting={isSelecting}
-            selectedPhotos={selectedPhotos}
-            onToggleSelection={handleToggleSelection}
-            isLoading={isLoading}
-            onScroll={handleScroll}
-          />
-        )}
-
-        {/* Selection Bottom Sheet */}
-        <SelectionBottomSheet
-          ref={selectionBottomSheetRef}
-          onDelete={handleDelete}
-          onMove={handleMove}
+        className="flex-1"> */}
+      {/* 툴바 (년 필터가 아닐 때만 표시) */}
+      {dateFilter !== 'year' && (
+        <PixelToolbar
+          totalPhotos={totalPhotos}
+          isSelecting={isSelecting}
+          selectedCount={selectedPhotos.length}
+          onToggleSelecting={() => setIsSelecting(!isSelecting)}
+          onSelectAll={handleSelectAll}
+          onClose={() => {
+            setIsSelecting(false);
+            setSelectedPhotos([]);
+          }}
+          onSort={showSortSheet}
+          onFilter={showBrandFilterSheet}
         />
-      </ImageBackground>
+      )}
+
+      {/* 콘텐츠 */}
+      {dateFilter === 'year' ? (
+        <MonthPhotoListView
+          scrollViewRef={scrollViewRef}
+          onScroll={handleScroll}
+          yearGroups={MOCK_YEAR_DATA}
+          isLoading={isLoading}
+          onViewMore={handleMonthViewMore}
+          onViewAllYear={handleViewAllYear}
+        />
+      ) : (
+        <PhotoListView
+          ref={flatListRef}
+          isSelecting={isSelecting}
+          selectedPhotos={selectedPhotos}
+          onToggleSelection={handleToggleSelection}
+          isLoading={isLoading}
+          onScroll={handleScroll}
+        />
+      )}
+
+      {/* Selection Bottom Sheet */}
+      <SelectionBottomSheet
+        ref={selectionBottomSheetRef}
+        onDelete={handleDelete}
+        onMove={handleMove}
+      />
+      {/* </ImageBackground> */}
 
       {/* Floating Buttons - 항상 하단 고정 */}
       {!isSelecting && (

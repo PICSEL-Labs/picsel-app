@@ -30,7 +30,7 @@ const ConfirmModal = () => {
       animationType="fade"
       onRequestClose={cancel}>
       <TouchableWithoutFeedback onPress={cancel}>
-        <View className="flex-1 items-center justify-center bg-[#111114]/50">
+        <View className="flex-1 items-center justify-center bg-[#11111480]">
           <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
             <View
               className="rounded-[24px] bg-white px-6 pb-6 pt-8"

@@ -10,7 +10,6 @@ export interface SortOption {
 export const SORT_OPTIONS: SortOption[] = [
   { type: 'latest', label: '최신 순' },
   { type: 'date', label: '오래된 순' },
-  { type: 'name', label: '가나다 순' },
 ];
 
 interface UseSortActionSheetParams {

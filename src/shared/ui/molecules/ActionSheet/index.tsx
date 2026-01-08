@@ -37,7 +37,7 @@ const ActionSheet = () => {
       animationType="fade"
       onRequestClose={hideActionSheet}>
       <TouchableWithoutFeedback onPress={hideActionSheet}>
-        <View className="flex-1 justify-end bg-[#111114]/30">
+        <View className="flex-1 justify-end bg-[#11111480]">
           <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
             <View
               className="mx-4"

@@ -1,8 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { Fragment, ReactNode } from 'react';
 
-import { ImageBackground, View } from 'react-native';
-
-import { IMAGES } from '@/shared/constants/images';
+import { View } from 'react-native';
 
 interface Props {
   children: ReactNode;
@@ -11,17 +9,12 @@ interface Props {
 
 const EmptyStateLayout = ({ children, floatingButton }: Props) => {
   return (
-    <ImageBackground
-      source={IMAGES.SPARKLE.BACKGROUND_OPACITY}
-      className="flex-1"
-      resizeMode="contain"
-      imageStyle={{ alignSelf: 'center' }}>
+    <Fragment>
       {children}
-
       <View className="absolute -bottom-4 right-4 space-y-5">
         {floatingButton}
       </View>
-    </ImageBackground>
+    </Fragment>
   );
 };
 

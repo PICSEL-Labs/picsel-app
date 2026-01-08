@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 
 import { cn } from '@/shared/lib/cn';
-import { defaultButtonShadow } from '@/styles/shadows';
+import { defaultButtonShadow, insetShadow } from '@/styles/shadows';
 
 export type DateFilterType = 'year' | 'month' | 'all';
 
@@ -76,15 +76,18 @@ const DateFilterButton = ({ selected, onSelect }: Props) => {
     <View
       className="flex h-[40px] w-[200px] flex-row items-center justify-between rounded-full bg-[#FFFFFFE5] p-1"
       style={{
-        boxShadow:
-          '0 -2px 8px 0 rgba(0, 0, 0, 0.05) inset, 0 -2px 8px 2px rgba(0, 0, 0, 0.10), 2px 4px 8px 0 rgba(255, 255, 255, 0.25) inset',
+        boxShadow: insetShadow.dateFilter,
       }}>
       {filters.map((filter, index) => (
         <FilterTab
           key={filter.type}
           filter={filter}
           isSelected={selected === filter.type}
-          onPress={() => onSelect(filter.type)}
+          onPress={() => {
+            if (selected !== filter.type) {
+              onSelect(filter.type);
+            }
+          }}
           isLast={index === filters.length - 1}
         />
       ))}

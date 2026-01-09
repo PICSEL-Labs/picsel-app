@@ -20,8 +20,9 @@ import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomShe
 import PixelToolbar from '../../organisms/PixelToolbar';
 
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
-import MonthPhotoListView from '@/feature/picsel/myPicsel/ui/organisms/MonthPhotoListView';
+import MonthFilterView from '@/feature/picsel/myPicsel/ui/organisms/MonthFilterView';
 import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
+import YearFilterView from '@/feature/picsel/myPicsel/ui/organisms/YearFilterView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import {
@@ -170,9 +171,8 @@ const MyPicselTemplate = () => {
     navigation.navigate('YearFolder', { year });
   };
 
-  const handleMonthViewMore = (month: string) => {
-    console.log('더보기 클릭:', month);
-    // TODO: 월별 상세 페이지로 이동
+  const handleViewMonthFolder = (year: string, month: string) => {
+    navigation.navigate('MonthFolder', { year, month });
   };
 
   const handleToggleFunctionButtons = () => {
@@ -213,8 +213,8 @@ const MyPicselTemplate = () => {
   // Content state (로딩 중이거나 사진이 있을 때)
   return (
     <View className="flex-1">
-      {/* 툴바 (년 필터가 아닐 때만 표시) */}
-      {dateFilter !== 'year' && (
+      {/* 툴바 (년/월 필터가 아닐 때만 표시) */}
+      {dateFilter === 'all' && (
         <PixelToolbar
           totalPhotos={totalPhotos}
           isSelecting={isSelecting}
@@ -232,13 +232,21 @@ const MyPicselTemplate = () => {
 
       {/* 콘텐츠 */}
       {dateFilter === 'year' ? (
-        <MonthPhotoListView
+        <YearFilterView
           scrollViewRef={scrollViewRef}
           onScroll={handleScroll}
           yearGroups={MOCK_YEAR_DATA}
           isLoading={isLoading}
-          onViewMore={handleMonthViewMore}
+          onViewMore={handleViewMonthFolder}
           onViewAllYear={handleViewAllYear}
+        />
+      ) : dateFilter === 'month' ? (
+        <MonthFilterView
+          scrollViewRef={scrollViewRef}
+          onScroll={handleScroll}
+          yearGroups={MOCK_YEAR_DATA}
+          isLoading={isLoading}
+          onViewMonthFolder={handleViewMonthFolder}
         />
       ) : (
         <PhotoListView
@@ -275,7 +283,7 @@ const MyPicselTemplate = () => {
             {showUpButton && (
               <View
                 style={{
-                  marginBottom: showFunctionButtons ? 56 : 56,
+                  marginBottom: showFunctionButtons ? 200 : 56,
                 }}>
                 <UpButton onPress={handleScrollToTop} />
               </View>

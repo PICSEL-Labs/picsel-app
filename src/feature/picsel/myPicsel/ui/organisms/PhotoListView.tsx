@@ -30,6 +30,7 @@ interface Props {
   isLoading: boolean;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   data: Photo[];
+  showYear?: boolean;
 }
 
 const HORIZONTAL_PADDING = 24; // 좌우 패딩 줄임
@@ -44,6 +45,7 @@ const PhotoListView = forwardRef<FlatList, Props>(
       isLoading = false,
       onScroll,
       data,
+      showYear = true,
     },
     ref,
   ) => {
@@ -62,7 +64,10 @@ const PhotoListView = forwardRef<FlatList, Props>(
       const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
       const dayOfWeek = dayNames[date.getDay()];
 
-      return `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
+      if (showYear) {
+        return `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
+      }
+      return `${month}월 ${day}일 (${dayOfWeek})`;
     };
 
     const getSelectionNumber = (photoId: string) => {

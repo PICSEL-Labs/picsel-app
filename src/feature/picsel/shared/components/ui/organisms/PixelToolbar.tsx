@@ -34,7 +34,7 @@ const PixelToolbar = ({
 
   if (isSelecting) {
     return (
-      <View className="bg-white px-6 py-4">
+      <View className="bg-white/90 px-6 py-4">
         {/* 선택 모드 헤더 */}
         <View className="mb-3 flex-row items-center justify-between">
           <Pressable
@@ -63,7 +63,7 @@ const PixelToolbar = ({
   }
 
   return (
-    <View className="flex-row items-center justify-between bg-white px-6 py-4">
+    <View className="flex-row items-center justify-between bg-white/90 px-6 py-4">
       <Text className="text-gray-900 body-rg-03">전체 {displayCount}</Text>
 
       <View className="flex-row items-center space-x-4">

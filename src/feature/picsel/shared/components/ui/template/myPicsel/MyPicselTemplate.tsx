@@ -8,8 +8,8 @@ import FloatingAddButton from '../../atoms/AddButton';
 import DateFilterButton, { DateFilterType } from '../../atoms/DateFilterButton';
 import FunctionButton from '../../atoms/FunctionButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
-import EmptyMessage from '../../molecule/EmptyMessage';
-import UploadTooltip from '../../molecule/UploadTooltip';
+import EmptyMessage from '../../molecules/EmptyMessage';
+import UploadTooltip from '../../molecules/UploadTooltip';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../organisms/PixelToolbar';
 

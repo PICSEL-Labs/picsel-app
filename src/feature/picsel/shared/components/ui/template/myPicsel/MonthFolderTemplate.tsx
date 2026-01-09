@@ -1,34 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useNavigation } from '@react-navigation/native';
-import {
-  FlatList,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  Pressable,
-  Text,
-  View,
-} from 'react-native';
-
-import FunctionButton from '../../atoms/FunctionButton';
+import React, { useEffect, useState } from 'react';
 
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
 import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
-import FloatingAddButton from '@/feature/picsel/shared/components/ui/atoms/AddButton';
-import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
+import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/FloatingActionButtons';
+import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
+import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
+import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
+import { useSelectionBottomSheet } from '@/feature/picsel/shared/hooks/useSelectionBottomSheet';
 import {
   SortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import ArrowIcons from '@/shared/icons/ArrowIcons';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
-import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
-import { useToastStore } from '@/shared/store/ui/toast';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface Props {
   year: string;
@@ -37,27 +25,37 @@ interface Props {
 }
 
 const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
-  const [isSelecting, setIsSelecting] = useState(false);
   const [photoData, setPhotoData] = useState([]);
-  const [showUpButton, setShowUpButton] = useState(false);
-  const flatListRef = useRef<FlatList>(null);
-  const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
-  const { showToast } = useToastStore();
-  const [showFunctionButtons, setShowFunctionButtons] = useState(false);
-
   const [isLoading, setIsLoading] = useState(true);
+
   const totalPhotos = photoData.length;
 
-  // 선택 모드 변경 시 바텀시트 제어
-  useEffect(() => {
-    if (isSelecting) {
-      selectionBottomSheetRef.current?.present();
-    } else {
-      selectionBottomSheetRef.current?.dismiss();
-    }
-  }, [isSelecting]);
+  const {
+    isSelecting,
+    selectedPhotos,
+    setIsSelecting,
+    toggleSelection,
+    selectAll,
+    resetSelection,
+  } = usePhotoSelection();
+
+  const { showUpButton, flatListRef, handleScroll, scrollToTop } =
+    useScrollWithUpButton();
+
+  const {
+    showFunctionButtons,
+    toggleFunctionButtons,
+    handleAlbumPress,
+    handleQrPress,
+    closeFunctionButtons,
+  } = useFunctionButtons();
+
+  const { handleDelete, handleMove } = usePhotoActions({
+    selectedPhotos,
+    onDeleteSuccess: resetSelection,
+  });
+
+  const { selectionBottomSheetRef } = useSelectionBottomSheet(isSelecting);
 
   // 데이터 로딩 및 월별 필터링
   useEffect(() => {
@@ -81,52 +79,6 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     return () => clearTimeout(timer);
   }, [year, month]);
 
-  const handleScrollToTop = () => {
-    setShowUpButton(false);
-    flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
-  };
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    setShowUpButton(offsetY > 100);
-  };
-
-  const handleToggleSelection = (photoId: string) => {
-    if (selectedPhotos.includes(photoId)) {
-      setSelectedPhotos(selectedPhotos.filter(id => id !== photoId));
-    } else {
-      setSelectedPhotos([...selectedPhotos, photoId]);
-    }
-  };
-
-  const handleSelectAll = () => {
-    if (selectedPhotos.length === totalPhotos) {
-      setSelectedPhotos([]);
-    } else {
-      const allPhotoIds = photoData.map(photo => photo.id);
-      setSelectedPhotos(allPhotoIds);
-    }
-  };
-
-  const handleDelete = () => {
-    if (selectedPhotos.length === 0) {
-      showToast('삭제할 픽셀북을 선택해주세요', 60);
-      return;
-    }
-
-    showDeleteConfirmModal(selectedPhotos.length, handleConfirmDelete);
-  };
-
-  const handleConfirmDelete = () => {
-    showToast(`${selectedPhotos.length}장의 사진을 삭제했어요`, 60);
-    setSelectedPhotos([]);
-    setIsSelecting(false);
-  };
-
-  const handleMove = () => {
-    // 다른 픽셀북 화면으로 이동
-  };
-
   const handleSort = (sortType: SortType) => {
     console.log('정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
@@ -136,36 +88,10 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     onSort: handleSort,
   });
 
-  const handleToggleFunctionButtons = () => {
-    setShowFunctionButtons(!showFunctionButtons);
-  };
-
-  const handleAlbumPress = () => {
-    setShowFunctionButtons(false);
-    navigation.navigate('PhotoUpload');
-  };
-
-  const handleQrPress = () => {
-    setShowFunctionButtons(false);
-    navigation.navigate('QrScan');
-  };
-
-  const handleCloseFunctionButtons = () => {
-    setShowFunctionButtons(false);
-  };
-
   return (
     <ScreenLayout>
       {/* 헤더 */}
-      <View className="flex-row items-center bg-white px-6 pt-4">
-        <Pressable onPress={onBack}>
-          <ArrowIcons shape="back" width={24} height={24} />
-        </Pressable>
-        <Text className="flex-1 text-center text-gray-900 headline-03">
-          {year}년 {month}
-        </Text>
-        <View className="w-6" />
-      </View>
+      <FolderHeader title={`${year}년 ${month}`} onBack={onBack} />
 
       {/* 툴바 */}
       <PixelToolbar
@@ -173,25 +99,22 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}
         onToggleSelecting={() => setIsSelecting(!isSelecting)}
-        onSelectAll={handleSelectAll}
-        onClose={() => {
-          setIsSelecting(false);
-          setSelectedPhotos([]);
-        }}
+        onSelectAll={() => selectAll(totalPhotos, photoData)}
+        onClose={resetSelection}
         onSort={showSortSheet}
         onFilter={showBrandFilterSheet}
       />
 
       {/* 콘텐츠 */}
       <PhotoListView
-        showYear={false}
         ref={flatListRef}
         data={photoData}
         isSelecting={isSelecting}
         selectedPhotos={selectedPhotos}
-        onToggleSelection={handleToggleSelection}
+        onToggleSelection={toggleSelection}
         isLoading={isLoading}
         onScroll={handleScroll}
+        showYear={false}
       />
 
       {/* Selection Bottom Sheet */}
@@ -201,28 +124,17 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         onMove={handleMove}
       />
 
-      {/* Floating Buttons - 항상 하단 고정 */}
-      {!isSelecting && (
-        <>
-          {/* Add Button - Right */}
-          <View className="absolute bottom-11 right-4">
-            {showUpButton && (
-              <View className="mb-14">
-                <UpButton onPress={handleScrollToTop} />
-              </View>
-            )}
-            {showFunctionButtons ? (
-              <FunctionButton
-                onAlbumPress={handleAlbumPress}
-                onQrPress={handleQrPress}
-                onClose={handleCloseFunctionButtons}
-              />
-            ) : (
-              <FloatingAddButton onPress={handleToggleFunctionButtons} />
-            )}
-          </View>
-        </>
-      )}
+      {/* Floating Buttons */}
+      <FloatingActionButtons
+        isSelecting={isSelecting}
+        showUpButton={showUpButton}
+        showFunctionButtons={showFunctionButtons}
+        onScrollToTop={scrollToTop}
+        onToggleFunctionButtons={toggleFunctionButtons}
+        onAlbumPress={handleAlbumPress}
+        onQrPress={handleQrPress}
+        onCloseFunctionButtons={closeFunctionButtons}
+      />
     </ScreenLayout>
   );
 };

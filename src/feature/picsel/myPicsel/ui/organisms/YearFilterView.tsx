@@ -1,30 +1,29 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 
 import {
-  Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Pressable,
   ScrollView,
   Text,
   View,
-  useWindowDimensions,
 } from 'react-native';
 
 import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../constants/photoGrid';
 
 import { YearGroup } from './MOCK_YEAR_DATA';
 
-import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecule/FilterViewSkeleton';
+import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecules/FilterViewSkeleton';
+import PhotoCard from '@/feature/picsel/shared/components/ui/molecules/PhotoCard';
+import { useImageDimensions } from '@/feature/picsel/shared/hooks/useImageDimensions';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
-import SparkleImages from '@/shared/images/Sparkle';
 
 interface Props {
   yearGroups: YearGroup[];
   isLoading: boolean;
   onViewMore: (year: string, month: string) => void;
   onViewAllYear: (year: string) => void;
-  scrollViewRef: React.RefObject<ScrollView>;
+  scrollViewRef: RefObject<ScrollView>;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
 
@@ -36,20 +35,12 @@ const YearFilterView = ({
   scrollViewRef,
   onScroll,
 }: Props) => {
-  const { width: screenWidth } = useWindowDimensions();
-
-  const imageWidth = (screenWidth - HORIZONTAL_PADDING * 2 - ITEM_SPACING) / 2;
-  const imageHeight = imageWidth * 1.5;
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-    const dayOfWeek = dayNames[date.getDay()];
-
-    return `${month}월 ${day}일 (${dayOfWeek})`;
-  };
+  const { imageWidth, imageHeight } = useImageDimensions({
+    horizontalPadding: HORIZONTAL_PADDING,
+    itemSpacing: ITEM_SPACING,
+    columns: 2,
+    aspectRatio: 1.5,
+  });
 
   if (isLoading) {
     return <FilterViewSkeleton type="year" />;
@@ -68,7 +59,7 @@ const YearFilterView = ({
       }}>
       {yearGroups.map((yearGroup, yearIndex) => (
         <View key={`${yearGroup.year}-${yearIndex}`}>
-          {/* Year Header with 전체보기 */}
+          {/* 년 전체보기 */}
           <View className="mb-4 mt-2 flex-row items-center justify-between">
             <Text className="text-gray-900 headline-02">
               {yearGroup.year}년
@@ -82,10 +73,10 @@ const YearFilterView = ({
             </Pressable>
           </View>
 
-          {/* Month Groups */}
+          {/* 월 */}
           {yearGroup.months.map((monthGroup, monthIndex) => (
             <View key={`${monthGroup.month}-${monthIndex}`} className="mb-6">
-              {/* Month Header with Arrow */}
+              {/* 월 타이틀 */}
               <View className="mb-3 flex-row items-center justify-between">
                 <Text className="text-gray-900 headline-02">
                   {monthGroup.month}
@@ -97,47 +88,17 @@ const YearFilterView = ({
                 </Pressable>
               </View>
 
-              {/* Horizontal Scroll List */}
+              {/* 스크롤뷰 */}
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View className="flex-row">
                   {monthGroup.photos.map(photo => (
-                    <View
-                      key={photo.id}
-                      className="mr-3"
-                      style={{
-                        width: imageWidth,
-                      }}>
-                      {/* 날짜 */}
-                      <Text className="mb-1 text-gray-900 headline-01">
-                        {formatDate(photo.date)}
-                      </Text>
-
-                      {/* 사진 */}
-                      <View className="relative">
-                        <View
-                          className="overflow-hidden"
-                          style={{ width: imageWidth, height: imageHeight }}>
-                          <Image
-                            source={{ uri: photo.uri }}
-                            style={{ width: imageWidth, height: imageHeight }}
-                            resizeMode="cover"
-                          />
-                        </View>
-
-                        {/* 매장명 */}
-                        <View className="mt-1 flex-row items-center">
-                          <SparkleImages
-                            shape="icon-one"
-                            height={24}
-                            width={24}
-                          />
-                          <Text
-                            className="ml-1 text-gray-900 body-rg-03"
-                            numberOfLines={1}>
-                            {photo.storeName}
-                          </Text>
-                        </View>
-                      </View>
+                    <View key={photo.id} className="mr-3">
+                      <PhotoCard
+                        photo={photo}
+                        imageWidth={imageWidth}
+                        imageHeight={imageHeight}
+                        showYear={false}
+                      />
                     </View>
                   ))}
                 </View>

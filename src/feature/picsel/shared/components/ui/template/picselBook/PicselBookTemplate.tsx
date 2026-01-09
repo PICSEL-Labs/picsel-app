@@ -3,7 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
-import EmptyMessage from '../../molecule/EmptyMessage';
+import EmptyMessage from '../../molecules/EmptyMessage';
 
 import AddButton from '@/feature/picsel/shared/components/ui/atoms/AddButton';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';

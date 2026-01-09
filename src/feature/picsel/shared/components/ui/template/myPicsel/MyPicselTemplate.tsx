@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
-import {
-  FlatList,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 
 import FloatingAddButton from '../../atoms/AddButton';
 import DateFilterButton, { DateFilterType } from '../../atoms/DateFilterButton';
@@ -24,34 +18,61 @@ import MonthFilterView from '@/feature/picsel/myPicsel/ui/organisms/MonthFilterV
 import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
 import YearFilterView from '@/feature/picsel/myPicsel/ui/organisms/YearFilterView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
+import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
+import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
+import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
 import {
   SortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
-import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
-import { useToastStore } from '@/shared/store/ui/toast';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 const MyPicselTemplate = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { handleAddPicsel } = usePicselBookActions();
-  const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
-  const [isSelecting, setIsSelecting] = useState(false);
-  const [photoData, setPhotoData] = useState([]);
-  const [showUpButton, setShowUpButton] = useState(false);
-  const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
-  const [showFunctionButtons, setShowFunctionButtons] = useState(false);
-  const flatListRef = useRef<FlatList>(null);
-  const scrollViewRef = useRef<ScrollView>(null);
   const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
-  const { showToast } = useToastStore();
 
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 -> 이후 query로 교체
+  const [photoData, setPhotoData] = useState([]);
+  const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
+  const [isLoading, setIsLoading] = useState(true);
 
   const totalPhotos = photoData.length;
   const hasPhotos = totalPhotos > 0;
+
+  const {
+    isSelecting,
+    selectedPhotos,
+    setIsSelecting,
+    toggleSelection,
+    selectAll,
+    resetSelection,
+  } = usePhotoSelection();
+
+  const {
+    showUpButton,
+    flatListRef,
+    scrollViewRef,
+    handleScroll,
+    scrollToTop,
+  } = useScrollWithUpButton({
+    useScrollView: dateFilter === 'year' || dateFilter === 'month',
+  });
+
+  const {
+    showFunctionButtons,
+    toggleFunctionButtons,
+    handleAlbumPress,
+    handleQrPress,
+    closeFunctionButtons,
+  } = useFunctionButtons();
+
+  const { handleDelete, handleMove } = usePhotoActions({
+    selectedPhotos,
+    onDeleteSuccess: resetSelection,
+  });
 
   // 선택 모드 변경 시 바텀시트 제어
   useEffect(() => {
@@ -76,71 +97,14 @@ const MyPicselTemplate = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleScrollToTop = () => {
-    setShowUpButton(false);
-    if (dateFilter === 'year') {
-      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-    } else {
-      flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
-    }
-  };
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    setShowUpButton(offsetY > 100);
-  };
-
-  const handleToggleSelection = (photoId: string) => {
-    if (selectedPhotos.includes(photoId)) {
-      setSelectedPhotos(selectedPhotos.filter(id => id !== photoId));
-    } else {
-      setSelectedPhotos([...selectedPhotos, photoId]);
-    }
-  };
-
-  const handleSelectAll = () => {
-    if (selectedPhotos.length === totalPhotos) {
-      // 전체 선택 상태면 전체 해제
-      setSelectedPhotos([]);
-    } else {
-      // 전체 선택
-      const allPhotoIds = photoData.map(photo => photo.id);
-      setSelectedPhotos(allPhotoIds);
-    }
-  };
-
-  const handleDelete = () => {
-    if (selectedPhotos.length === 0) {
-      showToast('삭제할 픽셀북을 선택해주세요', 60);
-      return;
-    }
-
-    showDeleteConfirmModal(selectedPhotos.length, handleConfirmDelete);
-  };
-
-  const handleConfirmDelete = () => {
-    // TODO: 실제 삭제 로직
-    showToast(`${selectedPhotos.length}장의 사진을 삭제했어요`, 60);
-    setSelectedPhotos([]);
-    setIsSelecting(false);
-  };
-
-  const handleMove = () => {
-    // 다른 픽셀북 화면으로 이동
-  };
-
   const handleSort = (sortType: SortType) => {
-    console.log('정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
     switch (sortType) {
       case 'latest':
-        // 최근 생성 순 정렬
         break;
       case 'name':
-        // 이름 순 정렬
         break;
       case 'date':
-        // 사진 게재 순 정렬
         break;
     }
   };
@@ -151,20 +115,11 @@ const MyPicselTemplate = () => {
 
   const handleDateFilterChange = (type: DateFilterType) => {
     setDateFilter(type);
-    console.log('날짜 필터:', type);
 
-    // 필터 변경 시 로딩 상태 시뮬레이션
     setIsLoading(true);
     setTimeout(() => {
-      setShowUpButton(false);
-    }, 10);
-
-    setTimeout(() => {
       setIsLoading(false);
-      setShowUpButton(false);
     }, 1000);
-
-    // TODO: 날짜 필터링 로직 구현
   };
 
   const handleViewAllYear = (year: string) => {
@@ -173,24 +128,6 @@ const MyPicselTemplate = () => {
 
   const handleViewMonthFolder = (year: string, month: string) => {
     navigation.navigate('MonthFolder', { year, month });
-  };
-
-  const handleToggleFunctionButtons = () => {
-    setShowFunctionButtons(!showFunctionButtons);
-  };
-
-  const handleAlbumPress = () => {
-    setShowFunctionButtons(false);
-    navigation.navigate('PhotoUpload');
-  };
-
-  const handleQrPress = () => {
-    setShowFunctionButtons(false);
-    navigation.navigate('QrScan');
-  };
-
-  const handleCloseFunctionButtons = () => {
-    setShowFunctionButtons(false);
   };
 
   // Empty state (로딩 중이 아닐 때만 표시)
@@ -218,11 +155,8 @@ const MyPicselTemplate = () => {
           isSelecting={isSelecting}
           selectedCount={selectedPhotos.length}
           onToggleSelecting={() => setIsSelecting(!isSelecting)}
-          onSelectAll={handleSelectAll}
-          onClose={() => {
-            setIsSelecting(false);
-            setSelectedPhotos([]);
-          }}
+          onSelectAll={() => selectAll(totalPhotos, photoData)}
+          onClose={resetSelection}
           onSort={showSortSheet}
           onFilter={showBrandFilterSheet}
         />
@@ -252,7 +186,7 @@ const MyPicselTemplate = () => {
           data={photoData}
           isSelecting={isSelecting}
           selectedPhotos={selectedPhotos}
-          onToggleSelection={handleToggleSelection}
+          onToggleSelection={toggleSelection}
           isLoading={isLoading}
           onScroll={handleScroll}
         />
@@ -283,17 +217,17 @@ const MyPicselTemplate = () => {
                 style={{
                   marginBottom: showFunctionButtons ? 200 : 56,
                 }}>
-                <UpButton onPress={handleScrollToTop} />
+                <UpButton onPress={scrollToTop} />
               </View>
             )}
             {showFunctionButtons ? (
               <FunctionButton
                 onAlbumPress={handleAlbumPress}
                 onQrPress={handleQrPress}
-                onClose={handleCloseFunctionButtons}
+                onClose={closeFunctionButtons}
               />
             ) : (
-              <FloatingAddButton onPress={handleToggleFunctionButtons} />
+              <FloatingAddButton onPress={toggleFunctionButtons} />
             )}
           </View>
         </>

@@ -13,7 +13,7 @@ import {
 
 import { YearGroup } from './MOCK_YEAR_DATA';
 
-import PhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/PhotoSkeleton';
+import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecule/FilterViewSkeleton';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import SparkleImages from '@/shared/images/Sparkle';
 
@@ -51,42 +51,7 @@ const MonthFilterView = ({
   };
 
   if (isLoading) {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: HORIZONTAL_PADDING,
-          paddingBottom: 20,
-          paddingTop: 12,
-        }}>
-        {Array.from({ length: 3 }).map((__, monthIndex) => (
-          <View key={`skeleton-month-${monthIndex}`} className="mb-6">
-            {/* Month Header Skeleton */}
-            <View className="mb-3 flex-row items-center justify-between">
-              <View className="h-6 w-24 rounded bg-gray-200" />
-              <View className="h-5 w-5 rounded bg-gray-200" />
-            </View>
-
-            {/* Horizontal Photos Skeleton */}
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="flex-row">
-                {Array.from({ length: 4 }).map((__, photoIndex) => (
-                  <View
-                    key={`skeleton-photo-${photoIndex}`}
-                    className="mr-3"
-                    style={{ width: imageWidth }}>
-                    <PhotoSkeleton
-                      imageWidth={imageWidth}
-                      imageHeight={imageHeight}
-                    />
-                  </View>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-        ))}
-      </ScrollView>
-    );
+    return <FilterViewSkeleton type="month" />;
   }
 
   return (
@@ -135,7 +100,7 @@ const MonthFilterView = ({
                       </Text>
 
                       {/* 사진 */}
-                      <Pressable className="relative">
+                      <View className="relative">
                         <View
                           className="overflow-hidden"
                           style={{ width: imageWidth, height: imageHeight }}>
@@ -159,7 +124,7 @@ const MonthFilterView = ({
                             {photo.storeName}
                           </Text>
                         </View>
-                      </Pressable>
+                      </View>
                     </View>
                   ))}
                 </View>

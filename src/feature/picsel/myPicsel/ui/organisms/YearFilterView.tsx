@@ -11,9 +11,11 @@ import {
   useWindowDimensions,
 } from 'react-native';
 
+import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../constants/photoGrid';
+
 import { YearGroup } from './MOCK_YEAR_DATA';
 
-import PhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/PhotoSkeleton';
+import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecule/FilterViewSkeleton';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import SparkleImages from '@/shared/images/Sparkle';
 
@@ -25,9 +27,6 @@ interface Props {
   scrollViewRef: React.RefObject<ScrollView>;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
-
-const HORIZONTAL_PADDING = 24;
-const ITEM_SPACING = 8;
 
 const YearFilterView = ({
   yearGroups,
@@ -53,53 +52,7 @@ const YearFilterView = ({
   };
 
   if (isLoading) {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: HORIZONTAL_PADDING,
-          paddingBottom: 20,
-          paddingTop: 12,
-        }}>
-        {Array.from({ length: 2 }).map((__, yearIndex) => (
-          <View key={`skeleton-year-${yearIndex}`}>
-            {/* Year Header Skeleton with 전체보기 */}
-            <View className="mb-4 mt-2 flex-row items-center justify-between">
-              <View className="h-7 w-20 rounded bg-gray-200" />
-              <View className="h-5 w-16 rounded bg-gray-200" />
-            </View>
-
-            {/* Month Sections Skeleton */}
-            {Array.from({ length: 3 }).map((__, monthIndex) => (
-              <View key={`skeleton-month-${monthIndex}`} className="mb-6">
-                {/* Month Header Skeleton */}
-                <View className="mb-3 flex-row items-center justify-between">
-                  <View className="h-6 w-12 rounded bg-gray-200" />
-                  <View className="h-5 w-5 rounded bg-gray-200" />
-                </View>
-
-                {/* Horizontal Photos Skeleton */}
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View className="flex-row">
-                    {Array.from({ length: 4 }).map((__, photoIndex) => (
-                      <View
-                        key={`skeleton-photo-${photoIndex}`}
-                        className="mr-3"
-                        style={{ width: imageWidth }}>
-                        <PhotoSkeleton
-                          imageWidth={imageWidth}
-                          imageHeight={imageHeight}
-                        />
-                      </View>
-                    ))}
-                  </View>
-                </ScrollView>
-              </View>
-            ))}
-          </View>
-        ))}
-      </ScrollView>
-    );
+    return <FilterViewSkeleton type="year" />;
   }
 
   return (
@@ -160,7 +113,7 @@ const YearFilterView = ({
                       </Text>
 
                       {/* 사진 */}
-                      <Pressable className="relative">
+                      <View className="relative">
                         <View
                           className="overflow-hidden"
                           style={{ width: imageWidth, height: imageHeight }}>
@@ -184,7 +137,7 @@ const YearFilterView = ({
                             {photo.storeName}
                           </Text>
                         </View>
-                      </Pressable>
+                      </View>
                     </View>
                   ))}
                 </View>

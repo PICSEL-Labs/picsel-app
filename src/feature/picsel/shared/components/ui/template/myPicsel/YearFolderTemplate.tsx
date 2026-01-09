@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
 import {
   FlatList,
   NativeScrollEvent,
@@ -27,6 +28,7 @@ import ArrowIcons from '@/shared/icons/ArrowIcons';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
+import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface Props {
   year: string;
@@ -34,6 +36,7 @@ interface Props {
 }
 
 const YearFolderTemplate = ({ year, onBack }: Props) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
   const [photoData, setPhotoData] = useState([]);
@@ -133,15 +136,13 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
   };
 
   const handleAlbumPress = () => {
-    console.log('앨범에서 선택');
-    // TODO: 앨범에서 사진 선택 로직
     setShowFunctionButtons(false);
+    navigation.navigate('PhotoUpload');
   };
 
   const handleQrPress = () => {
-    console.log('QR 스캔');
-    // TODO: QR 스캔 로직
     setShowFunctionButtons(false);
+    navigation.navigate('QrScan');
   };
 
   const handleCloseFunctionButtons = () => {

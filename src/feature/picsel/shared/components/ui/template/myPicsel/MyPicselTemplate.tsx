@@ -180,15 +180,13 @@ const MyPicselTemplate = () => {
   };
 
   const handleAlbumPress = () => {
-    console.log('앨범에서 선택');
-    // TODO: 앨범에서 사진 선택 로직
     setShowFunctionButtons(false);
+    navigation.navigate('PhotoUpload');
   };
 
   const handleQrPress = () => {
-    console.log('QR 스캔');
-    // TODO: QR 스캔 로직
     setShowFunctionButtons(false);
+    navigation.navigate('QrScan');
   };
 
   const handleCloseFunctionButtons = () => {

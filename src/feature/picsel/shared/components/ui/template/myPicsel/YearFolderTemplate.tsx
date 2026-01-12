@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
-import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/components/ui/organisms/MOCK_YEAR_DATA';
+import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/FloatingActionButtons';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
@@ -29,7 +29,6 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
 
   const totalPhotos = photoData.length;
 
-  // Custom hooks
   const {
     isSelecting,
     selectedPhotos,
@@ -39,7 +38,6 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     resetSelection,
   } = usePhotoSelection();
 
-  // 선택 모드 전환 훅
   const {
     handleEnterSelecting,
     handleExitSelecting,

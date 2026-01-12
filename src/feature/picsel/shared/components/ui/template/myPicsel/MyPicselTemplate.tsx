@@ -13,10 +13,10 @@ import UploadTooltip from '../../molecules/UploadTooltip';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
-import MonthFilterView from '@/feature/picsel/myPicsel/ui/organisms/MonthFilterView';
-import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
-import YearFilterView from '@/feature/picsel/myPicsel/ui/organisms/YearFilterView';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/components/ui/organisms/MOCK_YEAR_DATA';
+import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/MonthFilterView';
+import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
+import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
@@ -42,7 +42,6 @@ const MyPicselTemplate = () => {
   const totalPhotos = photoData.length;
   const hasPhotos = totalPhotos > 0;
 
-  // Custom hooks
   const {
     isSelecting,
     selectedPhotos,
@@ -52,7 +51,6 @@ const MyPicselTemplate = () => {
     resetSelection,
   } = usePhotoSelection();
 
-  // 선택 모드 전환 훅
   const {
     handleEnterSelecting,
     handleExitSelecting,

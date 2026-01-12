@@ -24,7 +24,7 @@ import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelecti
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
 import {
-  SortType,
+  MyPicselSortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
@@ -97,12 +97,10 @@ const MyPicselTemplate = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSort = (sortType: SortType) => {
+  const handleSort = (sortType: MyPicselSortType) => {
     // TODO: 정렬 로직 구현
     switch (sortType) {
       case 'latest':
-        break;
-      case 'name':
         break;
       case 'date':
         break;

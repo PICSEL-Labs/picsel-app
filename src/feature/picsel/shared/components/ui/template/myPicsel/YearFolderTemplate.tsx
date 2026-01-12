@@ -12,7 +12,7 @@ import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelecti
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
 import { useSelectionBottomSheet } from '@/feature/picsel/shared/hooks/useSelectionBottomSheet';
 import {
-  SortType,
+  MyPicselSortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
@@ -74,7 +74,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     return () => clearTimeout(timer);
   }, [year]);
 
-  const handleSort = (sortType: SortType) => {
+  const handleSort = (sortType: MyPicselSortType) => {
     console.log('정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
   };

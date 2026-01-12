@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
-import SelectPhotoScreen from '@/screens/picselbook/selectPhoto';
+import RegisterPhotoScreen from '@/screens/picselUpload/registerPhoto';
+import SelectPhotoScreen from '@/screens/picselUpload/selectPhoto';
 import QrScanScreen from '@/screens/qr/scan';
 import QrViewerScreen from '@/screens/qr/viewer';
 import StoreSearchScreen from '@/screens/search';
@@ -18,7 +19,11 @@ export type MainNavigationProps = {
   StoreSearch: undefined;
   QrScan: undefined;
   QrViewer: { url: string };
-  SelectPhoto: undefined;
+  SelectPhoto: { variant: 'main' | 'extra' };
+  RegisterPhoto: {
+    variant?: 'main' | 'extra';
+    photoUris?: string[];
+  };
 };
 
 const MainRoute = () => {
@@ -46,6 +51,8 @@ const MainRoute = () => {
       <Stack.Screen name="QrViewer" component={QrViewerScreen} />
 
       <Stack.Screen name="SelectPhoto" component={SelectPhotoScreen} />
+
+      <Stack.Screen name="RegisterPhoto" component={RegisterPhotoScreen} />
     </Stack.Navigator>
   );
 };

@@ -81,7 +81,7 @@ const PixelToolbar = ({
         )}
 
         {/* 정렬 */}
-        <Pressable onPress={onSort}>
+        <Pressable onPress={onSort} className={cn(!onFilter && 'mr-5')}>
           <SortIcons height={24} width={24} shape="sort" />
         </Pressable>
 

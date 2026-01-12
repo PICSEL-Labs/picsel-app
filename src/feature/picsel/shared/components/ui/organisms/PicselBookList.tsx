@@ -6,24 +6,34 @@ import PicselBookCard from '../molecules/PicselBookCard';
 
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
 import { PicselBook } from '@/feature/picsel/shared/data/mockPicselBookData';
+import { cn } from '@/shared/lib/cn';
 
 interface Props {
   books: PicselBook[];
+  isSelecting?: boolean;
+  selectedBookIds?: string[];
   onBookPress?: (bookId: string) => void;
   onAddBook: () => void;
 }
 
-const PicselBookList = ({ books, onBookPress, onAddBook }: Props) => {
+const PicselBookList = ({
+  books,
+  isSelecting = false,
+  selectedBookIds = [],
+  onBookPress,
+  onAddBook,
+}: Props) => {
   return (
     <ScrollView className="flex-1 px-9 pt-2">
       <View className="flex-row flex-wrap justify-between">
-        {/* 첫 번째 아이템: 추가하기 버튼 */}
-        <View className="mb-7" style={{ marginRight: 40 }}>
+        {/* 첫 번째 아이템: 추가하기 버튼 - 선택 모드 시 숨김 */}
+        <View className={cn(isSelecting && 'opacity-40', 'mb-7 mr-[40px]')}>
           <AddBookButton onPress={onAddBook} />
         </View>
 
-        {/* 픽셀북 카드 List */}
+        {/* 픽셀북 카드들 */}
         {books.map((book, index) => {
+          // 선택 모드가 아닐 때는 추가하기 버튼이 첫 번째이므로 index + 1로 계산
           const position = index + 1;
           return (
             <View
@@ -36,6 +46,8 @@ const PicselBookList = ({ books, onBookPress, onAddBook }: Props) => {
                 id={book.id}
                 title={book.title}
                 coverImage={book.coverImage}
+                isSelecting={isSelecting}
+                isSelected={selectedBookIds.includes(book.id)}
                 onPress={onBookPress}
               />
             </View>

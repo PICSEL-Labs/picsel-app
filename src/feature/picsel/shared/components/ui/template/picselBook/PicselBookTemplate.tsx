@@ -3,22 +3,29 @@ import React, { useRef, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
+import FunctionButton from '../../atoms/FunctionButton';
+import UpButton from '../../atoms/UpButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecules/EmptyMessage';
 import PicselBookBottomSheet from '../../organisms/bottomSheet/PicselBookBottomSheet';
+import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PicselBookList from '../../organisms/PicselBookList';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
 import AddButton from '@/feature/picsel/shared/components/ui/atoms/AddButton';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
 import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/shared/data/mockPicselBookData';
+import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
+import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
 import {
   PicselBookSortType,
   PICSEL_BOOK_SORT_OPTIONS,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
+import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 const PicselBookTemplate = () => {
@@ -32,13 +39,31 @@ const PicselBookTemplate = () => {
   const hasBooks = totalBooks > 0;
 
   // 선택 관련 훅
+  const { isSelecting, setIsSelecting, resetSelection } = usePhotoSelection();
+
+  // 선택된 픽셀북 ID 관리
+  const [selectedBookIds, setSelectedBookIds] = useState<string[]>([]);
+
+  // 선택 모드 전환 훅
+  const { handleEnterSelecting, handleExitSelecting, selectionSheetRef } =
+    useSelectingMode({
+      isSelecting,
+      setIsSelecting,
+      resetSelection: () => {
+        setSelectedBookIds([]);
+        resetSelection();
+      },
+    });
+
   const {
-    isSelecting,
-    selectedPhotos,
-    setIsSelecting,
-    selectAll,
-    resetSelection,
-  } = usePhotoSelection();
+    showFunctionButtons,
+    toggleFunctionButtons,
+    handleAlbumPress,
+    handleQrPress,
+    closeFunctionButtons,
+  } = useFunctionButtons();
+
+  const { showUpButton, scrollToTop } = useScrollWithUpButton();
 
   // 정렬 핸들러
   const handleSort = (sortType: PicselBookSortType) => {
@@ -73,8 +98,46 @@ const PicselBookTemplate = () => {
   };
 
   const handleBookPress = (bookId: string) => {
-    console.log('픽셀북 클릭:', bookId);
-    // TODO: 픽셀북 상세 화면으로 이동
+    if (isSelecting) {
+      // 선택 모드: 토글
+      setSelectedBookIds(prev =>
+        prev.includes(bookId)
+          ? prev.filter(id => id !== bookId)
+          : [...prev, bookId],
+      );
+    } else {
+      // 일반 모드: 상세 화면 이동
+      console.log('픽셀북 클릭:', bookId);
+      // TODO: 픽셀북 상세 화면으로 이동
+    }
+  };
+
+  // 전체 선택
+  const handleSelectAll = () => {
+    if (selectedBookIds.length === totalBooks) {
+      setSelectedBookIds([]);
+    } else {
+      setSelectedBookIds(books.map(book => book.id));
+    }
+  };
+
+  // 삭제 버튼 클릭
+  const handleDeletePress = () => {
+    if (selectedBookIds.length === 0) {
+      showToast('삭제할 픽셀북을 선택해주세요', 60);
+      return;
+    }
+
+    selectionSheetRef.current?.dismiss();
+
+    // ConfirmModal 사용
+    showDeleteConfirmModal('picselBook', selectedBookIds.length, () => {
+      // TODO: 픽셀북 삭제 API 호출
+      const deletedCount = selectedBookIds.length;
+      setBooks(prev => prev.filter(book => !selectedBookIds.includes(book.id)));
+      handleExitSelecting();
+      showToast(`${deletedCount}개의 픽셀북을 삭제했어요`, 60);
+    });
   };
 
   // Empty 상태 체크
@@ -106,16 +169,18 @@ const PicselBookTemplate = () => {
       <PixelToolbar
         totalPhotos={totalBooks}
         isSelecting={isSelecting}
-        selectedCount={selectedPhotos.length}
-        onToggleSelecting={() => setIsSelecting(!isSelecting)}
-        onSelectAll={() => selectAll(totalBooks, books)}
-        onClose={resetSelection}
+        selectedCount={selectedBookIds.length}
+        onToggleSelecting={handleEnterSelecting}
+        onSelectAll={handleSelectAll}
+        onClose={handleExitSelecting}
         onSort={showSortSheet}
       />
 
       {/* 픽셀북 리스트 (AddBookButton 포함) */}
       <PicselBookList
         books={books}
+        isSelecting={isSelecting}
+        selectedBookIds={selectedBookIds}
         onBookPress={handleBookPress}
         onAddBook={handleAddBook}
       />
@@ -123,9 +188,34 @@ const PicselBookTemplate = () => {
       {/* 픽셀북 생성 바텀시트 */}
       <PicselBookBottomSheet ref={picselBookRef} onSubmit={handleSubmit} />
 
-      {/* 플로팅 버튼 */}
+      {/* 픽셀북 선택 바텀시트 - onMove 없이 호출하여 픽셀북 모드로 사용 */}
+      {isSelecting && (
+        <SelectionBottomSheet
+          ref={selectionSheetRef}
+          onDelete={handleDeletePress}
+        />
+      )}
+
+      {/* 플로팅 버튼 - 선택 모드가 아닐 때만 표시 */}
+      {/* Add Button - Right */}
       <View className="absolute -bottom-4 right-4">
-        <AddButton onPress={handleAddPicsel} />
+        {showUpButton && (
+          <View
+            style={{
+              marginBottom: showFunctionButtons ? 200 : 56,
+            }}>
+            <UpButton onPress={scrollToTop} />
+          </View>
+        )}
+        {showFunctionButtons ? (
+          <FunctionButton
+            onAlbumPress={handleAlbumPress}
+            onQrPress={handleQrPress}
+            onClose={closeFunctionButtons}
+          />
+        ) : (
+          <AddButton onPress={toggleFunctionButtons} />
+        )}
       </View>
     </View>
   );

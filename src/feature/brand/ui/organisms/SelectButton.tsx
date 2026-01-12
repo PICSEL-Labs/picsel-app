@@ -9,7 +9,7 @@ import Button from '@/shared/ui/atoms/Button';
 interface Props {
   disabled: boolean;
   actualSelectedCount: number;
-  handleSelectedCompleted?: () => Promise<void>;
+  handleSelectedCompleted?: () => void;
   showFloatingButton?: boolean;
   scrollToTop?: () => void;
   handleNavigation?: () => void;
@@ -31,7 +31,7 @@ const SelectButton = ({
         color={disabled ? 'disabled' : 'active'}
         textColor="white"
         text={`선택 완료 (${actualSelectedCount})`}
-        disabled={!disabled}
+        disabled={disabled}
         onPressIn={
           actualSelectedCount ? handleSelectedCompleted : handleNavigation
         }

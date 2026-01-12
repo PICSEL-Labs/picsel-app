@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
@@ -23,6 +22,7 @@ import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
 import {
   MyPicselSortType,
   useSortActionSheet,
@@ -33,7 +33,6 @@ import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 const MyPicselTemplate = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { handleAddPicsel } = usePicselBookActions();
-  const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
 
   const [photoData, setPhotoData] = useState([]);
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
@@ -42,6 +41,7 @@ const MyPicselTemplate = () => {
   const totalPhotos = photoData.length;
   const hasPhotos = totalPhotos > 0;
 
+  // Custom hooks
   const {
     isSelecting,
     selectedPhotos,
@@ -50,6 +50,17 @@ const MyPicselTemplate = () => {
     selectAll,
     resetSelection,
   } = usePhotoSelection();
+
+  // 선택 모드 전환 훅
+  const {
+    handleEnterSelecting,
+    handleExitSelecting,
+    selectionSheetRef: selectionBottomSheetRef,
+  } = useSelectingMode({
+    isSelecting,
+    setIsSelecting,
+    resetSelection,
+  });
 
   const {
     showUpButton,
@@ -74,15 +85,6 @@ const MyPicselTemplate = () => {
     onDeleteSuccess: resetSelection,
   });
 
-  // 선택 모드 변경 시 바텀시트 제어
-  useEffect(() => {
-    if (isSelecting) {
-      selectionBottomSheetRef.current?.present();
-    } else {
-      selectionBottomSheetRef.current?.dismiss();
-    }
-  }, [isSelecting]);
-
   // 시뮬레이션: 데이터 로딩 (실제로는 API 호출)
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -98,11 +100,15 @@ const MyPicselTemplate = () => {
   }, []);
 
   const handleSort = (sortType: MyPicselSortType) => {
+    console.log('정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
     switch (sortType) {
       case 'latest':
+        // 최근 생성 순 정렬
         break;
+
       case 'date':
+        // 사진 게재 순 정렬
         break;
     }
   };
@@ -113,11 +119,15 @@ const MyPicselTemplate = () => {
 
   const handleDateFilterChange = (type: DateFilterType) => {
     setDateFilter(type);
+    console.log('날짜 필터:', type);
 
+    // 필터 변경 시 로딩 상태 시뮬레이션
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
+
+    // TODO: 날짜 필터링 로직 구현
   };
 
   const handleViewAllYear = (year: string) => {
@@ -152,9 +162,9 @@ const MyPicselTemplate = () => {
           totalPhotos={totalPhotos}
           isSelecting={isSelecting}
           selectedCount={selectedPhotos.length}
-          onToggleSelecting={() => setIsSelecting(!isSelecting)}
+          onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
-          onClose={resetSelection}
+          onClose={handleExitSelecting}
           onSort={showSortSheet}
           onFilter={showBrandFilterSheet}
         />

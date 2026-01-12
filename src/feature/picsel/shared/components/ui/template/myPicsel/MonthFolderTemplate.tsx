@@ -10,7 +10,7 @@ import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionBut
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
-import { useSelectionBottomSheet } from '@/feature/picsel/shared/hooks/useSelectionBottomSheet';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
 import {
   MyPicselSortType,
   useSortActionSheet,
@@ -39,6 +39,17 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     resetSelection,
   } = usePhotoSelection();
 
+  // 선택 모드 전환 훅
+  const {
+    handleEnterSelecting,
+    handleExitSelecting,
+    selectionSheetRef: selectionBottomSheetRef,
+  } = useSelectingMode({
+    isSelecting,
+    setIsSelecting,
+    resetSelection,
+  });
+
   const { showUpButton, flatListRef, handleScroll, scrollToTop } =
     useScrollWithUpButton();
 
@@ -54,8 +65,6 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     selectedPhotos,
     onDeleteSuccess: resetSelection,
   });
-
-  const { selectionBottomSheetRef } = useSelectionBottomSheet(isSelecting);
 
   // 데이터 로딩 및 월별 필터링
   useEffect(() => {
@@ -98,9 +107,9 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         totalPhotos={totalPhotos}
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}
-        onToggleSelecting={() => setIsSelecting(!isSelecting)}
+        onToggleSelecting={handleEnterSelecting}
         onSelectAll={() => selectAll(totalPhotos, photoData)}
-        onClose={resetSelection}
+        onClose={handleExitSelecting}
         onSort={showSortSheet}
         onFilter={showBrandFilterSheet}
       />

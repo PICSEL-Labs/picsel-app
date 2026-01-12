@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import FloatingAddButton from '../../atoms/AddButton';
+import AddButton from '../../atoms/AddButton';
 import DateFilterButton, { DateFilterType } from '../../atoms/DateFilterButton';
 import FunctionButton from '../../atoms/FunctionButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
@@ -235,7 +236,7 @@ const MyPicselTemplate = () => {
                 onClose={closeFunctionButtons}
               />
             ) : (
-              <FloatingAddButton onPress={toggleFunctionButtons} />
+              <AddButton onPress={toggleFunctionButtons} />
             )}
           </View>
         </>

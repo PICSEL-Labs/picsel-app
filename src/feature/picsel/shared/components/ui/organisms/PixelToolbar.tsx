@@ -36,7 +36,7 @@ const PixelToolbar = ({
     return (
       <View className="bg-white/90 px-6 py-4">
         {/* 선택 모드 헤더 */}
-        <View className="mb-3 flex-row items-center justify-between">
+        <View className="flex-row items-center justify-between">
           <Pressable
             onPress={onSelectAll}
             className="flex-row items-center space-x-0.5">

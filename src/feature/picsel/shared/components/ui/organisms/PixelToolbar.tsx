@@ -36,7 +36,7 @@ const PixelToolbar = ({
     return (
       <View className="bg-white/90 px-6 py-4">
         {/* 선택 모드 헤더 */}
-        <View className="mb-3 flex-row items-center justify-between">
+        <View className="flex-row items-center justify-between">
           <Pressable
             onPress={onSelectAll}
             className="flex-row items-center space-x-0.5">
@@ -63,17 +63,25 @@ const PixelToolbar = ({
   }
 
   return (
-    <View className="flex-row items-center justify-between bg-white/90 px-6 py-4">
-      <Text className="text-gray-900 body-rg-03">전체 {displayCount}</Text>
+    <View
+      className={cn(
+        onFilter ? 'justify-between' : 'justify-end',
+        'flex-row items-center bg-white/90 px-6 py-4',
+      )}>
+      {onFilter && (
+        <Text className="text-gray-900 body-rg-03">전체 {displayCount}</Text>
+      )}
 
       <View className="flex-row items-center space-x-4">
-        {/* 브랜드 필터 */}
-        <Pressable onPress={onFilter}>
-          <FilterIcons height={24} width={24} shape="gray" />
-        </Pressable>
+        {/* 브랜드 필터 - onFilter가 있을 때만 표시 */}
+        {onFilter && (
+          <Pressable onPress={onFilter}>
+            <FilterIcons height={24} width={24} shape="gray" />
+          </Pressable>
+        )}
 
         {/* 정렬 */}
-        <Pressable onPress={onSort}>
+        <Pressable onPress={onSort} className={cn(!onFilter && 'mr-5')}>
           <SortIcons height={24} width={24} shape="sort" />
         </Pressable>
 

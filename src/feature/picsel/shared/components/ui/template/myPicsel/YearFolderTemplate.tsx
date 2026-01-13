@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
-import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/components/ui/organisms/MOCK_YEAR_DATA';
+import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/FloatingActionButtons';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
@@ -10,9 +10,9 @@ import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionBut
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
-import { useSelectionBottomSheet } from '@/feature/picsel/shared/hooks/useSelectionBottomSheet';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
 import {
-  SortType,
+  MyPicselSortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
@@ -38,6 +38,16 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     resetSelection,
   } = usePhotoSelection();
 
+  const {
+    handleEnterSelecting,
+    handleExitSelecting,
+    selectionSheetRef: selectionBottomSheetRef,
+  } = useSelectingMode({
+    isSelecting,
+    setIsSelecting,
+    resetSelection,
+  });
+
   const { showUpButton, flatListRef, handleScroll, scrollToTop } =
     useScrollWithUpButton();
 
@@ -53,8 +63,6 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     selectedPhotos,
     onDeleteSuccess: resetSelection,
   });
-
-  const { selectionBottomSheetRef } = useSelectionBottomSheet(isSelecting);
 
   // 데이터 로딩 및 년도별 필터링
   useEffect(() => {
@@ -74,7 +82,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     return () => clearTimeout(timer);
   }, [year]);
 
-  const handleSort = (sortType: SortType) => {
+  const handleSort = (sortType: MyPicselSortType) => {
     console.log('정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
   };
@@ -93,9 +101,9 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
         totalPhotos={totalPhotos}
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}
-        onToggleSelecting={() => setIsSelecting(!isSelecting)}
+        onToggleSelecting={handleEnterSelecting}
         onSelectAll={() => selectAll(totalPhotos, photoData)}
-        onClose={resetSelection}
+        onClose={handleExitSelecting}
         onSort={showSortSheet}
         onFilter={showBrandFilterSheet}
       />

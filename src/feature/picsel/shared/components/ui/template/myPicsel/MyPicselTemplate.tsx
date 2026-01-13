@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import FloatingAddButton from '../../atoms/AddButton';
+import AddButton from '../../atoms/AddButton';
 import DateFilterButton, { DateFilterType } from '../../atoms/DateFilterButton';
 import FunctionButton from '../../atoms/FunctionButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
@@ -13,18 +13,19 @@ import UploadTooltip from '../../molecules/UploadTooltip';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/ui/organisms/MOCK_YEAR_DATA';
-import MonthFilterView from '@/feature/picsel/myPicsel/ui/organisms/MonthFilterView';
-import PhotoListView from '@/feature/picsel/myPicsel/ui/organisms/PhotoListView';
-import YearFilterView from '@/feature/picsel/myPicsel/ui/organisms/YearFilterView';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/components/ui/organisms/MOCK_YEAR_DATA';
+import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/MonthFilterView';
+import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
+import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
 import {
-  SortType,
+  MyPicselSortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
@@ -33,7 +34,6 @@ import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 const MyPicselTemplate = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { handleAddPicsel } = usePicselBookActions();
-  const selectionBottomSheetRef = useRef<BottomSheetModal>(null);
 
   const [photoData, setPhotoData] = useState([]);
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
@@ -50,6 +50,16 @@ const MyPicselTemplate = () => {
     selectAll,
     resetSelection,
   } = usePhotoSelection();
+
+  const {
+    handleEnterSelecting,
+    handleExitSelecting,
+    selectionSheetRef: selectionBottomSheetRef,
+  } = useSelectingMode({
+    isSelecting,
+    setIsSelecting,
+    resetSelection,
+  });
 
   const {
     showUpButton,
@@ -74,15 +84,6 @@ const MyPicselTemplate = () => {
     onDeleteSuccess: resetSelection,
   });
 
-  // 선택 모드 변경 시 바텀시트 제어
-  useEffect(() => {
-    if (isSelecting) {
-      selectionBottomSheetRef.current?.present();
-    } else {
-      selectionBottomSheetRef.current?.dismiss();
-    }
-  }, [isSelecting]);
-
   // 시뮬레이션: 데이터 로딩 (실제로는 API 호출)
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -97,14 +98,16 @@ const MyPicselTemplate = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSort = (sortType: SortType) => {
+  const handleSort = (sortType: MyPicselSortType) => {
+    console.log('정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
     switch (sortType) {
       case 'latest':
+        // 최근 생성 순 정렬
         break;
-      case 'name':
-        break;
+
       case 'date':
+        // 사진 게재 순 정렬
         break;
     }
   };
@@ -115,11 +118,15 @@ const MyPicselTemplate = () => {
 
   const handleDateFilterChange = (type: DateFilterType) => {
     setDateFilter(type);
+    console.log('날짜 필터:', type);
 
+    // 필터 변경 시 로딩 상태 시뮬레이션
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
+
+    // TODO: 날짜 필터링 로직 구현
   };
 
   const handleViewAllYear = (year: string) => {
@@ -154,9 +161,9 @@ const MyPicselTemplate = () => {
           totalPhotos={totalPhotos}
           isSelecting={isSelecting}
           selectedCount={selectedPhotos.length}
-          onToggleSelecting={() => setIsSelecting(!isSelecting)}
+          onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
-          onClose={resetSelection}
+          onClose={handleExitSelecting}
           onSort={showSortSheet}
           onFilter={showBrandFilterSheet}
         />
@@ -227,7 +234,7 @@ const MyPicselTemplate = () => {
                 onClose={closeFunctionButtons}
               />
             ) : (
-              <FloatingAddButton onPress={toggleFunctionButtons} />
+              <AddButton onPress={toggleFunctionButtons} />
             )}
           </View>
         </>

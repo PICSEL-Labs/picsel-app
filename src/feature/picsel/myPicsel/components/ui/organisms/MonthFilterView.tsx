@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 
-import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../constants/photoGrid';
+import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../../constants/photoGrid';
 
 import { YearGroup } from './MOCK_YEAR_DATA';
 
@@ -21,17 +21,15 @@ import ArrowIcons from '@/shared/icons/ArrowIcons';
 interface Props {
   yearGroups: YearGroup[];
   isLoading: boolean;
-  onViewMore: (year: string, month: string) => void;
-  onViewAllYear: (year: string) => void;
+  onViewMonthFolder: (year: string, month: string) => void;
   scrollViewRef: RefObject<ScrollView>;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
 
-const YearFilterView = ({
+const MonthFilterView = ({
   yearGroups,
   isLoading,
-  onViewMore,
-  onViewAllYear,
+  onViewMonthFolder,
   scrollViewRef,
   onScroll,
 }: Props) => {
@@ -43,7 +41,7 @@ const YearFilterView = ({
   });
 
   if (isLoading) {
-    return <FilterViewSkeleton type="year" />;
+    return <FilterViewSkeleton type="month" />;
   }
 
   return (
@@ -59,36 +57,24 @@ const YearFilterView = ({
       }}>
       {yearGroups.map((yearGroup, yearIndex) => (
         <View key={`${yearGroup.year}-${yearIndex}`}>
-          {/* 년 전체보기 */}
-          <View className="mb-4 mt-2 flex-row items-center justify-between">
-            <Text className="text-gray-900 headline-02">
-              {yearGroup.year}년
-            </Text>
-            <Pressable
-              onPress={() => onViewAllYear(yearGroup.year)}
-              className="flex-row items-center">
-              <Text className="mr-1 text-primary-pink body-rg-01">
-                전체보기
-              </Text>
-            </Pressable>
-          </View>
-
           {/* 월 */}
           {yearGroup.months.map((monthGroup, monthIndex) => (
             <View key={`${monthGroup.month}-${monthIndex}`} className="mb-6">
               {/* 월 타이틀 */}
               <View className="mb-3 flex-row items-center justify-between">
                 <Text className="text-gray-900 headline-02">
-                  {monthGroup.month}
+                  {yearGroup.year}년 {monthGroup.month}
                 </Text>
                 <Pressable
-                  onPress={() => onViewMore(yearGroup.year, monthGroup.month)}
+                  onPress={() =>
+                    onViewMonthFolder(yearGroup.year, monthGroup.month)
+                  }
                   className="flex-row items-center">
                   <ArrowIcons shape="next" width={20} height={20} />
                 </Pressable>
               </View>
 
-              {/* 스크롤뷰 */}
+              {/* 이미지 스크롤뷰 */}
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View className="flex-row">
                   {monthGroup.photos.map(photo => (
@@ -111,4 +97,4 @@ const YearFilterView = ({
   );
 };
 
-export default YearFilterView;
+export default MonthFilterView;

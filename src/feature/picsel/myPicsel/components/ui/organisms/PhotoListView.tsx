@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 
-import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../constants/photoGrid';
+import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../../constants/photoGrid';
 
 import GridPhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/GridPhotoSkeleton';
 import SelectablePhotoCard from '@/feature/picsel/shared/components/ui/molecules/SelectablePhotoCard';

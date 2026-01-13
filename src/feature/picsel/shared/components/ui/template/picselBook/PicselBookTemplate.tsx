@@ -84,7 +84,6 @@ const PicselBookTemplate = () => {
   const handleSubmit = (bookName: string) => {
     // TODO: 픽셀북 생성 API 호출
     console.log('픽셀북 생성:', bookName);
-    showToast(`"${bookName}" 픽셀북이 생성되었어요`, 60);
 
     // 임시로 새 픽셀북 추가
     const newBook = {

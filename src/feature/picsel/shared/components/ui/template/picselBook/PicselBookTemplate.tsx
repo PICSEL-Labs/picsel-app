@@ -3,8 +3,8 @@ import React, { useRef, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
-import FunctionButton from '../../atoms/FunctionButton';
-import UpButton from '../../atoms/UpButton';
+import FunctionButton from '../../atoms/Button/FunctionButton';
+import UpButton from '../../atoms/Button/UpButton';
 import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecules/EmptyMessage';
 import PicselBookBottomSheet from '../../organisms/bottomSheet/PicselBookBottomSheet';
@@ -12,7 +12,7 @@ import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomShe
 import PicselBookList from '../../organisms/PicselBookList';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
-import AddButton from '@/feature/picsel/shared/components/ui/atoms/AddButton';
+import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
 import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/shared/data/mockPicselBookData';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';

@@ -3,28 +3,27 @@ import React, { useRef, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
-import EmptyStateLayout from '../../../layouts/EmptyStateLayout';
-import FunctionButton from '../../atoms/Button/FunctionButton';
-import UpButton from '../../atoms/Button/UpButton';
-import EmptyMessage from '../../molecules/EmptyMessage';
-import PicselBookBottomSheet from '../../organisms/bottomSheet/PicselBookBottomSheet';
-import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
-import PicselBookList from '../../organisms/PicselBookList';
-import PixelToolbar from '../../organisms/PixelToolbar';
-
 import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/picselBook/data/mockPicselBookData';
+import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
 import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
+import FunctionButton from '@/feature/picsel/shared/components/ui/atoms/Button/FunctionButton';
+import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
+import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
-import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
-import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
-import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
-import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
-import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
+import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
+import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
+import PicselBookList from '@/feature/picsel/shared/components/ui/organisms/PicselBookList';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import {
   PicselBookSortType,
   PICSEL_BOOK_SORT_OPTIONS,
   useSortActionSheet,
-} from '@/feature/picsel/shared/hooks/useSortActionSheet';
+} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import { usePicselBookActions } from '@/feature/picsel/shared/hooks/navigation/usePicselBookActions';
+import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
+import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 

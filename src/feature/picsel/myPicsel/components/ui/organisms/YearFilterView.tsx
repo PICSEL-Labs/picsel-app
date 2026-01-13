@@ -14,7 +14,7 @@ import { YearGroup } from '../../../data/MOCK_YEAR_DATA';
 
 import PhotoCard from '@/feature/picsel/shared/components/ui/molecules/PhotoCard';
 import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecules/Skeleton/FilterViewSkeleton';
-import { useImageDimensions } from '@/feature/picsel/shared/hooks/useImageDimensions';
+import { useImageDimensions } from '@/feature/picsel/shared/hooks/photo/useImageDimensions';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 
 interface Props {

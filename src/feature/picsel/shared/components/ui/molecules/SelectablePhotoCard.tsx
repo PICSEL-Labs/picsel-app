@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Image, Pressable, Text, View } from 'react-native';
 
-import { formatDate } from '../../../utils/dateUtils';
+import { formatDate } from '../../../../myPicsel/utils/dateUtils';
 
 import SelectionCheckbox from '@/feature/picsel/myPicsel/components/ui/atoms/SelectionCheckbox';
 import SparkleImages from '@/shared/images/Sparkle';

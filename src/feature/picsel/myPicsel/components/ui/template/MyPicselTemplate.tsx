@@ -18,16 +18,16 @@ import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/Pho
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
-import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
-import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
-import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
-import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
-import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
-import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
+import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import {
   MyPicselSortType,
   useSortActionSheet,
-} from '@/feature/picsel/shared/hooks/useSortActionSheet';
+} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import { usePicselBookActions } from '@/feature/picsel/shared/hooks/navigation/usePicselBookActions';
+import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
+import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
+import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 

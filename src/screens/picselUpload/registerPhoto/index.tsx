@@ -23,6 +23,12 @@ const RegisterPhotoScreen = () => {
   const { isModalOpen, closeModal, openModal } = useModal();
   const { reset } = usePhotoStore();
 
+  const handleConfirmExit = () => {
+    reset();
+    closeModal();
+    navigation.replace('QrScan');
+  };
+
   return (
     <ScreenLayout>
       <PhotoRegisterHeader
@@ -71,11 +77,7 @@ const RegisterPhotoScreen = () => {
         cancelText="계속하기"
         confirmText="종료"
         onCancel={closeModal}
-        onConfirm={() => {
-          reset();
-          closeModal();
-          navigation.replace('QrScan');
-        }}
+        onConfirm={handleConfirmExit}
       />
     </ScreenLayout>
   );

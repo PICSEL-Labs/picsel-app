@@ -41,6 +41,8 @@ const PicselBookTemplate = () => {
   // 선택된 픽셀북 ID 관리
   const [selectedBookIds, setSelectedBookIds] = useState<string[]>([]);
 
+  const { showUpButton, scrollToTop } = useScrollWithUpButton();
+
   // 선택 모드 전환 훅
   const { handleEnterSelecting, handleExitSelecting, selectionSheetRef } =
     useSelectingMode({
@@ -60,15 +62,12 @@ const PicselBookTemplate = () => {
     closeFunctionButtons,
   } = useFunctionButtons();
 
-  const { showUpButton, scrollToTop } = useScrollWithUpButton();
-
   // 정렬 핸들러
   const handleSort = (sortType: PicselBookSortType) => {
     console.log('픽셀북 정렬 타입:', sortType);
     // TODO: 정렬 로직 구현
   };
 
-  // 정렬 액션시트 - 픽셀북 정렬 옵션 사용
   const { showSortSheet } = useSortActionSheet<PicselBookSortType>({
     onSort: handleSort,
     options: PICSEL_BOOK_SORT_OPTIONS,
@@ -95,20 +94,17 @@ const PicselBookTemplate = () => {
 
   const handleBookPress = (bookId: string) => {
     if (isSelecting) {
-      // 선택 모드: 토글
       setSelectedBookIds(prev =>
         prev.includes(bookId)
           ? prev.filter(id => id !== bookId)
           : [...prev, bookId],
       );
     } else {
-      // 일반 모드: 상세 화면 이동
       console.log('픽셀북 클릭:', bookId);
       // TODO: 픽셀북 상세 화면으로 이동
     }
   };
 
-  // 전체 선택
   const handleSelectAll = () => {
     if (selectedBookIds.length === totalBooks) {
       setSelectedBookIds([]);
@@ -117,14 +113,11 @@ const PicselBookTemplate = () => {
     }
   };
 
-  // 삭제 버튼 클릭
   const handleDeletePress = () => {
     if (selectedBookIds.length === 0) {
       showToast('삭제할 픽셀북을 선택해주세요', 60);
       return;
     }
-
-    selectionSheetRef.current?.dismiss();
 
     // ConfirmModal 사용
     showDeleteConfirmModal('picselBook', selectedBookIds.length, () => {
@@ -190,7 +183,7 @@ const PicselBookTemplate = () => {
         isSelecting={isSelecting}
         selectedBookIds={selectedBookIds}
         onBookPress={handleBookPress}
-        onAddBook={handleAddBook}
+        onAddBook={isSelecting ? undefined : handleAddBook}
       />
 
       {/* 픽셀북 생성 바텀시트 */}
@@ -206,25 +199,27 @@ const PicselBookTemplate = () => {
 
       {/* 플로팅 버튼 - 선택 모드가 아닐 때만 표시 */}
       {/* Add Button - Right */}
-      <View className="absolute -bottom-4 right-4">
-        {showUpButton && (
-          <View
-            style={{
-              marginBottom: showFunctionButtons ? 200 : 56,
-            }}>
-            <UpButton onPress={scrollToTop} />
-          </View>
-        )}
-        {showFunctionButtons ? (
-          <FunctionButton
-            onAlbumPress={handleAlbumPress}
-            onQrPress={handleQrPress}
-            onClose={closeFunctionButtons}
-          />
-        ) : (
-          <AddButton onPress={toggleFunctionButtons} />
-        )}
-      </View>
+      {!isSelecting && (
+        <View className="absolute -bottom-4 right-4">
+          {showUpButton && (
+            <View
+              style={{
+                marginBottom: showFunctionButtons ? 200 : 56,
+              }}>
+              <UpButton onPress={scrollToTop} />
+            </View>
+          )}
+          {showFunctionButtons ? (
+            <FunctionButton
+              onAlbumPress={handleAlbumPress}
+              onQrPress={handleQrPress}
+              onClose={closeFunctionButtons}
+            />
+          ) : (
+            <AddButton onPress={toggleFunctionButtons} />
+          )}
+        </View>
+      )}
     </View>
   );
 };

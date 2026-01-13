@@ -18,22 +18,22 @@ interface Props {
 
 const PicselBookList = ({
   books,
-  isSelecting = false,
+  isSelecting,
   selectedBookIds = [],
   onBookPress,
   onAddBook,
 }: Props) => {
   return (
-    <ScrollView className="flex-1 px-9 pt-2">
-      <View className="flex-row flex-wrap justify-between">
-        {/* 첫 번째 아이템: 추가하기 버튼 - 선택 모드 시 숨김 */}
+    <ScrollView
+      className="flex-1 px-10 pt-2"
+      showsVerticalScrollIndicator={false}>
+      <View className="flex-row flex-wrap">
         <View className={cn(isSelecting && 'opacity-40', 'mb-7 mr-[40px]')}>
           <AddBookButton onPress={onAddBook} />
         </View>
 
         {/* 픽셀북 카드들 */}
         {books.map((book, index) => {
-          // 선택 모드가 아닐 때는 추가하기 버튼이 첫 번째이므로 index + 1로 계산
           const position = index + 1;
           return (
             <View

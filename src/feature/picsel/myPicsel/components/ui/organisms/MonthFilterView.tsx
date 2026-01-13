@@ -12,8 +12,8 @@ import {
 import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../../constants/photoGrid';
 import { YearGroup } from '../../../data/MOCK_YEAR_DATA';
 
-import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecules/FilterViewSkeleton';
 import PhotoCard from '@/feature/picsel/shared/components/ui/molecules/PhotoCard';
+import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecules/Skeleton/FilterViewSkeleton';
 import { useImageDimensions } from '@/feature/picsel/shared/hooks/useImageDimensions';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 

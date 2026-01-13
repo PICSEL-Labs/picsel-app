@@ -2,7 +2,12 @@ import React from 'react';
 
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 
-import HorizontalPhotoSkeleton from '../atoms/Skeleton/HorizontalPhotoSkeleton';
+import HorizontalPhotoSkeleton from '../../atoms/Skeleton/HorizontalPhotoSkeleton';
+
+import {
+  HORIZONTAL_PADDING,
+  ITEM_SPACING,
+} from '@/feature/picsel/myPicsel/constants/photoGrid';
 
 interface FilterViewSkeletonProps {
   type: 'year' | 'month';
@@ -10,9 +15,6 @@ interface FilterViewSkeletonProps {
   monthCount?: number;
   photoCount?: number;
 }
-
-const HORIZONTAL_PADDING = 24;
-const ITEM_SPACING = 8;
 
 const FilterViewSkeleton = ({
   type,

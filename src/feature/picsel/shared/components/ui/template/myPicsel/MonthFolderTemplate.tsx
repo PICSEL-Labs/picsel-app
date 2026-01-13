@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
-import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/FloatingActionButtons';
+import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';

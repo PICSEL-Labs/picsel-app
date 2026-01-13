@@ -3,9 +3,9 @@ import React, { useRef, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
+import EmptyStateLayout from '../../../layouts/EmptyStateLayout';
 import FunctionButton from '../../atoms/Button/FunctionButton';
 import UpButton from '../../atoms/Button/UpButton';
-import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecules/EmptyMessage';
 import PicselBookBottomSheet from '../../organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';

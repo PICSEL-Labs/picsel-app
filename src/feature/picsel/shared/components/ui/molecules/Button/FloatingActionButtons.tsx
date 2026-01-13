@@ -2,7 +2,7 @@ import React from 'react';
 
 import { View } from 'react-native';
 
-import FunctionButton from '../atoms/Button/FunctionButton';
+import FunctionButton from '../../atoms/Button/FunctionButton';
 
 import FloatingAddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';

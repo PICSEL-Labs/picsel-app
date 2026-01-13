@@ -6,10 +6,10 @@ import { View } from 'react-native';
 import DateFilterButton, {
   DateFilterType,
 } from '../../../../../myPicsel/components/ui/atoms/DateFilterButton';
+import EmptyStateLayout from '../../../layouts/EmptyStateLayout';
 import FloatingAddButton from '../../atoms/Button/AddButton';
 import AddButton from '../../atoms/Button/AddButton';
 import FunctionButton from '../../atoms/Button/FunctionButton';
-import EmptyStateLayout from '../../layouts/EmptyStateLayout';
 import EmptyMessage from '../../molecules/EmptyMessage';
 import UploadTooltip from '../../molecules/UploadTooltip';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';

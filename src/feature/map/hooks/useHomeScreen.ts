@@ -41,7 +41,6 @@ export const useHomeScreen = () => {
   const {
     emptyBrandVisible,
     detailBrandVisible,
-    brandFilterVisible,
     hideAllSheet,
     hideSheet,
     showSheet,
@@ -104,7 +103,6 @@ export const useHomeScreen = () => {
     // Bottom Sheets
     emptyBrandVisible,
     detailBrandVisible,
-    brandFilterVisible,
     hideSheet,
     showSheet,
 

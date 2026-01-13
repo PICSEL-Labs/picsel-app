@@ -1,16 +1,20 @@
 import { useCallback, useState } from 'react';
 
-export type BottomSheetType = 'empty' | 'detail' | 'filter'; // 브랜드 찾기 타입 추가
+import {
+  hideBrandFilterSheet,
+  showBrandFilterSheet,
+} from '@/shared/lib/brandFilterSheet';
+
+export type BottomSheetType = 'empty' | 'detail' | 'filter';
 
 export const useBottomSheetManager = () => {
   const [emptyBrandVisible, setEmptyBrandVisible] = useState(false);
   const [detailBrandVisible, setDetailBrandVisible] = useState(false);
-  const [brandFilterVisible, setBrandFilterVisible] = useState(false);
 
   const hideAllSheet = useCallback(() => {
     setEmptyBrandVisible(false);
     setDetailBrandVisible(false);
-    setBrandFilterVisible(false);
+    hideBrandFilterSheet();
   }, []);
 
   const showSheet = useCallback((type: BottomSheetType) => {
@@ -18,17 +22,17 @@ export const useBottomSheetManager = () => {
       case 'empty':
         setEmptyBrandVisible(true);
         setDetailBrandVisible(false);
-        setBrandFilterVisible(false);
+        hideBrandFilterSheet();
         break;
 
       case 'detail':
         setDetailBrandVisible(true);
         setEmptyBrandVisible(false);
-        setBrandFilterVisible(false);
+        hideBrandFilterSheet();
         break;
 
       case 'filter':
-        setBrandFilterVisible(true);
+        showBrandFilterSheet();
         setEmptyBrandVisible(false);
         setDetailBrandVisible(false);
         break;
@@ -44,7 +48,7 @@ export const useBottomSheetManager = () => {
         setDetailBrandVisible(false);
         break;
       case 'filter':
-        setBrandFilterVisible(false);
+        hideBrandFilterSheet();
         break;
     }
   }, []);
@@ -52,7 +56,6 @@ export const useBottomSheetManager = () => {
   return {
     emptyBrandVisible,
     detailBrandVisible,
-    brandFilterVisible,
     hideAllSheet,
     showSheet,
     hideSheet,

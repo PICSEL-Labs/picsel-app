@@ -9,7 +9,7 @@ interface Props {
 const BackDrop = ({ onClose }: Props) => {
   return (
     <TouchableWithoutFeedback onPress={onClose}>
-      <View className="flex-1 bg-black/30" />
+      <View className="flex-1 bg-[#11111480]" />
     </TouchableWithoutFeedback>
   );
 };

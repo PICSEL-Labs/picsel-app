@@ -5,7 +5,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
-import SelectPhotoScreen from '@/screens/picselbook/selectPhoto';
+import PhotoUploadScreen from '@/screens/photoUpload';
+import MonthFolderScreen from '@/screens/picsel/myPicsel/monthFolder';
+import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
+import PicselBookScreen from '@/screens/picsel/picselBook';
 import QrScanScreen from '@/screens/qr/scan';
 import QrViewerScreen from '@/screens/qr/viewer';
 import StoreSearchScreen from '@/screens/search';
@@ -18,7 +21,10 @@ export type MainNavigationProps = {
   StoreSearch: undefined;
   QrScan: undefined;
   QrViewer: { url: string };
-  SelectPhoto: undefined;
+  PhotoUpload: undefined;
+  PicselBook: undefined;
+  YearFolder: { year: string };
+  MonthFolder: { year: string; month: string };
 };
 
 const MainRoute = () => {
@@ -45,7 +51,13 @@ const MainRoute = () => {
 
       <Stack.Screen name="QrViewer" component={QrViewerScreen} />
 
-      <Stack.Screen name="SelectPhoto" component={SelectPhotoScreen} />
+      <Stack.Screen name="PhotoUpload" component={PhotoUploadScreen} />
+
+      <Stack.Screen name="PicselBook" component={PicselBookScreen} />
+
+      <Stack.Screen name="YearFolder" component={YearFolderScreen} />
+
+      <Stack.Screen name="MonthFolder" component={MonthFolderScreen} />
     </Stack.Navigator>
   );
 };

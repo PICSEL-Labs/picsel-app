@@ -2,10 +2,12 @@ import React, { Dispatch, SetStateAction, useCallback } from 'react';
 
 import { Animated, View } from 'react-native';
 
-import BrandFilterButton from './BrandFilterBottomSheet/BrandFilterButton';
+import BrandFilterButton from '../molecules/BrandFilterButton';
+
 import CurrentLocationSearch from './CurrentLocationSearch';
 
 import { useMapLocationStore } from '@/shared/store';
+import { useBrandFilterSheetStore } from '@/shared/store/ui/brandFilterSheet';
 
 interface Props {
   activeButton: 'brand' | 'location';
@@ -14,7 +16,6 @@ interface Props {
   detailHideSheet: () => void;
   emptyHideSheet: () => void;
   showFilterSheet: () => void;
-  brandFilterVisible: boolean;
   hideFilterSheet: () => void;
   showBrandTooltip: boolean;
   fadeAnim: Animated.Value;
@@ -25,7 +26,6 @@ const MapActionButton = ({
   activeButton,
   handleLocationSearch,
   showFilterSheet,
-  brandFilterVisible,
   detailHideSheet,
   emptyHideSheet,
   hideFilterSheet,
@@ -33,6 +33,7 @@ const MapActionButton = ({
   fadeAnim,
 }: Props) => {
   const { mapMode } = useMapLocationStore();
+  const { visible: brandFilterVisible } = useBrandFilterSheetStore();
 
   const handleModal = useCallback(() => {
     if (brandFilterVisible) {

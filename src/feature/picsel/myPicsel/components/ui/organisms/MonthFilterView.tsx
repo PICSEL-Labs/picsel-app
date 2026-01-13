@@ -10,8 +10,7 @@ import {
 } from 'react-native';
 
 import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../../constants/photoGrid';
-
-import { YearGroup } from './MOCK_YEAR_DATA';
+import { YearGroup } from '../../../data/MOCK_YEAR_DATA';
 
 import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecules/FilterViewSkeleton';
 import PhotoCard from '@/feature/picsel/shared/components/ui/molecules/PhotoCard';

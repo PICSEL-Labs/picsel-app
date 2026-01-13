@@ -13,10 +13,10 @@ import UploadTooltip from '../../molecules/UploadTooltip';
 import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/components/ui/organisms/MOCK_YEAR_DATA';
 import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/MonthFilterView';
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';

@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 
 import { cn } from '@/shared/lib/cn';
-import { defaultButtonShadow, insetShadow } from '@/styles/shadows';
+import { defaultButtonShadow, insetShadow } from '@/shared/styles/shadows';
 
 export type DateFilterType = 'year' | 'month' | 'all';
 

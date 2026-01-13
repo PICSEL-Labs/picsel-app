@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
 import BrandGridList from '@/feature/brand/ui/organisms/BrandGridList';
 import NoResult from '@/feature/brand/ui/organisms/NoResult';
+import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useBrandListStore, useSelectedBrandsStore } from '@/shared/store';
-import { SignupNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
-import SignupHeader from '@/shared/ui/organisms/SignupHeader';
 
 const SearchBrandScreen = () => {
   const navigation = useNavigation<SignupNavigationProp>();

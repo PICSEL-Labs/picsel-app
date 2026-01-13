@@ -3,7 +3,7 @@ import React from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import MonthFolderTemplate from '@/feature/picsel/shared/components/ui/template/myPicsel/MonthFolderTemplate';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 
 type MonthFolderRouteProp = RouteProp<
   { MonthFolder: { year: string; month: string } },

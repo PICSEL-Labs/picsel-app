@@ -13,8 +13,8 @@ import { useUserConfig } from '@/shared/hooks/useUserConfig';
 import { useLocationStore } from '@/shared/store';
 import Toast from '@/shared/ui/atoms/Toast';
 import ActionSheet from '@/shared/ui/molecules/ActionSheet';
+import BrandFilterSheet from '@/shared/ui/molecules/BrandFilterSheet';
 import ConfirmModal from '@/shared/ui/molecules/ConfirmModal';
-import BrandFilterSheet from '@/shared/ui/organisms/BrandFilterSheet';
 
 interface AppProviderProps {
   children: ReactNode;

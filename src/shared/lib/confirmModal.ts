@@ -1,17 +1,8 @@
+import {
+  DELETE_ITEM_CONFIG,
+  DeleteItemType,
+} from '@/feature/picsel/shared/lib/modalConfig';
 import { useConfirmModalStore } from '@/shared/store/ui/confirmModal';
-
-type DeleteItemType = 'photo' | 'picselBook';
-
-const DELETE_ITEM_CONFIG = {
-  photo: {
-    unit: '장',
-    itemName: '사진',
-  },
-  picselBook: {
-    unit: '개',
-    itemName: '픽셀북',
-  },
-} as const;
 
 /**
  * 삭제 확인 모달을 표시하는 헬퍼 함수

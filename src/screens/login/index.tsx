@@ -5,10 +5,10 @@ import { View } from 'react-native';
 
 import { useLoginService } from '@/feature/auth/login/model/loginService';
 import { SocialTypes } from '@/feature/auth/login/types';
+import LoginIntro from '@/feature/auth/login/ui/organisms/LoginIntro';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import SocialLoginButton from '@/shared/ui/molecules/SocialLoginButton';
-import LoginIntro from '@/shared/ui/organisms/LoginIntro';
 
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();

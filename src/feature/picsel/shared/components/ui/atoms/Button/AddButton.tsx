@@ -4,7 +4,7 @@ import { Pressable } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 
 import PlusIcon from '@/assets/icons/plus/icon-plus.svg';
-import { insetShadow } from '@/styles/shadows';
+import { insetShadow } from '@/shared/styles/shadows';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

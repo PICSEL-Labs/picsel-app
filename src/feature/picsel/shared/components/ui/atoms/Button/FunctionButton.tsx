@@ -6,7 +6,7 @@ import Animated, { FadeInUp, FadeOutDown } from 'react-native-reanimated';
 import AlbumIcons from '@/shared/icons/AlbumIcons';
 import CloseIcons from '@/shared/icons/CloseIcons';
 import QrIcons from '@/shared/icons/QrIcons';
-import { insetShadow } from '@/styles/shadows';
+import { insetShadow } from '@/shared/styles/shadows';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

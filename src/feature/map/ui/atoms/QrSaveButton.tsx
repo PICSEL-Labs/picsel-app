@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
 import QrIcons from '@/shared/icons/QrIcons';
-import { defaultButtonShadow } from '@/styles/shadows';
+import { defaultButtonShadow } from '@/shared/styles/shadows';
 
 const QrSaveButton = () => {
   const [isPressed, setIsPressed] = useState(false);

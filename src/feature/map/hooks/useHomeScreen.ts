@@ -14,8 +14,8 @@ import { useFetchStores } from '../queries/useFetchStores';
 import { useFilteredData } from './useFilteredData';
 import { useStoreFavorite } from './useStoreFavorite';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useModal } from '@/shared/hooks/useModal';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 export const useHomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);

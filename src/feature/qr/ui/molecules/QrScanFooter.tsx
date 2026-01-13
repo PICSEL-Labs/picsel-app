@@ -3,8 +3,8 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import AlbumIcons from '@/shared/icons/AlbumIcons';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 const QrScanFooter = () => {
   const navigation = useNavigation<RootStackNavigationProp>();

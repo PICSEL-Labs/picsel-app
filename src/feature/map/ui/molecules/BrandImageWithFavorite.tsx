@@ -7,7 +7,7 @@ import { useFavoriteToggle } from '../../hooks/useFavoriteToggle';
 import BrandImage from '../atoms/BrandImage';
 
 import BrandFavIcons from '@/shared/icons/BrandFav';
-import { defaultShadow, favoriteShadow } from '@/styles/shadows';
+import { defaultShadow, favoriteShadow } from '@/shared/styles/shadows';
 
 interface Props {
   imageUrl: string;

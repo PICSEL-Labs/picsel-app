@@ -6,7 +6,7 @@ import { SocialTypes } from '@/feature/auth/login/types';
 import LoginTooltip from '@/feature/auth/login/ui/organisms/LoginTooltip';
 import SocialButtons from '@/shared/icons/SocialButtons';
 import { useUserStore } from '@/shared/store';
-import { defaultShadow } from '@/styles/shadows';
+import { defaultShadow } from '@/shared/styles/shadows';
 
 interface Props {
   type: SocialTypes;

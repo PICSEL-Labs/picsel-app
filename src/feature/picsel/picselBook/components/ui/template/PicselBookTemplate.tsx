@@ -21,14 +21,12 @@ import {
   PICSEL_BOOK_SORT_OPTIONS,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
-import { usePicselBookActions } from '@/feature/picsel/shared/hooks/navigation/usePicselBookActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 const PicselBookTemplate = () => {
-  const { handleAddPicsel } = usePicselBookActions();
   const { showToast } = useToastStore();
   const picselBookRef = useRef<BottomSheetModal>(null);
 
@@ -142,7 +140,19 @@ const PicselBookTemplate = () => {
   if (!hasBooks) {
     return (
       <EmptyStateLayout
-        floatingButton={<AddButton onPress={handleAddPicsel} />}>
+        floatingButton={
+          <View className="absolute bottom-1 right-1">
+            {showFunctionButtons ? (
+              <FunctionButton
+                onAlbumPress={handleAlbumPress}
+                onQrPress={handleQrPress}
+                onClose={closeFunctionButtons}
+              />
+            ) : (
+              <AddButton onPress={toggleFunctionButtons} />
+            )}
+          </View>
+        }>
         <View className="flex-1">
           <View className="absolute left-9 top-16">
             {/* 추가하기 버튼만 표시 */}

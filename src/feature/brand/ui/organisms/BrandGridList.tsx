@@ -5,10 +5,10 @@ import Config from 'react-native-config';
 
 import { Brand } from '../../types';
 
+import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import { HighlightedText } from '@/shared/components/HighlightedText';
 import CheckIcons from '@/shared/icons/CheckIcons';
-import { chunkArray } from '@/shared/utils/arrayUtils';
-import { defaultShadow } from '@/styles/shadows';
+import { defaultShadow } from '@/shared/styles/shadows';
 
 interface Props {
   brandList: Brand[];

@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { signupApi } from '../api/signupApi';
 
-import { SignupNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
 
 interface Props {
   socialAccessToken: string;

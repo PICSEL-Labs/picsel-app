@@ -7,9 +7,9 @@ import { TermsBottomSheet } from '@/feature/auth/signup/ui/modal';
 import NicknameFeedback from '@/feature/auth/signup/ui/organisms/NicknameFeedback';
 import NicknameInput from '@/feature/auth/signup/ui/organisms/NicknameInput';
 import NicknameSubmitButton from '@/feature/auth/signup/ui/organisms/NicknameSubmitButton';
+import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
+import SignupIntro from '@/feature/auth/signup/ui/organisms/SignupIntro';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import SignupHeader from '@/shared/ui/organisms/SignupHeader';
-import SignupIntro from '@/shared/ui/organisms/SignupIntro';
 
 const NicknameInputScreen = () => {
   const {

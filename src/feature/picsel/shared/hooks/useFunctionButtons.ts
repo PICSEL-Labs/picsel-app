@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 
 interface UseFunctionButtonsReturn {
   showFunctionButtons: boolean;

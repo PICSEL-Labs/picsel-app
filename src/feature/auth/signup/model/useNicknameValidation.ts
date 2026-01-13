@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { validateUserInfoApi } from '../api/validateApi';
 
-import { validateFormat } from '@/shared/utils/validateNickname';
+import { validateFormat } from '@/feature/auth/signup/utils/validateNickname';
 
 export const useNicknameValidation = () => {
   const [userNickname, setUserNickname] = useState('');

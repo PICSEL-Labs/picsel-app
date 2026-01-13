@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 
 import CopyIcons from '@/shared/icons/CopyIcons';
-import { defaultButtonShadow } from '@/styles/shadows';
+import { defaultButtonShadow } from '@/shared/styles/shadows';
 
 interface Props {
   detailLocation: string;

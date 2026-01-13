@@ -2,7 +2,7 @@ import React from 'react';
 
 import { View, Text, Pressable, Linking } from 'react-native';
 
-import { TERMS_DATA } from '@/shared/constants/data/terms';
+import { TERMS_DATA } from '@/feature/auth/signup/constants/terms';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import CheckboxIcons from '@/shared/icons/CheckboxIcons';
 

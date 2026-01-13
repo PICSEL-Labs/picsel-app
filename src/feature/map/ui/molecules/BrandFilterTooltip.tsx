@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 
 import { useFloatingAnimation } from '@/shared/hooks/useFloatingAnimation';
 import Tooltip from '@/shared/icons/Tooltip';
-import { insetShadow } from '@/styles/shadows';
+import { insetShadow } from '@/shared/styles/shadows';
 
 const BrandFilterTooltip = ({ fadeAnim }: { fadeAnim: Animated.Value }) => {
   const translateY = useFloatingAnimation({

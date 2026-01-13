@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import EmptyStateLayout from '../../../../shared/components/layouts/EmptyStateLayout';
-import FloatingAddButton from '../../../../shared/components/ui/atoms/Button/AddButton';
 import AddButton from '../../../../shared/components/ui/atoms/Button/AddButton';
 import FunctionButton from '../../../../shared/components/ui/atoms/Button/FunctionButton';
 import EmptyMessage from '../../../../shared/components/ui/molecules/EmptyMessage';
@@ -24,16 +23,14 @@ import {
   MyPicselSortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
-import { usePicselBookActions } from '@/feature/picsel/shared/hooks/navigation/usePicselBookActions';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 const MyPicselTemplate = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { handleAddPicsel } = usePicselBookActions();
 
   const [photoData, setPhotoData] = useState([]);
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
@@ -144,7 +141,17 @@ const MyPicselTemplate = () => {
         floatingButton={
           <>
             <UploadTooltip />
-            <FloatingAddButton onPress={handleAddPicsel} />
+            <View className="absolute bottom-1 right-1">
+              {showFunctionButtons ? (
+                <FunctionButton
+                  onAlbumPress={handleAlbumPress}
+                  onQrPress={handleQrPress}
+                  onClose={closeFunctionButtons}
+                />
+              ) : (
+                <AddButton onPress={toggleFunctionButtons} />
+              )}
+            </View>
           </>
         }>
         <EmptyMessage message="당신의 네컷사진을 올려보세요!" />

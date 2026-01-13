@@ -3,7 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import CheckIcons from '@/shared/icons/CheckIcons';
-import { defaultButtonShadow } from '@/styles/shadows';
+import { defaultButtonShadow } from '@/shared/styles/shadows';
 
 interface Props {
   isSelected: boolean;

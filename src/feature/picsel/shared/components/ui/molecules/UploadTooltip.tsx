@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 
 import BottomRight from '@/assets/icons/tooltip/tooltip-bottom-right.svg';
 import { useFloatingAnimation } from '@/shared/hooks/useFloatingAnimation';
-import { insetShadow } from '@/styles/shadows';
+import { insetShadow } from '@/shared/styles/shadows';
 
 const UploadTooltip = () => {
   const translateY = useFloatingAnimation({
@@ -16,7 +16,7 @@ const UploadTooltip = () => {
 
   return (
     <Animated.View
-      className="mb-4 items-center rounded-3xl bg-primary-pink px-3 py-2"
+      className="absolute bottom-[70px] right-1 items-center rounded-3xl bg-primary-pink px-3 py-2"
       style={{
         width: scale(155),
         boxShadow: `${insetShadow.default}, 0 2px 4px 0 rgba(0, 0, 0, 0.20), -2px -4px 12px 0 rgba(255, 255, 255, 0.10)`,

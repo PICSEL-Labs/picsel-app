@@ -13,8 +13,8 @@ import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
 import { useBrandFilterSheetStore } from '@/shared/store/ui/brandFilterSheet';
 import { useToastStore } from '@/shared/store/ui/toast';
-import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
-import { bottomSheetShadow } from '@/styles/shadows';
+import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
+import { bottomSheetShadow } from '@/shared/styles/shadows';
 
 const BrandFilterSheet = () => {
   const { visible, hideBrandFilterSheet } = useBrandFilterSheetStore();

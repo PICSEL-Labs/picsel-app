@@ -6,8 +6,8 @@ import BrandDetailContent from './BrandDetailContent';
 
 import { useBrandDetailBottomSheet } from '@/feature/map/hooks/useBrandDetailBottomSheet';
 import { StoreDetail } from '@/feature/map/types';
-import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
-import { bottomSheetShadow } from '@/styles/shadows';
+import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
+import { bottomSheetShadow } from '@/shared/styles/shadows';
 
 interface Props {
   visible: boolean;

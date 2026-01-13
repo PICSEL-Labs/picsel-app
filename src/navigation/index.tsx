@@ -9,6 +9,7 @@ import PhotoUploadScreen from '@/screens/photoUpload';
 import MonthFolderScreen from '@/screens/picsel/myPicsel/monthFolder';
 import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
 import PicselBookScreen from '@/screens/picsel/picselBook';
+import PicselBookFolderScreen from '@/screens/picsel/picselBook/picselBookFolder';
 import QrScanScreen from '@/screens/qr/scan';
 import QrViewerScreen from '@/screens/qr/viewer';
 import StoreSearchScreen from '@/screens/search';
@@ -25,6 +26,7 @@ export type MainNavigationProps = {
   PicselBook: undefined;
   YearFolder: { year: string };
   MonthFolder: { year: string; month: string };
+  PicselBookFolder: undefined;
 };
 
 const MainRoute = () => {
@@ -58,6 +60,11 @@ const MainRoute = () => {
       <Stack.Screen name="YearFolder" component={YearFolderScreen} />
 
       <Stack.Screen name="MonthFolder" component={MonthFolderScreen} />
+
+      <Stack.Screen
+        name="PicselBookFolder"
+        component={PicselBookFolderScreen}
+      />
     </Stack.Navigator>
   );
 };

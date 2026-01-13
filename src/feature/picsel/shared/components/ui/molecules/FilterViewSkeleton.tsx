@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 
-import HorizontalPhotoSkeleton from '../atoms/HorizontalPhotoSkeleton';
+import HorizontalPhotoSkeleton from '../atoms/Skeleton/HorizontalPhotoSkeleton';
 
 interface FilterViewSkeletonProps {
   type: 'year' | 'month';

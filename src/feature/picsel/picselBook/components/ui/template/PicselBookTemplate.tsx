@@ -12,9 +12,9 @@ import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomShe
 import PicselBookList from '../../organisms/PicselBookList';
 import PixelToolbar from '../../organisms/PixelToolbar';
 
+import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/picselBook/data/mockPicselBookData';
 import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
-import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/shared/data/mockPicselBookData';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
 import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';

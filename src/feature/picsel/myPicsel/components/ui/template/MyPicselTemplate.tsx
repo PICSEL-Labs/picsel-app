@@ -3,17 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
-import DateFilterButton, {
-  DateFilterType,
-} from '../../../../../myPicsel/components/ui/atoms/DateFilterButton';
-import EmptyStateLayout from '../../../layouts/EmptyStateLayout';
-import FloatingAddButton from '../../atoms/Button/AddButton';
-import AddButton from '../../atoms/Button/AddButton';
-import FunctionButton from '../../atoms/Button/FunctionButton';
-import EmptyMessage from '../../molecules/EmptyMessage';
-import UploadTooltip from '../../molecules/UploadTooltip';
-import SelectionBottomSheet from '../../organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '../../organisms/PixelToolbar';
+import EmptyStateLayout from '../../../../shared/components/layouts/EmptyStateLayout';
+import FloatingAddButton from '../../../../shared/components/ui/atoms/Button/AddButton';
+import AddButton from '../../../../shared/components/ui/atoms/Button/AddButton';
+import FunctionButton from '../../../../shared/components/ui/atoms/Button/FunctionButton';
+import EmptyMessage from '../../../../shared/components/ui/molecules/EmptyMessage';
+import UploadTooltip from '../../../../shared/components/ui/molecules/UploadTooltip';
+import SelectionBottomSheet from '../../../../shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
+import PixelToolbar from '../../../../shared/components/ui/organisms/PixelToolbar';
+import DateFilterButton, { DateFilterType } from '../atoms/DateFilterButton';
 
 import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/MonthFilterView';
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';

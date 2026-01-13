@@ -2,8 +2,8 @@ import React from 'react';
 
 import { View } from 'react-native';
 
-import MyPicselTemplate from '../template/myPicsel/MyPicselTemplate';
-import PicselBookTemplate from '../template/picselBook/PicselBookTemplate';
+import MyPicselTemplate from '@/feature/picsel/myPicsel/components/ui/template/MyPicselTemplate';
+import PicselBookTemplate from '@/feature/picsel/picselBook/components/ui/template/PicselBookTemplate';
 
 interface PicselBookTabContentProps {
   activeTab: 'my' | 'book';

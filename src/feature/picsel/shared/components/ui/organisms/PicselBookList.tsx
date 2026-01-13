@@ -4,8 +4,8 @@ import { ScrollView, View } from 'react-native';
 
 import PicselBookCard from '../molecules/PicselBookCard';
 
+import { PicselBook } from '@/feature/picsel/picselBook/data/mockPicselBookData';
 import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
-import { PicselBook } from '@/feature/picsel/shared/data/mockPicselBookData';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {

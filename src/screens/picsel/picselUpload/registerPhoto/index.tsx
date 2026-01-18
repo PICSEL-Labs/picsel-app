@@ -8,24 +8,31 @@ import ExtraPhotoList from '@/feature/picsel/picselUpload/ui/organisms/ExtraPhot
 import MainPhotoCard from '@/feature/picsel/picselUpload/ui/organisms/MainPhotoCard';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { useModal } from '@/shared/hooks/useModal';
+import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 import Button from '@/shared/ui/atoms/Button';
 import ProgressBar from '@/shared/ui/molecules/ProgressBar';
-import ConfirmModal from '@/shared/ui/organisms/ConfirmModal';
 
 const RegisterPhotoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
-  const { mainPhoto, extraPhotos, setMainPhoto, removeExtraPhoto } =
+  const { mainPhoto, extraPhotos, setMainPhoto, removeExtraPhoto, reset } =
     usePhotoStore();
 
-  const { isModalOpen, closeModal, openModal } = useModal();
-  const { reset } = usePhotoStore();
+  const handleClosePress = () => {
+    showConfirmModal(
+      '지금까지 입력한 정보가\n모두 지워져요',
+      handleConfirmExit,
+      {
+        title: '업로드를 종료할까요?',
+        confirmText: '종료',
+        cancelText: '계속하기',
+      },
+    );
+  };
 
   const handleConfirmExit = () => {
     reset();
-    closeModal();
     navigation.replace('QrScan');
   };
 
@@ -33,7 +40,7 @@ const RegisterPhotoScreen = () => {
     <ScreenLayout>
       <PhotoRegisterHeader
         onBack={() => navigation.goBack()}
-        onClose={openModal}
+        onClose={handleClosePress}
       />
       <ProgressBar currentStep={1} totalStep={4} />
       <View className="flex-1">
@@ -68,15 +75,6 @@ const RegisterPhotoScreen = () => {
           />
         </View>
       </View>
-      <ConfirmModal
-        visible={isModalOpen}
-        title="업로드를 종료할까요?"
-        description={'지금까지 입력한 정보가\n모두 지워져요'}
-        cancelText="계속하기"
-        confirmText="종료"
-        onCancel={closeModal}
-        onConfirm={handleConfirmExit}
-      />
     </ScreenLayout>
   );
 };

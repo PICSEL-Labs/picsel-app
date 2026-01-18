@@ -17,36 +17,25 @@ export const useBrandDetailBottomSheet = ({ visible, storeDetail }: Props) => {
   const [openCopy, setOpenCopy] = useState(false);
   const { showToast } = useToastStore();
 
-  const isOpenRef = useRef(false);
   const lastStoreIdRef = useRef<string | null>(null);
-  const lastActionTimeRef = useRef(0);
 
   useEffect(() => {
-    const now = Date.now();
     const shouldOpen = visible && storeDetail;
-    const shouldClose = !visible && isOpenRef.current;
+    const shouldClose = !visible;
 
     if (shouldClose) {
-      bottomSheetModalRef.current?.dismiss();
-      isOpenRef.current = false;
+      bottomSheetModalRef.current?.close();
       lastStoreIdRef.current = null;
-      lastActionTimeRef.current = now;
       setOpenCopy(false);
-      return;
-    }
-
-    if (now - lastActionTimeRef.current < 300) {
       return;
     }
 
     if (shouldOpen) {
       const isDifferentStore = lastStoreIdRef.current !== storeDetail.storeId;
 
-      if (!isOpenRef.current || isDifferentStore) {
+      if (isDifferentStore) {
         bottomSheetModalRef.current?.present();
-        isOpenRef.current = true;
         lastStoreIdRef.current = storeDetail.storeId;
-        lastActionTimeRef.current = now;
       }
     }
   }, [visible, storeDetail?.storeId]);

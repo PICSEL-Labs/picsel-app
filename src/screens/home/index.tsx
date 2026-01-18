@@ -11,7 +11,6 @@ import { useBrandTooltipOnce } from '@/feature/brand/model/hooks/useBrandTooltip
 import { useHomeScreen } from '@/feature/map/hooks/useHomeScreen';
 import { useSearchMode } from '@/feature/map/hooks/useSearchMode';
 import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottomSheet';
-import BrandFilterBottomSheet from '@/feature/map/ui/organisms/BrandFilterBottomSheet';
 import EmptyBottomSheet from '@/feature/map/ui/organisms/EmptyBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
@@ -47,7 +46,6 @@ const HomeScreen = () => {
     handleMarkerPress,
     clearSelection,
     detailBrandVisible,
-    brandFilterVisible,
     hideSheet,
     handleLocationSearch,
     handleNavigateSearch,
@@ -81,6 +79,9 @@ const HomeScreen = () => {
   const handleResetToDefault = () => {
     clearSelection();
     resetToDefault();
+    hideSheet('detail');
+    hideSheet('empty');
+    hideSheet('filter');
   };
 
   const handleCameraIdle = useCallback(
@@ -140,7 +141,8 @@ const HomeScreen = () => {
         ref={mapRef}
         onTapMap={handleMapTap}
         style={StyleSheet.absoluteFillObject}
-        initialCamera={userLocation ? userLocation : undefined}>
+        initialCamera={userLocation ? userLocation : undefined}
+        maxZoom={19}>
         <MapOverlay
           handleMarkerPress={handleMarkerPress}
           selectedMarkerId={selectedMarkerId}
@@ -168,19 +170,12 @@ const HomeScreen = () => {
         activeButton={activeButton}
         setActiveButton={setActiveButton}
         handleLocationSearch={handleLocationSearch}
-        brandFilterVisible={brandFilterVisible}
         showFilterSheet={() => showSheet('filter')}
         hideFilterSheet={() => hideSheet('filter')}
         detailHideSheet={() => hideSheet('detail')}
         emptyHideSheet={() => hideSheet('empty')}
         showBrandTooltip={showBrandTooltip}
         fadeAnim={fadeAnim}
-      />
-
-      <BrandFilterBottomSheet
-        visible={brandFilterVisible}
-        hideSheet={() => hideSheet('filter')}
-        showSheet={() => showSheet('filter')}
       />
 
       <BrandDetailBottomSheet

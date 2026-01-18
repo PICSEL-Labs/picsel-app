@@ -12,6 +12,9 @@ import { useSplashScreen } from '@/shared/hooks/useSplashScreen';
 import { useUserConfig } from '@/shared/hooks/useUserConfig';
 import { useLocationStore } from '@/shared/store';
 import Toast from '@/shared/ui/atoms/Toast';
+import ActionSheet from '@/shared/ui/molecules/ActionSheet';
+import ConfirmModal from '@/shared/ui/molecules/ConfirmModal';
+import BrandFilterSheet from '@/shared/ui/organisms/BrandFilterSheet';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -77,7 +80,11 @@ const AppProvider = ({ children }: AppProviderProps) => {
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
             <NavigationContainer>{children}</NavigationContainer>
+            {/* Global UI Components */}
             <Toast />
+            <ConfirmModal />
+            <ActionSheet />
+            <BrandFilterSheet />
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

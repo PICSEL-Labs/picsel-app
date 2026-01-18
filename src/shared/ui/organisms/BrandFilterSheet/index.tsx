@@ -3,25 +3,21 @@ import React, { useEffect } from 'react';
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
-import { useBrandFilterBottomSheet } from '../../../../brand/model/hooks/useBrandFilterBottomSheet';
-import { useHandleScroll } from '../../../../brand/model/hooks/useHandleScroll';
-import { useGetBrandsList } from '../../../../brand/queries/useGetBrandList';
-import BrandGridList from '../../../../brand/ui/organisms/BrandGridList';
-import BrandFilterHeader from '../../molecules/BrandFilterHeader';
+import BrandFilterHeader from './BrandFilterHeader';
 
+import { useBrandFilterBottomSheet } from '@/feature/brand/model/hooks/useBrandFilterBottomSheet';
+import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
+import { useGetBrandsList } from '@/feature/brand/queries/useGetBrandList';
+import BrandGridList from '@/feature/brand/ui/organisms/BrandGridList';
 import { useBrandListStore } from '@/shared/store/brand/brandList';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
+import { useBrandFilterSheetStore } from '@/shared/store/ui/brandFilterSheet';
 import { useToastStore } from '@/shared/store/ui/toast';
 import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/styles/shadows';
 
-interface Props {
-  visible: boolean;
-  showSheet: () => void;
-  hideSheet: () => void;
-}
-
-const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
+const BrandFilterSheet = () => {
+  const { visible, hideBrandFilterSheet } = useBrandFilterSheetStore();
   const { data: brands } = useGetBrandsList();
   const { brandList, setBrandList } = useBrandListStore();
   const { scrollViewRef, handleScroll } = useHandleScroll();
@@ -29,7 +25,10 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
   const { tempFilteredList, filterBrand, resetFilter } =
     useFilteredBrandsStore();
   const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
-    useBrandFilterBottomSheet({ visible, showSheet, hideSheet });
+    useBrandFilterBottomSheet({
+      visible,
+      hideSheet: hideBrandFilterSheet,
+    });
 
   const handleReset = () => {
     if (tempFilteredList.length > 0) {
@@ -83,4 +82,4 @@ const BrandFilterBottomSheet = ({ visible, showSheet, hideSheet }: Props) => {
   );
 };
 
-export default BrandFilterBottomSheet;
+export default BrandFilterSheet;

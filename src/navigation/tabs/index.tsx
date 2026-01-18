@@ -6,6 +6,7 @@ import { Text, View } from 'react-native';
 import TabBarIcon from './TabBarIcon';
 
 import HomeScreen from '@/screens/home';
+import PicselBookScreen from '@/screens/picsel/picselBook';
 
 const Tab = createBottomTabNavigator();
 
@@ -54,10 +55,7 @@ const BottomTabBar = () => {
           tabBarIcon: renderTabBarIcon('QRScreen'),
         }}
       />
-      <Tab.Screen
-        name="BookScreen"
-        children={() => <DummyScreen label="Book" />}
-      />
+      <Tab.Screen name="BookScreen" component={PicselBookScreen} />
       <Tab.Screen name="MyScreen" children={() => <DummyScreen label="My" />} />
     </Tab.Navigator>
   );

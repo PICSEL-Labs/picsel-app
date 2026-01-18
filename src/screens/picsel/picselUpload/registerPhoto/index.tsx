@@ -6,10 +6,10 @@ import { Text, View } from 'react-native';
 import PhotoRegisterHeader from '@/feature/picsel/picselUpload/ui/layout/photoRegisterHeader';
 import ExtraPhotoList from '@/feature/picsel/picselUpload/ui/organisms/ExtraPhotoList';
 import MainPhotoCard from '@/feature/picsel/picselUpload/ui/organisms/MainPhotoCard';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
 import { usePhotoStore } from '@/shared/store/picselUpload';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Button from '@/shared/ui/atoms/Button';
 import ProgressBar from '@/shared/ui/molecules/ProgressBar';
 import ConfirmModal from '@/shared/ui/organisms/ConfirmModal';
@@ -51,14 +51,12 @@ const RegisterPhotoScreen = () => {
           uri={mainPhoto}
           onDelete={() => setMainPhoto(null)}
           onSelect={() => {
-            navigation.navigate('SelectPhoto', {
-              variant: 'main',
-            });
+            navigation.navigate('SelectMainPhoto');
           }}
         />
         <ExtraPhotoList
           photos={extraPhotos}
-          onAdd={() => navigation.navigate('SelectPhoto', { variant: 'extra' })}
+          onAdd={() => navigation.navigate('SelectExtraPhoto')}
           onRemove={removeExtraPhoto}
         />
         <View className="absolute bottom-2 w-full items-center">

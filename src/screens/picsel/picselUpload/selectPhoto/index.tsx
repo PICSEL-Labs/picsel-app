@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,14 +9,17 @@ import { usePhotoPicker } from '@/feature/picsel/picselUpload/hooks/usePhotoPick
 import SelectPhotoHeader from '@/feature/picsel/picselUpload/ui/layout/PhotoSelectHeader';
 import { PhotoGrid } from '@/feature/picsel/picselUpload/ui/organisms/PhotoGrid';
 import { MainNavigationProps } from '@/navigation';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { usePhotoStore } from '@/shared/store/picselUpload';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
-type SelectPhotoRouteProp = RouteProp<MainNavigationProps, 'SelectPhoto'>;
+type SelectPhotoRouteProp =
+  | RouteProp<MainNavigationProps, 'SelectMainPhoto'>
+  | RouteProp<MainNavigationProps, 'SelectExtraPhoto'>;
 
-const SelectPhotoScreen = ({ route }: { route: SelectPhotoRouteProp }) => {
+const SelectPhotoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { variant } = route.params;
+  const route = useRoute<SelectPhotoRouteProp>();
+  const variant = route.params.variant;
 
   const { setMainPhoto, addExtraPhotos } = usePhotoStore();
 
@@ -37,9 +40,7 @@ const SelectPhotoScreen = ({ route }: { route: SelectPhotoRouteProp }) => {
       addExtraPhotos(selectedUris);
     }
 
-    navigation.navigate('RegisterPhoto', {
-      variant,
-    });
+    navigation.navigate('RegisterPhoto');
   };
 
   return (

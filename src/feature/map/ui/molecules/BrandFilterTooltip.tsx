@@ -18,7 +18,7 @@ const BrandFilterTooltip = ({ fadeAnim }: { fadeAnim: Animated.Value }) => {
     <Animated.View
       className="absolute top-[55px] z-10 mx-3 items-center rounded-2xl bg-primary-pink px-3 py-2"
       style={{
-        width: scale(195),
+        width: scale(220),
         boxShadow: insetShadow.default,
         opacity: fadeAnim,
         transform: [{ translateY }],

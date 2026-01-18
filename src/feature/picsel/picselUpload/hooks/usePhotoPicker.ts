@@ -11,8 +11,11 @@ import { useToastStore } from '@/shared/store/ui/toast';
  * usePhotoPicker
  * - 대표 사진 선택 / 카메라 촬영 / 무한 스크롤 사진 로드 통합 훅
  */
-export const usePhotoPicker = () => {
-  const [selectedUri, setSelectedUri] = useState<string | null>(null);
+export const usePhotoPicker = (variant: 'main' | 'extra') => {
+  const MAX_EXTRA_COUNT = 10;
+
+  const [selectedUris, setSelectedUris] = useState<string[]>([]);
+
   const { showToast } = useToastStore();
 
   const { photos, fetchPhotos, hasNextPage, resetPhotos } =
@@ -20,19 +23,28 @@ export const usePhotoPicker = () => {
 
   const handleSelectPhoto = useCallback(
     (uri: string) => {
-      if (selectedUri === uri) {
-        return setSelectedUri(null);
+      // 이미 선택된 경우 → 해제
+      if (selectedUris.includes(uri)) {
+        setSelectedUris(prev => prev.filter(u => u !== uri));
+        return;
       }
 
-      const isAnotherPhotoSelected = selectedUri && selectedUri !== uri;
-      if (isAnotherPhotoSelected) {
+      // extra + 10장 초과
+      if (variant === 'extra' && selectedUris.length >= 10) {
+        showToast('사진은 최대 10장까지 선택 가능해요', 60);
+        return;
+      }
+
+      // main + 이미 선택 있음
+      if (variant === 'main' && selectedUris.length >= 1) {
         showToast('대표사진은 1장만 선택 가능해요', 60);
         return;
       }
 
-      setSelectedUri(uri);
+      // 정상 추가
+      setSelectedUris(prev => [...prev, uri]);
     },
-    [selectedUri, showToast],
+    [variant, selectedUris, showToast],
   );
 
   const handleOpenCamera = useCallback(async () => {
@@ -49,15 +61,23 @@ export const usePhotoPicker = () => {
         return;
       }
 
-      setSelectedUri(uri);
+      if (variant === 'main') {
+        setSelectedUris([uri]);
+      } else {
+        setSelectedUris(prev =>
+          prev.length >= MAX_EXTRA_COUNT ? prev : [...prev, uri],
+        );
+      }
+
       showToast('사진이 선택되었습니다', 50);
     } catch (error) {
-      console.log('카메라 실행 실패:', error);
       Alert.alert('카메라를 실행할 수 없습니다.');
     }
-  }, [showToast]);
+  }, [variant, showToast]);
 
-  const resetSelection = useCallback(() => setSelectedUri(null), []);
+  const resetSelection = useCallback(() => {
+    setSelectedUris([]);
+  }, []);
 
   useEffect(() => {
     fetchPhotos();
@@ -66,7 +86,8 @@ export const usePhotoPicker = () => {
   return {
     photos,
     hasNextPage,
-    selectedUri,
+    selectedUris,
+    selectedCount: selectedUris.length,
     fetchPhotos,
     handleSelectPhoto,
     handleOpenCamera,

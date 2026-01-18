@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 
+import Geolocation from '@react-native-community/geolocation';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 
@@ -15,18 +16,9 @@ const StoreSearchScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [query, setQuery] = useState('');
   const { setTargetLocation, mapMode, resetToDefault } = useMapLocationStore();
-  const { setSearchLocation } = useLocationStore();
+  const { setUserLocation } = useLocationStore();
   const { result, uiState, hasResults } = useStoreSearch(query);
   const composingRef = useRef(false);
-  const highlight = useMemo(() => query?.split(/\s+/), [query]);
-
-  const handleClear = useCallback(() => {
-    setQuery('');
-  }, []);
-
-  const dismissKeyboard = useCallback(() => {
-    Keyboard.dismiss();
-  }, []);
 
   const handleSearchModeBack = useCallback(() => {
     if (mapMode === 'search') {
@@ -53,29 +45,66 @@ const StoreSearchScreen = () => {
     }) => {
       const storeId = row.kind === 'store' ? row.id : null;
 
-      const locationData = {
+      const targetLocationData = {
         latitude: row.y,
         longitude: row.x,
         zoom: 15,
       };
 
-      setSearchLocation(locationData);
+      Geolocation.getCurrentPosition(
+        position => {
+          const currentUserLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            zoom: 15,
+          };
 
-      setTargetLocation(
-        locationData,
-        {
-          id: row.id,
-          kind: row.kind,
-          title: row.title,
-          subtitle: row.subtitle,
+          setUserLocation(currentUserLocation);
+
+          setTargetLocation(
+            targetLocationData,
+            {
+              id: row.id,
+              kind: row.kind,
+              title: row.title,
+              subtitle: row.subtitle,
+            },
+            storeId,
+          );
+
+          setQuery(row.title);
+          navigation.goBack();
         },
-        storeId,
+        error => {
+          console.error('위치 가져오기 실패:', error);
+          setUserLocation(targetLocationData);
+          setTargetLocation(
+            targetLocationData,
+            {
+              id: row.id,
+              kind: row.kind,
+              title: row.title,
+              subtitle: row.subtitle,
+            },
+            storeId,
+          );
+          setQuery(row.title);
+          navigation.goBack();
+        },
       );
-      setQuery(row.title);
-      navigation.navigate('Home');
     },
-    [setSearchLocation, setTargetLocation, navigation],
+    [setUserLocation, setTargetLocation, navigation],
   );
+
+  const handleClear = useCallback(() => {
+    setQuery('');
+  }, []);
+
+  const dismissKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
+
+  const highlight = useMemo(() => query?.split(/\s+/), [query]);
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard} accessible={false}>

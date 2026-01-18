@@ -26,7 +26,7 @@ const textVariants = cva('headline-02', {
   variants: {
     textColor: {
       white: 'text-white',
-      gray: 'text-gray-500',
+      gray: 'text-gray-600',
     },
   },
 });

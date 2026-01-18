@@ -8,7 +8,7 @@ import ArrowIcons from '@/shared/icons/ArrowIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 
 interface Props {
-  variant: 'main' | 'sub'; // 대표사진 / 추가사진
+  variant: 'main' | 'extra'; // 대표사진 / 추가사진
   onReset?: () => void;
   hasSelected?: boolean;
 }
@@ -44,7 +44,7 @@ const UploadPhotoHeader = ({ variant, onReset, hasSelected }: Props) => {
           </Text>
         ) : (
           <Text className="text-center text-gray-500 headline-01">
-            추가사진은 <Text className="text-pink-500">최대 10장까지</Text> 선택
+            추가사진은 <Text className="text-pink-500">최대 10장</Text>까지 선택
             가능해요.
           </Text>
         )}

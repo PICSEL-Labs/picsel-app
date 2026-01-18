@@ -80,7 +80,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
 
     const handleSelectedCover = () => {
       setSelectedCover('photo');
-      navigation.navigate('PhotoUpload');
+      navigation.navigate('SelectPhoto');
     };
 
     const renderBackdrop = (props: any) => (

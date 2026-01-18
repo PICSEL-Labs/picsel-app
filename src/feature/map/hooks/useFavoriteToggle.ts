@@ -21,38 +21,41 @@ export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
     : isFavorite;
 
   useEffect(() => {
-    if (brandId) {
+    if (brandId && optimisticFavorites[brandId] === undefined) {
       syncFavorite(brandId, isFavorite);
     }
-  }, [brandId, isFavorite, syncFavorite]);
+  }, [brandId, isFavorite, syncFavorite, optimisticFavorites]);
 
   const handleToggleFavorite = (margin: number) => {
-    if (isPending || !brandId) {
+    if (!brandId) {
       return;
     }
 
     const action = optimisticFavorite ? 'REMOVE' : 'ADD';
     toggleOptimisticFavorite(brandId);
 
-    toggleFavorite(
-      {
-        brandId,
-        action,
-      },
-      {
-        onSuccess: () => {
-          showToast(
-            action === 'ADD'
-              ? '찜한 브랜드에 추가했어요'
-              : '찜한 브랜드에서 삭제했어요',
-            margin,
-          );
-        },
-        onError: () => {
-          syncFavorite(brandId, isFavorite);
-        },
-      },
+    showToast(
+      action === 'ADD'
+        ? '찜한 브랜드에 추가했어요'
+        : '찜한 브랜드에서 삭제했어요',
+      margin,
     );
+
+    if (!isPending) {
+      toggleFavorite(
+        {
+          brandId,
+          action,
+        },
+        {
+          onError: () => {
+            toggleOptimisticFavorite(brandId);
+            syncFavorite(brandId, isFavorite);
+            showToast('찜 처리 중 오류가 발생했어요', margin);
+          },
+        },
+      );
+    }
   };
 
   return {

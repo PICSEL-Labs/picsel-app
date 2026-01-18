@@ -12,7 +12,7 @@ module.exports = {
       },
       colors: {
         pink: {
-          100: '#F5F5F5',
+          100: '#FFEEF4',
           200: '#FEDEE8',
           300: '#FECDDD',
           400: '#FFB3CA',

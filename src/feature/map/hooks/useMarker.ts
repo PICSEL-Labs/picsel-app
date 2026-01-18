@@ -16,7 +16,6 @@ export const useMarker = (): UseMarkerReturn => {
 
   const processingRef = useRef(false);
   const lastActionTimeRef = useRef(0);
-  const lastMarkerSelectTimeRef = useRef(0);
 
   const handleMarkerPress = useCallback(
     (store: StoreDetail, _isFromSearch = false) => {
@@ -39,7 +38,6 @@ export const useMarker = (): UseMarkerReturn => {
         setSelectedMarkerId(null);
         setSelectedStore(null);
       } else {
-        lastMarkerSelectTimeRef.current = now;
         setSelectedMarkerId(store.storeId);
         setSelectedStore(store);
       }
@@ -52,13 +50,6 @@ export const useMarker = (): UseMarkerReturn => {
   );
 
   const clearSelection = useCallback(() => {
-    const now = Date.now();
-
-    // 마커 선택 후 500ms 이내에는 clearSelection 차단 (바텀시트 열리는 시간 확보)
-    if (now - lastMarkerSelectTimeRef.current < 500) {
-      return;
-    }
-
     if (processingRef.current) {
       return;
     }

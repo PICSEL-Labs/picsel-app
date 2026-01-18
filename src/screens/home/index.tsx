@@ -79,6 +79,9 @@ const HomeScreen = () => {
   const handleResetToDefault = () => {
     clearSelection();
     resetToDefault();
+    hideSheet('detail');
+    hideSheet('empty');
+    hideSheet('filter');
   };
 
   const handleCameraIdle = useCallback(
@@ -138,7 +141,8 @@ const HomeScreen = () => {
         ref={mapRef}
         onTapMap={handleMapTap}
         style={StyleSheet.absoluteFillObject}
-        initialCamera={userLocation ? userLocation : undefined}>
+        initialCamera={userLocation ? userLocation : undefined}
+        maxZoom={19}>
         <MapOverlay
           handleMarkerPress={handleMarkerPress}
           selectedMarkerId={selectedMarkerId}

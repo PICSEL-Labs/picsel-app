@@ -22,7 +22,8 @@ type GridItem =
 
 interface Props {
   photos: PhotoIdentifier[];
-  selectedUri: string | null;
+  // selectedUri: string | null;
+  selectedUris: string[];
   onSelectPhoto: (uri: string) => void;
   onOpenCamera: () => void;
   onLoadMore: () => void;
@@ -30,7 +31,7 @@ interface Props {
 
 export const PhotoGrid = ({
   photos,
-  selectedUri,
+  selectedUris,
   onSelectPhoto,
   onOpenCamera,
   onLoadMore,
@@ -58,7 +59,9 @@ export const PhotoGrid = ({
     }
 
     const uri = item.node.image.uri;
-    const isSelected = selectedUri === uri;
+    // const isSelected = selectedUri === uri;
+
+    const isSelected = selectedUris.includes(uri);
 
     return (
       <Pressable onPress={() => onSelectPhoto(uri)}>
@@ -89,6 +92,7 @@ export const PhotoGrid = ({
       showsVerticalScrollIndicator={false}
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.6}
+      bounces={false}
       contentContainerStyle={{ paddingBottom: 100 }}
     />
   );

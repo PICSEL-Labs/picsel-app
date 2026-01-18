@@ -4,15 +4,20 @@ import { ScrollView, View } from 'react-native';
 
 import PicselBookCard from '../molecules/PicselBookCard';
 
+import AddBookButton from './AddBookButton';
+
 import { PicselBook } from '@/feature/picsel/picselBook/data/mockPicselBookData';
-import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
   books: PicselBook[];
   isSelecting?: boolean;
   selectedBookIds?: string[];
+  isLoading?: boolean;
   onBookPress?: (bookId: string) => void;
+  onEdit?: (id: string, title: string) => void;
+  onChangeCover?: (id: string) => void;
+  onDelete?: (id: string, title: string) => void;
   onAddBook: () => void;
 }
 
@@ -20,7 +25,11 @@ const PicselBookList = ({
   books,
   isSelecting,
   selectedBookIds = [],
+  isLoading = false,
   onBookPress,
+  onEdit,
+  onChangeCover,
+  onDelete,
   onAddBook,
 }: Props) => {
   return (
@@ -48,7 +57,11 @@ const PicselBookList = ({
                 coverImage={book.coverImage}
                 isSelecting={isSelecting}
                 isSelected={selectedBookIds.includes(book.id)}
+                isLoading={isLoading}
                 onPress={onBookPress}
+                onEdit={onEdit}
+                onChangeCover={onChangeCover}
+                onDelete={onDelete}
               />
             </View>
           );

@@ -54,6 +54,7 @@ const SelectPhotoScreen = () => {
       <PhotoGrid
         photos={photos}
         selectedUris={selectedUris}
+        variant={variant}
         onSelectPhoto={handleSelectPhoto}
         onOpenCamera={handleOpenCamera}
         onLoadMore={fetchPhotos}

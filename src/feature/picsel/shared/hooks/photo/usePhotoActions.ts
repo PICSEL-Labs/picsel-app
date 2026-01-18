@@ -26,7 +26,7 @@ export const usePhotoActions = ({
     }
 
     showDeleteConfirmModal('photo', selectedPhotos.length, () => {
-      showToast(`${selectedPhotos.length}장의 사진을 삭제했어요`, 60);
+      showToast(`${selectedPhotos.length}장의 픽셀을 삭제했어요`, 60);
       onDeleteSuccess?.();
     });
   };

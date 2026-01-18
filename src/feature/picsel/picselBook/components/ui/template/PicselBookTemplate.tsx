@@ -1,7 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
+
+import { usePicselBookActions } from '../../../hooks/usePicselBookActions';
+import AddBookButton from '../organisms/AddBookButton';
+import PicselBookList from '../organisms/PicselBookList';
 
 import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/picselBook/data/mockPicselBookData';
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
@@ -9,10 +13,8 @@ import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddBut
 import FunctionButton from '@/feature/picsel/shared/components/ui/atoms/Button/FunctionButton';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
-import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBookButton';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PicselBookList from '@/feature/picsel/shared/components/ui/organisms/PicselBookList';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
@@ -30,10 +32,22 @@ const PicselBookTemplate = () => {
   const { showToast } = useToastStore();
   const picselBookRef = useRef<BottomSheetModal>(null);
 
+  // Context Menu 관련 hook
+  const { handleEdit, handleChangeCover, handleDelete } =
+    usePicselBookActions();
+
   // 픽셀북 데이터
   const [books, setBooks] = useState(MOCK_PICSEL_BOOK_DATA);
+  const [isLoading, setIsLoading] = useState(true); // 스켈레톤 로딩 상태
   const totalBooks = books.length;
   const hasBooks = totalBooks > 0;
+
+  // 스켈레톤 로딩 테스트
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
 
   // 선택 관련 훅
   const { isSelecting, setIsSelecting, resetSelection } = usePhotoSelection();
@@ -182,7 +196,11 @@ const PicselBookTemplate = () => {
         books={books}
         isSelecting={isSelecting}
         selectedBookIds={selectedBookIds}
+        isLoading={isLoading}
         onBookPress={handleBookPress}
+        onEdit={handleEdit}
+        onChangeCover={handleChangeCover}
+        onDelete={handleDelete}
         onAddBook={isSelecting ? undefined : handleAddBook}
       />
 

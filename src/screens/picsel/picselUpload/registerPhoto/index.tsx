@@ -3,9 +3,9 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View } from 'react-native';
 
-import PhotoRegisterHeader from '@/feature/picselUpload/ui/layout/photoRegisterHeader';
-import ExtraPhotoList from '@/feature/picselUpload/ui/organisms/ExtraPhotoList';
-import MainPhotoCard from '@/feature/picselUpload/ui/organisms/MainPhotoCard';
+import PhotoRegisterHeader from '@/feature/picsel/picselUpload/ui/layout/photoRegisterHeader';
+import ExtraPhotoList from '@/feature/picsel/picselUpload/ui/organisms/ExtraPhotoList';
+import MainPhotoCard from '@/feature/picsel/picselUpload/ui/organisms/MainPhotoCard';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useModal } from '@/shared/hooks/useModal';
 import { usePhotoStore } from '@/shared/store/picselUpload';

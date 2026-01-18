@@ -22,7 +22,7 @@ export const useFunctionButtons = (): UseFunctionButtonsReturn => {
 
   const handleAlbumPress = () => {
     setShowFunctionButtons(false);
-    navigation.navigate('PhotoUpload');
+    navigation.navigate('SelectPhoto', { variant: 'main' });
   };
 
   const handleQrPress = () => {

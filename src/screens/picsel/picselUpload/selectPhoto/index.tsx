@@ -5,9 +5,9 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
-import { usePhotoPicker } from '@/feature/picselUpload/hooks/usePhotoPicker';
-import SelectPhotoHeader from '@/feature/picselUpload/ui/layout/PhotoSelectHeader';
-import { PhotoGrid } from '@/feature/picselUpload/ui/organisms/PhotoGrid';
+import { usePhotoPicker } from '@/feature/picsel/picselUpload/hooks/usePhotoPicker';
+import SelectPhotoHeader from '@/feature/picsel/picselUpload/ui/layout/PhotoSelectHeader';
+import { PhotoGrid } from '@/feature/picsel/picselUpload/ui/organisms/PhotoGrid';
 import { MainNavigationProps } from '@/navigation';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';

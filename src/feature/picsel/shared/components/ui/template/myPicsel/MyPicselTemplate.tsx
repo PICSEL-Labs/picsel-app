@@ -21,7 +21,6 @@ import UpButton from '@/feature/picsel/shared/components/ui/atoms/UpButton';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
-import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
 import {
@@ -33,7 +32,6 @@ import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 const MyPicselTemplate = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { handleAddPicsel } = usePicselBookActions();
 
   const [photoData, setPhotoData] = useState([]);
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
@@ -144,7 +142,11 @@ const MyPicselTemplate = () => {
         floatingButton={
           <>
             <UploadTooltip />
-            <FloatingAddButton onPress={handleAddPicsel} />
+            <FloatingAddButton
+              onPress={() =>
+                navigation.navigate('SelectPhoto', { variant: 'main' })
+              }
+            />
           </>
         }>
         <EmptyMessage message="당신의 네컷사진을 올려보세요!" />

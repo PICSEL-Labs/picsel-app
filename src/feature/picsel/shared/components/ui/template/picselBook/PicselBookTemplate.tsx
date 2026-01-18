@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import FunctionButton from '../../atoms/FunctionButton';
@@ -17,7 +18,6 @@ import AddBookButton from '@/feature/picsel/shared/components/ui/organisms/AddBo
 import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/shared/data/mockPicselBookData';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
-import { usePicselBookActions } from '@/feature/picsel/shared/hooks/usePicselBookActions';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
 import {
@@ -27,10 +27,11 @@ import {
 } from '@/feature/picsel/shared/hooks/useSortActionSheet';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
+import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 const PicselBookTemplate = () => {
-  const { handleAddPicsel } = usePicselBookActions();
   const { showToast } = useToastStore();
+  const navigation = useNavigation<RootStackNavigationProp>();
   const picselBookRef = useRef<BottomSheetModal>(null);
 
   // 픽셀북 데이터
@@ -143,7 +144,13 @@ const PicselBookTemplate = () => {
   if (!hasBooks) {
     return (
       <EmptyStateLayout
-        floatingButton={<AddButton onPress={handleAddPicsel} />}>
+        floatingButton={
+          <AddButton
+            onPress={() =>
+              navigation.navigate('SelectPhoto', { variant: 'main' })
+            }
+          />
+        }>
         <View className="flex-1">
           <View className="absolute left-9 top-16">
             {/* 추가하기 버튼만 표시 */}

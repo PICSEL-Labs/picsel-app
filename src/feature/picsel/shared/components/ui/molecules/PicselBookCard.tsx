@@ -34,11 +34,11 @@ const PicselBookCard = ({
       {/* 픽셀북 아이콘 */}
       <View className="relative mb-2">
         <PicselBookIcons
-          shape={coverImage ? 'cover-selected' : 'default'}
+          shape="default"
           width={80}
           height={72}
+          imageUri={coverImage ? coverImage : undefined}
         />
-
         {/* 선택 모드 체크박스 */}
         {isSelecting && (
           <View className="absolute right-[25px] top-[25px]">

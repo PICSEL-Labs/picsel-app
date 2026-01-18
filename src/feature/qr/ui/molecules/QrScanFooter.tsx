@@ -3,8 +3,8 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import AlbumIcons from '@/shared/icons/AlbumIcons';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 const QrScanFooter = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -17,11 +17,7 @@ const QrScanFooter = () => {
       </Text>
       <Pressable
         className="flex-row items-center justify-center gap-1 rounded-xl border border-pink-500 p-3"
-        onPress={() =>
-          navigation.navigate('SelectPhoto', {
-            variant: 'main',
-          })
-        }>
+        onPress={() => navigation.navigate('SelectMainPhoto')}>
         <AlbumIcons shape="pink" width={24} height={24} />
         <Text
           className="leading-4 text-pink-500 headline-02"

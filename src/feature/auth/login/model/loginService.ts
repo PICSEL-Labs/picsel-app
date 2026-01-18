@@ -2,8 +2,8 @@ import { loginApi } from '../api/loginApi';
 import { loginStrategies } from '../lib/socialStrategies';
 import { LoginRequest, LoginResponse, SocialTypes } from '../types';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useUserStore } from '@/shared/store';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 export const useLoginService = (navigation: RootStackNavigationProp) => {
   const {

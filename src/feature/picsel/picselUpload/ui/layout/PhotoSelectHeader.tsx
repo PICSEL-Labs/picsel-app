@@ -3,9 +3,9 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface Props {
   variant: 'main' | 'extra'; // 대표사진 / 추가사진

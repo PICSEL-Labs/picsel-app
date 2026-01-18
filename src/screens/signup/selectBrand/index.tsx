@@ -3,17 +3,17 @@ import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
 
+import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
+import SignupIntro from '@/feature/auth/signup/ui/organisms/SignupIntro';
 import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
 import { useSelectedBrands } from '@/feature/brand/model/hooks/useSelectedBrands';
 import { useGetBrandsList } from '@/feature/brand/queries/useGetBrandList';
 import BrandGridList from '@/feature/brand/ui/organisms/BrandGridList';
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
 import SelectedBrand from '@/feature/brand/ui/organisms/SelectedBrand';
+import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useBrandListStore, useSelectedBrandsStore } from '@/shared/store';
-import { SignupNavigationProp } from '@/shared/types/navigateTypeUtil';
-import SignupHeader from '@/shared/ui/organisms/SignupHeader';
-import SignupIntro from '@/shared/ui/organisms/SignupIntro';
 
 const SelectBrandScreen = () => {
   const navigation = useNavigation<SignupNavigationProp>();

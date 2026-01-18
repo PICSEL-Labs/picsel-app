@@ -3,8 +3,8 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import CloseIcons from '@/shared/icons/CloseIcons';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 const QrScanHeader = () => {
   const navigation = useNavigation<RootStackNavigationProp>();

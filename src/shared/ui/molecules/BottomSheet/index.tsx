@@ -8,7 +8,7 @@ import BackDrop from '../BackDrop';
 
 import BottomSheetHeader from './BottomSheetHeader';
 
-import { bottomSheetShadow } from '@/styles/shadows';
+import { bottomSheetShadow } from '@/shared/styles/shadows';
 
 interface Props {
   children: ReactNode;

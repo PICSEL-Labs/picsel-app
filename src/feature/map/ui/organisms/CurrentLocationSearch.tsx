@@ -3,7 +3,7 @@ import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 import ReplayIcons from '@/shared/icons/ReplayIcon';
-import { defaultShadow } from '@/styles/shadows';
+import { defaultShadow } from '@/shared/styles/shadows';
 
 interface Props {
   onLocationSearch: () => void;

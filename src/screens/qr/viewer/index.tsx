@@ -6,8 +6,8 @@ import WebView from 'react-native-webview';
 
 import QrViewerHeader from '@/feature/qr/ui/layout/QrViewerHeader';
 import { MainNavigationProps } from '@/navigation';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Button from '@/shared/ui/atoms/Button';
 
 type QrPreviewRouteProp = RouteProp<MainNavigationProps, 'QrViewer'>;

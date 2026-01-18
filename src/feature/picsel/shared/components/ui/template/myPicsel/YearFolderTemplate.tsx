@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/components/ui/organisms/MOCK_YEAR_DATA';
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
-import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/FloatingActionButtons';
+import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
+import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
-import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
-import { usePhotoActions } from '@/feature/picsel/shared/hooks/usePhotoActions';
-import { usePhotoSelection } from '@/feature/picsel/shared/hooks/usePhotoSelection';
-import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/useScrollWithUpButton';
-import { useSelectingMode } from '@/feature/picsel/shared/hooks/useSelectingMode';
+import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
+import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import {
   MyPicselSortType,
   useSortActionSheet,
-} from '@/feature/picsel/shared/hooks/useSortActionSheet';
+} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
+import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
+import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 

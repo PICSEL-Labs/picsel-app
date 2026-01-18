@@ -10,12 +10,12 @@ import { Text, View, Keyboard, Pressable } from 'react-native';
 
 import PicselBookInput from '../../atoms/PicselBookInput';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import PicselBookIcons from '@/shared/icons/PicselBookIcons';
 import { cn } from '@/shared/lib/cn';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
 import Button from '@/shared/ui/atoms/Button';
-import { bottomSheetIndicator } from '@/styles/bottomSheetIndicator';
 
 interface Props {
   onSubmit: (bookName: string) => void;
@@ -80,7 +80,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
 
     const handleSelectedCover = () => {
       setSelectedCover('photo');
-      navigation.navigate('SelectPhoto');
+      navigation.navigate('SelectMainPhoto');
     };
 
     const renderBackdrop = (props: any) => (

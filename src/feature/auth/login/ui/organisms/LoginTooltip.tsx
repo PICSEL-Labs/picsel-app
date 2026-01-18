@@ -3,11 +3,11 @@ import React from 'react';
 import { View, Text, Animated } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
-import { TOOLTIP_CONFIG } from '@/shared/constants/tooltip';
+import { TOOLTIP_CONFIG } from '@/feature/auth/signup/constants/tooltip';
 import { useFloatingAnimation } from '@/shared/hooks/useFloatingAnimation';
 import Tooltip from '@/shared/icons/Tooltip';
 import { useUserStore } from '@/shared/store';
-import { insetShadow } from '@/styles/shadows';
+import { insetShadow } from '@/shared/styles/shadows';
 
 const LoginTooltip = () => {
   const { userSocialType } = useUserStore();

@@ -4,9 +4,9 @@ import { useButtonService } from '@/feature/auth/signup/model/useButtonService';
 import { useNicknameValidation } from '@/feature/auth/signup/model/useNicknameValidation';
 import { useTermsAgreement } from '@/feature/auth/signup/model/useTermsAgreement';
 import { useUserSignup } from '@/feature/auth/signup/model/useUserSignup';
+import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useModal } from '@/shared/hooks/useModal';
 import { useUserStore } from '@/shared/store';
-import { SignupNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 export const useSignupFlow = () => {
   const navigation = useNavigation<SignupNavigationProp>();

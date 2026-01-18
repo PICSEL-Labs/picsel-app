@@ -9,9 +9,9 @@ import {
 
 import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../../constants/photoGrid';
 
-import GridPhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/GridPhotoSkeleton';
+import GridPhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/GridPhotoSkeleton';
 import SelectablePhotoCard from '@/feature/picsel/shared/components/ui/molecules/SelectablePhotoCard';
-import { useImageDimensions } from '@/feature/picsel/shared/hooks/useImageDimensions';
+import { useImageDimensions } from '@/feature/picsel/shared/hooks/photo/useImageDimensions';
 
 export interface Photo {
   id: string;

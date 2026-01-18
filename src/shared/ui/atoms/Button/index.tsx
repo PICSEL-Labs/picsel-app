@@ -5,7 +5,7 @@ import { Pressable, PressableProps, Text } from 'react-native';
 
 import { BUTTON_STYLE } from '@/shared/constants/styles/button';
 import { cn } from '@/shared/lib/cn';
-import { defaultButtonShadow } from '@/styles/shadows';
+import { defaultButtonShadow } from '@/shared/styles/shadows';
 
 interface Props extends PressableProps {
   color?: 'active' | 'disabled' | 'white';

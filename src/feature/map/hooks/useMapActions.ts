@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useFilteredBrandsStore, useMapLocationStore } from '@/shared/store';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 
 interface UseMapActionsParams {
   searchStoresByLocation: (lat: number, lng: number, zoom?: number) => void;

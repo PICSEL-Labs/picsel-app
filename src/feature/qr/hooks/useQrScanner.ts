@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useCodeScanner } from 'react-native-vision-camera';
 
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 
 export const useQrScanner = () => {
   const navigation = useNavigation<RootStackNavigationProp>();

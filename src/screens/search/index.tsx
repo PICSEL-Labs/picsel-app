@@ -7,9 +7,9 @@ import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import NoResult from '@/feature/brand/ui/organisms/NoResult';
 import { useStoreSearch } from '@/feature/search/hooks/useStoreSearch';
 import SearchResultList from '@/feature/search/ui/organisms/SearchResultList';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useLocationStore, useMapLocationStore } from '@/shared/store';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Input from '@/shared/ui/atoms/Input';
 
 const StoreSearchScreen = () => {

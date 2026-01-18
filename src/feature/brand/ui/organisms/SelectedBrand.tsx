@@ -4,7 +4,7 @@ import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import CloseIcons from '@/shared/icons/CloseIcons';
-import { insetShadow } from '@/styles/shadows';
+import { insetShadow } from '@/shared/styles/shadows';
 
 interface Props {
   selectedList: {

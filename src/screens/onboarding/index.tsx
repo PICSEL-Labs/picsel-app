@@ -2,10 +2,10 @@ import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
+import OnboardingCarousel from '@/feature/onboarding/components/OnboardingCarousel';
+import OnboardingFooter from '@/feature/onboarding/components/OnboardingFooter';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
-import OnboardingCarousel from '@/widgets/onboarding/OnboardingCarousel';
-import OnboardingFooter from '@/widgets/onboarding/OnboardingFooter';
 
 const OnboardingScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();

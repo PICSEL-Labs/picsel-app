@@ -8,7 +8,7 @@ import BrandFilterTooltip from './BrandFilterTooltip';
 import { FILTER_BUTTON_STYLE } from '@/shared/constants/styles/filterButton';
 import FilterIcons from '@/shared/icons/FilterIcons';
 import { cn } from '@/shared/lib/cn';
-import { filterButtonShadow } from '@/styles/shadows';
+import { filterButtonShadow } from '@/shared/styles/shadows';
 
 const buttonVariants = cva(FILTER_BUTTON_STYLE, {
   variants: {

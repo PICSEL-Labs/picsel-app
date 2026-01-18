@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { RootStackNavigationProp } from '@/shared/types/navigateTypeUtil';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 
 interface UseFunctionButtonsReturn {
   showFunctionButtons: boolean;
@@ -22,7 +22,7 @@ export const useFunctionButtons = (): UseFunctionButtonsReturn => {
 
   const handleAlbumPress = () => {
     setShowFunctionButtons(false);
-    navigation.navigate('SelectPhoto', { variant: 'main' });
+    navigation.navigate('SelectMainPhoto');
   };
 
   const handleQrPress = () => {

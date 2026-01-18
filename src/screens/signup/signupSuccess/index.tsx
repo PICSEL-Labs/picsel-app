@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import SuccessHeader from '@/feature/success/ui/organisms/SuccessHeader';
+import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { SignupNavigationProp } from '@/shared/types/navigateTypeUtil';
 import Button from '@/shared/ui/atoms/Button';
 
 const SignupSuccessScreen = () => {

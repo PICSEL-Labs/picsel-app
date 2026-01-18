@@ -69,7 +69,9 @@ const PixelToolbar = ({
         'flex-row items-center bg-white/90 px-6 py-4',
       )}>
       {onFilter && (
-        <Text className="text-gray-900 body-rg-03">전체 {displayCount}</Text>
+        <Text className="text-gray-900 body-rg-03" style={{ lineHeight: 0 }}>
+          전체 {displayCount}
+        </Text>
       )}
 
       <View className="flex-row items-center space-x-4">

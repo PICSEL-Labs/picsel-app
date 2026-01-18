@@ -5,9 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
+import PicselTabScreen from '@/screens/picsel';
 import MonthFolderScreen from '@/screens/picsel/myPicsel/monthFolder';
 import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
-import PicselBookScreen from '@/screens/picsel/picselBook';
 import PicselBookFolderScreen from '@/screens/picsel/picselBook/picselBookFolder';
 import RegisterPhotoScreen from '@/screens/picsel/picselUpload/registerPhoto';
 import SelectPhotoScreen from '@/screens/picsel/picselUpload/selectPhoto';
@@ -34,8 +34,8 @@ export type MainNavigationProps = {
   SelectExtraPhoto: { variant: 'extra' };
   RegisterPhoto: undefined;
 
-  // PicselBook
-  PicselBook: undefined;
+  // Picsel Tab & Book
+  PicselTab: undefined;
   YearFolder: { year: string };
   MonthFolder: { year: string; month: string };
   PicselBookFolder: undefined;
@@ -79,8 +79,8 @@ const MainRoute = () => {
       />
       <Stack.Screen name="RegisterPhoto" component={RegisterPhotoScreen} />
 
-      {/* PicselBook */}
-      <Stack.Screen name="PicselBook" component={PicselBookScreen} />
+      {/* Picsel Tab & Book */}
+      <Stack.Screen name="PicselTab" component={PicselTabScreen} />
       <Stack.Screen name="YearFolder" component={YearFolderScreen} />
       <Stack.Screen name="MonthFolder" component={MonthFolderScreen} />
       <Stack.Screen

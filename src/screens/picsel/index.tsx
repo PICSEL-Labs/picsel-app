@@ -5,7 +5,7 @@ import PicselBookTabHeader from '@/feature/picsel/shared/components/layouts/Pics
 import { usePicselBookTab } from '@/feature/picsel/shared/hooks/animation/usePicselBookTab';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 
-const PicselBookScreen = () => {
+const PicselTabScreen = () => {
   const { activeTab, handleTabChange, indicatorPosition } =
     usePicselBookTab('my');
 
@@ -21,4 +21,4 @@ const PicselBookScreen = () => {
   );
 };
 
-export default PicselBookScreen;
+export default PicselTabScreen;

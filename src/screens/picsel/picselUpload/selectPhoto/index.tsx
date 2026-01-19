@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
@@ -42,6 +42,12 @@ const SelectPhotoScreen = () => {
 
     navigation.navigate('RegisterPhoto');
   };
+
+  useEffect(() => {
+    if (selectedCount === 1 && variant === 'main') {
+      navigation.navigate('RegisterPhoto');
+    }
+  }, [selectedCount]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top']}>

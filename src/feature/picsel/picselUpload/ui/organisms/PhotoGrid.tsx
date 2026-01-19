@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { PhotoIdentifier } from '@react-native-camera-roll/camera-roll';
 import {
   Dimensions,
   FlatList,
@@ -10,20 +9,20 @@ import {
   View,
 } from 'react-native';
 
+import { GridPhoto } from '../../hooks/useInfiniteScrollPhotos';
+
 import CameraIcons from '@/shared/icons/CameraIcons ';
 import SelectIcons from '@/shared/icons/SelectIcons';
 
 const { width } = Dimensions.get('window');
 const IMAGE_SIZE = width / 3;
 
-type GridItem =
-  | { type: 'camera' }
-  | { type: 'photo'; node: PhotoIdentifier['node'] };
+type GridItem = { type: 'camera' } | { type: 'photo'; photo: GridPhoto };
 
 interface Props {
-  photos: PhotoIdentifier[];
-  // selectedUri: string | null;
+  photos: GridPhoto[];
   selectedUris: string[];
+  variant: 'main' | 'extra';
   onSelectPhoto: (uri: string) => void;
   onOpenCamera: () => void;
   onLoadMore: () => void;
@@ -32,13 +31,14 @@ interface Props {
 export const PhotoGrid = ({
   photos,
   selectedUris,
+  variant,
   onSelectPhoto,
   onOpenCamera,
   onLoadMore,
 }: Props) => {
   const data: GridItem[] = [
     { type: 'camera' },
-    ...photos.map(photo => ({ type: 'photo' as const, node: photo.node })),
+    ...photos.map(photo => ({ type: 'photo' as const, photo })),
   ];
 
   const renderItem = ({ item }: { item: GridItem }) => {
@@ -58,10 +58,26 @@ export const PhotoGrid = ({
       );
     }
 
-    const uri = item.node.image.uri;
-    // const isSelected = selectedUri === uri;
+    const uri = item.photo.uri;
 
-    const isSelected = selectedUris.includes(uri);
+    const selectedIndex = selectedUris.indexOf(uri);
+    const isSelected = selectedIndex !== -1;
+
+    const renderSelection = () => {
+      if (!isSelected) {
+        return <SelectIcons shape="default" width={24} height={24} />;
+      }
+
+      if (variant === 'main') {
+        return <SelectIcons shape="active" width={24} height={24} />;
+      }
+
+      return (
+        <View className="h-6 w-6 items-center justify-center rounded-full bg-pink-500">
+          <Text className="text-white headline-01">{selectedIndex + 1}</Text>
+        </View>
+      );
+    };
 
     return (
       <Pressable onPress={() => onSelectPhoto(uri)}>
@@ -71,13 +87,7 @@ export const PhotoGrid = ({
             className="h-full w-full rounded-none"
             resizeMode="cover"
           />
-          <View className="absolute right-2 top-2">
-            <SelectIcons
-              shape={isSelected ? 'active' : 'default'}
-              width={24}
-              height={24}
-            />
-          </View>
+          <View className="absolute right-2 top-2">{renderSelection()}</View>
         </View>
       </Pressable>
     );

@@ -1,13 +1,16 @@
 import { useCallback, useRef, useState } from 'react';
 
-import {
-  CameraRoll,
-  PhotoIdentifier,
-} from '@react-native-camera-roll/camera-roll';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Alert } from 'react-native';
 
+export type GridPhoto = {
+  id: string;
+  uri: string;
+  source: 'gallery' | 'camera';
+};
+
 export const useInfiniteScrollPhotos = () => {
-  const [photos, setPhotos] = useState<PhotoIdentifier[]>([]);
+  const [photos, setPhotos] = useState<GridPhoto[]>([]);
   const [endCursor, setEndCursor] = useState<string | undefined>();
   const [hasNextPage, setHasNextPage] = useState(true);
   const loadingRef = useRef(false);
@@ -25,11 +28,18 @@ export const useInfiniteScrollPhotos = () => {
         assetType: 'Photos',
       });
 
+      const mappedPhotos: GridPhoto[] = edges.map(edge => ({
+        id: edge.node.id,
+        uri: edge.node.image.uri,
+        source: 'gallery',
+      }));
+
       if (page_info.end_cursor === endCursor) {
         return;
       }
 
-      setPhotos(prev => [...prev, ...edges]);
+      setPhotos(prev => [...prev, ...mappedPhotos]);
+
       setEndCursor(page_info.end_cursor);
       setHasNextPage(page_info.has_next_page);
     } catch (error) {

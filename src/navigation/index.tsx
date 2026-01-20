@@ -38,7 +38,7 @@ export type MainNavigationProps = {
   PicselTab: undefined;
   YearFolder: { year: string };
   MonthFolder: { year: string; month: string };
-  PicselBookFolder: undefined;
+  PicselBookFolder: { bookId: string };
 };
 
 const MainRoute = () => {

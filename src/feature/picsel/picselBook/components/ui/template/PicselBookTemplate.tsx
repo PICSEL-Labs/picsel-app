@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import { usePicselBookActions } from '../../../hooks/usePicselBookActions';
@@ -25,10 +26,12 @@ import {
 } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 const PicselBookTemplate = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const { showToast } = useToastStore();
   const picselBookRef = useRef<BottomSheetModal>(null);
 
@@ -114,8 +117,7 @@ const PicselBookTemplate = () => {
           : [...prev, bookId],
       );
     } else {
-      console.log('픽셀북 클릭:', bookId);
-      // TODO: 픽셀북 상세 화면으로 이동
+      navigation.navigate('PicselBookFolder', { bookId });
     }
   };
 

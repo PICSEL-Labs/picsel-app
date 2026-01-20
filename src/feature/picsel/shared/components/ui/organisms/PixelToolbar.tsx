@@ -6,12 +6,14 @@ import CheckRoundIcons from '@/shared/icons/CheckRound';
 import CloseIcons from '@/shared/icons/CloseIcons';
 import FilterIcons from '@/shared/icons/FilterIcons';
 import SortIcons from '@/shared/icons/SortIcons';
+import ViewModeIcons from '@/shared/icons/ViewModeIcons';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
   totalPhotos: number;
   isSelecting: boolean;
   selectedCount: number;
+  viewMode?: boolean;
   onToggleSelecting: () => void;
   onSelectAll: () => void;
   onClose: () => void;
@@ -24,6 +26,7 @@ const PixelToolbar = ({
   isSelecting,
   onToggleSelecting,
   onSelectAll,
+  viewMode,
   selectedCount,
   onClose,
   onSort,
@@ -68,11 +71,14 @@ const PixelToolbar = ({
         onFilter ? 'justify-between' : 'justify-end',
         'flex-row items-center bg-white/90 px-6 py-4',
       )}>
-      {onFilter && (
-        <Text className="text-gray-900 body-rg-03" style={{ lineHeight: 0 }}>
-          전체 {displayCount}
-        </Text>
-      )}
+      {onFilter &&
+        (viewMode ? (
+          <ViewModeIcons shape="list" width={24} height={24} />
+        ) : (
+          <Text className="text-gray-900 body-rg-03" style={{ lineHeight: 0 }}>
+            전체 {displayCount}
+          </Text>
+        ))}
 
       <View className="flex-row items-center space-x-4">
         {/* 브랜드 필터 - onFilter가 있을 때만 표시 */}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ScrollView, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 import PicselBookCard from '../molecules/PicselBookCard';
 
@@ -32,42 +32,55 @@ const PicselBookList = ({
   onDelete,
   onAddBook,
 }: Props) => {
-  return (
-    <ScrollView
-      className="flex-1 px-10 pt-2"
-      showsVerticalScrollIndicator={false}>
-      <View className="flex-row flex-wrap">
-        <View className={cn(isSelecting && 'opacity-40', 'mb-7 mr-[40px]')}>
-          <AddBookButton onPress={onAddBook} />
-        </View>
+  const allItems = [
+    { id: 'add-button', type: 'add' },
+    ...books.map(book => ({ ...book, type: 'book' })),
+  ];
 
-        {/* 픽셀북 카드들 */}
-        {books.map((book, index) => {
-          const position = index + 1;
+  return (
+    <FlatList
+      data={allItems}
+      numColumns={3}
+      keyExtractor={item => item.id}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: 32, paddingTop: 8 }}
+      columnWrapperStyle={{ justifyContent: 'space-between' }}
+      renderItem={({ item, index }) => {
+        if (item.type === 'add') {
           return (
             <View
-              key={book.id}
-              className="mb-7"
-              style={{
-                marginRight: (position + 1) % 3 === 0 ? 0 : 40,
-              }}>
-              <PicselBookCard
-                id={book.id}
-                title={book.title}
-                coverImage={book.coverImage}
-                isSelecting={isSelecting}
-                isSelected={selectedBookIds.includes(book.id)}
-                isLoading={isLoading}
-                onPress={onBookPress}
-                onEdit={onEdit}
-                onChangeCover={onChangeCover}
-                onDelete={onDelete}
-              />
+              className={cn(isSelecting && 'opacity-40', 'mb-7')}
+              style={{ marginRight: 40 }}>
+              <AddBookButton onPress={onAddBook} />
             </View>
           );
-        })}
-      </View>
-    </ScrollView>
+        }
+
+        const book = item as PicselBook & { type: string };
+        const isLastInRow = (index + 1) % 3 === 0;
+
+        return (
+          <View
+            className="mb-7"
+            style={{
+              marginRight: isLastInRow ? 0 : 40,
+            }}>
+            <PicselBookCard
+              id={book.id}
+              title={book.title}
+              coverImage={book.coverImage}
+              isSelecting={isSelecting}
+              isSelected={selectedBookIds.includes(book.id)}
+              isLoading={isLoading}
+              onPress={onBookPress}
+              onEdit={onEdit}
+              onChangeCover={onChangeCover}
+              onDelete={onDelete}
+            />
+          </View>
+        );
+      }}
+    />
   );
 };
 

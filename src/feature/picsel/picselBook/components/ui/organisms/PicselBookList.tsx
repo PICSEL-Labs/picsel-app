@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { FlatList, View } from 'react-native';
+import { FlatList, View, useWindowDimensions } from 'react-native';
 
+import {
+  CARD_WIDTH,
+  GAP,
+  NUM_COLUMNS,
+} from '../../../constants/picselBookGrid';
 import PicselBookCard from '../molecules/PicselBookCard';
 
 import AddBookButton from './AddBookButton';
@@ -32,6 +37,16 @@ const PicselBookList = ({
   onDelete,
   onAddBook,
 }: Props) => {
+  const { width: screenWidth } = useWindowDimensions();
+
+  const horizontalPadding = useMemo(() => {
+    const totalCardsWidth = CARD_WIDTH * NUM_COLUMNS;
+    const totalGapsWidth = GAP * (NUM_COLUMNS - 1);
+    const totalContentWidth = totalCardsWidth + totalGapsWidth;
+    const remainingSpace = screenWidth - totalContentWidth;
+    return remainingSpace / 2;
+  }, [screenWidth]);
+
   const allItems = [
     { id: 'add-button', type: 'add' },
     ...books.map(book => ({ ...book, type: 'book' })),
@@ -40,31 +55,27 @@ const PicselBookList = ({
   return (
     <FlatList
       data={allItems}
-      numColumns={3}
+      numColumns={NUM_COLUMNS}
       keyExtractor={item => item.id}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 32, paddingTop: 8 }}
-      columnWrapperStyle={{ justifyContent: 'space-between' }}
-      renderItem={({ item, index }) => {
+      contentContainerStyle={{
+        paddingHorizontal: horizontalPadding,
+        paddingTop: 8,
+      }}
+      columnWrapperStyle={{ gap: GAP }}
+      renderItem={({ item }) => {
         if (item.type === 'add') {
           return (
-            <View
-              className={cn(isSelecting && 'opacity-40', 'mb-7')}
-              style={{ marginRight: 40 }}>
+            <View className={cn(isSelecting && 'opacity-40', 'mb-7')}>
               <AddBookButton onPress={onAddBook} />
             </View>
           );
         }
 
         const book = item as PicselBook & { type: string };
-        const isLastInRow = (index + 1) % 3 === 0;
 
         return (
-          <View
-            className="mb-7"
-            style={{
-              marginRight: isLastInRow ? 0 : 40,
-            }}>
+          <View className="mb-7">
             <PicselBookCard
               id={book.id}
               title={book.title}

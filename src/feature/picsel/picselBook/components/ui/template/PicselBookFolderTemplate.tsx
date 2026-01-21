@@ -137,6 +137,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
         <>
           {viewMode === 'list' ? (
             <PhotoListView
+              showYear={false}
               ref={flatListRef}
               data={photoData}
               selectedPhotos={selectedPhotos}

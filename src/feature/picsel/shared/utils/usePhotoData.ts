@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { DependencyList, useEffect, useState } from 'react';
 
 interface UsePhotoDataOptions<T> {
   loadData: () => T[];
   delay?: number;
-  deps?: any[];
+  deps?: DependencyList;
 }
 
 interface UsePhotoDataReturn<T> {
@@ -22,13 +22,17 @@ export const usePhotoData = <T>({
 
   useEffect(() => {
     setIsLoading(true);
+    setData([]);
+
     const timer = setTimeout(() => {
       const loadedData = loadData();
       setData(loadedData);
       setIsLoading(false);
     }, delay);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+    };
   }, deps);
 
   return {

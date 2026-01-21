@@ -1,7 +1,7 @@
 export const DELETE_ITEM_CONFIG = {
   photo: {
     unit: '장',
-    itemName: '사진',
+    itemName: '픽셀',
   },
   picselBook: {
     unit: '개',

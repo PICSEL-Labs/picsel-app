@@ -29,6 +29,7 @@ interface Props {
 
 type PicselBookSortType = 'latest' | 'oldest';
 type PicselBookEditType = 'editName' | 'editCover';
+type ViewMode = 'list' | 'textList';
 
 const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
   const initialBookData = MOCK_PICSEL_BOOK_PHOTO_DATA.find(
@@ -41,6 +42,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
   const [isLoading, setIsLoading] = useState(
     initialBookData?.photos.length ? true : false,
   );
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   const totalPhotos = photoData.length;
 
@@ -131,6 +133,10 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
     return count.toString();
   };
 
+  const handleToggleViewMode = () => {
+    setViewMode(prev => (prev === 'list' ? 'textList' : 'list'));
+  };
+
   return (
     <ScreenLayout>
       <FolderHeader
@@ -142,7 +148,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
 
       {photoData.length !== 0 && (
         <PixelToolbar
-          viewMode
+          listViewMode={viewMode}
           totalPhotos={totalPhotos}
           selectedCount={selectedPhotos.length}
           isSelecting={isSelecting}
@@ -151,6 +157,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
           onClose={handleExitSelecting}
           onFilter={showBrandFilterSheet}
           onSort={showSortSheet}
+          onToggleViewMode={handleToggleViewMode}
         />
       )}
 

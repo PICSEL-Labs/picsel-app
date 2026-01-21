@@ -13,12 +13,13 @@ interface Props {
   totalPhotos: number;
   isSelecting: boolean;
   selectedCount: number;
-  viewMode?: boolean;
+  listViewMode?: 'list' | 'textList';
   onToggleSelecting: () => void;
   onSelectAll: () => void;
   onClose: () => void;
   onSort?: () => void;
   onFilter?: () => void;
+  onToggleViewMode?: () => void;
 }
 
 const PixelToolbar = ({
@@ -26,11 +27,12 @@ const PixelToolbar = ({
   isSelecting,
   onToggleSelecting,
   onSelectAll,
-  viewMode,
+  listViewMode,
   selectedCount,
   onClose,
   onSort,
   onFilter,
+  onToggleViewMode,
 }: Props) => {
   const displayCount = totalPhotos > 999 ? '999+' : totalPhotos;
   const isAllSelected = selectedCount === totalPhotos && totalPhotos > 0;
@@ -72,8 +74,14 @@ const PixelToolbar = ({
         'flex-row items-center bg-white/90 px-6 py-4',
       )}>
       {onFilter &&
-        (viewMode ? (
-          <ViewModeIcons shape="list" width={24} height={24} />
+        (listViewMode && onToggleViewMode ? (
+          <Pressable onPress={onToggleViewMode}>
+            <ViewModeIcons
+              shape={listViewMode === 'list' ? 'list' : 'text-list'}
+              width={24}
+              height={24}
+            />
+          </Pressable>
         ) : (
           <Text className="text-gray-900 body-rg-03" style={{ lineHeight: 0 }}>
             전체 {displayCount}

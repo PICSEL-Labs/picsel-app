@@ -5,6 +5,7 @@ interface UsePhotoActionsOptions {
   selectedPhotos: string[];
   onDeleteSuccess?: () => void;
   onMoveSuccess?: () => void;
+  exitSelectingMode?: () => void;
 }
 
 interface UsePhotoActionsReturn {
@@ -16,6 +17,7 @@ export const usePhotoActions = ({
   selectedPhotos,
   onDeleteSuccess,
   onMoveSuccess,
+  exitSelectingMode,
 }: UsePhotoActionsOptions): UsePhotoActionsReturn => {
   const { showToast } = useToastStore();
 
@@ -28,6 +30,7 @@ export const usePhotoActions = ({
     showDeleteConfirmModal('photo', selectedPhotos.length, () => {
       showToast(`${selectedPhotos.length}장의 픽셀을 삭제했어요`, 60);
       onDeleteSuccess?.();
+      exitSelectingMode?.();
     });
   };
 
@@ -38,6 +41,7 @@ export const usePhotoActions = ({
     }
     // TODO: 이동 로직 구현
     onMoveSuccess?.();
+    exitSelectingMode?.();
   };
 
   return {

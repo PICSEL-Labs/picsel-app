@@ -78,7 +78,7 @@ const MyPicselTemplate = () => {
 
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
-    onDeleteSuccess: resetSelection,
+    exitSelectingMode: handleExitSelecting,
   });
 
   // 시뮬레이션: 데이터 로딩 (실제로는 API 호출)

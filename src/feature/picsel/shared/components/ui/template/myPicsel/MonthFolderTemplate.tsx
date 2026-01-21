@@ -62,7 +62,7 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
 
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
-    onDeleteSuccess: resetSelection,
+    exitSelectingMode: handleExitSelecting,
   });
 
   // 데이터 로딩 및 월별 필터링

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
+import PhotoTextListView from '@/feature/picsel/picselBook/components/ui/organisms/PhotoTextListView';
 import { MOCK_PICSEL_BOOK_PHOTO_DATA } from '@/feature/picsel/picselBook/data/mockPicselBookPhotoData';
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
 import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
@@ -32,6 +33,7 @@ type PicselBookEditType = 'editName' | 'editCover';
 type ViewMode = 'list' | 'textList';
 
 const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
+  // bookId로 초기 데이터 설정
   const initialBookData = MOCK_PICSEL_BOOK_PHOTO_DATA.find(
     data => data.bookId === bookId,
   );
@@ -78,7 +80,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
 
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
-    onDeleteSuccess: resetSelection,
+    exitSelectingMode: handleExitSelecting,
   });
 
   // TODO: 데이터 로딩 및 필터링
@@ -165,7 +167,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
         <EmptyStateLayout
           floatingButton={
             <>
-              {!showFunctionButtons && <UploadTooltip bottom={120} />}
+              <UploadTooltip bottom={120} />
               <View className="absolute bottom-14 right-1">
                 {showFunctionButtons ? (
                   <FunctionButton
@@ -183,16 +185,27 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
         </EmptyStateLayout>
       ) : (
         <>
-          <PhotoListView
-            showYear={false}
-            ref={flatListRef}
-            data={photoData}
-            selectedPhotos={selectedPhotos}
-            isSelecting={isSelecting}
-            isLoading={isLoading}
-            onScroll={handleScroll}
-            onToggleSelection={toggleSelection}
-          />
+          {viewMode === 'list' ? (
+            <PhotoListView
+              ref={flatListRef}
+              data={photoData}
+              selectedPhotos={selectedPhotos}
+              isSelecting={isSelecting}
+              isLoading={isLoading}
+              onScroll={handleScroll}
+              onToggleSelection={toggleSelection}
+            />
+          ) : (
+            <PhotoTextListView
+              ref={flatListRef}
+              data={photoData}
+              selectedPhotos={selectedPhotos}
+              isSelecting={isSelecting}
+              isLoading={isLoading}
+              onScroll={handleScroll}
+              onToggleSelection={toggleSelection}
+            />
+          )}
           <FloatingActionButtons
             isSelecting={isSelecting}
             showUpButton={showUpButton}

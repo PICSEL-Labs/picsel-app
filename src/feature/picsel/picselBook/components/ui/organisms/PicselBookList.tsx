@@ -12,6 +12,7 @@ import PicselBookCard from '../molecules/PicselBookCard';
 import AddBookButton from './AddBookButton';
 
 import { PicselBook } from '@/feature/picsel/picselBook/data/mockPicselBookData';
+import PicselBookSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PicselBookSkeleton';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
@@ -47,10 +48,18 @@ const PicselBookList = ({
     return remainingSpace / 2;
   }, [screenWidth]);
 
-  const allItems = [
-    { id: 'add-button', type: 'add' },
-    ...books.map(book => ({ ...book, type: 'book' })),
-  ];
+  const allItems = isLoading
+    ? [
+        { id: 'add-button', type: 'add' },
+        ...Array.from({ length: 5 }, (_, i) => ({
+          id: `skeleton-${i}`,
+          type: 'skeleton',
+        })),
+      ]
+    : [
+        { id: 'add-button', type: 'add' },
+        ...books.map(book => ({ ...book, type: 'book' })),
+      ];
 
   return (
     <FlatList
@@ -72,6 +81,14 @@ const PicselBookList = ({
           );
         }
 
+        if (item.type === 'skeleton') {
+          return (
+            <View className="mb-7">
+              <PicselBookSkeleton />
+            </View>
+          );
+        }
+
         const book = item as PicselBook & { type: string };
 
         return (
@@ -82,7 +99,6 @@ const PicselBookList = ({
               coverImage={book.coverImage}
               isSelecting={isSelecting}
               isSelected={selectedBookIds.includes(book.id)}
-              isLoading={isLoading}
               onPress={onBookPress}
               onEdit={onEdit}
               onChangeCover={onChangeCover}

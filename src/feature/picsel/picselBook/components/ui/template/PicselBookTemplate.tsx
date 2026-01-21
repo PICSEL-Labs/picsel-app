@@ -70,7 +70,7 @@ const PicselBookTemplate = () => {
     options: PICSEL_BOOK_SORT_OPTIONS,
   });
 
-  if (!hasBooks) {
+  if (!isLoading && !hasBooks) {
     return (
       <EmptyStateLayout
         floatingButton={

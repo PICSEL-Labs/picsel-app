@@ -2,7 +2,16 @@ import React from 'react';
 
 import { Image, Pressable, Text, View } from 'react-native';
 
+import {
+  CONTENT_MAX_LINES,
+  PHOTO_DEFAULT_TITLE,
+  PHOTO_PLACEHOLDER_TEXT,
+  TITLE_MAX_LINES,
+} from '../../../constants/photo';
+import { CARD_SHADOW, TEXT_LIST_CARD } from '../../../constants/styles';
+
 import type { Photo } from '@/feature/picsel/picselBook/data/mockPicselBookPhotoData';
+import { usePhotoFormat } from '@/feature/picsel/shared/utils/usePhotoFormat';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import SparkleImages from '@/shared/images/Sparkle';
 import { cn } from '@/shared/lib/cn';
@@ -22,6 +31,12 @@ const PhotoTextListItem = ({
   onToggleSelection,
   onPress,
 }: Props) => {
+  const { formatDate } = usePhotoFormat();
+
+  const formattedDate = formatDate(photo.date);
+  const isDefaultTitle = photo.title === PHOTO_DEFAULT_TITLE || !photo.title;
+  const isDefaultContent = !photo.content;
+
   const handlePress = () => {
     if (isSelecting) {
       onToggleSelection(photo.id);
@@ -30,38 +45,22 @@ const PhotoTextListItem = ({
     }
   };
 
-  // 날짜 포맷팅 (YYYY.MM.DD)
-  const formattedDate = photo.date.replace(/-/g, '.');
-
-  // 타이틀이 기본값인지 확인
-  const isDefaultTitle = photo.title === '제목 입력' || !photo.title;
-
-  // 내용이 없는지 확인
-  const isDefaultContent = !photo.content;
-
-  // 플레이스홀더 텍스트
-  const placeholderText =
-    '✏️ 이 날의 추억을 기록해보아요!\n(기억하고 싶은 순간, 감정, 에피소드 등을 자유롭게 남겨보세요)';
-
   return (
     <Pressable
       onPress={handlePress}
       className="mb-3 flex-row items-center space-x-4 self-stretch rounded-xl border border-gray-100 bg-white px-4 py-3"
       style={{
-        width: 360,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: -2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 2,
-        elevation: 4,
-        boxShadow:
-          '0 -2px 8px 2px rgba(0, 0, 0, 0.10), 2px 4px 8px 0 rgba(255, 255, 255, 0.25) inset;',
+        width: TEXT_LIST_CARD.WIDTH,
+        ...CARD_SHADOW,
       }}>
       {/* 이미지 */}
       <View className="relative flex-shrink-0">
         <Image
           source={{ uri: photo.uri }}
-          className="h-[150px] w-[100px]"
+          style={{
+            width: TEXT_LIST_CARD.IMAGE_WIDTH,
+            height: TEXT_LIST_CARD.IMAGE_HEIGHT,
+          }}
           resizeMode="cover"
         />
       </View>
@@ -71,9 +70,7 @@ const PhotoTextListItem = ({
         {/* date text container */}
         <View className="flex-col items-start self-stretch">
           <View className="flex-row items-center justify-between self-stretch">
-            {/* 날짜 */}
             <Text className="text-gray-600 body-rg-02">{formattedDate}</Text>
-            {/* 선택 체크박스 */}
             {isSelecting && (
               <View style={{ marginBottom: 0, marginRight: 0 }}>
                 <CheckRoundIcons
@@ -85,26 +82,25 @@ const PhotoTextListItem = ({
             )}
           </View>
 
-          {/* text-content */}
           <View className="mt-0.5 flex-col items-start self-stretch">
-            {/* 타이틀 */}
             <Text
               className={cn(
-                'mb-0.5 headline-03',
-                isDefaultTitle ? 'text-gray-600 body-rg-04' : 'text-gray-900',
+                'mb-0.5',
+                isDefaultTitle
+                  ? 'text-gray-600 body-rg-04'
+                  : 'text-gray-900 headline-03',
               )}
-              numberOfLines={1}>
-              {photo.title || '제목 입력'}
+              numberOfLines={TITLE_MAX_LINES}>
+              {photo.title || PHOTO_DEFAULT_TITLE}
             </Text>
 
-            {/* 내용 */}
             <Text
               className={cn(
                 'body-rg-02',
                 isDefaultContent ? 'text-gray-500' : 'text-gray-900',
               )}
-              numberOfLines={3}>
-              {photo.content || placeholderText}
+              numberOfLines={CONTENT_MAX_LINES}>
+              {photo.content || PHOTO_PLACEHOLDER_TEXT}
             </Text>
           </View>
         </View>

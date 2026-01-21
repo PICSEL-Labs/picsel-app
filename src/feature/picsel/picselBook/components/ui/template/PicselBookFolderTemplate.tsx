@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { View } from 'react-native';
 
+import { PicselBookEditType, PicselBookSortType } from '../../../types';
+
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import PhotoTextListView from '@/feature/picsel/picselBook/components/ui/organisms/PhotoTextListView';
-import { MOCK_PICSEL_BOOK_PHOTO_DATA } from '@/feature/picsel/picselBook/data/mockPicselBookPhotoData';
+import { usePicselBookFolder } from '@/feature/picsel/picselBook/hooks/usePicselBookFolder';
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
 import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
 import FunctionButton from '@/feature/picsel/shared/components/ui/atoms/Button/FunctionButton';
@@ -14,12 +16,7 @@ import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/Folder
 import UploadTooltip from '@/feature/picsel/shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
-import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
-import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
-import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
-import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
-import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
@@ -28,80 +25,47 @@ interface Props {
   onBack: () => void;
 }
 
-type PicselBookSortType = 'latest' | 'oldest';
-type PicselBookEditType = 'editName' | 'editCover';
-type ViewMode = 'list' | 'textList';
-
 const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
-  // bookId로 초기 데이터 설정
-  const initialBookData = MOCK_PICSEL_BOOK_PHOTO_DATA.find(
-    data => data.bookId === bookId,
-  );
-
-  const [photoData, setPhotoData] = useState(initialBookData?.photos || []);
-  const [bookTitle, setBookTitle] = useState(initialBookData?.bookTitle || '');
-  // 초기 데이터가 비어있으면 로딩 상태를 false로 설정
-  const [isLoading, setIsLoading] = useState(
-    initialBookData?.photos.length ? true : false,
-  );
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
-
-  const totalPhotos = photoData.length;
-
   const {
+    // 데이터
+    photoData,
+    bookTitle,
+    isLoading,
+    totalPhotos,
+
+    // 뷰 모드
+    viewMode,
+    handleToggleViewMode,
+
+    // 선택 모드
     isSelecting,
     selectedPhotos,
-    setIsSelecting,
     toggleSelection,
     selectAll,
-    resetSelection,
-  } = usePhotoSelection();
-
-  const {
     handleEnterSelecting,
     handleExitSelecting,
-    selectionSheetRef: selectionBottomSheetRef,
-  } = useSelectingMode({
-    isSelecting,
-    setIsSelecting,
-    resetSelection,
-  });
+    selectionBottomSheetRef,
 
-  const { showUpButton, flatListRef, handleScroll, scrollToTop } =
-    useScrollWithUpButton();
+    // 스크롤
+    showUpButton,
+    flatListRef,
+    handleScroll,
+    scrollToTop,
 
-  const {
+    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
-  } = useFunctionButtons();
 
-  const { handleDelete, handleMove } = usePhotoActions({
-    selectedPhotos,
-    exitSelectingMode: handleExitSelecting,
-  });
+    // 사진 액션
+    handleDelete,
+    handleMove,
 
-  // TODO: 데이터 로딩 및 필터링
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-
-      const bookData = MOCK_PICSEL_BOOK_PHOTO_DATA.find(
-        data => data.bookId === bookId,
-      );
-      if (bookData) {
-        setBookTitle(bookData.bookTitle);
-        setPhotoData(bookData.photos);
-      } else {
-        setBookTitle('');
-        setPhotoData([]);
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [bookId]);
+    // 유틸리티
+    formatPhotoCount,
+  } = usePicselBookFolder({ bookId });
 
   // TODO: 정렬 로직 구현
   const handleSort = (sortType: PicselBookSortType) => {
@@ -124,20 +88,6 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
       { type: 'editCover', label: '커버사진 편집' },
     ],
   });
-
-  const formatPhotoCount = (count: number) => {
-    if (count === 0) {
-      return '0';
-    }
-    if (count > 999) {
-      return '999+';
-    }
-    return count.toString();
-  };
-
-  const handleToggleViewMode = () => {
-    setViewMode(prev => (prev === 'list' ? 'textList' : 'list'));
-  };
 
   return (
     <ScreenLayout>

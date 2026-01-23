@@ -1,20 +1,14 @@
 import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View } from 'react-native';
 
 import TabBarIcon from './TabBarIcon';
 
 import HomeScreen from '@/screens/home';
+import MypageScreen from '@/screens/mypage';
 import PicselTabScreen from '@/screens/picsel';
 
 const Tab = createBottomTabNavigator();
-
-const DummyScreen = ({ label }: { label: string }) => (
-  <View className="flex-1 items-center justify-center bg-white">
-    <Text>{label} Screen</Text>
-  </View>
-);
 
 const EmptyScreen = () => <></>;
 
@@ -42,6 +36,7 @@ const BottomTabBar = () => {
         tabBarStyle: {
           paddingTop: 6,
           paddingHorizontal: 4,
+          borderColor: 'white',
         },
       })}>
       <Tab.Screen name="HomeScreen" component={HomeScreen} />
@@ -56,7 +51,7 @@ const BottomTabBar = () => {
         }}
       />
       <Tab.Screen name="BookScreen" component={PicselTabScreen} />
-      <Tab.Screen name="MyScreen" children={() => <DummyScreen label="My" />} />
+      <Tab.Screen name="MyScreen" component={MypageScreen} />
     </Tab.Navigator>
   );
 };

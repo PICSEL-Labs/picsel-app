@@ -50,7 +50,6 @@ const PhotoListView = forwardRef<FlatList, Props>(
       aspectRatio: 1.5,
     });
 
-    // 스켈레톤 렌더링
     if (isLoading) {
       return (
         <GridPhotoSkeleton

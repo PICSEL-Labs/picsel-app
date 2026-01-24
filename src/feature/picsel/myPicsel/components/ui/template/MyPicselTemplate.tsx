@@ -25,17 +25,14 @@ import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 const MyPicselTemplate = () => {
   const {
-    // 데이터
     photoData,
     isLoading,
     totalPhotos,
     hasPhotos,
 
-    // 날짜 필터
     dateFilter,
     handleDateFilterChange,
 
-    // 선택 모드
     isSelecting,
     selectedPhotos,
     toggleSelection,
@@ -44,25 +41,21 @@ const MyPicselTemplate = () => {
     handleExitSelecting,
     selectionBottomSheetRef,
 
-    // 스크롤
     showUpButton,
     flatListRef,
     scrollViewRef,
     handleScroll,
     scrollToTop,
 
-    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
 
-    // 사진 액션
     handleDelete,
     handleMove,
 
-    // 네비게이션
     handleViewAllYear,
     handleViewMonthFolder,
   } = useMyPicsel();

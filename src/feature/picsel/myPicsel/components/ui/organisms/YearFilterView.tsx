@@ -47,6 +47,7 @@ const YearFilterView = ({
 
   return (
     <ScrollView
+      className="flex-1"
       ref={scrollViewRef}
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
@@ -58,7 +59,6 @@ const YearFilterView = ({
       }}>
       {yearGroups.map((yearGroup, yearIndex) => (
         <View key={`${yearGroup.year}-${yearIndex}`}>
-          {/* 년 전체보기 */}
           <View className="mb-4 mt-2 flex-row items-center justify-between">
             <Text className="text-gray-900 headline-02">
               {yearGroup.year}년
@@ -72,10 +72,8 @@ const YearFilterView = ({
             </Pressable>
           </View>
 
-          {/* 월 */}
           {yearGroup.months.map((monthGroup, monthIndex) => (
             <View key={`${monthGroup.month}-${monthIndex}`} className="mb-6">
-              {/* 월 타이틀 */}
               <View className="mb-3 flex-row items-center justify-between">
                 <Text className="text-gray-900 headline-02">
                   {monthGroup.month}
@@ -87,7 +85,6 @@ const YearFilterView = ({
                 </Pressable>
               </View>
 
-              {/* 스크롤뷰 */}
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View className="flex-row">
                   {monthGroup.photos.map(photo => (

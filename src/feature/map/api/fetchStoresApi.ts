@@ -11,5 +11,6 @@ export const fetchStores = async (
       params,
     },
   );
+
   return response.data;
 };

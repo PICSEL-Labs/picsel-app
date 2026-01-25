@@ -50,6 +50,7 @@ const PicselBookCard = ({
           width={80}
           height={72}
           imageUri={coverImage}
+          opacity={isSelecting && coverImage ? 0.3 : 1}
         />
 
         {/* 선택 모드 체크박스 */}

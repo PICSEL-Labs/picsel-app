@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { ScrollView, View } from 'react-native';
+import { FlatList, View, useWindowDimensions } from 'react-native';
 
+import {
+  CARD_WIDTH,
+  GAP,
+  NUM_COLUMNS,
+} from '../../../constants/picselBookGrid';
 import PicselBookCard from '../molecules/PicselBookCard';
 
 import AddBookButton from './AddBookButton';
 
 import { PicselBook } from '@/feature/picsel/picselBook/data/mockPicselBookData';
+import PicselBookSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PicselBookSkeleton';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
@@ -32,42 +38,76 @@ const PicselBookList = ({
   onDelete,
   onAddBook,
 }: Props) => {
-  return (
-    <ScrollView
-      className="flex-1 px-10 pt-2"
-      showsVerticalScrollIndicator={false}>
-      <View className="flex-row flex-wrap">
-        <View className={cn(isSelecting && 'opacity-40', 'mb-7 mr-[40px]')}>
-          <AddBookButton onPress={onAddBook} />
-        </View>
+  const { width: screenWidth } = useWindowDimensions();
 
-        {/* 픽셀북 카드들 */}
-        {books.map((book, index) => {
-          const position = index + 1;
+  const horizontalPadding = useMemo(() => {
+    const totalCardsWidth = CARD_WIDTH * NUM_COLUMNS;
+    const totalGapsWidth = GAP * (NUM_COLUMNS - 1);
+    const totalContentWidth = totalCardsWidth + totalGapsWidth;
+    const remainingSpace = screenWidth - totalContentWidth;
+    return remainingSpace / 2;
+  }, [screenWidth]);
+
+  const allItems = isLoading
+    ? [
+        { id: 'add-button', type: 'add' },
+        ...Array.from({ length: 5 }, (_, i) => ({
+          id: `skeleton-${i}`,
+          type: 'skeleton',
+        })),
+      ]
+    : [
+        { id: 'add-button', type: 'add' },
+        ...books.map(book => ({ ...book, type: 'book' })),
+      ];
+
+  return (
+    <FlatList
+      data={allItems}
+      numColumns={NUM_COLUMNS}
+      keyExtractor={item => item.id}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingHorizontal: horizontalPadding,
+        paddingTop: 8,
+      }}
+      columnWrapperStyle={{ gap: GAP }}
+      renderItem={({ item }) => {
+        if (item.type === 'add') {
           return (
-            <View
-              key={book.id}
-              className="mb-7"
-              style={{
-                marginRight: (position + 1) % 3 === 0 ? 0 : 40,
-              }}>
-              <PicselBookCard
-                id={book.id}
-                title={book.title}
-                coverImage={book.coverImage}
-                isSelecting={isSelecting}
-                isSelected={selectedBookIds.includes(book.id)}
-                isLoading={isLoading}
-                onPress={onBookPress}
-                onEdit={onEdit}
-                onChangeCover={onChangeCover}
-                onDelete={onDelete}
-              />
+            <View className={cn(isSelecting && 'opacity-40', 'mb-7')}>
+              <AddBookButton onPress={onAddBook} />
             </View>
           );
-        })}
-      </View>
-    </ScrollView>
+        }
+
+        if (item.type === 'skeleton') {
+          return (
+            <View className="mb-7">
+              <PicselBookSkeleton />
+            </View>
+          );
+        }
+
+        const book = item as PicselBook & { type: string };
+
+        return (
+          <View className="mb-7">
+            <PicselBookCard
+              id={book.id}
+              title={book.title}
+              coverImage={book.coverImage}
+              isSelecting={isSelecting}
+              isSelected={selectedBookIds.includes(book.id)}
+              onPress={onBookPress}
+              onEdit={onEdit}
+              onChangeCover={onChangeCover}
+              onDelete={onDelete}
+            />
+          </View>
+        );
+      }}
+    />
   );
 };
 

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import EmptyStateLayout from '../../../../shared/components/layouts/EmptyStateLayout';
@@ -10,131 +9,73 @@ import EmptyMessage from '../../../../shared/components/ui/molecules/EmptyMessag
 import UploadTooltip from '../../../../shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '../../../../shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '../../../../shared/components/ui/organisms/PixelToolbar';
-import DateFilterButton, { DateFilterType } from '../atoms/DateFilterButton';
+import { useMyPicsel } from '../../../hooks/useMyPicsel';
+import DateFilterButton from '../atoms/DateFilterButton';
 
 import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/MonthFilterView';
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
-import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
-import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import {
   MyPicselSortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
-import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
-import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
-import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 const MyPicselTemplate = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-
-  const [photoData, setPhotoData] = useState([]);
-  const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
-  const [isLoading, setIsLoading] = useState(true);
-
-  const totalPhotos = photoData.length;
-  const hasPhotos = totalPhotos > 0;
-
   const {
+    // 데이터
+    photoData,
+    isLoading,
+    totalPhotos,
+    hasPhotos,
+
+    // 날짜 필터
+    dateFilter,
+    handleDateFilterChange,
+
+    // 선택 모드
     isSelecting,
     selectedPhotos,
-    setIsSelecting,
     toggleSelection,
     selectAll,
-    resetSelection,
-  } = usePhotoSelection();
-
-  const {
     handleEnterSelecting,
     handleExitSelecting,
-    selectionSheetRef: selectionBottomSheetRef,
-  } = useSelectingMode({
-    isSelecting,
-    setIsSelecting,
-    resetSelection,
-  });
+    selectionBottomSheetRef,
 
-  const {
+    // 스크롤
     showUpButton,
     flatListRef,
     scrollViewRef,
     handleScroll,
     scrollToTop,
-  } = useScrollWithUpButton({
-    useScrollView: dateFilter === 'year' || dateFilter === 'month',
-  });
 
-  const {
+    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
-  } = useFunctionButtons();
 
-  const { handleDelete, handleMove } = usePhotoActions({
-    selectedPhotos,
-    onDeleteSuccess: resetSelection,
-  });
+    // 사진 액션
+    handleDelete,
+    handleMove,
 
-  // 시뮬레이션: 데이터 로딩 (실제로는 API 호출)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      // MOCK_YEAR_DATA에서 모든 사진 가져오기
-      const allPhotos = MOCK_YEAR_DATA.flatMap(yearData =>
-        yearData.months.flatMap(month => month.photos),
-      );
-      setPhotoData(allPhotos);
-    }, 2000); // 2초 후 로딩 완료
+    // 네비게이션
+    handleViewAllYear,
+    handleViewMonthFolder,
+  } = useMyPicsel();
 
-    return () => clearTimeout(timer);
-  }, []);
-
+  // TODO: 정렬 로직 구현
   const handleSort = (sortType: MyPicselSortType) => {
     console.log('정렬 타입:', sortType);
-    // TODO: 정렬 로직 구현
-    switch (sortType) {
-      case 'latest':
-        // 최근 생성 순 정렬
-        break;
-
-      case 'date':
-        // 사진 게재 순 정렬
-        break;
-    }
   };
 
   const { showSortSheet } = useSortActionSheet({
     onSort: handleSort,
   });
 
-  const handleDateFilterChange = (type: DateFilterType) => {
-    setDateFilter(type);
-    console.log('날짜 필터:', type);
-
-    // 필터 변경 시 로딩 상태 시뮬레이션
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    // TODO: 날짜 필터링 로직 구현
-  };
-
-  const handleViewAllYear = (year: string) => {
-    navigation.navigate('YearFolder', { year });
-  };
-
-  const handleViewMonthFolder = (year: string, month: string) => {
-    navigation.navigate('MonthFolder', { year, month });
-  };
-
-  // Empty state (로딩 중이 아닐 때만 표시)
   if (!isLoading && !hasPhotos) {
     return (
       <EmptyStateLayout
@@ -159,10 +100,8 @@ const MyPicselTemplate = () => {
     );
   }
 
-  // Content state (로딩 중이거나 사진이 있을 때)
   return (
     <View className="flex-1">
-      {/* 툴바 (년/월 필터가 아닐 때만 표시) */}
       {dateFilter === 'all' && (
         <PixelToolbar
           totalPhotos={totalPhotos}
@@ -176,7 +115,6 @@ const MyPicselTemplate = () => {
         />
       )}
 
-      {/* 콘텐츠 */}
       {dateFilter === 'year' ? (
         <YearFilterView
           scrollViewRef={scrollViewRef}
@@ -206,17 +144,14 @@ const MyPicselTemplate = () => {
         />
       )}
 
-      {/* Selection Bottom Sheet */}
       <SelectionBottomSheet
         ref={selectionBottomSheetRef}
         onDelete={handleDelete}
         onMove={handleMove}
       />
 
-      {/* Floating Buttons - 항상 하단 고정 */}
       {!isSelecting && (
         <>
-          {/* Date Filter - Center */}
           <View className="absolute -bottom-4 left-0 right-0 items-center">
             <DateFilterButton
               selected={dateFilter}
@@ -224,7 +159,6 @@ const MyPicselTemplate = () => {
             />
           </View>
 
-          {/* Add Button - Right */}
           <View className="absolute -bottom-4 right-4">
             {showUpButton && (
               <View

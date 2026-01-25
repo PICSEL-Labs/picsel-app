@@ -12,9 +12,16 @@ interface Props {
   width: number;
   height: number;
   imageUri?: string;
+  opacity?: number;
 }
 
-const PicselBookIcons = ({ shape, width, height, imageUri }: Props) => {
+const PicselBookIcons = ({
+  shape,
+  width,
+  height,
+  imageUri,
+  opacity,
+}: Props) => {
   const renderIcon = () => {
     switch (shape) {
       case 'default':
@@ -45,6 +52,18 @@ const PicselBookIcons = ({ shape, width, height, imageUri }: Props) => {
           }}
           resizeMode="cover"
         />
+        {opacity < 1 && (
+          <View
+            style={{
+              position: 'absolute',
+              left: '7%',
+              width: '88%',
+              height: '97%',
+              borderRadius: 5,
+              backgroundColor: '#0000004D',
+            }}
+          />
+        )}
       </View>
     );
   }

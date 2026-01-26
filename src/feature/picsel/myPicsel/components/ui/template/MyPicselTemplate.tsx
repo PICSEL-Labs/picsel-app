@@ -94,7 +94,7 @@ const MyPicselTemplate = () => {
   }
 
   return (
-    <View className="flex-1">
+    <View>
       {dateFilter === 'all' && (
         <PixelToolbar
           totalPhotos={totalPhotos}
@@ -145,14 +145,14 @@ const MyPicselTemplate = () => {
 
       {!isSelecting && (
         <>
-          <View className="absolute -bottom-4 left-0 right-0 items-center">
+          <View className="absolute bottom-10 left-0 right-0 items-center">
             <DateFilterButton
               selected={dateFilter}
               onSelect={handleDateFilterChange}
             />
           </View>
 
-          <View className="absolute -bottom-4 right-4">
+          <View className="absolute bottom-10 right-4">
             {showUpButton && (
               <View
                 style={{

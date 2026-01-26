@@ -16,7 +16,7 @@ import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/Pho
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import {
   MyPicselSortType,
   useSortActionSheet,

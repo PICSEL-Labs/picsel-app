@@ -15,7 +15,7 @@ import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyM
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import UploadTooltip from '@/feature/picsel/shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';

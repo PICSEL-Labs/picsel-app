@@ -13,7 +13,7 @@ import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButto
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import {
   PicselBookSortType,
   PICSEL_BOOK_SORT_OPTIONS,

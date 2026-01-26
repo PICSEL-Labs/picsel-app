@@ -7,7 +7,7 @@ import { useYearFolder } from '@/feature/picsel/myPicsel/hooks/useYearFolder';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import {
   MyPicselSortType,
   useSortActionSheet,

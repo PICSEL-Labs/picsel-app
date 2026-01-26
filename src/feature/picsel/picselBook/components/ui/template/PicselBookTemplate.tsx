@@ -13,7 +13,7 @@ import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButto
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import {
   PicselBookSortType,
   PICSEL_BOOK_SORT_OPTIONS,
@@ -22,13 +22,11 @@ import {
 
 const PicselBookTemplate = () => {
   const {
-    // 데이터
     books,
     isLoading,
     totalBooks,
     hasBooks,
 
-    // 선택 모드
     isSelecting,
     selectedBookIds,
     handleEnterSelecting,
@@ -36,18 +34,15 @@ const PicselBookTemplate = () => {
     handleSelectAll,
     selectionSheetRef,
 
-    // 스크롤
     showUpButton,
     scrollToTop,
 
-    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
 
-    // 픽셀북 액션
     handleAddBook,
     handleSubmit,
     handleBookPress,
@@ -56,7 +51,6 @@ const PicselBookTemplate = () => {
     handleChangeCover,
     handleDelete,
 
-    // Refs
     picselBookRef,
   } = usePicselBook();
 
@@ -136,7 +130,7 @@ const PicselBookTemplate = () => {
       )}
 
       {!isSelecting && (
-        <View className="absolute -bottom-4 right-4">
+        <View className="absolute bottom-4 right-4">
           {showUpButton && (
             <View
               style={{

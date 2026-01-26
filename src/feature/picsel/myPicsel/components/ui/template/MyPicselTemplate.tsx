@@ -8,7 +8,6 @@ import FunctionButton from '../../../../shared/components/ui/atoms/Button/Functi
 import EmptyMessage from '../../../../shared/components/ui/molecules/EmptyMessage';
 import UploadTooltip from '../../../../shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '../../../../shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '../../../../shared/components/ui/organisms/PixelToolbar';
 import { useMyPicsel } from '../../../hooks/useMyPicsel';
 import DateFilterButton from '../atoms/DateFilterButton';
 
@@ -17,6 +16,7 @@ import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/Pho
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import {
   MyPicselSortType,
   useSortActionSheet,
@@ -25,17 +25,14 @@ import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 const MyPicselTemplate = () => {
   const {
-    // 데이터
     photoData,
     isLoading,
     totalPhotos,
     hasPhotos,
 
-    // 날짜 필터
     dateFilter,
     handleDateFilterChange,
 
-    // 선택 모드
     isSelecting,
     selectedPhotos,
     toggleSelection,
@@ -44,25 +41,20 @@ const MyPicselTemplate = () => {
     handleExitSelecting,
     selectionBottomSheetRef,
 
-    // 스크롤
     showUpButton,
     flatListRef,
-    scrollViewRef,
     handleScroll,
     scrollToTop,
 
-    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
 
-    // 사진 액션
     handleDelete,
     handleMove,
 
-    // 네비게이션
     handleViewAllYear,
     handleViewMonthFolder,
   } = useMyPicsel();
@@ -117,7 +109,7 @@ const MyPicselTemplate = () => {
 
       {dateFilter === 'year' ? (
         <YearFilterView
-          scrollViewRef={scrollViewRef}
+          ref={flatListRef}
           onScroll={handleScroll}
           yearGroups={MOCK_YEAR_DATA}
           isLoading={isLoading}
@@ -126,7 +118,7 @@ const MyPicselTemplate = () => {
         />
       ) : dateFilter === 'month' ? (
         <MonthFilterView
-          scrollViewRef={scrollViewRef}
+          ref={flatListRef}
           onScroll={handleScroll}
           yearGroups={MOCK_YEAR_DATA}
           isLoading={isLoading}
@@ -152,14 +144,14 @@ const MyPicselTemplate = () => {
 
       {!isSelecting && (
         <>
-          <View className="absolute -bottom-4 left-0 right-0 items-center">
+          <View className="absolute bottom-4 left-0 right-0 items-center">
             <DateFilterButton
               selected={dateFilter}
               onSelect={handleDateFilterChange}
             />
           </View>
 
-          <View className="absolute -bottom-4 right-4">
+          <View className="absolute bottom-4 right-4">
             {showUpButton && (
               <View
                 style={{

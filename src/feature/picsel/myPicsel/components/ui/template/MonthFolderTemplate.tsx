@@ -1,12 +1,18 @@
 import React from 'react';
 
-import PhotoFolderTemplate from './PhotoFolderTemplate';
+import { View } from 'react-native';
 
+import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import { useMonthFolder } from '@/feature/picsel/myPicsel/hooks/useMonthFolder';
+import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
+import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
+import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import {
   MyPicselSortType,
   useSortActionSheet,
 } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 interface Props {
@@ -16,7 +22,33 @@ interface Props {
 }
 
 const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
-  const folderViewState = useMonthFolder({ year, month });
+  const {
+    photoData,
+    isLoading,
+    totalPhotos,
+
+    isSelecting,
+    selectedPhotos,
+    toggleSelection,
+    selectAll,
+    handleEnterSelecting,
+    handleExitSelecting,
+    selectionBottomSheetRef,
+
+    showUpButton,
+    flatListRef,
+    handleScroll,
+    scrollToTop,
+
+    showFunctionButtons,
+    toggleFunctionButtons,
+    handleAlbumPress,
+    handleQrPress,
+    closeFunctionButtons,
+
+    handleDelete,
+    handleMove,
+  } = useMonthFolder({ year, month });
 
   // TODO: 정렬 로직 구현
   const handleSort = (sortType: MyPicselSortType) => {
@@ -28,20 +60,52 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
   });
 
   return (
-    <PhotoFolderTemplate
-      title={`${year}년 ${month}`}
-      onBack={onBack}
-      onSort={showSortSheet}
-      onFilter={showBrandFilterSheet}
-      onSelectAll={() =>
-        folderViewState.selectAll(
-          folderViewState.totalPhotos,
-          folderViewState.photoData,
-        )
-      }
-      showYear={false}
-      {...folderViewState}
-    />
+    <ScreenLayout>
+      <FolderHeader title={`${year}년 ${month}`} onBack={onBack} />
+
+      <PixelToolbar
+        totalPhotos={totalPhotos}
+        isSelecting={isSelecting}
+        selectedCount={selectedPhotos.length}
+        onToggleSelecting={handleEnterSelecting}
+        onSelectAll={() => selectAll(totalPhotos, photoData)}
+        onClose={handleExitSelecting}
+        onSort={showSortSheet}
+        onFilter={showBrandFilterSheet}
+      />
+
+      <PhotoListView
+        ref={flatListRef}
+        data={photoData}
+        isSelecting={isSelecting}
+        selectedPhotos={selectedPhotos}
+        onToggleSelection={toggleSelection}
+        isLoading={isLoading}
+        onScroll={handleScroll}
+        showYear={false}
+      />
+
+      <SelectionBottomSheet
+        ref={selectionBottomSheetRef}
+        onDelete={handleDelete}
+        onMove={handleMove}
+      />
+
+      {!isSelecting && (
+        <View className="absolute bottom-0 right-4">
+          <FloatingActionButtons
+            isSelecting={isSelecting}
+            showUpButton={showUpButton}
+            showFunctionButtons={showFunctionButtons}
+            onToggleFunctionButtons={toggleFunctionButtons}
+            onScrollToTop={scrollToTop}
+            onAlbumPress={handleAlbumPress}
+            onQrPress={handleQrPress}
+            onCloseFunctionButtons={closeFunctionButtons}
+          />
+        </View>
+      )}
+    </ScreenLayout>
   );
 };
 

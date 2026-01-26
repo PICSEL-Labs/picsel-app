@@ -64,15 +64,8 @@ export const useMyPicsel = () => {
   });
 
   // 스크롤 관리
-  const {
-    showUpButton,
-    flatListRef,
-    scrollViewRef,
-    handleScroll,
-    scrollToTop,
-  } = useScrollWithUpButton({
-    useScrollView: dateFilter === 'year' || dateFilter === 'month',
-  });
+  const { showUpButton, flatListRef, handleScroll, scrollToTop } =
+    useScrollWithUpButton();
 
   // 기능 버튼 (업로드)
   const {
@@ -129,7 +122,6 @@ export const useMyPicsel = () => {
     // 스크롤
     showUpButton,
     flatListRef,
-    scrollViewRef,
     handleScroll,
     scrollToTop,
 

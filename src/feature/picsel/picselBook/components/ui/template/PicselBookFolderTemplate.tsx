@@ -15,7 +15,7 @@ import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyM
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import UploadTooltip from '@/feature/picsel/shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
@@ -27,17 +27,14 @@ interface Props {
 
 const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
   const {
-    // 데이터
     photoData,
     bookTitle,
     isLoading,
     totalPhotos,
 
-    // 뷰 모드
     viewMode,
     handleToggleViewMode,
 
-    // 선택 모드
     isSelecting,
     selectedPhotos,
     toggleSelection,
@@ -46,24 +43,20 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
     handleExitSelecting,
     selectionBottomSheetRef,
 
-    // 스크롤
     showUpButton,
     flatListRef,
     handleScroll,
     scrollToTop,
 
-    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
 
-    // 사진 액션
     handleDelete,
     handleMove,
 
-    // 유틸리티
     formatPhotoCount,
   } = usePicselBookFolder({ bookId });
 

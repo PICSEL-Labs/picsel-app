@@ -8,7 +8,6 @@ import FunctionButton from '../../../../shared/components/ui/atoms/Button/Functi
 import EmptyMessage from '../../../../shared/components/ui/molecules/EmptyMessage';
 import UploadTooltip from '../../../../shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '../../../../shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '../../../../shared/components/ui/organisms/PixelToolbar';
 import { useMyPicsel } from '../../../hooks/useMyPicsel';
 import DateFilterButton from '../atoms/DateFilterButton';
 
@@ -17,6 +16,7 @@ import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/Pho
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
 import {
   MyPicselSortType,
   useSortActionSheet,
@@ -43,7 +43,6 @@ const MyPicselTemplate = () => {
 
     showUpButton,
     flatListRef,
-    scrollViewRef,
     handleScroll,
     scrollToTop,
 
@@ -94,7 +93,7 @@ const MyPicselTemplate = () => {
   }
 
   return (
-    <View>
+    <View className="flex-1">
       {dateFilter === 'all' && (
         <PixelToolbar
           totalPhotos={totalPhotos}
@@ -110,7 +109,7 @@ const MyPicselTemplate = () => {
 
       {dateFilter === 'year' ? (
         <YearFilterView
-          scrollViewRef={scrollViewRef}
+          ref={flatListRef}
           onScroll={handleScroll}
           yearGroups={MOCK_YEAR_DATA}
           isLoading={isLoading}
@@ -119,7 +118,7 @@ const MyPicselTemplate = () => {
         />
       ) : dateFilter === 'month' ? (
         <MonthFilterView
-          scrollViewRef={scrollViewRef}
+          ref={flatListRef}
           onScroll={handleScroll}
           yearGroups={MOCK_YEAR_DATA}
           isLoading={isLoading}
@@ -145,14 +144,14 @@ const MyPicselTemplate = () => {
 
       {!isSelecting && (
         <>
-          <View className="absolute bottom-10 left-0 right-0 items-center">
+          <View className="absolute bottom-4 left-0 right-0 items-center">
             <DateFilterButton
               selected={dateFilter}
               onSelect={handleDateFilterChange}
             />
           </View>
 
-          <View className="absolute bottom-10 right-4">
+          <View className="absolute bottom-4 right-4">
             {showUpButton && (
               <View
                 style={{

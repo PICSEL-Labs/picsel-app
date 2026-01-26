@@ -105,7 +105,7 @@ const PhotoListView = forwardRef<FlatList, Props>(
         scrollEventThrottle={16}
         contentContainerStyle={{
           paddingHorizontal: HORIZONTAL_PADDING,
-          paddingBottom: 20,
+          paddingBottom: 40,
         }}
       />
     );

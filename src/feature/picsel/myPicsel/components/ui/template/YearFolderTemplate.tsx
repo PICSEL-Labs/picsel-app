@@ -91,7 +91,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
       />
 
       {!isSelecting && (
-        <View className="absolute -bottom-4 right-4">
+        <View className="bottom absolute right-4">
           <FloatingActionButtons
             isSelecting={isSelecting}
             showUpButton={showUpButton}

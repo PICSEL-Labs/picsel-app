@@ -40,7 +40,6 @@ const PixelToolbar = ({
   if (isSelecting) {
     return (
       <View className="bg-white/90 px-6 py-4">
-        {/* 선택 모드 헤더 */}
         <View className="flex-row items-center justify-between">
           <Pressable
             onPress={onSelectAll}

@@ -22,13 +22,11 @@ import {
 
 const PicselBookTemplate = () => {
   const {
-    // 데이터
     books,
     isLoading,
     totalBooks,
     hasBooks,
 
-    // 선택 모드
     isSelecting,
     selectedBookIds,
     handleEnterSelecting,
@@ -36,18 +34,15 @@ const PicselBookTemplate = () => {
     handleSelectAll,
     selectionSheetRef,
 
-    // 스크롤
     showUpButton,
     scrollToTop,
 
-    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
 
-    // 픽셀북 액션
     handleAddBook,
     handleSubmit,
     handleBookPress,
@@ -56,7 +51,6 @@ const PicselBookTemplate = () => {
     handleChangeCover,
     handleDelete,
 
-    // Refs
     picselBookRef,
   } = usePicselBook();
 
@@ -136,7 +130,7 @@ const PicselBookTemplate = () => {
       )}
 
       {!isSelecting && (
-        <View className="absolute -bottom-4 right-4">
+        <View className="absolute bottom-4 right-4">
           {showUpButton && (
             <View
               style={{

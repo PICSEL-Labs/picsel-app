@@ -12,8 +12,8 @@ interface PicselBookTabContentProps {
 const PicselBookTabContent = ({ activeTab }: PicselBookTabContentProps) => {
   return (
     <View className="flex-1">
-      {activeTab === 'book' && <PicselBookTemplate />}
       {activeTab === 'my' && <MyPicselTemplate />}
+      {activeTab === 'book' && <PicselBookTemplate />}
     </View>
   );
 };

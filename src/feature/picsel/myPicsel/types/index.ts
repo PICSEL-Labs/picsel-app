@@ -50,3 +50,8 @@ export interface MyPicselResult {
   first: boolean;
   last: boolean;
 }
+
+// 픽셀 삭제 요청
+export interface DeletePicselsRequest {
+  picselIds: string[];
+}

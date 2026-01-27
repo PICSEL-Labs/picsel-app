@@ -1,7 +1,9 @@
-import { usePhotoData } from '../../shared/utils/usePhotoData';
-import { Photo } from '../components/ui/organisms/PhotoListView';
+import { useMemo } from 'react';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
+import { Photo } from '../components/ui/organisms/PhotoListView';
+import { useGetMyPicsels } from '../queries/useGetMyPicsels';
+import { getMonthFromDate, getYearFromDate } from '../utils/dateUtils';
+
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
@@ -27,26 +29,40 @@ export const useFolderView = ({
   year,
   month,
 }: UseFolderViewOptions) => {
-  // 년도별/월별 사진 데이터 로딩
-  const { data: photoData, isLoading } = usePhotoData<Photo>({
-    loadData: () => {
-      const yearData = MOCK_YEAR_DATA.find(data => data.year === year);
-      if (!yearData) {
-        return [];
+  // API에서 전체 데이터 페칭
+  const { data: myPicselsData, isLoading } = useGetMyPicsels({
+    page: 0,
+    size: 1000, // 전체 데이터를 가져와 클라이언트에서 필터링
+    sort: 'RECENT_DESC',
+  });
+
+  // 년도별/월별 필터링
+  const photoData: Photo[] = useMemo(() => {
+    if (!myPicselsData?.content) {
+      return [];
+    }
+
+    const filtered = myPicselsData.content.filter(item => {
+      const itemYear = getYearFromDate(item.takenDate);
+      if (itemYear !== year) {
+        return false;
       }
 
-      if (filterType === 'year') {
-        // 년도별: 모든 월의 사진 반환
-        return yearData.months.flatMap(m => m.photos);
-      } else {
-        // 월별: 특정 월의 사진만 반환
-        const monthData = yearData.months.find(m => m.month === month);
-        return monthData?.photos || [];
+      if (filterType === 'month' && month) {
+        const itemMonth = getMonthFromDate(item.takenDate);
+        return itemMonth === month;
       }
-    },
-    delay: 1000,
-    deps: [year, month, filterType],
-  });
+
+      return true;
+    });
+
+    return filtered.map(item => ({
+      id: item.picselId,
+      uri: item.imagePath,
+      date: item.takenDate,
+      storeName: item.storeName,
+    }));
+  }, [myPicselsData, filterType, year, month]);
 
   const totalPhotos = photoData.length;
 

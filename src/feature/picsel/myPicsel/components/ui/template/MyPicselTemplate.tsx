@@ -14,7 +14,6 @@ import DateFilterButton from '../atoms/DateFilterButton';
 import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/MonthFilterView';
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import {
@@ -26,6 +25,7 @@ import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 const MyPicselTemplate = () => {
   const {
     photoData,
+    yearGroups,
     isLoading,
     totalPhotos,
     hasPhotos,
@@ -111,7 +111,7 @@ const MyPicselTemplate = () => {
         <YearFilterView
           ref={flatListRef}
           onScroll={handleScroll}
-          yearGroups={MOCK_YEAR_DATA}
+          yearGroups={yearGroups}
           isLoading={isLoading}
           onViewMore={handleViewMonthFolder}
           onViewAllYear={handleViewAllYear}
@@ -120,7 +120,7 @@ const MyPicselTemplate = () => {
         <MonthFilterView
           ref={flatListRef}
           onScroll={handleScroll}
-          yearGroups={MOCK_YEAR_DATA}
+          yearGroups={yearGroups}
           isLoading={isLoading}
           onViewMonthFolder={handleViewMonthFolder}
         />

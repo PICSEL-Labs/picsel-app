@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { usePhotoData } from '../../shared/utils/usePhotoData';
 import { Photo } from '../components/ui/organisms/PhotoListView';
-import { DateFilterType } from '../types';
+import { useGetMyPicsels } from '../queries/useGetMyPicsels';
+import { DateFilterType, MyPicselSortType, YearGroup } from '../types';
+import { groupByYearMonth } from '../utils/groupByDate';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
@@ -29,17 +29,38 @@ export const useMyPicsel = () => {
   // 날짜 필터 상태
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
 
-  // 사진 데이터 로딩
-  const { data: photoData, isLoading } = usePhotoData<Photo>({
-    loadData: () => {
-      return MOCK_YEAR_DATA.flatMap(yearData =>
-        yearData.months.flatMap(month => month.photos),
-      );
-    },
-    delay: 2000,
+  // 정렬 상태
+  const [sortType, setSortType] = useState<MyPicselSortType>('RECENT_DESC');
+
+  // 내 픽셀 데이터 페칭
+  const { data: myPicselsData, isLoading } = useGetMyPicsels({
+    page: 0,
+    size: 20,
+    sort: sortType,
   });
 
-  const totalPhotos = photoData.length;
+  // API 데이터를 Photo 형태로 변환
+  const photoData: Photo[] = useMemo(() => {
+    if (!myPicselsData?.content) {
+      return [];
+    }
+    return myPicselsData.content.map(item => ({
+      id: item.picselId,
+      uri: item.imagePath,
+      date: item.takenDate,
+      storeName: item.storeName,
+    }));
+  }, [myPicselsData]);
+
+  // 년/월별 그룹 데이터
+  const yearGroups: YearGroup[] = useMemo(() => {
+    if (!myPicselsData?.content) {
+      return [];
+    }
+    return groupByYearMonth(myPicselsData.content);
+  }, [myPicselsData]);
+
+  const totalPhotos = myPicselsData?.totalElements ?? 0;
   const hasPhotos = totalPhotos > 0;
 
   // 사진 선택
@@ -102,9 +123,14 @@ export const useMyPicsel = () => {
   return {
     // 데이터
     photoData,
+    yearGroups,
     isLoading,
     totalPhotos,
     hasPhotos,
+
+    // 정렬
+    sortType,
+    setSortType,
 
     // 날짜 필터
     dateFilter,

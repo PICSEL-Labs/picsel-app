@@ -16,10 +16,7 @@ import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/Pho
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
-import {
-  MyPicselSortType,
-  useSortActionSheet,
-} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 const MyPicselTemplate = () => {
@@ -29,6 +26,8 @@ const MyPicselTemplate = () => {
     isLoading,
     totalPhotos,
     hasPhotos,
+
+    setSortType,
 
     dateFilter,
     handleDateFilterChange,
@@ -59,13 +58,8 @@ const MyPicselTemplate = () => {
     handleViewMonthFolder,
   } = useMyPicsel();
 
-  // TODO: 정렬 로직 구현
-  const handleSort = (sortType: MyPicselSortType) => {
-    console.log('정렬 타입:', sortType);
-  };
-
   const { showSortSheet } = useSortActionSheet({
-    onSort: handleSort,
+    onSort: setSortType,
   });
 
   if (!isLoading && !hasPhotos) {

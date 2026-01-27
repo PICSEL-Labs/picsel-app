@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Photo } from '../components/ui/organisms/PhotoListView';
 import { useGetMyPicsels } from '../queries/useGetMyPicsels';
-import { DateFilterType, MyPicselSortType, YearGroup } from '../types';
+import { DateFilterType, YearGroup } from '../types';
 import { groupByYearMonth } from '../utils/groupByDate';
 
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
@@ -13,6 +13,7 @@ import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoAct
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { useMyPicselStore } from '@/shared/store';
 
 /**
  * MyPicsel 템플릿을 위한 통합 hook
@@ -29,8 +30,8 @@ export const useMyPicsel = () => {
   // 날짜 필터 상태
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
 
-  // 정렬 상태
-  const [sortType, setSortType] = useState<MyPicselSortType>('RECENT_DESC');
+  // 정렬 상태 (전역 store)
+  const { sortType, setSortType } = useMyPicselStore();
 
   // 내 픽셀 데이터 페칭
   const { data: myPicselsData, isLoading } = useGetMyPicsels({
@@ -106,8 +107,6 @@ export const useMyPicsel = () => {
   // 날짜 필터 변경
   const handleDateFilterChange = (type: DateFilterType) => {
     setDateFilter(type);
-    console.log('날짜 필터:', type);
-    // TODO: 날짜 필터링 로직 구현
   };
 
   // 년도별 폴더로 이동

@@ -8,10 +8,7 @@ import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecul
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
-import {
-  MyPicselSortType,
-  useSortActionSheet,
-} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
@@ -26,6 +23,8 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     photoData,
     isLoading,
     totalPhotos,
+
+    setSortType,
 
     isSelecting,
     selectedPhotos,
@@ -50,13 +49,8 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     handleMove,
   } = useMonthFolder({ year, month });
 
-  // TODO: 정렬 로직 구현
-  const handleSort = (sortType: MyPicselSortType) => {
-    console.log('정렬 타입:', sortType);
-  };
-
   const { showSortSheet } = useSortActionSheet({
-    onSort: handleSort,
+    onSort: setSortType,
   });
 
   return (

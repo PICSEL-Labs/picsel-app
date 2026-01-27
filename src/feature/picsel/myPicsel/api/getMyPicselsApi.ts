@@ -13,7 +13,7 @@ export const getMyPicselsApi = async (
   const { page = 0, size = 20, sort = 'RECENT_DESC' } = params;
 
   const response = await axiosInstance.get<MyPicselsResponse>('/picsels/my', {
-    params: { page, size, sort },
+    params: { page, size, sortType: sort },
   });
 
   return response.data.data;

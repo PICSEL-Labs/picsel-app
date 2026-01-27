@@ -9,6 +9,7 @@ import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSel
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { useMyPicselStore } from '@/shared/store';
 
 interface UseFolderViewOptions {
   filterType: 'year' | 'month';
@@ -29,11 +30,14 @@ export const useFolderView = ({
   year,
   month,
 }: UseFolderViewOptions) => {
+  // 정렬 상태 (전역 store)
+  const { sortType, setSortType } = useMyPicselStore();
+
   // API에서 전체 데이터 페칭
   const { data: myPicselsData, isLoading } = useGetMyPicsels({
     page: 0,
-    size: 1000, // 전체 데이터를 가져와 클라이언트에서 필터링
-    sort: 'RECENT_DESC',
+    size: 1000,
+    sort: sortType,
   });
 
   // 년도별/월별 필터링
@@ -112,6 +116,10 @@ export const useFolderView = ({
     photoData,
     isLoading,
     totalPhotos,
+
+    // 정렬
+    sortType,
+    setSortType,
 
     // 선택 모드
     isSelecting,

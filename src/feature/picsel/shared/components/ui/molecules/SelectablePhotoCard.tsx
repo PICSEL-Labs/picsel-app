@@ -56,9 +56,13 @@ const SelectablePhotoCard = ({
         </View>
 
         {/* 매장명 */}
-        <View className="mt-1 flex-row items-center">
+        <View
+          className="mt-1 flex-row items-center"
+          style={{ width: imageWidth }}>
           <SparkleImages shape="icon-one" width={25} height={25} />
-          <Text className="ml-1 text-gray-900 body-rg-03" numberOfLines={1}>
+          <Text
+            className="ml-1 flex-1 text-gray-900 body-rg-03"
+            numberOfLines={1}>
             {photo.storeName}
           </Text>
         </View>

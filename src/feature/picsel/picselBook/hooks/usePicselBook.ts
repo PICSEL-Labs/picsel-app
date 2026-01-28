@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 
+import { useDeletePicselBooks } from '../mutations/useDeletePicselBooks';
 import { useGetPicselBooks } from '../queries/useGetPicselBooks';
 import { PicselBookItem } from '../types';
 
@@ -46,6 +47,9 @@ export const usePicselBook = () => {
   const { data, isLoading, refetch } = useGetPicselBooks({
     sort: sortType,
   });
+
+  // 픽셀북 삭제 mutation
+  const { mutate: deletePicselBooks } = useDeletePicselBooks();
 
   const books: PicselBookItem[] = data ?? [];
   const totalBooks = books.length;
@@ -126,11 +130,19 @@ export const usePicselBook = () => {
     }
 
     showDeleteConfirmModal('picselBook', selectedBookIds.length, () => {
-      // TODO: 픽셀북 삭제 API 호출
       const deletedCount = selectedBookIds.length;
-      handleExitSelecting();
-      showToast(`${deletedCount}개의 픽셀북을 삭제했어요`, 60);
-      refetch();
+      deletePicselBooks(
+        { picselbookIds: selectedBookIds },
+        {
+          onSuccess: () => {
+            handleExitSelecting();
+            showToast(`${deletedCount}개의 픽셀북을 삭제했어요`, 60);
+          },
+          onError: () => {
+            showToast('픽셀북 삭제에 실패했어요', 60);
+          },
+        },
+      );
     });
   };
 
@@ -175,8 +187,5 @@ export const usePicselBook = () => {
 
     // Refs
     picselBookRef,
-
-    // 리프레시
-    refetch,
   };
 };

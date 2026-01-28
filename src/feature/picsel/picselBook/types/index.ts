@@ -57,3 +57,8 @@ export interface PicselBookFolderResult {
   first: boolean;
   last: boolean;
 }
+
+// 픽셀북 삭제 요청
+export interface DeletePicselBooksRequest {
+  picselbookIds: string[];
+}

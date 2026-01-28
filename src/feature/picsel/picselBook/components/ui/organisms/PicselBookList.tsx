@@ -7,6 +7,7 @@ import {
   GAP,
   NUM_COLUMNS,
 } from '../../../constants/picselBookGrid';
+import { ITEM_HEIGHT, TOP_OFFSET } from '../../../constants/styles';
 import { PicselBookItem } from '../../../types';
 import PicselBookCard from '../molecules/PicselBookCard';
 
@@ -38,7 +39,7 @@ const PicselBookList = ({
   onDelete,
   onAddBook,
 }: Props) => {
-  const { width: screenWidth } = useWindowDimensions();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
   const horizontalPadding = useMemo(() => {
     const totalCardsWidth = CARD_WIDTH * NUM_COLUMNS;
@@ -48,10 +49,17 @@ const PicselBookList = ({
     return remainingSpace / 2;
   }, [screenWidth]);
 
+  const skeletonCount = useMemo(() => {
+    const availableHeight = screenHeight - TOP_OFFSET;
+    const rowCount = Math.ceil(availableHeight / ITEM_HEIGHT);
+    const totalItems = rowCount * NUM_COLUMNS;
+    return totalItems - 1;
+  }, [screenHeight]);
+
   const allItems = isLoading
     ? [
         { id: 'add-button', type: 'add' },
-        ...Array.from({ length: 5 }, (_, i) => ({
+        ...Array.from({ length: skeletonCount }, (_, i) => ({
           id: `skeleton-${i}`,
           type: 'skeleton',
         })),

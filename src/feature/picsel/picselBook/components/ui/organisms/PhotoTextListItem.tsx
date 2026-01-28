@@ -10,14 +10,14 @@ import {
 } from '../../../constants/photo';
 import { CARD_SHADOW, TEXT_LIST_CARD } from '../../../constants/styles';
 
-import type { Photo } from '@/feature/picsel/picselBook/data/mockPicselBookPhotoData';
+import { PicselBookPicselItem } from '@/feature/picsel/picselBook/types';
 import { usePhotoFormat } from '@/feature/picsel/shared/utils/usePhotoFormat';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import SparkleImages from '@/shared/images/Sparkle';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
-  photo: Photo;
+  picsel: PicselBookPicselItem;
   isSelecting: boolean;
   isSelected: boolean;
   onToggleSelection: (photoId: string) => void;
@@ -25,7 +25,7 @@ interface Props {
 }
 
 const PhotoTextListItem = ({
-  photo,
+  picsel,
   isSelecting,
   isSelected,
   onToggleSelection,
@@ -33,15 +33,15 @@ const PhotoTextListItem = ({
 }: Props) => {
   const { formatDate } = usePhotoFormat();
 
-  const formattedDate = formatDate(photo.date);
-  const isDefaultTitle = photo.title === PHOTO_DEFAULT_TITLE || !photo.title;
-  const isDefaultContent = !photo.content;
+  const formattedDate = formatDate(picsel.takenDate);
+  const isDefaultTitle = picsel.title === PHOTO_DEFAULT_TITLE || !picsel.title;
+  const isDefaultContent = !picsel.contentPreview;
 
   const handlePress = () => {
     if (isSelecting) {
-      onToggleSelection(photo.id);
+      onToggleSelection(picsel.picselId);
     } else {
-      onPress?.(photo.id);
+      onPress?.(picsel.picselId);
     }
   };
 
@@ -56,7 +56,7 @@ const PhotoTextListItem = ({
       {/* 이미지 */}
       <View className="relative flex-shrink-0">
         <Image
-          source={{ uri: photo.uri }}
+          source={{ uri: picsel.representativeImagePath }}
           style={{
             width: TEXT_LIST_CARD.IMAGE_WIDTH,
             height: TEXT_LIST_CARD.IMAGE_HEIGHT,
@@ -91,7 +91,7 @@ const PhotoTextListItem = ({
                   : 'text-gray-900 headline-03',
               )}
               numberOfLines={TITLE_MAX_LINES}>
-              {photo.title || PHOTO_DEFAULT_TITLE}
+              {picsel.title || PHOTO_DEFAULT_TITLE}
             </Text>
 
             <Text
@@ -100,7 +100,7 @@ const PhotoTextListItem = ({
                 isDefaultContent ? 'text-gray-500' : 'text-gray-900',
               )}
               numberOfLines={CONTENT_MAX_LINES}>
-              {photo.content || PHOTO_PLACEHOLDER_TEXT}
+              {picsel.contentPreview || PHOTO_PLACEHOLDER_TEXT}
             </Text>
           </View>
         </View>
@@ -109,7 +109,7 @@ const PhotoTextListItem = ({
         <View className="flex-row items-center justify-end self-stretch">
           <SparkleImages shape="icon-one" width={25} height={25} />
           <Text className="text-primary-pink body-rg-02">
-            {photo.storeName}
+            {picsel.storeName}
           </Text>
         </View>
       </View>

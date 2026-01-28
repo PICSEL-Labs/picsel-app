@@ -8,10 +8,10 @@ import {
 
 import PhotoTextListItem from './PhotoTextListItem';
 
-import type { Photo } from '@/feature/picsel/picselBook/data/mockPicselBookPhotoData';
+import { PicselBookPicselItem } from '@/feature/picsel/picselBook/types';
 
 interface Props {
-  data: Photo[];
+  data: PicselBookPicselItem[];
   selectedPhotos: string[];
   isSelecting: boolean;
   isLoading?: boolean;
@@ -32,12 +32,12 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
     },
     ref,
   ) => {
-    const renderItem = ({ item }: { item: Photo }) => {
-      const isSelected = selectedPhotos.includes(item.id);
+    const renderItem = ({ item }: { item: PicselBookPicselItem }) => {
+      const isSelected = selectedPhotos.includes(item.picselId);
 
       return (
         <PhotoTextListItem
-          photo={item}
+          picsel={item}
           isSelecting={isSelecting}
           isSelected={isSelected}
           onToggleSelection={onToggleSelection}
@@ -51,7 +51,7 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
         ref={ref}
         data={data}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.picselId}
         contentContainerStyle={{
           alignItems: 'center',
           paddingHorizontal: 16,

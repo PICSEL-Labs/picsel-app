@@ -23,3 +23,37 @@ export interface PicselBookItem {
   photoCount: number;
   createdAt: string;
 }
+
+// 픽셀북 폴더 정렬 타입
+export type PicselBookFolderSortType = 'RECENT_DESC' | 'OLDEST_ASC';
+
+// 픽셀북 폴더 API 요청 파라미터
+export interface PicselBookFolderParams {
+  picselbookId: string;
+  page?: number;
+  size?: number;
+  sortType?: PicselBookFolderSortType;
+}
+
+// 픽셀북 내 픽셀 아이템
+export interface PicselBookPicselItem {
+  picselId: string;
+  representativeImagePath: string;
+  title: string;
+  contentPreview: string;
+  takenDate: string;
+  storeId: string;
+  storeName: string;
+  brandImagePath: string;
+}
+
+// 픽셀북 폴더 API 응답 (페이지네이션)
+export interface PicselBookFolderResult {
+  content: PicselBookPicselItem[];
+  totalElements: number;
+  totalPages: number;
+  pageNumber: number;
+  pageSize: number;
+  first: boolean;
+  last: boolean;
+}

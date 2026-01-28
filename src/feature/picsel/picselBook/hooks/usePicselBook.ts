@@ -97,7 +97,7 @@ export const usePicselBook = () => {
   };
 
   // 픽셀북 클릭
-  const handleBookPress = (bookId: string) => {
+  const handleBookPress = (bookId: string, bookName: string) => {
     if (isSelecting) {
       setSelectedBookIds(prev =>
         prev.includes(bookId)
@@ -105,7 +105,7 @@ export const usePicselBook = () => {
           : [...prev, bookId],
       );
     } else {
-      navigation.navigate('PicselBookFolder', { bookId });
+      navigation.navigate('PicselBookFolder', { bookId, bookName });
     }
   };
 

@@ -6,20 +6,26 @@ import PicselBookFolderTemplate from '@/feature/picsel/picselBook/components/ui/
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 
 type PicselBookFolderRouteProp = RouteProp<
-  { PicselBookFolder: { bookId: string } },
+  { PicselBookFolder: { bookId: string; bookName: string } },
   'PicselBookFolder'
 >;
 
 const PicselBookFolderScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const route = useRoute<PicselBookFolderRouteProp>();
-  const { bookId } = route.params;
+  const { bookId, bookName } = route.params;
 
   const handleBack = () => {
     navigation.goBack();
   };
 
-  return <PicselBookFolderTemplate bookId={bookId} onBack={handleBack} />;
+  return (
+    <PicselBookFolderTemplate
+      bookId={bookId}
+      bookName={bookName}
+      onBack={handleBack}
+    />
+  );
 };
 
 export default PicselBookFolderScreen;

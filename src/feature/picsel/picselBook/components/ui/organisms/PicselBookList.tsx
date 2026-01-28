@@ -21,7 +21,7 @@ interface Props {
   isSelecting?: boolean;
   selectedBookIds?: string[];
   isLoading?: boolean;
-  onBookPress?: (bookId: string) => void;
+  onBookPress?: (bookId: string, bookName: string) => void;
   onEdit?: (id: string, title: string) => void;
   onChangeCover?: (id: string) => void;
   onDelete?: (id: string, title: string) => void;
@@ -53,7 +53,7 @@ const PicselBookList = ({
     const availableHeight = screenHeight - TOP_OFFSET;
     const rowCount = Math.ceil(availableHeight / ITEM_HEIGHT);
     const totalItems = rowCount * NUM_COLUMNS;
-    return totalItems - 1;
+    return totalItems - 1; // AddButton 제외
   }, [screenHeight]);
 
   const allItems = isLoading

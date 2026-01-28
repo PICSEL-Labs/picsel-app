@@ -3,26 +3,23 @@ import { useRef, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 
-import { usePhotoData } from '../../shared/utils/usePhotoData';
+import {
+  PICSEL_BOOK_SORT_OPTIONS,
+  useSortActionSheet,
+} from '../../shared/hooks/animation/useSortActionSheet';
+import { useGetPicselBooks } from '../queries/useGetPicselBooks';
+import { PicselBookItem } from '../types';
 
 import { usePicselBookActions } from './usePicselBookActions';
 
-import { MOCK_PICSEL_BOOK_DATA } from '@/feature/picsel/picselBook/data/mockPicselBookData';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
+import { usePicselBookStore } from '@/shared/store/picselBook';
 import { useToastStore } from '@/shared/store/ui/toast';
-
-interface Book {
-  id: string;
-  title: string;
-  photoCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
 
 /**
  * PicselBook 템플릿을 위한 통합 hook
@@ -31,27 +28,27 @@ interface Book {
  * - 스크롤 관리
  * - 기능 버튼 (업로드)
  * - 픽셀북 액션 (생성, 삭제, 수정)
+ * - 정렬 기능
  */
 export const usePicselBook = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { showToast } = useToastStore();
   const picselBookRef = useRef<BottomSheetModal>(null);
 
+  // 정렬 상태 (전역 store)
+  const { sortType, setSortType } = usePicselBookStore();
+
   // 픽셀북 액션 (Context Menu)
   const { handleEdit, handleChangeCover, handleDelete } =
     usePicselBookActions();
 
-  // 픽셀북 데이터 로딩
-  const {
-    data: books,
-    isLoading,
-    setData: setBooks,
-  } = usePhotoData<Book>({
-    loadData: () => MOCK_PICSEL_BOOK_DATA,
-    delay: 2000,
+  // 픽셀북 데이터 로딩 (API 연동)
+  const { data, isLoading, refetch } = useGetPicselBooks({
+    sort: sortType,
   });
 
-  const totalBooks = books.length;
+  const books: PicselBookItem[] = data?.content ?? [];
+  const totalBooks = data?.totalElements ?? 0;
   const hasBooks = totalBooks > 0;
 
   // 선택 관련
@@ -81,6 +78,12 @@ export const usePicselBook = () => {
     closeFunctionButtons,
   } = useFunctionButtons();
 
+  // 정렬 액션시트
+  const { showSortSheet } = useSortActionSheet({
+    onSort: setSortType,
+    options: PICSEL_BOOK_SORT_OPTIONS,
+  });
+
   // 픽셀북 추가 바텀시트 열기
   const handleAddBook = () => {
     picselBookRef.current?.present();
@@ -90,15 +93,7 @@ export const usePicselBook = () => {
   const handleSubmit = (bookName: string) => {
     // TODO: 픽셀북 생성 API 호출
     console.log('픽셀북 생성:', bookName);
-
-    const newBook: Book = {
-      id: String(books.length + 1),
-      title: bookName,
-      photoCount: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setBooks([newBook, ...books]);
+    refetch();
   };
 
   // 픽셀북 클릭
@@ -116,10 +111,10 @@ export const usePicselBook = () => {
 
   // 전체 선택
   const handleSelectAll = () => {
-    if (selectedBookIds.length === totalBooks) {
+    if (selectedBookIds.length === books.length) {
       setSelectedBookIds([]);
     } else {
-      setSelectedBookIds(books.map(book => book.id));
+      setSelectedBookIds(books.map(book => book.picselBookId));
     }
   };
 
@@ -135,6 +130,7 @@ export const usePicselBook = () => {
       const deletedCount = selectedBookIds.length;
       handleExitSelecting();
       showToast(`${deletedCount}개의 픽셀북을 삭제했어요`, 60);
+      refetch();
     });
   };
 
@@ -144,6 +140,10 @@ export const usePicselBook = () => {
     isLoading,
     totalBooks,
     hasBooks,
+
+    // 정렬
+    sortType,
+    showSortSheet,
 
     // 선택 모드
     isSelecting,
@@ -175,5 +175,8 @@ export const usePicselBook = () => {
 
     // Refs
     picselBookRef,
+
+    // 리프레시
+    refetch,
   };
 };

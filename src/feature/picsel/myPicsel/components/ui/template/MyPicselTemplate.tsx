@@ -16,7 +16,6 @@ import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/Pho
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
-import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 const MyPicselTemplate = () => {
@@ -27,7 +26,7 @@ const MyPicselTemplate = () => {
     totalPhotos,
     hasPhotos,
 
-    setSortType,
+    showSortSheet,
 
     dateFilter,
     handleDateFilterChange,
@@ -57,10 +56,6 @@ const MyPicselTemplate = () => {
     handleViewAllYear,
     handleViewMonthFolder,
   } = useMyPicsel();
-
-  const { showSortSheet } = useSortActionSheet({
-    onSort: setSortType,
-  });
 
   if (!isLoading && !hasPhotos) {
     return (

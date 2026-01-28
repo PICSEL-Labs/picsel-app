@@ -8,7 +8,6 @@ import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecul
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
-import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
@@ -24,7 +23,7 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     isLoading,
     totalPhotos,
 
-    setSortType,
+    showSortSheet,
 
     isSelecting,
     selectedPhotos,
@@ -48,10 +47,6 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     handleDelete,
     handleMove,
   } = useMonthFolder({ year, month });
-
-  const { showSortSheet } = useSortActionSheet({
-    onSort: setSortType,
-  });
 
   return (
     <ScreenLayout>

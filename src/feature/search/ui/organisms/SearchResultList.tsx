@@ -11,16 +11,18 @@ interface Props {
   data?: AcSearchResult;
   highlight?: string[];
   onPressItem?: (row: any) => void;
+  scrollEnabled?: boolean;
 }
 
 const SearchResultList = memo(
-  ({ data, highlight, onPressItem }: Props) => {
+  ({ data, highlight, onPressItem, scrollEnabled = true }: Props) => {
     const sections = useSearchResultSections(data);
 
     return (
       <View className="flex-1">
         <SectionList
           sections={sections}
+          scrollEnabled={scrollEnabled}
           extraData={highlight}
           className="mt-6 px-4"
           stickySectionHeadersEnabled={false}

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { useSortActionSheet } from '../../shared/hooks/animation/useSortActionSheet';
 import { Photo } from '../components/ui/organisms/PhotoListView';
 import { useGetMyPicsels } from '../queries/useGetMyPicsels';
 import { getMonthFromDate, getYearFromDate } from '../utils/dateUtils';
@@ -111,6 +112,11 @@ export const useFolderView = ({
     exitSelectingMode: handleExitSelecting,
   });
 
+  // 정렬 액션시트
+  const { showSortSheet } = useSortActionSheet({
+    onSort: setSortType,
+  });
+
   return {
     // 데이터
     photoData,
@@ -119,7 +125,7 @@ export const useFolderView = ({
 
     // 정렬
     sortType,
-    setSortType,
+    showSortSheet,
 
     // 선택 모드
     isSelecting,

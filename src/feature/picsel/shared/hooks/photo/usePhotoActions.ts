@@ -1,4 +1,4 @@
-import { useDeletePicsels } from '@/feature/picsel/mutations/useDeletePicsels';
+import { useDeletePicsels } from '@/feature/picsel/myPicsel/mutations/useDeletePicsels';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 

@@ -7,24 +7,25 @@ import {
   GAP,
   NUM_COLUMNS,
 } from '../../../constants/picselBookGrid';
+import { ITEM_HEIGHT, TOP_OFFSET } from '../../../constants/styles';
+import { PicselBookItem } from '../../../types';
 import PicselBookCard from '../molecules/PicselBookCard';
 
 import AddBookButton from './AddBookButton';
 
-import { PicselBook } from '@/feature/picsel/picselBook/data/mockPicselBookData';
 import PicselBookSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PicselBookSkeleton';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
-  books: PicselBook[];
+  books: PicselBookItem[];
   isSelecting?: boolean;
   selectedBookIds?: string[];
   isLoading?: boolean;
-  onBookPress?: (bookId: string) => void;
+  onBookPress?: (bookId: string, bookName: string) => void;
   onEdit?: (id: string, title: string) => void;
   onChangeCover?: (id: string) => void;
   onDelete?: (id: string, title: string) => void;
-  onAddBook: () => void;
+  onAddBook?: () => void;
 }
 
 const PicselBookList = ({
@@ -38,7 +39,7 @@ const PicselBookList = ({
   onDelete,
   onAddBook,
 }: Props) => {
-  const { width: screenWidth } = useWindowDimensions();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
   const horizontalPadding = useMemo(() => {
     const totalCardsWidth = CARD_WIDTH * NUM_COLUMNS;
@@ -48,17 +49,28 @@ const PicselBookList = ({
     return remainingSpace / 2;
   }, [screenWidth]);
 
+  const skeletonCount = useMemo(() => {
+    const availableHeight = screenHeight - TOP_OFFSET;
+    const rowCount = Math.ceil(availableHeight / ITEM_HEIGHT);
+    const totalItems = rowCount * NUM_COLUMNS;
+    return totalItems - 1; // AddButton 제외
+  }, [screenHeight]);
+
   const allItems = isLoading
     ? [
         { id: 'add-button', type: 'add' },
-        ...Array.from({ length: 5 }, (_, i) => ({
+        ...Array.from({ length: skeletonCount }, (_, i) => ({
           id: `skeleton-${i}`,
           type: 'skeleton',
         })),
       ]
     : [
         { id: 'add-button', type: 'add' },
-        ...books.map(book => ({ ...book, type: 'book' })),
+        ...books.map(book => ({
+          ...book,
+          id: book.picselbookId,
+          type: 'book',
+        })),
       ];
 
   return (
@@ -89,16 +101,16 @@ const PicselBookList = ({
           );
         }
 
-        const book = item as PicselBook & { type: string };
+        const book = item as PicselBookItem & { type: string };
 
         return (
           <View className="mb-7">
             <PicselBookCard
-              id={book.id}
-              title={book.title}
-              coverImage={book.coverImage}
+              id={book.picselbookId}
+              title={book.bookName}
+              coverImage={book.coverImagePath}
               isSelecting={isSelecting}
-              isSelected={selectedBookIds.includes(book.id)}
+              isSelected={selectedBookIds.includes(book.picselbookId)}
               onPress={onBookPress}
               onEdit={onEdit}
               onChangeCover={onChangeCover}

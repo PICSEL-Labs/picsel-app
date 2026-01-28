@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
+import { useSortActionSheet } from '../../shared/hooks/animation/useSortActionSheet';
 import { Photo } from '../components/ui/organisms/PhotoListView';
 import { useGetMyPicsels } from '../queries/useGetMyPicsels';
 import { DateFilterType, YearGroup } from '../types';
@@ -119,6 +120,11 @@ export const useMyPicsel = () => {
     navigation.navigate('MonthFolder', { year, month });
   };
 
+  // 정렬 액션시트
+  const { showSortSheet } = useSortActionSheet({
+    onSort: setSortType,
+  });
+
   return {
     // 데이터
     photoData,
@@ -129,7 +135,7 @@ export const useMyPicsel = () => {
 
     // 정렬
     sortType,
-    setSortType,
+    showSortSheet,
 
     // 날짜 필터
     dateFilter,

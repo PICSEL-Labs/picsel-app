@@ -2,7 +2,7 @@ import React from 'react';
 
 import { View } from 'react-native';
 
-import { PicselBookEditType, PicselBookSortType } from '../../../types';
+import { PicselBookEditType } from '../../../types';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import PhotoTextListView from '@/feature/picsel/picselBook/components/ui/organisms/PhotoTextListView';
@@ -22,15 +22,18 @@ import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 interface Props {
   bookId: string;
+  bookName?: string;
   onBack: () => void;
 }
 
-const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
+const PicselBookFolderTemplate = ({ bookId, bookName = '', onBack }: Props) => {
   const {
     photoData,
-    bookTitle,
+    rawData,
     isLoading,
     totalPhotos,
+
+    showSortSheet,
 
     viewMode,
     handleToggleViewMode,
@@ -60,15 +63,6 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
     formatPhotoCount,
   } = usePicselBookFolder({ bookId });
 
-  // TODO: 정렬 로직 구현
-  const handleSort = (sortType: PicselBookSortType) => {
-    console.log('정렬 타입:', sortType);
-  };
-
-  const { showSortSheet } = useSortActionSheet({
-    onSort: handleSort,
-  });
-
   // TODO: 편집 로직 구현
   const handleEdit = (editType: PicselBookEditType) => {
     console.log('편집 타입:', editType);
@@ -85,7 +79,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
   return (
     <ScreenLayout>
       <FolderHeader
-        title={`${bookTitle}(${formatPhotoCount(totalPhotos)})`}
+        title={`${bookName}(${formatPhotoCount(totalPhotos)})`}
         onBack={onBack}
         showToggle={true}
         onTogglePress={showEditSheet}
@@ -142,7 +136,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
           ) : (
             <PhotoTextListView
               ref={flatListRef}
-              data={photoData}
+              data={rawData}
               selectedPhotos={selectedPhotos}
               isSelecting={isSelecting}
               isLoading={isLoading}

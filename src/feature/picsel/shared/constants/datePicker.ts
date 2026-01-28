@@ -1,11 +1,11 @@
 export const WEEK_DAYS = [
+  { label: 'S', key: 'sun' },
   { label: 'M', key: 'mon' },
   { label: 'T', key: 'tue' },
   { label: 'W', key: 'wed' },
   { label: 'T', key: 'thu' },
   { label: 'F', key: 'fri' },
   { label: 'S', key: 'sat' },
-  { label: 'S', key: 'sun' },
 ] as const;
 
 export const DAYS_PER_WEEK = 7;

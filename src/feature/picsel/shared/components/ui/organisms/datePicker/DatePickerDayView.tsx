@@ -6,7 +6,6 @@ import { Pressable, Text, View } from 'react-native';
 import {
   CELL_WIDTH,
   DATE_STYLES,
-  DAYS_PER_WEEK,
   TOTAL_CALENDAR_CELLS,
   WEEK_DAYS,
 } from '@/feature/picsel/shared/constants/datePicker';
@@ -20,7 +19,8 @@ interface Props {
 const DatePickerDayView = ({ current, selectedDate, onSelect }: Props) => {
   const cells = useMemo(() => {
     const daysInMonth = current.daysInMonth();
-    const startDay = (current.startOf('month').day() + 6) % DAYS_PER_WEEK;
+
+    const startDay = current.startOf('month').day();
 
     return Array.from({ length: TOTAL_CALENDAR_CELLS }, (_, i) => {
       const dayOffset = i - startDay + 1;

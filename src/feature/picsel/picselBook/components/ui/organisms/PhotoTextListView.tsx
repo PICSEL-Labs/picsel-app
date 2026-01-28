@@ -9,6 +9,7 @@ import {
 import PhotoTextListItem from './PhotoTextListItem';
 
 import { PicselBookPicselItem } from '@/feature/picsel/picselBook/types';
+import PhotoTextListSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PhotoTextListItemSkeleton';
 
 interface Props {
   data: PicselBookPicselItem[];
@@ -26,12 +27,17 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
       data,
       selectedPhotos,
       isSelecting,
+      isLoading = false,
       onScroll,
       onToggleSelection,
       onPhotoPress,
     },
     ref,
   ) => {
+    if (isLoading) {
+      return <PhotoTextListSkeleton count={4} />;
+    }
+
     const renderItem = ({ item }: { item: PicselBookPicselItem }) => {
       const isSelected = selectedPhotos.includes(item.picselId);
 

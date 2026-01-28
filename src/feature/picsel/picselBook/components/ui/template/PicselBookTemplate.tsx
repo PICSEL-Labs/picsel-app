@@ -14,11 +14,6 @@ import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyM
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
-import {
-  PicselBookSortType,
-  PICSEL_BOOK_SORT_OPTIONS,
-  useSortActionSheet,
-} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 
 const PicselBookTemplate = () => {
   const {
@@ -52,23 +47,15 @@ const PicselBookTemplate = () => {
     handleDelete,
 
     picselBookRef,
+
+    showSortSheet,
   } = usePicselBook();
-
-  // TODO: 정렬 로직 구현
-  const handleSort = (sortType: PicselBookSortType) => {
-    console.log('픽셀북 정렬 타입:', sortType);
-  };
-
-  const { showSortSheet } = useSortActionSheet<PicselBookSortType>({
-    onSort: handleSort,
-    options: PICSEL_BOOK_SORT_OPTIONS,
-  });
 
   if (!isLoading && !hasBooks) {
     return (
       <EmptyStateLayout
         floatingButton={
-          <View className="absolute bottom-1 right-1">
+          <View className="absolute bottom-8 right-0">
             {showFunctionButtons ? (
               <FunctionButton
                 onAlbumPress={handleAlbumPress}
@@ -81,7 +68,7 @@ const PicselBookTemplate = () => {
           </View>
         }>
         <View className="flex-1">
-          <View className="absolute left-9 top-16">
+          <View className="absolute left-[41px] top-16">
             <AddBookButton onPress={handleAddBook} />
           </View>
 

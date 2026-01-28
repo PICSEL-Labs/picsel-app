@@ -7,16 +7,16 @@ import {
   GAP,
   NUM_COLUMNS,
 } from '../../../constants/picselBookGrid';
+import { PicselBookItem } from '../../../types';
 import PicselBookCard from '../molecules/PicselBookCard';
 
 import AddBookButton from './AddBookButton';
 
-import { PicselBook } from '@/feature/picsel/picselBook/data/mockPicselBookData';
 import PicselBookSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PicselBookSkeleton';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
-  books: PicselBook[];
+  books: PicselBookItem[];
   isSelecting?: boolean;
   selectedBookIds?: string[];
   isLoading?: boolean;
@@ -24,7 +24,7 @@ interface Props {
   onEdit?: (id: string, title: string) => void;
   onChangeCover?: (id: string) => void;
   onDelete?: (id: string, title: string) => void;
-  onAddBook: () => void;
+  onAddBook?: () => void;
 }
 
 const PicselBookList = ({
@@ -58,7 +58,11 @@ const PicselBookList = ({
       ]
     : [
         { id: 'add-button', type: 'add' },
-        ...books.map(book => ({ ...book, type: 'book' })),
+        ...books.map(book => ({
+          ...book,
+          id: book.picselbookId,
+          type: 'book',
+        })),
       ];
 
   return (
@@ -89,16 +93,16 @@ const PicselBookList = ({
           );
         }
 
-        const book = item as PicselBook & { type: string };
+        const book = item as PicselBookItem & { type: string };
 
         return (
           <View className="mb-7">
             <PicselBookCard
-              id={book.id}
-              title={book.title}
-              coverImage={book.coverImage}
+              id={book.picselbookId}
+              title={book.bookName}
+              coverImage={book.coverImagePath}
               isSelecting={isSelecting}
-              isSelected={selectedBookIds.includes(book.id)}
+              isSelected={selectedBookIds.includes(book.picselbookId)}
               onPress={onBookPress}
               onEdit={onEdit}
               onChangeCover={onChangeCover}

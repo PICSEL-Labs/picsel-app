@@ -3,10 +3,6 @@ import { useRef, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 
-import {
-  PICSEL_BOOK_SORT_OPTIONS,
-  useSortActionSheet,
-} from '../../shared/hooks/animation/useSortActionSheet';
 import { useGetPicselBooks } from '../queries/useGetPicselBooks';
 import { PicselBookItem } from '../types';
 
@@ -14,6 +10,10 @@ import { usePicselBookActions } from './usePicselBookActions';
 
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
+import {
+  PICSEL_BOOK_SORT_OPTIONS,
+  useSortActionSheet,
+} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
@@ -47,9 +47,9 @@ export const usePicselBook = () => {
     sort: sortType,
   });
 
-  const books: PicselBookItem[] = data?.content ?? [];
-  const totalBooks = data?.totalElements ?? 0;
-  const hasBooks = totalBooks > 0;
+  const books: PicselBookItem[] = data ?? [];
+  const totalBooks = books.length;
+  const hasBooks = books.length > 0;
 
   // 선택 관련
   const { isSelecting, setIsSelecting, resetSelection } = usePhotoSelection();
@@ -114,7 +114,7 @@ export const usePicselBook = () => {
     if (selectedBookIds.length === books.length) {
       setSelectedBookIds([]);
     } else {
-      setSelectedBookIds(books.map(book => book.picselBookId));
+      setSelectedBookIds(books.map(book => book.picselbookId));
     }
   };
 

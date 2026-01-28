@@ -15,21 +15,11 @@ export interface PicselBookParams {
 
 // 개별 픽셀북 아이템
 export interface PicselBookItem {
-  picselBookId: string;
-  name: string;
+  picselbookId: string;
+  bookName: string;
+  coverImagePath: string;
+  displayOrder: number;
+  lastPicselAddedAt: string | null;
   photoCount: number;
-  coverImagePath?: string;
   createdAt: string;
-  lastPhotoAddedAt: string;
-}
-
-// API 응답 (페이지네이션)
-export interface PicselBookResult {
-  content: PicselBookItem[];
-  totalElements: number;
-  totalPages: number;
-  pageNumber: number;
-  pageSize: number;
-  first: boolean;
-  last: boolean;
 }

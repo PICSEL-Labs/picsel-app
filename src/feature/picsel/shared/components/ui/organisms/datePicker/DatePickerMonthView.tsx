@@ -3,6 +3,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
+import { MONTH_GRID_COLUMNS } from '@/feature/picsel/shared/constants/datePicker';
 import { modalShadow } from '@/shared/styles/shadows';
 
 interface Props {
@@ -15,16 +16,14 @@ const months = Array.from({ length: 12 }, (_, i) => ({
   value: i,
 }));
 
-const NUM_COLUMNS = 3;
-
 const DatePickerMonthView = ({ current, onChange }: Props) => {
-  const selectedMonth = current.month(); // 0~11
+  const selectedMonth = current.month();
 
   return (
     <FlatList
       data={months}
       keyExtractor={item => item.label}
-      numColumns={NUM_COLUMNS}
+      numColumns={MONTH_GRID_COLUMNS}
       scrollEnabled={false}
       columnWrapperStyle={{ justifyContent: 'center' }}
       renderItem={({ item }) => {

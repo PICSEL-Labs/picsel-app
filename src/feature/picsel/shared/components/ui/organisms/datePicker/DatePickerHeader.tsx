@@ -15,35 +15,30 @@ interface Props {
   onConfirm: () => void;
 }
 
+const MODE_STEP_MAP: Record<
+  PickerMode,
+  { unit: dayjs.ManipulateType; amount: number }
+> = {
+  day: { unit: 'month', amount: 1 },
+  month: { unit: 'year', amount: 1 },
+  year: { unit: 'year', amount: 12 },
+};
+
 const DatePickerHeader = ({
   mode,
   current,
   onChangeMode,
   onChangeCurrent,
 }: Props) => {
-  const handlePrev = () => {
-    if (mode === 'day') {
-      onChangeCurrent(current.subtract(1, 'month'));
-    }
-    if (mode === 'month') {
-      onChangeCurrent(current.subtract(1, 'year'));
-    }
-    if (mode === 'year') {
-      onChangeCurrent(current.subtract(12, 'year'));
-    }
+  const handleChange = (direction: 'prev' | 'next') => {
+    const { unit, amount } = MODE_STEP_MAP[mode];
+    const diff = direction === 'prev' ? -amount : amount;
+
+    onChangeCurrent(current.add(diff, unit));
   };
 
-  const handleNext = () => {
-    if (mode === 'day') {
-      onChangeCurrent(current.add(1, 'month'));
-    }
-    if (mode === 'month') {
-      onChangeCurrent(current.add(1, 'year'));
-    }
-    if (mode === 'year') {
-      onChangeCurrent(current.add(12, 'year'));
-    }
-  };
+  const handlePrev = () => handleChange('prev');
+  const handleNext = () => handleChange('next');
 
   // 연도 범위를 계산
   const startYear = Math.floor(current.year() / 12) * 12;

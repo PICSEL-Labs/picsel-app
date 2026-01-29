@@ -22,7 +22,7 @@ const PicselUploadLayout = ({ children, onBack }: Props) => {
     if (onBack) {
       onBack();
     } else {
-      navigation.goBack(); // 없으면 기본 내비게이션 뒤로 가기
+      navigation.goBack();
     }
   };
 

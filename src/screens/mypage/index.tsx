@@ -8,6 +8,7 @@ import MypageMenuItem from '@/feature/mypage/components/ui/molecules/MypageMenuI
 import ListGroup from '@/feature/mypage/components/ui/organisms/ListGroup';
 import { useMypageMenu } from '@/feature/mypage/hooks/useMypageMenu';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import StarIcons from '@/shared/icons/StarIcons';
 
 const MypageScreen = () => {
   const { menuItems } = useMypageMenu();
@@ -24,11 +25,12 @@ const MypageScreen = () => {
         onPressEdit={() => console.log('닉네임 변경')}
       />
 
-      <View className="mb-2 mt-[22px] px-3" style={{ gap: 12 }}>
+      <View className="mb-4 mt-4 px-4" style={{ gap: 12 }}>
         <MypageMenuItem
           title="찜한 브랜드 설정"
           description="내가 찜한 브랜드를 한눈에 보고 관리해요"
           backgroundColor="bg-pink-100"
+          icon={<StarIcons shape="empty" width={24} height={24} />}
           onPress={() => console.log('찜한 브랜드 설정')}
         />
 

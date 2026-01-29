@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { usePhotoData } from '../../shared/utils/usePhotoData';
-import { usePhotoFormat } from '../../shared/utils/usePhotoFormat';
+import { useGetPicselBookPicsels } from '../queries/useGetPicselBookPicsels';
+import { PicselBookFolderSortType, PicselBookPicselItem } from '../types';
 
-import type { Photo } from '@/feature/picsel/picselBook/data/mockPicselBookPhotoData';
-import { MOCK_PICSEL_BOOK_PHOTO_DATA } from '@/feature/picsel/picselBook/data/mockPicselBookPhotoData';
+import { Photo } from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
+import {
+  MY_PICSEL_SORT_OPTIONS,
+  useSortActionSheet,
+} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
@@ -19,39 +22,46 @@ interface UsePicselBookFolderOptions {
 
 /**
  * PicselBook 폴더 템플릿을 위한 통합 hook
- * - 데이터 로딩
+ * - 데이터 로딩 (API 연동)
  * - 선택 모드
  * - 스크롤 관리
  * - 사진 액션 (삭제, 이동)
  * - 기능 버튼 (업로드)
  * - 뷰 모드 (list, textList)
+ * - 정렬 기능
  */
 export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
-  // 초기 데이터 설정
-  const initialBookData = MOCK_PICSEL_BOOK_PHOTO_DATA.find(
-    data => data.bookId === bookId,
-  );
-
   // 상태 관리
   const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [bookTitle, setBookTitle] = useState(initialBookData?.bookTitle || '');
+  const [sortType, setSortType] =
+    useState<PicselBookFolderSortType>('RECENT_DESC');
 
-  // 데이터 로딩
-  const { data: photoData, isLoading } = usePhotoData<Photo>({
-    loadData: () => {
-      const bookData = MOCK_PICSEL_BOOK_PHOTO_DATA.find(
-        data => data.bookId === bookId,
-      );
-      if (bookData) {
-        setBookTitle(bookData.bookTitle);
-        return bookData.photos;
-      }
-      setBookTitle('');
-      return [];
-    },
-    delay: 1000,
-    deps: [bookId],
+  // 픽셀북 내 픽셀 데이터 페칭 (API 연동)
+  const { data, isLoading, refetch } = useGetPicselBookPicsels({
+    picselbookId: bookId,
+    sortType,
   });
+
+  // API 데이터를 Photo 형태로 변환
+  const photoData: Photo[] = useMemo(() => {
+    if (!data?.content) {
+      return [];
+    }
+    return data.content.map((item: PicselBookPicselItem) => ({
+      id: item.picselId,
+      uri: item.representativeImagePath,
+      date: item.takenDate,
+      storeName: item.storeName,
+    }));
+  }, [data]);
+
+  console.log(data);
+
+  // 원본 데이터 (텍스트 리스트 뷰용)
+  const rawData: PicselBookPicselItem[] = data?.content ?? [];
+
+  const totalPhotos = data?.totalElements ?? 0;
+  const hasPhotos = totalPhotos > 0;
 
   // 사진 선택
   const {
@@ -90,24 +100,40 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
   // 사진 액션 (삭제, 이동)
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
-    onDeleteSuccess: resetSelection,
+    onDeleteSuccess: () => {
+      resetSelection();
+      refetch();
+    },
     exitSelectingMode: handleExitSelecting,
   });
 
-  // 유틸리티
-  const { formatPhotoCount } = usePhotoFormat();
+  // 정렬 액션시트
+  const { showSortSheet } = useSortActionSheet({
+    onSort: setSortType,
+    options: MY_PICSEL_SORT_OPTIONS,
+  });
 
   // 뷰 모드 토글
   const handleToggleViewMode = () => {
     setViewMode(prev => (prev === 'list' ? 'textList' : 'list'));
   };
 
+  // 사진 개수 포맷
+  const formatPhotoCount = (count: number) => {
+    return count.toLocaleString();
+  };
+
   return {
     // 데이터
     photoData,
-    bookTitle,
+    rawData,
     isLoading,
-    totalPhotos: photoData.length,
+    totalPhotos,
+    hasPhotos,
+
+    // 정렬
+    sortType,
+    showSortSheet,
 
     // 뷰 모드
     viewMode,
@@ -141,5 +167,8 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
 
     // 유틸리티
     formatPhotoCount,
+
+    // 리프레시
+    refetch,
   };
 };

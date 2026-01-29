@@ -44,3 +44,18 @@ export const formatMonth = (month: number): string => {
 export const formatYear = (year: number): string => {
   return `${year}년`;
 };
+
+/**
+ * 날짜 문자열에서 년도 추출
+ */
+export const getYearFromDate = (dateString: string): string => {
+  return new Date(dateString).getFullYear().toString();
+};
+
+/**
+ * 날짜 문자열에서 월 추출 (한글 형식)
+ */
+export const getMonthFromDate = (dateString: string): string => {
+  const month = new Date(dateString).getMonth() + 1;
+  return `${month}월`;
+};

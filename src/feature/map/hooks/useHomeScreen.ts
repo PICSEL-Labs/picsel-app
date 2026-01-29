@@ -110,8 +110,5 @@ export const useHomeScreen = () => {
     handleLocationSearch,
     handleNavigateSearch,
     searchStoresByLocation,
-
-    // Navigation
-    navigation,
   };
 };

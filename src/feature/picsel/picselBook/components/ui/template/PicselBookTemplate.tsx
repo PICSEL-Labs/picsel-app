@@ -13,22 +13,15 @@ import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButto
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
-import {
-  PicselBookSortType,
-  PICSEL_BOOK_SORT_OPTIONS,
-  useSortActionSheet,
-} from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 
 const PicselBookTemplate = () => {
   const {
-    // 데이터
     books,
     isLoading,
     totalBooks,
     hasBooks,
 
-    // 선택 모드
     isSelecting,
     selectedBookIds,
     handleEnterSelecting,
@@ -36,18 +29,15 @@ const PicselBookTemplate = () => {
     handleSelectAll,
     selectionSheetRef,
 
-    // 스크롤
     showUpButton,
     scrollToTop,
 
-    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
 
-    // 픽셀북 액션
     handleAddBook,
     handleSubmit,
     handleBookPress,
@@ -56,25 +46,16 @@ const PicselBookTemplate = () => {
     handleChangeCover,
     handleDelete,
 
-    // Refs
     picselBookRef,
+
+    showSortSheet,
   } = usePicselBook();
-
-  // TODO: 정렬 로직 구현
-  const handleSort = (sortType: PicselBookSortType) => {
-    console.log('픽셀북 정렬 타입:', sortType);
-  };
-
-  const { showSortSheet } = useSortActionSheet<PicselBookSortType>({
-    onSort: handleSort,
-    options: PICSEL_BOOK_SORT_OPTIONS,
-  });
 
   if (!isLoading && !hasBooks) {
     return (
       <EmptyStateLayout
         floatingButton={
-          <View className="absolute bottom-1 right-1">
+          <View className="absolute bottom-8 right-0">
             {showFunctionButtons ? (
               <FunctionButton
                 onAlbumPress={handleAlbumPress}
@@ -87,7 +68,7 @@ const PicselBookTemplate = () => {
           </View>
         }>
         <View className="flex-1">
-          <View className="absolute left-9 top-16">
+          <View className="absolute left-[41px] top-16">
             <AddBookButton onPress={handleAddBook} />
           </View>
 
@@ -136,7 +117,7 @@ const PicselBookTemplate = () => {
       )}
 
       {!isSelecting && (
-        <View className="absolute -bottom-4 right-4">
+        <View className="absolute bottom-4 right-4">
           {showUpButton && (
             <View
               style={{

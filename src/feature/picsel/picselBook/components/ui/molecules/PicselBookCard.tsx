@@ -14,7 +14,7 @@ interface Props {
   isSelecting?: boolean;
   isSelected?: boolean;
   isLoading?: boolean;
-  onPress?: (id: string) => void;
+  onPress?: (id: string, title: string) => void;
   onEdit?: (id: string, title: string) => void;
   onChangeCover?: (id: string) => void;
   onDelete?: (id: string, title: string) => void;
@@ -33,7 +33,7 @@ const PicselBookCard = ({
   onDelete,
 }: Props) => {
   const handlePress = () => {
-    onPress?.(id);
+    onPress?.(id, title);
   };
 
   // 스켈레톤 상태일 때

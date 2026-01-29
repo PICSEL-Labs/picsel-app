@@ -2,7 +2,7 @@ import React from 'react';
 
 import { View } from 'react-native';
 
-import { PicselBookEditType, PicselBookSortType } from '../../../types';
+import { PicselBookEditType } from '../../../types';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import PhotoTextListView from '@/feature/picsel/picselBook/components/ui/organisms/PhotoTextListView';
@@ -15,29 +15,29 @@ import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyM
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import UploadTooltip from '@/feature/picsel/shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/PixelToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 interface Props {
   bookId: string;
+  bookName?: string;
   onBack: () => void;
 }
 
-const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
+const PicselBookFolderTemplate = ({ bookId, bookName = '', onBack }: Props) => {
   const {
-    // 데이터
     photoData,
-    bookTitle,
+    rawData,
     isLoading,
     totalPhotos,
 
-    // 뷰 모드
+    showSortSheet,
+
     viewMode,
     handleToggleViewMode,
 
-    // 선택 모드
     isSelecting,
     selectedPhotos,
     toggleSelection,
@@ -46,35 +46,22 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
     handleExitSelecting,
     selectionBottomSheetRef,
 
-    // 스크롤
     showUpButton,
     flatListRef,
     handleScroll,
     scrollToTop,
 
-    // 기능 버튼
     showFunctionButtons,
     toggleFunctionButtons,
     handleAlbumPress,
     handleQrPress,
     closeFunctionButtons,
 
-    // 사진 액션
     handleDelete,
     handleMove,
 
-    // 유틸리티
     formatPhotoCount,
   } = usePicselBookFolder({ bookId });
-
-  // TODO: 정렬 로직 구현
-  const handleSort = (sortType: PicselBookSortType) => {
-    console.log('정렬 타입:', sortType);
-  };
-
-  const { showSortSheet } = useSortActionSheet({
-    onSort: handleSort,
-  });
 
   // TODO: 편집 로직 구현
   const handleEdit = (editType: PicselBookEditType) => {
@@ -92,7 +79,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
   return (
     <ScreenLayout>
       <FolderHeader
-        title={`${bookTitle}(${formatPhotoCount(totalPhotos)})`}
+        title={`${bookName}(${formatPhotoCount(totalPhotos)})`}
         onBack={onBack}
         showToggle={true}
         onTogglePress={showEditSheet}
@@ -149,7 +136,7 @@ const PicselBookFolderTemplate = ({ bookId, onBack }: Props) => {
           ) : (
             <PhotoTextListView
               ref={flatListRef}
-              data={photoData}
+              data={rawData}
               selectedPhotos={selectedPhotos}
               isSelecting={isSelecting}
               isLoading={isLoading}

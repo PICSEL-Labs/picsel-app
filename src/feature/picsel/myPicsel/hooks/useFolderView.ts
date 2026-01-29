@@ -1,12 +1,16 @@
-import { usePhotoData } from '../../shared/utils/usePhotoData';
-import { Photo } from '../components/ui/organisms/PhotoListView';
+import { useMemo } from 'react';
 
-import { MOCK_YEAR_DATA } from '@/feature/picsel/myPicsel/data/MOCK_YEAR_DATA';
+import { useSortActionSheet } from '../../shared/hooks/animation/useSortActionSheet';
+import { Photo } from '../components/ui/organisms/PhotoListView';
+import { useGetMyPicsels } from '../queries/useGetMyPicsels';
+import { getMonthFromDate, getYearFromDate } from '../utils/dateUtils';
+
 import { useScrollWithUpButton } from '@/feature/picsel/shared/hooks/animation/useScrollWithUpButton';
 import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSelectingMode';
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { useMyPicselStore } from '@/shared/store';
 
 interface UseFolderViewOptions {
   filterType: 'year' | 'month';
@@ -27,26 +31,43 @@ export const useFolderView = ({
   year,
   month,
 }: UseFolderViewOptions) => {
-  // 년도별/월별 사진 데이터 로딩
-  const { data: photoData, isLoading } = usePhotoData<Photo>({
-    loadData: () => {
-      const yearData = MOCK_YEAR_DATA.find(data => data.year === year);
-      if (!yearData) {
-        return [];
+  // 정렬 상태 (전역 store)
+  const { sortType, setSortType } = useMyPicselStore();
+
+  // API에서 전체 데이터 페칭
+  const { data: myPicselsData, isLoading } = useGetMyPicsels({
+    page: 0,
+    size: 1000,
+    sort: sortType,
+  });
+
+  // 년도별/월별 필터링
+  const photoData: Photo[] = useMemo(() => {
+    if (!myPicselsData?.content) {
+      return [];
+    }
+
+    const filtered = myPicselsData.content.filter(item => {
+      const itemYear = getYearFromDate(item.takenDate);
+      if (itemYear !== year) {
+        return false;
       }
 
-      if (filterType === 'year') {
-        // 년도별: 모든 월의 사진 반환
-        return yearData.months.flatMap(m => m.photos);
-      } else {
-        // 월별: 특정 월의 사진만 반환
-        const monthData = yearData.months.find(m => m.month === month);
-        return monthData?.photos || [];
+      if (filterType === 'month' && month) {
+        const itemMonth = getMonthFromDate(item.takenDate);
+        return itemMonth === month;
       }
-    },
-    delay: 1000,
-    deps: [year, month, filterType],
-  });
+
+      return true;
+    });
+
+    return filtered.map(item => ({
+      id: item.picselId,
+      uri: item.imagePath,
+      date: item.takenDate,
+      storeName: item.storeName,
+    }));
+  }, [myPicselsData, filterType, year, month]);
 
   const totalPhotos = photoData.length;
 
@@ -91,11 +112,20 @@ export const useFolderView = ({
     exitSelectingMode: handleExitSelecting,
   });
 
+  // 정렬 액션시트
+  const { showSortSheet } = useSortActionSheet({
+    onSort: setSortType,
+  });
+
   return {
     // 데이터
     photoData,
     isLoading,
     totalPhotos,
+
+    // 정렬
+    sortType,
+    showSortSheet,
 
     // 선택 모드
     isSelecting,

@@ -1,7 +1,6 @@
+import { MyPicselSortType } from '@/feature/picsel/myPicsel/types';
+import { PicselBookSortType } from '@/feature/picsel/picselBook/types';
 import { useActionSheetStore } from '@/shared/store/ui/actionSheet';
-
-export type MyPicselSortType = 'latest' | 'date';
-export type PicselBookSortType = 'latest' | 'add' | 'length';
 
 export interface SortOption<T = MyPicselSortType | PicselBookSortType> {
   type: T;
@@ -10,15 +9,15 @@ export interface SortOption<T = MyPicselSortType | PicselBookSortType> {
 
 // 내픽셀 정렬 옵션
 export const MY_PICSEL_SORT_OPTIONS: SortOption<MyPicselSortType>[] = [
-  { type: 'latest', label: '최신 순' },
-  { type: 'date', label: '오래된 순' },
+  { type: 'RECENT_DESC', label: '최신 순' },
+  { type: 'OLDEST_ASC', label: '오래된 순' },
 ];
 
 // 픽셀북 정렬 옵션
 export const PICSEL_BOOK_SORT_OPTIONS: SortOption<PicselBookSortType>[] = [
-  { type: 'latest', label: '최신 생성 순' },
-  { type: 'add', label: '사진 추가 순' },
-  { type: 'length', label: '사진 개수 순' },
+  { type: 'RECENT_CREATED_DESC', label: '최신 생성 순' },
+  { type: 'PHOTO_ADDED_DESC', label: '사진 추가 순' },
+  { type: 'PHOTO_COUNT_DESC', label: '사진 개수 순' },
 ];
 
 interface UseSortActionSheetParams<T = MyPicselSortType | PicselBookSortType> {

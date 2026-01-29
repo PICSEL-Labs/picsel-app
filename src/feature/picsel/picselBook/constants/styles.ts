@@ -17,3 +17,8 @@ export const TEXT_LIST_CARD = {
   IMAGE_WIDTH: 100,
   IMAGE_HEIGHT: 150,
 } as const;
+
+// 스켈레톤 아이템 높이 (아이콘 72px + mb-2 8px + 제목 16px + mb-1 4px + mb-7 28px)
+export const ITEM_HEIGHT = 128;
+// 툴바 + 상단 패딩 등 오프셋
+export const TOP_OFFSET = 100;

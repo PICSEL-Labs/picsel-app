@@ -40,12 +40,12 @@ const SelectPhotoScreen = () => {
       addExtraPhotos(selectedUris);
     }
 
-    navigation.navigate('RegisterPhoto');
+    navigation.navigate('PicselUpload');
   };
 
   useEffect(() => {
     if (selectedCount === 1 && variant === 'main') {
-      navigation.navigate('RegisterPhoto');
+      navigation.navigate('PicselUpload');
     }
   }, [selectedCount]);
 

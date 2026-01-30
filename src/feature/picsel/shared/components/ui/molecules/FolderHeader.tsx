@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Pressable, Text, View } from 'react-native';
 
-import Toggle from '@/assets/icons/toggle/icon-toggle.svg';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
+import ToggleIcons from '@/shared/icons/ToggleIcons';
 
 interface FolderHeaderProps {
   title: string;
@@ -27,7 +27,7 @@ const FolderHeader = ({
         <Text className="text-gray-900 headline-03">{title}</Text>
         {showToggle && (
           <Pressable onPress={onTogglePress}>
-            <Toggle />
+            <ToggleIcons shape="down" color="#676B79" width={24} height={24} />
           </Pressable>
         )}
       </View>

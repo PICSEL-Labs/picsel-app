@@ -11,18 +11,24 @@ import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 
 interface Props {
   children: React.ReactNode;
+  onBack?: () => void;
 }
 
-const PicselUploadLayout = ({ children }: Props) => {
+const PicselUploadLayout = ({ children, onBack }: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { confirmExitUpload } = useConfirmExit();
 
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      navigation.goBack();
+    }
+  };
+
   return (
     <ScreenLayout>
-      <PicselUploadHeader
-        onBack={() => navigation.goBack()}
-        onClose={confirmExitUpload}
-      />
+      <PicselUploadHeader onBack={handleBack} onClose={confirmExitUpload} />
       {children}
     </ScreenLayout>
   );

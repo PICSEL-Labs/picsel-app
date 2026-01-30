@@ -6,7 +6,7 @@ import BrandFilterButton from '../molecules/BrandFilterButton';
 
 import CurrentLocationSearch from './CurrentLocationSearch';
 
-import { useMapLocationStore } from '@/shared/store';
+import { useFilteredBrandsStore, useMapLocationStore } from '@/shared/store';
 import { useBrandFilterSheetStore } from '@/shared/store/ui/brandFilterSheet';
 
 interface Props {
@@ -35,6 +35,9 @@ const MapActionButton = ({
   const { mapMode } = useMapLocationStore();
   const { visible: brandFilterVisible } = useBrandFilterSheetStore();
 
+  const { filteredList } = useFilteredBrandsStore();
+  const isFilterApplied = filteredList.length > 0;
+
   const handleModal = useCallback(() => {
     if (brandFilterVisible) {
       hideFilterSheet();
@@ -57,7 +60,9 @@ const MapActionButton = ({
     <View className="relative flex-row justify-center">
       <View className="absolute left-0">
         <BrandFilterButton
-          variant={brandFilterVisible ? 'active' : 'inactive'}
+          variant={
+            brandFilterVisible || isFilterApplied ? 'active' : 'inactive'
+          }
           onPress={handleModal}
           showTooltip={showBrandTooltip}
           fadeAnim={fadeAnim}

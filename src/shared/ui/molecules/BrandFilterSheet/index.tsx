@@ -22,7 +22,7 @@ const BrandFilterSheet = () => {
   const { brandList, setBrandList } = useBrandListStore();
   const { scrollViewRef, handleScroll } = useHandleScroll();
   const { showToast } = useToastStore();
-  const { tempFilteredList, filterBrand, resetFilter } =
+  const { tempFilteredList, filterBrand, resetFilter, applyFilter } =
     useFilteredBrandsStore();
   const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
     useBrandFilterBottomSheet({
@@ -35,6 +35,11 @@ const BrandFilterSheet = () => {
       resetFilter();
       showToast('선택한 브랜드가 모두 해제됐어요', 50);
     }
+  };
+
+  const handleApply = () => {
+    applyFilter();
+    hideBrandFilterSheet();
   };
 
   const handlePressBrand = (brandId: string, name: string) => {
@@ -65,7 +70,7 @@ const BrandFilterSheet = () => {
       onChange={handleSheetChange}
       enablePanDownToClose>
       <View className="flex-1">
-        <BrandFilterHeader onReset={handleReset} />
+        <BrandFilterHeader onReset={handleReset} onApply={handleApply} />
         <BottomSheetScrollView
           ref={scrollViewRef}
           onScroll={handleScroll}

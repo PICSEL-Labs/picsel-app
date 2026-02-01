@@ -2,11 +2,11 @@ import React from 'react';
 
 import { View } from 'react-native';
 
-import MypageTopBar from '@/feature/mypage/components/ui/atoms/MypageTopBar';
-import NicknameSection from '@/feature/mypage/components/ui/atoms/NicknameSection';
-import MypageMenuItem from '@/feature/mypage/components/ui/molecules/MypageMenuItem';
-import ListGroup from '@/feature/mypage/components/ui/organisms/ListGroup';
-import { useMypageMenu } from '@/feature/mypage/hooks/useMypageMenu';
+import MypageTopBar from '@/feature/mypage/main/components/ui/atoms/MypageTopBar';
+import NicknameSection from '@/feature/mypage/main/components/ui/atoms/NicknameSection';
+import MypageMenuItem from '@/feature/mypage/main/components/ui/molecules/MypageMenuItem';
+import { useMypageMenu } from '@/feature/mypage/main/hooks/useMypageMenu';
+import ListGroup from '@/feature/mypage/shared/components/ui/organisms/ListGroup';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import StarIcons from '@/shared/icons/StarIcons';
 

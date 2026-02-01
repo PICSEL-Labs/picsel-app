@@ -2,7 +2,8 @@ import React, { ReactNode } from 'react';
 
 import { Pressable, Text, View } from 'react-native';
 
-import { BOX_MAIN_BOX_SHADOWS } from '@/feature/mypage/constants/styles';
+import { BOX_MAIN_BOX_SHADOWS } from '../../../constants/styles';
+
 import SparkleImages from '@/shared/images/Sparkle';
 
 interface Props {

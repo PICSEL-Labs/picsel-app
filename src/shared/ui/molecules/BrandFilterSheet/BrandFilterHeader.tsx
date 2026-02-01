@@ -2,15 +2,12 @@ import React from 'react';
 
 import { Pressable, Text, View } from 'react-native';
 
-import { useFilteredBrandsStore } from '@/shared/store';
-
 interface Props {
   onReset: () => void;
+  onApply: () => void;
 }
 
-const BrandFilterHeader = ({ onReset }: Props) => {
-  const { applyFilter } = useFilteredBrandsStore();
-
+const BrandFilterHeader = ({ onReset, onApply }: Props) => {
   return (
     <View className="w-full flex-row items-center px-4 pb-2">
       <View className="flex-1">
@@ -23,7 +20,7 @@ const BrandFilterHeader = ({ onReset }: Props) => {
 
       <View className="flex-1 items-end">
         <Pressable
-          onPress={applyFilter}
+          onPress={onApply}
           style={({ pressed }) => [
             {
               padding: 8,

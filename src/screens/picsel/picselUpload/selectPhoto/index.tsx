@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
 import { usePhotoPicker } from '@/feature/picsel/picselUpload/hooks/usePhotoPicker';
-import SelectPhotoHeader from '@/feature/picsel/picselUpload/ui/layout/PhotoSelectHeader';
+import PhotoSelectHeader from '@/feature/picsel/picselUpload/ui/layout/PhotoSelectHeader';
 import { PhotoGrid } from '@/feature/picsel/picselUpload/ui/organisms/PhotoGrid';
 import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
@@ -39,19 +39,12 @@ const SelectPhotoScreen = () => {
     } else {
       addExtraPhotos(selectedUris);
     }
-
     navigation.navigate('PicselUpload');
   };
 
-  useEffect(() => {
-    if (selectedCount === 1 && variant === 'main') {
-      navigation.navigate('PicselUpload');
-    }
-  }, [selectedCount]);
-
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top']}>
-      <SelectPhotoHeader
+      <PhotoSelectHeader
         variant={variant}
         onReset={resetSelection}
         hasSelected={!!selectedUris}

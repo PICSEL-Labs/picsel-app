@@ -50,10 +50,14 @@ const ConfirmModal = () => {
               )}
 
               {/* Message */}
-              <Text
-                className={`text-center text-gray-900 body-rg-02 ${title ? 'mb-7' : 'mb-7'}`}>
-                {message}
-              </Text>
+              {message && (
+                <Text className="mb-7 text-center text-gray-900 body-rg-02">
+                  {message}
+                </Text>
+              )}
+
+              {/* message가 없을 때 간격 추가 */}
+              {!message && <View className="mb-6" />}
 
               {/* Buttons */}
               <View className="flex-row space-x-2">

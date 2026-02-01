@@ -1,13 +1,27 @@
+import { useCallback } from 'react';
 import React from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
+import { showConfirmModal } from '@/shared/lib/confirmModal';
+import { useUserStore } from '@/shared/store';
 
 export const useAccountMenu = () => {
-  // const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const { logout } = useUserStore();
+
+  const executeLogout = useCallback(() => {
+    logout();
+  }, [logout, navigation]);
 
   const handleLogout = () => {
-    console.log('로그아웃');
-    // 로그아웃 로직
+    showConfirmModal('', executeLogout, {
+      title: '로그아웃 할까요?',
+      confirmText: '로그아웃',
+      cancelText: '취소',
+    });
   };
 
   const handleWithdraw = () => {

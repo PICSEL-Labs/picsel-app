@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { NavigationContainer } from '@react-navigation/native';
 
 import MainRoute from '@/navigation';
 import SignupRoute from '@/navigation/route/signup';
@@ -8,8 +10,14 @@ import { useUserStore } from '@/shared/store';
 function App() {
   const { refreshToken } = useUserStore();
 
+  useEffect(() => {}, [refreshToken]);
+
   return (
-    <AppProvider>{refreshToken ? <MainRoute /> : <SignupRoute />}</AppProvider>
+    <AppProvider>
+      <NavigationContainer key={refreshToken ? 'authenticated' : 'guest'}>
+        {refreshToken ? <MainRoute /> : <SignupRoute />}
+      </NavigationContainer>
+    </AppProvider>
   );
 }
 

@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Text, TextInput } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -79,7 +78,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
       <SafeAreaProvider>
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
-            <NavigationContainer>{children}</NavigationContainer>
+            {children}
             {/* Global UI Components */}
             <Toast />
             <ConfirmModal />

@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 import { useToastStore } from '@/shared/store/ui/toast';
 
-export const usePhotoSelection = () => {
+export const usePhotoSelection = (variant: 'main' | 'extra') => {
   const MAX_EXTRA_COUNT = 10;
   const { showToast } = useToastStore();
 
@@ -12,21 +12,28 @@ export const usePhotoSelection = () => {
     extraPhotos,
     setMainPhoto,
     addExtraPhotos,
+    setExtraPhotos,
     removeExtraPhoto,
   } = usePhotoStore();
 
   const selectMainPhoto = useCallback(
     (uri: string) => {
+      if (mainPhoto === uri) {
+        setMainPhoto(null);
+        return;
+      }
+
       if (mainPhoto) {
         showToast('대표사진은 1장만 선택 가능해요', 60);
         return;
       }
+
       setMainPhoto(uri);
     },
     [mainPhoto, setMainPhoto, showToast],
   );
 
-  const toggleExtraPhoto = useCallback(
+  const selectExtraPhoto = useCallback(
     (uri: string) => {
       const index = extraPhotos.indexOf(uri);
 
@@ -45,10 +52,19 @@ export const usePhotoSelection = () => {
     [extraPhotos, addExtraPhotos, removeExtraPhoto, showToast],
   );
 
+  const resetCurrentPhoto = useCallback(() => {
+    if (variant === 'main') {
+      setMainPhoto(null);
+    } else {
+      setExtraPhotos([]);
+    }
+  }, [variant, setMainPhoto]);
+
   return {
     mainPhoto,
     extraPhotos,
     selectMainPhoto,
-    toggleExtraPhoto,
+    selectExtraPhoto,
+    resetCurrentPhoto,
   };
 };

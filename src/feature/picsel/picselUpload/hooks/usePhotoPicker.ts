@@ -3,11 +3,16 @@ import { usePhotoGrid } from './usePhotoGrid';
 import { usePhotoSelection } from './usePhotoSelection';
 
 export const usePhotoPicker = (variant: 'main' | 'extra') => {
-  const { photos, fetchPhotos, hasNextPage, appendCapturedPhoto, resetPhotos } =
+  const { photos, fetchPhotos, hasNextPage, appendCapturedPhoto } =
     usePhotoGrid();
 
-  const { mainPhoto, extraPhotos, selectMainPhoto, toggleExtraPhoto } =
-    usePhotoSelection();
+  const {
+    mainPhoto,
+    extraPhotos,
+    selectMainPhoto,
+    selectExtraPhoto,
+    resetCurrentPhoto,
+  } = usePhotoSelection(variant);
 
   const { capturePhoto } = useCameraCapture();
 
@@ -16,27 +21,33 @@ export const usePhotoPicker = (variant: 'main' | 'extra') => {
   const selectedUris = isMain ? (mainPhoto ? [mainPhoto] : []) : extraPhotos;
   const selectedCount = isMain ? selectedUris.length : extraPhotos.length;
 
+  const handleReset = () => {
+    resetCurrentPhoto();
+  };
+
   const handleSelectPhoto = (uri: string) => {
     if (variant === 'main') {
       selectMainPhoto(uri);
     } else {
-      toggleExtraPhoto(uri);
+      selectExtraPhoto(uri);
     }
   };
 
   const handleOpenCamera = async () => {
     const photo = await capturePhoto();
+
     if (!photo) {
       return;
     }
+
+    appendCapturedPhoto(photo);
 
     if (variant === 'main') {
       selectMainPhoto(photo.uri);
       return;
     }
 
-    appendCapturedPhoto(photo);
-    toggleExtraPhoto(photo.uri);
+    selectExtraPhoto(photo.uri);
   };
 
   return {
@@ -47,6 +58,6 @@ export const usePhotoPicker = (variant: 'main' | 'extra') => {
     hasNextPage,
     handleSelectPhoto,
     handleOpenCamera,
-    resetSelection: resetPhotos,
+    resetSelection: handleReset,
   };
 };

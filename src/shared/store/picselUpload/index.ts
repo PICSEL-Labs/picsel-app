@@ -6,6 +6,8 @@ interface PhotoState {
 
   setMainPhoto: (uri: string | null) => void;
   addExtraPhotos: (uris: string[]) => void;
+
+  setExtraPhotos: (uris: string[]) => void;
   removeExtraPhoto: (index: number) => void;
   reset: () => void;
 }
@@ -20,6 +22,8 @@ export const usePhotoStore = create<PhotoState>(set => ({
     set(state => ({
       extraPhotos: Array.from(new Set([...state.extraPhotos, ...uris])),
     })),
+
+  setExtraPhotos: uris => set({ extraPhotos: uris }),
 
   removeExtraPhoto: index =>
     set(state => ({

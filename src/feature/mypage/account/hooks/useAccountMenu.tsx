@@ -24,9 +24,13 @@ export const useAccountMenu = () => {
     });
   };
 
+  const handleEditNickname = () => {
+    console.log('닉네임 수정');
+    // navigation.navigate('EditNickname');
+  };
+
   const handleWithdraw = () => {
-    console.log('탈퇴하기');
-    // navigation.navigate('Withdraw');
+    navigation.navigate('MypageWithdrawal');
   };
 
   const accountMenuItems = [
@@ -44,5 +48,5 @@ export const useAccountMenu = () => {
     },
   ];
 
-  return { accountMenuItems };
+  return { accountMenuItems, handleEditNickname };
 };

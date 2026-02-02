@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -9,8 +9,6 @@ import { useUserStore } from '@/shared/store';
 
 function App() {
   const { refreshToken } = useUserStore();
-
-  useEffect(() => {}, [refreshToken]);
 
   return (
     <AppProvider>

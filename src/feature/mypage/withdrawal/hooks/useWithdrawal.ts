@@ -1,10 +1,14 @@
 import { useState, useCallback } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { ETC_REASON_ID } from '../constants/withdrawalText';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 
 export const useWithdrawal = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [etcReason, setEtcReason] = useState('');
 
@@ -21,13 +25,10 @@ export const useWithdrawal = () => {
     });
   }, []);
 
-  const executeWithdrawal = useCallback(() => {
-    console.log('탈퇴 실행', {
-      selectedReasons,
-      etcReason,
-    });
-    // 탈퇴 API 호출
-  }, [selectedReasons, etcReason]);
+  const executeWithdrawal = () => {
+    // 회원탈퇴 API
+    navigation.navigate('MypageWithdrawalSuccess');
+  };
 
   const handleWithdraw = useCallback(() => {
     showConfirmModal(

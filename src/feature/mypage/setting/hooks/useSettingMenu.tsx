@@ -1,4 +1,3 @@
-// @/feature/setting/hooks/useSettingMenu.tsx
 import { useCallback } from 'react';
 import React from 'react';
 
@@ -40,12 +39,12 @@ export const useSettingMenu = () => {
 
   const handleTerms = useCallback(() => {
     console.log('이용약관');
-    // navigation.navigate('Terms');
+    // navigation.navigate('Terms'); or Linking 처리
   }, []);
 
   const handlePrivacy = useCallback(() => {
     console.log('개인정보처리방침');
-    // navigation.navigate('Privacy');
+    // navigation.navigate('Privacy'); or Linking 처리
   }, []);
 
   const menuItems = SETTING_MENU_ITEMS.map(item => {

@@ -26,7 +26,7 @@ const MypageScreen = () => {
       <NicknameSection
         // 유저 닉네임 정보 필요 -> 서버측 문의 완료
         nickname="닉네임 들어갑니다"
-        onPressEdit={() => console.log('닉네임 변경')}
+        onPressEdit={() => navigation.navigate('EditNicknameScreen')}
       />
 
       <View className="mb-4 mt-4 px-4" style={{ gap: 12 }}>

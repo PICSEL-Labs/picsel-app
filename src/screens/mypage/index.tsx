@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import MypageTopBar from '@/feature/mypage/main/components/ui/atoms/MypageTopBar';
@@ -8,13 +8,26 @@ import NicknameSection from '@/feature/mypage/main/components/ui/atoms/NicknameS
 import MypageMenuItem from '@/feature/mypage/main/components/ui/molecules/MypageMenuItem';
 import { useMypageMenu } from '@/feature/mypage/main/hooks/useMypageMenu';
 import ListGroup from '@/feature/mypage/shared/components/ui/organisms/ListGroup';
+import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import StarIcons from '@/shared/icons/StarIcons';
+import { useUserStore } from '@/shared/store';
+import { useToastStore } from '@/shared/store/ui/toast';
 
 const MypageScreen = () => {
+  const { userNickname } = useUserStore();
   const { menuItems } = useMypageMenu();
   const navigation = useNavigation<RootStackNavigationProp>();
+  const route = useRoute<RouteProp<MainNavigationProps, 'Mypage'>>();
+  const { showToast } = useToastStore();
+
+  useEffect(() => {
+    if (route.params?.toastMessage) {
+      showToast(route.params.toastMessage);
+      navigation.setParams({ toastMessage: undefined });
+    }
+  }, [route.params?.toastMessage]);
 
   return (
     <ScreenLayout>
@@ -24,8 +37,7 @@ const MypageScreen = () => {
       />
 
       <NicknameSection
-        // 유저 닉네임 정보 필요 -> 서버측 문의 완료
-        nickname="닉네임 들어갑니다"
+        nickname={userNickname}
         onPressEdit={() => navigation.navigate('EditNicknameScreen')}
       />
 

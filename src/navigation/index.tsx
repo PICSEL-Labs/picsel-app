@@ -47,7 +47,7 @@ export type MainNavigationProps = {
   PicselBookFolder: { bookId: string; bookName: string };
 
   // Mypage
-  Mypage: undefined;
+  Mypage: { toastMessage?: string } | undefined;
   MypageSetting: undefined;
   MypageAccount: undefined;
   MypageWithdrawal: undefined;

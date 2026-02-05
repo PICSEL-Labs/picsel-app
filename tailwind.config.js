@@ -142,6 +142,11 @@ module.exports = {
           lineHeight: `${verticalScale(24)}px`,
           fontFamily: 'NanumSquareRoundB',
         },
+        '.headline-01-eb': {
+          fontSize: moderateScale(14, 0.3),
+          lineHeight: `${verticalScale(21)}px`,
+          fontFamily: 'NanumSquareRoundEB',
+        },
         '.headline-01': {
           fontSize: moderateScale(14, 0.3),
           lineHeight: `${verticalScale(21)}px`,

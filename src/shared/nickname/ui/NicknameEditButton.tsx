@@ -14,7 +14,6 @@ interface Props {
   onSubmit: () => void;
 }
 
-// 마이페이지 닉네임 수정용 버튼
 const NicknameEditButton = ({
   focus,
   keyboardHeight,

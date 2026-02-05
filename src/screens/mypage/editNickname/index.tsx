@@ -19,18 +19,28 @@ import { useUserStore } from '@/shared/store';
 
 const EditNicknameScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { setUserNickname, setEmail } = useUserStore();
+  const {
+    userNickname: currentNickname,
+    setUserNickname,
+    setEmail,
+  } = useUserStore();
   const nicknameValidation = useNicknameValidation();
   const { keyboardHeight } = useKeyboardHeight();
 
+  const isSameAsCurrentNickname =
+    nicknameValidation.userNickname === currentNickname;
+
+  const errorMessage = isSameAsCurrentNickname
+    ? '현재 닉네임과 동일한 닉네임이에요'
+    : nicknameValidation.errorMessage;
+
   const handleSubmit = async () => {
-    if (!nicknameValidation.isAvailable) {
+    if (!nicknameValidation.isAvailable || isSameAsCurrentNickname) {
       return;
     }
 
     try {
       const response = await updateNicknameApi(nicknameValidation.userNickname);
-      console.log('닉네임 변경 응답:', response);
 
       setUserNickname(response.data.userNickname);
       setEmail(response.data.email);
@@ -39,7 +49,6 @@ const EditNicknameScreen = () => {
         toastMessage: '닉네임 변경을 완료했어요',
       });
     } catch (error) {
-      console.log('닉네임 변경 에러:', error);
       navigation.navigate('Mypage', {
         toastMessage: '닉네임 변경에 실패했어요',
       });
@@ -71,18 +80,22 @@ const EditNicknameScreen = () => {
           handleChange={nicknameValidation.handleNicknameChange}
           handleClear={nicknameValidation.handleClear}
           setFocus={nicknameValidation.setFocus}
-          errorMessage={nicknameValidation.errorMessage}
+          errorMessage={errorMessage}
           userNickname={nicknameValidation.userNickname}>
           <NicknameFeedback
-            errorMessage={nicknameValidation.errorMessage}
-            isAvailable={nicknameValidation.isAvailable}
+            errorMessage={errorMessage}
+            isAvailable={
+              nicknameValidation.isAvailable && !isSameAsCurrentNickname
+            }
             length={nicknameValidation.userNickname.length}
           />
         </NicknameInput>
 
         <NicknameEditButton
           focus={nicknameValidation.focus}
-          isAvailable={nicknameValidation.isAvailable}
+          isAvailable={
+            nicknameValidation.isAvailable && !isSameAsCurrentNickname
+          }
           keyboardHeight={keyboardHeight}
           onSubmit={handleSubmit}
         />

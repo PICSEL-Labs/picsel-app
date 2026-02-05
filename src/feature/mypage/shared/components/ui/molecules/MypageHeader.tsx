@@ -10,6 +10,7 @@ interface Props {
   showBackButton?: boolean;
   rightElement?: ReactNode;
   className?: string;
+  rightIconPress?: () => void;
 }
 
 const MypageHeader = ({
@@ -17,6 +18,7 @@ const MypageHeader = ({
   showBackButton = true,
   rightElement,
   className = '',
+  rightIconPress,
 }: Props) => {
   const navigation = useNavigation();
 
@@ -33,7 +35,9 @@ const MypageHeader = ({
       <Text className="flex-1 text-center text-gray-900 title-01">{title}</Text>
 
       {rightElement && (
-        <View className="absolute right-4 z-10">{rightElement}</View>
+        <Pressable onPress={rightIconPress} className="absolute right-4 z-10">
+          {rightElement}
+        </Pressable>
       )}
     </View>
   );

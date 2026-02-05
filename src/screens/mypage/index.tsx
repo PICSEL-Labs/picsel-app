@@ -32,7 +32,7 @@ const MypageScreen = () => {
   return (
     <ScreenLayout>
       <MypageTopBar
-        onPressNotification={() => console.log('알림 페이지로')}
+        onPressNotification={() => navigation.navigate('NotificationScreen')}
         onPressSetting={() => navigation.navigate('MypageSetting')}
       />
 

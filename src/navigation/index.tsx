@@ -8,6 +8,8 @@ import BottomTabBar from './tabs';
 import MypageScreen from '@/screens/mypage';
 import MypageAccountScreen from '@/screens/mypage/account';
 import EditNicknameScreen from '@/screens/mypage/editNickname';
+import NotificationScreen from '@/screens/mypage/notification';
+import NotificationSettingScreen from '@/screens/mypage/notification/setting';
 import MypageSettingScreen from '@/screens/mypage/setting';
 import WithdrawalScreen from '@/screens/mypage/withdrawal';
 import WithdrawalSuccessScreen from '@/screens/mypage/withdrawal/success';
@@ -53,6 +55,8 @@ export type MainNavigationProps = {
   MypageWithdrawal: undefined;
   MypageWithdrawalSuccess: undefined;
   EditNicknameScreen: undefined;
+  NotificationScreen: undefined;
+  NotificationSettingScreen: undefined;
 };
 
 const MainRoute = () => {
@@ -112,6 +116,11 @@ const MainRoute = () => {
         component={WithdrawalSuccessScreen}
       />
       <Stack.Screen name="EditNicknameScreen" component={EditNicknameScreen} />
+      <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+      <Stack.Screen
+        name="NotificationSettingScreen"
+        component={NotificationSettingScreen}
+      />
     </Stack.Navigator>
   );
 };

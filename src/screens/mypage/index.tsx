@@ -47,7 +47,7 @@ const MypageScreen = () => {
           description="내가 찜한 브랜드를 한눈에 보고 관리해요"
           backgroundColor="bg-pink-100"
           icon={<StarIcons shape="empty" width={24} height={24} />}
-          onPress={() => console.log('찜한 브랜드 설정')}
+          onPress={() => navigation.navigate('BrandSettingScreen')}
         />
 
         <MypageMenuItem

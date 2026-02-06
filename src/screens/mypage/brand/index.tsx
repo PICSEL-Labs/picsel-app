@@ -20,6 +20,7 @@ import Animated, {
 
 import Kebab from '@/assets/icons/kebab/icon-kebab.svg';
 import PlusIcon from '@/assets/icons/plus/icon-plus-S.svg';
+import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavoriteBrand';
 import { Brand } from '@/feature/brand/types';
 import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
@@ -33,7 +34,6 @@ import { useToastStore } from '@/shared/store/ui/toast';
 import { defaultShadow } from '@/shared/styles/shadows';
 import Button from '@/shared/ui/atoms/Button';
 
-// 실제 API 연동
 // ─── Screen Mode ───
 type ScreenMode = 'default' | 'remove' | 'add';
 
@@ -49,10 +49,11 @@ const BrandSettingScreen = () => {
   const [selectedBrandIds, setSelectedBrandIds] = useState<string[]>([]);
   const [addSelectedBrandIds, setAddSelectedBrandIds] = useState<string[]>([]);
 
-  // ─── Store ───
+  // ─── Store & Mutation ───
   const { brandList } = useBrandListStore();
   const { optimisticFavorites, setOptimisticFavorite } = useFavoriteStore();
   const { showToast } = useToastStore();
+  const { mutate: toggleFavorite } = useToggleFavoriteBrand();
 
   // ─── Derived Data ───
   const favoriteBrands = useMemo(
@@ -163,11 +164,20 @@ const BrandSettingScreen = () => {
 
     selectedBrandIds.forEach(brandId => {
       setOptimisticFavorite(brandId, false);
+      toggleFavorite(
+        { brandId, action: 'REMOVE' },
+        {
+          onError: () => {
+            setOptimisticFavorite(brandId, true);
+            showToast('찜 해제 중 오류가 발생했어요');
+          },
+        },
+      );
     });
     showToast(`${selectedBrandIds.length}개의 브랜드를 찜 해제 했어요`);
     setMode('default');
     setSelectedBrandIds([]);
-  }, [selectedBrandIds, setOptimisticFavorite, showToast]);
+  }, [selectedBrandIds, setOptimisticFavorite, toggleFavorite, showToast]);
 
   // ─── Add Mode Handlers ───
   const handleToggleAddSelect = useCallback(
@@ -192,11 +202,20 @@ const BrandSettingScreen = () => {
 
     addSelectedBrandIds.forEach(brandId => {
       setOptimisticFavorite(brandId, true);
+      toggleFavorite(
+        { brandId, action: 'ADD' },
+        {
+          onError: () => {
+            setOptimisticFavorite(brandId, false);
+            showToast('브랜드 추가 중 오류가 발생했어요');
+          },
+        },
+      );
     });
     showToast(`${addSelectedBrandIds.length}개의 브랜드를 찜했어요`);
     setMode('default');
     setAddSelectedBrandIds([]);
-  }, [addSelectedBrandIds, setOptimisticFavorite, showToast]);
+  }, [addSelectedBrandIds, setOptimisticFavorite, toggleFavorite, showToast]);
 
   // ─── Header Config ───
   const headerTitle = useMemo(() => {

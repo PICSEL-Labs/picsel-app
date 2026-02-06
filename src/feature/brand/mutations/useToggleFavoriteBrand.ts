@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BrandFavToggleRequest,
   toggleFavoriteBrandApi,
-} from '../api/toggleFavoriteBrandAPi';
+} from '../api/toggleFavoriteBrandApi';
 
 export const useToggleFavoriteBrand = () => {
   const queryClient = useQueryClient();

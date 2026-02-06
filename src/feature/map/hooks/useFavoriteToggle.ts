@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
-import { useToggleFavoriteBrand } from '../mutations/useToggleFavoriteBrand';
-
+import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavoriteBrand';
 import { useFavoriteStore } from '@/shared/store';
 import { useToastStore } from '@/shared/store/ui/toast';
 

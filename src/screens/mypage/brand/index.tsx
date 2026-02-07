@@ -32,7 +32,6 @@ import SearchIcons from '@/shared/icons/SearchIcons';
 import { useBrandListStore, useFavoriteStore } from '@/shared/store';
 import { useToastStore } from '@/shared/store/ui/toast';
 import { defaultShadow } from '@/shared/styles/shadows';
-import Button from '@/shared/ui/atoms/Button';
 
 // ─── Screen Mode ───
 type ScreenMode = 'default' | 'remove' | 'add';
@@ -452,22 +451,29 @@ const BrandSettingScreen = () => {
       {mode === 'remove' && (
         <View className="flex-row">
           <Pressable
-            className="ml-2 flex-1 flex-row items-center justify-center space-x-1 rounded-lg py-3"
+            className="ml-2 mt-1 flex-1 flex-row items-center justify-center space-x-1 rounded-lg py-3"
             onPress={handleConfirmRemove}>
             <PicselActionIcons shape="delete" width={24} height={24} />
-            <Text className="text-semantic-error headline-02">찜 해제하기</Text>
+            <Text className="text-semantic-error headline-02">
+              {selectedBrandIds.length > 0
+                ? `${selectedBrandIds.length}개의 브랜드 찜 해제하기`
+                : '찜 해제하기'}
+            </Text>
           </Pressable>
         </View>
       )}
 
       {mode === 'add' && (
-        <View className="px-4 pb-4">
-          <Button
-            className="w-full"
-            text="추가하기"
-            textColor="white"
-            onPress={handleConfirmAdd}
-          />
+        <View className="flex-row">
+          <Pressable
+            className="ml-2 mt-1 flex-1 flex-row items-center justify-center space-x-1 rounded-lg py-3"
+            onPress={handleConfirmAdd}>
+            <Text className="text-primary-pink headline-02">
+              {addSelectedBrandIds.length > 0
+                ? `${addSelectedBrandIds.length}개의 브랜드 찜 추가하기`
+                : '추가하기'}
+            </Text>
+          </Pressable>
         </View>
       )}
     </ScreenLayout>

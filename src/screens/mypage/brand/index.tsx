@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import {
   ImageBackground,
   Modal,
@@ -24,6 +25,7 @@ import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavor
 import { Brand } from '@/feature/brand/types';
 import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import CheckIcons from '@/shared/icons/CheckIcons';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
@@ -53,6 +55,7 @@ const BrandSettingScreen = () => {
   const { optimisticFavorites, setOptimisticFavorite } = useFavoriteStore();
   const { showToast } = useToastStore();
   const { mutate: toggleFavorite } = useToggleFavoriteBrand();
+  const navigation = useNavigation<RootStackNavigationProp>();
 
   // ─── Derived Data ───
   const favoriteBrands = useMemo(
@@ -240,11 +243,15 @@ const BrandSettingScreen = () => {
           </Pressable>
         ) : undefined;
       case 'add':
-        return <SearchIcons shape="black" width={24} height={24} />;
+        return (
+          <Pressable onPress={() => navigation.navigate('BrandSearchScreen')}>
+            <SearchIcons shape="black" width={24} height={24} />
+          </Pressable>
+        );
       default:
         return <Kebab />;
     }
-  }, [mode, selectedBrandIds.length, handleResetSelection]);
+  }, [mode, selectedBrandIds.length, handleResetSelection, navigation]);
 
   // ─── Render: Default / Remove 브랜드 아이템 ───
   const renderFavoriteBrandItem = useCallback(

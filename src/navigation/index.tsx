@@ -8,6 +8,7 @@ import BottomTabBar from './tabs';
 import MypageScreen from '@/screens/mypage';
 import MypageAccountScreen from '@/screens/mypage/account';
 import BrandSettingScreen from '@/screens/mypage/brand';
+import BrandSearchScreen from '@/screens/mypage/brand/search';
 import EditNicknameScreen from '@/screens/mypage/editNickname';
 import NotificationScreen from '@/screens/mypage/notification';
 import NotificationSettingScreen from '@/screens/mypage/notification/setting';
@@ -59,6 +60,7 @@ export type MainNavigationProps = {
   NotificationScreen: undefined;
   NotificationSettingScreen: undefined;
   BrandSettingScreen: undefined;
+  BrandSearchScreen: undefined;
 };
 
 const MainRoute = () => {
@@ -124,6 +126,7 @@ const MainRoute = () => {
         component={NotificationSettingScreen}
       />
       <Stack.Screen name="BrandSettingScreen" component={BrandSettingScreen} />
+      <Stack.Screen name="BrandSearchScreen" component={BrandSearchScreen} />
     </Stack.Navigator>
   );
 };

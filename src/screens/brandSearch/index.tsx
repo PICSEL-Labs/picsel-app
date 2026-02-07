@@ -13,6 +13,7 @@ import FloatingButton from '@/shared/icons/FloatingButton';
 import {
   useBrandListStore,
   useFavoriteStore,
+  useSearchSelectedBrandsStore,
   useSelectedBrandsStore,
 } from '@/shared/store';
 import Button from '@/shared/ui/atoms/Button';
@@ -35,6 +36,7 @@ const BrandSearchScreen = () => {
   const { brandList } = useBrandListStore();
   const { selectedList, selectBrand } = useSelectedBrandsStore();
   const { optimisticFavorites } = useFavoriteStore();
+  const { setSearchSelectedBrandIds } = useSearchSelectedBrandsStore();
   const { showFloatingButton, handleScroll, scrollToTop, scrollViewRef } =
     useHandleScroll();
 
@@ -102,11 +104,9 @@ const BrandSearchScreen = () => {
     }
 
     const selectedIds = mypageSelectedBrands.map(b => b.brandId);
-    // @ts-ignore - navigate with params to parent screen
-    navigation.navigate('BrandSettingScreen', {
-      searchSelectedBrandIds: selectedIds,
-    });
-  }, [mypageSelectedBrands, navigation]);
+    setSearchSelectedBrandIds(selectedIds);
+    navigation.goBack();
+  }, [mypageSelectedBrands, setSearchSelectedBrandIds, navigation]);
 
   const gridSelectedList =
     variant === 'signup' ? selectedList : mypageCombinedSelectedList;

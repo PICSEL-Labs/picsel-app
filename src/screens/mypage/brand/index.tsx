@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   ImageBackground,
   Modal,
@@ -25,7 +25,6 @@ import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
 import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavoriteBrand';
 import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
-import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import CheckIcons from '@/shared/icons/CheckIcons';
@@ -33,7 +32,11 @@ import FloatingButton from '@/shared/icons/FloatingButton';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 import SearchIcons from '@/shared/icons/SearchIcons';
-import { useBrandListStore, useFavoriteStore } from '@/shared/store';
+import {
+  useBrandListStore,
+  useFavoriteStore,
+  useSearchSelectedBrandsStore,
+} from '@/shared/store';
 import { useToastStore } from '@/shared/store/ui/toast';
 import { defaultShadow } from '@/shared/styles/shadows';
 
@@ -41,9 +44,6 @@ import { defaultShadow } from '@/shared/styles/shadows';
 type ScreenMode = 'default' | 'remove' | 'add';
 
 const BrandSettingScreen = () => {
-  const route =
-    useRoute<RouteProp<MainNavigationProps, 'BrandSettingScreen'>>();
-
   // ─── Menu State ───
   const [menuVisible, setMenuVisible] = useState(false);
   const [menuMounted, setMenuMounted] = useState(false);
@@ -58,6 +58,8 @@ const BrandSettingScreen = () => {
   // ─── Store & Mutation ───
   const { brandList } = useBrandListStore();
   const { optimisticFavorites, setOptimisticFavorite } = useFavoriteStore();
+  const { searchSelectedBrandIds, clearSearchSelectedBrandIds } =
+    useSearchSelectedBrandsStore();
   const { showToast } = useToastStore();
   const { mutate: toggleFavorite } = useToggleFavoriteBrand();
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -66,17 +68,15 @@ const BrandSettingScreen = () => {
 
   // ─── 검색 화면에서 전달받은 선택 브랜드 반영 ───
   useEffect(() => {
-    const ids = route.params?.searchSelectedBrandIds;
-    if (ids && ids.length > 0) {
+    if (searchSelectedBrandIds.length > 0) {
       setMode('add');
       setAddSelectedBrandIds(prev => {
-        const merged = new Set([...prev, ...ids]);
+        const merged = new Set([...prev, ...searchSelectedBrandIds]);
         return Array.from(merged);
       });
-      // params 소비 후 초기화
-      navigation.setParams({ searchSelectedBrandIds: undefined });
+      clearSearchSelectedBrandIds();
     }
-  }, [route.params?.searchSelectedBrandIds, navigation]);
+  }, [searchSelectedBrandIds, clearSearchSelectedBrandIds]);
 
   // ─── Derived Data ───
   const favoriteBrands = useMemo(

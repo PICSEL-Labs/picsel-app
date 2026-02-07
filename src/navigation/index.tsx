@@ -59,7 +59,7 @@ export type MainNavigationProps = {
   EditNicknameScreen: undefined;
   NotificationScreen: undefined;
   NotificationSettingScreen: undefined;
-  BrandSettingScreen: { searchSelectedBrandIds?: string[] } | undefined;
+  BrandSettingScreen: undefined;
   BrandSearchScreen: { variant: 'signup' | 'mypage' };
 };
 

@@ -2,6 +2,7 @@ export { useSelectedBrandsStore } from './brand/selectBrands';
 export { useBrandListStore } from './brand/brandList';
 export { useFilteredBrandsStore } from './brand/filterBrands';
 export { useFavoriteStore } from './brand/favoriteBrand';
+export { useSearchSelectedBrandsStore } from './brand/searchSelectedBrands';
 export { useUserStore } from './user';
 export { useLocationStore } from './location';
 export { useMapLocationStore } from './searchLocation';

@@ -196,7 +196,7 @@ const BrandSettingScreen = () => {
 
   const handleConfirmAdd = useCallback(() => {
     if (addSelectedBrandIds.length === 0) {
-      showToast('추가할 브랜드를 골라주세요');
+      showToast('찜 추가할 브랜드를 골라주세요');
       return;
     }
 
@@ -212,7 +212,7 @@ const BrandSettingScreen = () => {
         },
       );
     });
-    showToast(`${addSelectedBrandIds.length}개의 브랜드를 찜했어요`);
+    showToast(`${addSelectedBrandIds.length}개의 브랜드를 찜 추가했어요`);
     setMode('default');
     setAddSelectedBrandIds([]);
   }, [addSelectedBrandIds, setOptimisticFavorite, toggleFavorite, showToast]);
@@ -288,7 +288,9 @@ const BrandSettingScreen = () => {
   // ─── Render: Add 모드 전체 브랜드 그리드 ───
   const renderAddBrandGrid = useCallback(() => {
     return chunkArray(allBrandsForAdd, 3).map((row, rowIndex) => (
-      <View key={rowIndex} className="mb-6 flex-row justify-between py-1">
+      <View
+        key={rowIndex}
+        className="-top-4 mb-6 flex-row justify-between py-1">
         {row.map(item => {
           const isFavorite = favoriteBrandIds.has(item.brandId);
           const isSelected = addSelectedBrandIds.includes(item.brandId);
@@ -337,7 +339,7 @@ const BrandSettingScreen = () => {
   const renderGuideText = useCallback(() => {
     if (mode === 'remove') {
       return (
-        <View className="flex items-center justify-center px-1 py-2">
+        <View className="-mb-3 flex items-center justify-center px-1 py-2">
           <Text className="text-gray-500 headline-01">
             <Text className="text-primary-pink headline-01">찜 해제</Text>할
             브랜드를 골라주세요
@@ -424,7 +426,7 @@ const BrandSettingScreen = () => {
         <ScrollView
           className="flex-1 px-2 pt-4"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 100 }}>
+          contentContainerStyle={{ paddingBottom: 10 }}>
           {renderAddBrandGrid()}
         </ScrollView>
       ) : favoriteBrands.length === 0 && mode === 'default' ? (
@@ -465,7 +467,6 @@ const BrandSettingScreen = () => {
             text="추가하기"
             textColor="white"
             onPress={handleConfirmAdd}
-            disabled={addSelectedBrandIds.length === 0}
           />
         </View>
       )}

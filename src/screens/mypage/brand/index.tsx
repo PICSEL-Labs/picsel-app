@@ -262,7 +262,10 @@ const BrandSettingScreen = () => {
         ) : undefined;
       case 'add':
         return (
-          <Pressable onPress={() => navigation.navigate('BrandSearchScreen')}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('BrandSearchScreen', { variant: 'mypage' })
+            }>
             <SearchIcons shape="black" width={24} height={24} />
           </Pressable>
         );

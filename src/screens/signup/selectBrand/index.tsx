@@ -38,7 +38,9 @@ const SelectBrandScreen = () => {
       <SignupHeader
         text="회원가입"
         search
-        onPressIn={() => navigation.navigate('BrandSearch')}
+        onPressIn={() =>
+          navigation.navigate('BrandSearch', { variant: 'signup' })
+        }
       />
 
       <SignupIntro

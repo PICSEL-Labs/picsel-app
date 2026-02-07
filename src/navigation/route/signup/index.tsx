@@ -3,10 +3,10 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import BottomTabBar from '@/navigation/tabs';
+import BrandSearchScreen from '@/screens/brandSearch';
 import LoginScreen from '@/screens/login';
 import OnboardingScreen from '@/screens/onboarding';
 import NicknameInputScreen from '@/screens/signup/nicknameInput';
-import BrandSearchScreen from '@/screens/signup/searchBrand';
 import SelectBrandScreen from '@/screens/signup/selectBrand';
 import SignupSuccessScreen from '@/screens/signup/signupSuccess';
 
@@ -15,7 +15,7 @@ export type SignupNavigationProps = {
   Login: undefined;
   NicknameInput: undefined;
   SelectBrand: undefined;
-  BrandSearch: undefined;
+  BrandSearch: { variant: 'signup' | 'mypage' };
   SignupSuccess: undefined;
   Home: undefined;
 };
@@ -42,7 +42,11 @@ const SignupRoute = () => {
         }}
       />
 
-      <Stack.Screen name="BrandSearch" component={BrandSearchScreen} />
+      <Stack.Screen
+        name="BrandSearch"
+        component={BrandSearchScreen}
+        initialParams={{ variant: 'signup' }}
+      />
 
       <Stack.Screen
         name="SignupSuccess"

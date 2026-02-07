@@ -1,29 +1,41 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Keyboard, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
 import BrandGridList from '@/feature/brand/ui/organisms/BrandGridList';
 import NoResult from '@/feature/brand/ui/organisms/NoResult';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
-import { useBrandListStore, useFavoriteStore } from '@/shared/store';
+import {
+  useBrandListStore,
+  useFavoriteStore,
+  useSelectedBrandsStore,
+} from '@/shared/store';
 import Button from '@/shared/ui/atoms/Button';
 import Input from '@/shared/ui/atoms/Input';
 
+// ─── Route Params ───
+export type BrandSearchParams = {
+  variant: 'signup' | 'mypage';
+};
+
 const BrandSearchScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<{ BrandSearch: BrandSearchParams }>>();
+  const variant = route.params?.variant ?? 'signup';
 
   // ─── State ───
   const [brandName, setBrandName] = useState('');
-  const [selectedBrands, setSelectedBrands] = useState<
+  const [mypageSelectedBrands, setMypageSelectedBrands] = useState<
     { brandId: string; name: string }[]
   >([]);
 
   // ─── Store ───
   const { brandList } = useBrandListStore();
+  const { selectedList, selectBrand } = useSelectedBrandsStore();
   const { optimisticFavorites } = useFavoriteStore();
 
   // ─── Derived Data ───
@@ -49,20 +61,34 @@ const BrandSearchScreen = () => {
 
   const showNoResult = brandName.length > 0 && searchedList.length === 0;
 
+  // ─── Mypage: 이미 찜한 브랜드 + 현재 선택을 합친 리스트 ───
+  const mypageCombinedSelectedList = useMemo(() => {
+    if (variant !== 'mypage') {
+      return [];
+    }
+    const favoriteEntries = brandList
+      .filter(b => favoriteBrandIds.has(b.brandId))
+      .map(b => ({ brandId: b.brandId, name: b.name }));
+    return [...favoriteEntries, ...mypageSelectedBrands];
+  }, [variant, brandList, favoriteBrandIds, mypageSelectedBrands]);
+
   // ─── Handlers ───
-  const handleSelectBrand = useCallback(
+  const handleGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const handleSelectBrandMypage = useCallback(
     (brandId: string, name: string) => {
       if (favoriteBrandIds.has(brandId)) {
         return;
       }
 
-      setSelectedBrands(prev => {
+      setMypageSelectedBrands(prev => {
         const exists = prev.some(b => b.brandId === brandId);
         const next = exists
           ? prev.filter(b => b.brandId !== brandId)
           : [...prev, { brandId, name }];
 
-        // 1개 이상 선택 시 키보드 내림
         if (next.length >= 1) {
           Keyboard.dismiss();
         }
@@ -73,32 +99,35 @@ const BrandSearchScreen = () => {
     [favoriteBrandIds],
   );
 
-  const handleConfirm = useCallback(() => {
-    if (selectedBrands.length === 0) {
+  const handleConfirmMypage = useCallback(() => {
+    if (mypageSelectedBrands.length === 0) {
       return;
     }
 
-    const selectedIds = selectedBrands.map(b => b.brandId);
+    const selectedIds = mypageSelectedBrands.map(b => b.brandId);
+    // @ts-ignore - navigate with params to parent screen
     navigation.navigate('BrandSettingScreen', {
       searchSelectedBrandIds: selectedIds,
     });
-  }, [selectedBrands, navigation]);
+  }, [mypageSelectedBrands, navigation]);
 
-  // ─── 이미 찜한 브랜드 + 현재 선택된 브랜드를 합쳐서 BrandGridList에 전달 ───
-  const combinedSelectedList = useMemo(() => {
-    const favoriteEntries = brandList
-      .filter(b => favoriteBrandIds.has(b.brandId))
-      .map(b => ({ brandId: b.brandId, name: b.name }));
-    return [...favoriteEntries, ...selectedBrands];
-  }, [brandList, favoriteBrandIds, selectedBrands]);
+  // ─── Variant-based config ───
+  const gridSelectedList =
+    variant === 'signup' ? selectedList : mypageCombinedSelectedList;
+
+  const gridOnPress =
+    variant === 'signup' ? selectBrand : handleSelectBrandMypage;
 
   return (
     <ScreenLayout>
-      <MypageHeader
-        title="브랜드 검색"
-        onBackPress={() => navigation.goBack()}
-      />
+      {/* ─── Header ─── */}
+      {variant === 'signup' ? (
+        <SignupHeader text="브랜드 검색" back onPressIn={handleGoBack} />
+      ) : (
+        <MypageHeader title="브랜드 검색" onBackPress={handleGoBack} />
+      )}
 
+      {/* ─── Search Input ─── */}
       <Input
         value={brandName}
         onChangeText={setBrandName}
@@ -109,6 +138,7 @@ const BrandSearchScreen = () => {
         container="mt-5 pb-8"
       />
 
+      {/* ─── Search Results ─── */}
       {brandName.length > 0 && searchedList.length > 0 ? (
         <ScrollView
           className="px-2"
@@ -118,8 +148,8 @@ const BrandSearchScreen = () => {
           keyboardShouldPersistTaps="handled">
           <BrandGridList
             brandList={searchedList}
-            selectedList={combinedSelectedList}
-            onPress={handleSelectBrand}
+            selectedList={gridSelectedList}
+            onPress={gridOnPress}
             keyword={brandName}
             highlight
           />
@@ -128,14 +158,14 @@ const BrandSearchScreen = () => {
         <NoResult visible={showNoResult} />
       )}
 
-      {/* 선택완료 버튼 */}
-      {selectedBrands.length > 0 && (
+      {/* ─── 선택완료 버튼 (mypage only) ─── */}
+      {variant === 'mypage' && mypageSelectedBrands.length > 0 && (
         <View className="px-4 pb-4">
           <Button
             className="w-full"
-            text={`선택완료(${selectedBrands.length})`}
+            text={`선택완료(${mypageSelectedBrands.length})`}
             textColor="white"
-            onPress={handleConfirm}
+            onPress={handleConfirmMypage}
           />
         </View>
       )}

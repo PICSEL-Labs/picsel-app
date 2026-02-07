@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { Keyboard, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Keyboard, Pressable, ScrollView, View } from 'react-native';
 
 import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
+import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
 import BrandGridList from '@/feature/brand/ui/organisms/BrandGridList';
 import NoResult from '@/feature/brand/ui/organisms/NoResult';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import FloatingButton from '@/shared/icons/FloatingButton';
 import {
   useBrandListStore,
   useFavoriteStore,
@@ -34,6 +35,8 @@ const BrandSearchScreen = () => {
   const { brandList } = useBrandListStore();
   const { selectedList, selectBrand } = useSelectedBrandsStore();
   const { optimisticFavorites } = useFavoriteStore();
+  const { showFloatingButton, handleScroll, scrollToTop, scrollViewRef } =
+    useHandleScroll();
 
   const favoriteBrandIds = useMemo(
     () =>
@@ -131,6 +134,9 @@ const BrandSearchScreen = () => {
 
       {brandName.length > 0 && searchedList.length > 0 ? (
         <ScrollView
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           showsVerticalScrollIndicator
           indicatorStyle="black"
           contentContainerStyle={{ paddingBottom: 50 }}
@@ -145,6 +151,19 @@ const BrandSearchScreen = () => {
         </ScrollView>
       ) : (
         <NoResult visible={showNoResult} />
+      )}
+
+      {showFloatingButton && (
+        <Pressable
+          onPressIn={scrollToTop}
+          style={{
+            position: 'absolute',
+            bottom: 105,
+            right: 24,
+            zIndex: 10,
+          }}>
+          <FloatingButton shape="floating" />
+        </Pressable>
       )}
 
       {variant === 'mypage' && mypageSelectedBrands.length > 0 && (

@@ -5,12 +5,12 @@ import {
   ImageBackground,
   Modal,
   Pressable,
+  ScrollView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import Config from 'react-native-config';
-import { ScrollView } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -23,13 +23,13 @@ import Kebab from '@/assets/icons/kebab/icon-kebab.svg';
 import PlusIcon from '@/assets/icons/plus/icon-plus-S.svg';
 import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
 import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavoriteBrand';
-import Floating from '@/feature/brand/ui/organisms/Floating';
 import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
 import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import CheckIcons from '@/shared/icons/CheckIcons';
+import FloatingButton from '@/shared/icons/FloatingButton';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 import SearchIcons from '@/shared/icons/SearchIcons';
@@ -379,7 +379,7 @@ const BrandSettingScreen = () => {
         <View className="-mb-3 flex items-center justify-center px-1 py-2">
           <Text className="text-gray-500 headline-01">
             <Text className="text-primary-pink headline-01">찜 해제</Text>할
-            브랜드를 골라주세요
+            브랜드를 골라주세요.
           </Text>
         </View>
       );
@@ -491,7 +491,18 @@ const BrandSettingScreen = () => {
       )}
 
       {/* ─── Floating Button ─── */}
-      {showFloatingButton && <Floating scrollToTop={scrollToTop} />}
+      {showFloatingButton && (
+        <Pressable
+          onPressIn={scrollToTop}
+          style={{
+            position: 'absolute',
+            bottom: 90,
+            right: 24,
+            zIndex: 10,
+          }}>
+          <FloatingButton shape="floating" />
+        </Pressable>
+      )}
 
       {/* ─── Bottom Action ─── */}
       {mode === 'remove' && (

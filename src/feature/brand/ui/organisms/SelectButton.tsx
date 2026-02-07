@@ -38,7 +38,9 @@ const SelectButton = ({
         onPress={onPress}
       />
 
-      {showFloatingButton && <Floating scrollToTop={scrollToTop} />}
+      {showFloatingButton && scrollToTop && (
+        <Floating scrollToTop={scrollToTop} />
+      )}
     </View>
   );
 };

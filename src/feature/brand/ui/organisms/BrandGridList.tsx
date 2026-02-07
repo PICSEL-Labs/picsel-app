@@ -43,7 +43,7 @@ const BrandGridList = ({
             );
 
             return (
-              <View key={item.brandId} className="flex-1 items-center">
+              <View key={item.brandId} className="flex-1 items-center px-4">
                 <View style={defaultShadow} className="mb-[7px] rounded-full">
                   <Pressable onPress={() => onPress(item.brandId, item.name)}>
                     <ImageBackground

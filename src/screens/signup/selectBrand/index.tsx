@@ -59,7 +59,7 @@ const SelectBrandScreen = () => {
         className="pt-[14px]"
         showsVerticalScrollIndicator
         indicatorStyle="black"
-        contentContainerStyle={{ paddingBottom: 100 }}>
+        contentContainerStyle={{ paddingBottom: 50 }}>
         <BrandGridList
           brandList={brandList}
           selectedList={selectedList}

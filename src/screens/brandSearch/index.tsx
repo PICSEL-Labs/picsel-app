@@ -17,7 +17,6 @@ import {
 import Button from '@/shared/ui/atoms/Button';
 import Input from '@/shared/ui/atoms/Input';
 
-// ─── Route Params ───
 export type BrandSearchParams = {
   variant: 'signup' | 'mypage';
 };
@@ -27,18 +26,15 @@ const BrandSearchScreen = () => {
   const route = useRoute<RouteProp<{ BrandSearch: BrandSearchParams }>>();
   const variant = route.params?.variant ?? 'signup';
 
-  // ─── State ───
   const [brandName, setBrandName] = useState('');
   const [mypageSelectedBrands, setMypageSelectedBrands] = useState<
     { brandId: string; name: string }[]
   >([]);
 
-  // ─── Store ───
   const { brandList } = useBrandListStore();
   const { selectedList, selectBrand } = useSelectedBrandsStore();
   const { optimisticFavorites } = useFavoriteStore();
 
-  // ─── Derived Data ───
   const favoriteBrandIds = useMemo(
     () =>
       new Set(
@@ -61,7 +57,6 @@ const BrandSearchScreen = () => {
 
   const showNoResult = brandName.length > 0 && searchedList.length === 0;
 
-  // ─── Mypage: 이미 찜한 브랜드 + 현재 선택을 합친 리스트 ───
   const mypageCombinedSelectedList = useMemo(() => {
     if (variant !== 'mypage') {
       return [];
@@ -72,7 +67,6 @@ const BrandSearchScreen = () => {
     return [...favoriteEntries, ...mypageSelectedBrands];
   }, [variant, brandList, favoriteBrandIds, mypageSelectedBrands]);
 
-  // ─── Handlers ───
   const handleGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
@@ -111,7 +105,6 @@ const BrandSearchScreen = () => {
     });
   }, [mypageSelectedBrands, navigation]);
 
-  // ─── Variant-based config ───
   const gridSelectedList =
     variant === 'signup' ? selectedList : mypageCombinedSelectedList;
 
@@ -120,14 +113,12 @@ const BrandSearchScreen = () => {
 
   return (
     <ScreenLayout>
-      {/* ─── Header ─── */}
       {variant === 'signup' ? (
         <SignupHeader text="브랜드 검색" back onPressIn={handleGoBack} />
       ) : (
         <MypageHeader title="브랜드 검색" onBackPress={handleGoBack} />
       )}
 
-      {/* ─── Search Input ─── */}
       <Input
         value={brandName}
         onChangeText={setBrandName}
@@ -135,16 +126,14 @@ const BrandSearchScreen = () => {
         placeholder="원하는 포토부스를 검색해보세요!"
         search
         close
-        container="mt-5 pb-8"
+        container="mt-5 pb-2"
       />
 
-      {/* ─── Search Results ─── */}
       {brandName.length > 0 && searchedList.length > 0 ? (
         <ScrollView
-          className="px-2"
           showsVerticalScrollIndicator
           indicatorStyle="black"
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 50 }}
           keyboardShouldPersistTaps="handled">
           <BrandGridList
             brandList={searchedList}
@@ -158,9 +147,8 @@ const BrandSearchScreen = () => {
         <NoResult visible={showNoResult} />
       )}
 
-      {/* ─── 선택완료 버튼 (mypage only) ─── */}
       {variant === 'mypage' && mypageSelectedBrands.length > 0 && (
-        <View className="px-4 pb-4">
+        <View className="px-4 pb-2">
           <Button
             className="w-full"
             text={`선택완료(${mypageSelectedBrands.length})`}

@@ -36,7 +36,7 @@ const BrandGridList = ({
   return (
     <>
       {chunkArray(filteredBrandList, 3).map((row, rowIndex) => (
-        <View key={rowIndex} className="mb-6 flex-row justify-between py-2">
+        <View key={rowIndex} className="mb-3 flex-row justify-between py-2">
           {row.map(item => {
             const isSelected = selectedList.some(
               selected => selected.brandId === item.brandId,

@@ -39,7 +39,10 @@ export const HighlightedText = ({
   const parts = useHighlightText(formattedText);
 
   return (
-    <Text className={cn(font, textAlign)} style={{ color }}>
+    <Text
+      className={cn(font, textAlign, 'w-24')}
+      style={{ color }}
+      numberOfLines={1}>
       {parts.map((part, index) => (
         <Text
           key={index}

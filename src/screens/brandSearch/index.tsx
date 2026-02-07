@@ -147,6 +147,9 @@ const BrandSearchScreen = () => {
             onPress={gridOnPress}
             keyword={brandName}
             highlight
+            disabledBrandIds={
+              variant === 'mypage' ? favoriteBrandIds : undefined
+            }
           />
         </ScrollView>
       ) : (

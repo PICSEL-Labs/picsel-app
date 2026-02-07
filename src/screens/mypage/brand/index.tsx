@@ -5,12 +5,12 @@ import {
   ImageBackground,
   Modal,
   Pressable,
-  ScrollView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import Config from 'react-native-config';
+import { ScrollView } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -21,8 +21,9 @@ import Animated, {
 
 import Kebab from '@/assets/icons/kebab/icon-kebab.svg';
 import PlusIcon from '@/assets/icons/plus/icon-plus-S.svg';
+import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
 import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavoriteBrand';
-import { Brand } from '@/feature/brand/types';
+import Floating from '@/feature/brand/ui/organisms/Floating';
 import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
 import { MainNavigationProps } from '@/navigation';
@@ -60,6 +61,8 @@ const BrandSettingScreen = () => {
   const { showToast } = useToastStore();
   const { mutate: toggleFavorite } = useToggleFavoriteBrand();
   const navigation = useNavigation<RootStackNavigationProp>();
+  const { showFloatingButton, handleScroll, scrollToTop, scrollViewRef } =
+    useHandleScroll();
 
   // ─── 검색 화면에서 전달받은 선택 브랜드 반영 ───
   useEffect(() => {
@@ -274,43 +277,50 @@ const BrandSettingScreen = () => {
     }
   }, [mode, selectedBrandIds.length, handleResetSelection, navigation]);
 
-  // ─── Render: Default / Remove 브랜드 아이템 ───
-  const renderFavoriteBrandItem = useCallback(
-    (brand: Brand) => {
-      const isSelected = selectedBrandIds.includes(brand.brandId);
+  // ─── Render: Default / Remove 브랜드 그리드 ───
+  const renderFavoriteBrandGrid = useCallback(() => {
+    return chunkArray(favoriteBrands, 3).map((row, rowIndex) => (
+      <View key={rowIndex} className="mb-6 flex-row justify-between py-1">
+        {row.map(item => {
+          const isSelected = selectedBrandIds.includes(item.brandId);
 
-      return (
-        <Pressable
-          key={brand.brandId}
-          className="items-center"
-          style={{ width: '33.33%', marginBottom: 24 }}
-          onPress={
-            mode === 'remove'
-              ? () => handleToggleRemoveSelect(brand.brandId)
-              : undefined
-          }>
-          <View style={defaultShadow} className="mb-[7px] rounded-full">
-            <ImageBackground
-              source={{ uri: Config.IMAGE_URL + brand.iconImageUrl }}
-              className="h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full">
-              {mode === 'remove' && isSelected && (
-                <View className="w-full flex-1 items-center justify-center rounded-full bg-black/30">
-                  <CheckIcons shape="white" width={24} height={24} />
-                </View>
-              )}
-            </ImageBackground>
-          </View>
-          <Text
-            className="text-center text-gray-900 body-rg-02"
-            numberOfLines={1}
-            ellipsizeMode="tail">
-            {brand.name}
-          </Text>
-        </Pressable>
-      );
-    },
-    [mode, selectedBrandIds, handleToggleRemoveSelect],
-  );
+          return (
+            <View key={item.brandId} className="flex-1 items-center">
+              <View style={defaultShadow} className="mb-[7px] rounded-full">
+                <Pressable
+                  onPress={
+                    mode === 'remove'
+                      ? () => handleToggleRemoveSelect(item.brandId)
+                      : undefined
+                  }>
+                  <ImageBackground
+                    source={{ uri: Config.IMAGE_URL + item.iconImageUrl }}
+                    className="h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full">
+                    {mode === 'remove' && isSelected && (
+                      <View className="w-full flex-1 items-center justify-center rounded-full bg-black/30">
+                        <CheckIcons shape="white" width={24} height={24} />
+                      </View>
+                    )}
+                  </ImageBackground>
+                </Pressable>
+              </View>
+              <Text
+                className="text-center text-gray-900 body-rg-02"
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {item.name}
+              </Text>
+            </View>
+          );
+        })}
+
+        {row.length < 3 &&
+          Array.from({ length: 3 - row.length }).map((_, i) => (
+            <View key={`empty-${i}`} className="flex-1" />
+          ))}
+      </View>
+    ));
+  }, [favoriteBrands, mode, selectedBrandIds, handleToggleRemoveSelect]);
 
   // ─── Render: Add 모드 전체 브랜드 그리드 ───
   const renderAddBrandGrid = useCallback(() => {
@@ -451,6 +461,9 @@ const BrandSettingScreen = () => {
       {/* ─── Content by Mode ─── */}
       {mode === 'add' ? (
         <ScrollView
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           className="flex-1 px-2 pt-4"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 10 }}>
@@ -467,13 +480,18 @@ const BrandSettingScreen = () => {
         </View>
       ) : (
         <ScrollView
-          className="flex-1 px-6 pt-4"
-          showsVerticalScrollIndicator={false}>
-          <View className="flex-row flex-wrap">
-            {favoriteBrands.map(brand => renderFavoriteBrandItem(brand))}
-          </View>
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          className="flex-1 px-2 pt-4"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 10 }}>
+          {renderFavoriteBrandGrid()}
         </ScrollView>
       )}
+
+      {/* ─── Floating Button ─── */}
+      {showFloatingButton && <Floating scrollToTop={scrollToTop} />}
 
       {/* ─── Bottom Action ─── */}
       {mode === 'remove' && (

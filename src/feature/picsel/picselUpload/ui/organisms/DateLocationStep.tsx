@@ -2,31 +2,39 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
-import DateLocationHeader from '../layout/DateLocationHeader';
+import { usePicselUploadStore } from '../../hooks/usePicselUploadStore';
 
 import Calendar from '@/assets/icons/calendar/icon-calendar.svg';
+import UploadStepHeader from '@/feature/picsel/shared/components/ui/molecules/UploadStepHeader';
 import LocationSearchBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/LocationSearchBottomSheet';
 import DatePickerBottomSheet from '@/feature/picsel/shared/components/ui/organisms/datePicker/DatePickerBottomSheet';
 import { useDateLocationForm } from '@/feature/picsel/shared/hooks/datePicker/useDateLocationForm';
 import MapIcons from '@/shared/icons/MapIcons';
 import Button from '@/shared/ui/atoms/Button';
 import InputButton from '@/shared/ui/atoms/InputButton';
+import { formatDate } from '@/shared/utils/date';
 
 interface Props {
-  onNext: (date: string, location: string) => void;
-  initialData?: { date: string; location: string };
+  onNext: () => void;
 }
 
-const DateLocationStep = ({ onNext, initialData }: Props) => {
+const DateLocationStep = ({ onNext }: Props) => {
+  const { takenDate, storeId, setDateLocation, locationName } =
+    usePicselUploadStore();
+
   const { state, actions, datePicker } = useDateLocationForm({
-    initialDate: initialData?.date,
-    initialLocation: initialData?.location,
-    onNext,
+    initialDate: takenDate,
+    initialStoreId: storeId,
+    initialLocation: locationName,
+    onNext: (date, locationId, locName) => {
+      setDateLocation(date, locationId, locName);
+      onNext();
+    },
   });
 
   return (
     <View className="flex-1">
-      <DateLocationHeader
+      <UploadStepHeader
         title={
           <>
             찍은 <Text className="text-pink-500 title-02">날짜</Text>와{' '}
@@ -39,7 +47,7 @@ const DateLocationStep = ({ onNext, initialData }: Props) => {
       <View className="pt-6">
         <InputButton
           label="날짜"
-          value={state.selectedDate}
+          value={state.selectedDate ? formatDate(state.selectedDate) : ''}
           placeholder="언제 찍었나요?"
           Icon={<Calendar width={24} height={24} />}
           onPress={actions.openDatePicker}

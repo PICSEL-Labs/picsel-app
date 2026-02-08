@@ -22,7 +22,7 @@ type GridItem = { type: 'camera' } | { type: 'photo'; photo: GridPhoto };
 interface Props {
   photos: GridPhoto[];
   selectedUris: string[];
-  variant: 'main' | 'extra';
+  variant: 'main' | 'extra' | 'cover';
   onSelectPhoto: (uri: string) => void;
   onOpenCamera: () => void;
   onLoadMore: () => void;

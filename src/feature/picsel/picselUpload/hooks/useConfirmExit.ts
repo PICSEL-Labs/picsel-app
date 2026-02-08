@@ -1,15 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
 
+import { usePicselUploadStore } from './usePicselUploadStore';
+
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 
 export const useConfirmExit = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { reset } = usePhotoStore();
+  const { reset: resetPhotoStore } = usePhotoStore();
+  const { resetUploadData } = usePicselUploadStore();
 
   const handleConfirmExit = () => {
-    reset();
+    resetPhotoStore();
+    resetUploadData();
+
     navigation.replace('QrScan');
   };
 

@@ -1,3 +1,5 @@
+import { CommonResponseType } from '@/shared/api/types';
+
 // 정렬 타입 (API 명세 기준)
 export type PicselBookSortType =
   | 'RECENT_CREATED_DESC'
@@ -61,4 +63,15 @@ export interface PicselBookFolderResult {
 // 픽셀북 삭제 요청
 export interface DeletePicselBooksRequest {
   picselbookIds: string[];
+}
+
+// 픽셀북 생성 요청
+export interface CreatePicselBookRequest {
+  bookName: string;
+  coverImagePath: string;
+}
+
+// 픽셀북 생성 응답
+export interface CreatePicselbookResponse extends CommonResponseType {
+  data: PicselBookItem;
 }

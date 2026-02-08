@@ -5,6 +5,7 @@ import { Text, View } from 'react-native';
 
 import ExtraPhotoList from '@/feature/picsel/picselUpload/ui/organisms/ExtraPhotoList';
 import MainPhotoCard from '@/feature/picsel/picselUpload/ui/organisms/MainPhotoCard';
+import UploadStepHeader from '@/feature/picsel/shared/components/ui/molecules/UploadStepHeader';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 import Button from '@/shared/ui/atoms/Button';
@@ -21,16 +22,20 @@ const PhotoSelectStep = ({ onNext }: Props) => {
   return (
     <>
       <View className="flex-1">
-        <View className="gap-2 px-5 pb-3 pt-5">
-          <Text className="text-gray-900 headline-04">
-            저장할 <Text className="text-pink-500 title-02">사진</Text>을
-            등록해주세요
-          </Text>
-          <Text className="text-gray-600 body-rg-02">
-            네컷 사진과 함께 추억이 담긴 {'\n'}다른 사진도 추가해 저장할 수
-            있어요.
-          </Text>
-        </View>
+        <UploadStepHeader
+          title={
+            <>
+              저장할 <Text className="text-pink-500 title-02">사진</Text>을
+              등록해주세요
+            </>
+          }
+          description={
+            <>
+              네컷 사진과 함께 추억이 담긴{'\n'}
+              다른 사진도 추가해 저장할 수 있어요.
+            </>
+          }
+        />
         <MainPhotoCard
           uri={mainPhoto}
           onDelete={() => setMainPhoto(null)}

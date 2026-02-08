@@ -9,7 +9,7 @@ import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useMapLocationStore } from '@/shared/store';
 
 interface Props {
-  onSelect: (location: string) => void;
+  onSelect: (id: string, name: string) => void;
   onClose: () => void;
 }
 
@@ -26,9 +26,9 @@ export const useLocationSearch = ({ onSelect, onClose }: Props) => {
 
   const handleSelectLocation = useCallback(
     (item: SearchResultView) => {
-      if (item?.title) {
+      if (item?.id && item?.title) {
         Keyboard.dismiss();
-        onSelect(item.title);
+        onSelect(item.id, item.title);
         onClose();
       }
     },

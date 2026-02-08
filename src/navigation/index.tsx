@@ -5,6 +5,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
+import MypageScreen from '@/screens/mypage';
+import MypageAccountScreen from '@/screens/mypage/account';
+import MypageSettingScreen from '@/screens/mypage/setting';
+import WithdrawalScreen from '@/screens/mypage/withdrawal';
+import WithdrawalSuccessScreen from '@/screens/mypage/withdrawal/success';
 import PicselTabScreen from '@/screens/picsel';
 import MonthFolderScreen from '@/screens/picsel/myPicsel/monthFolder';
 import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
@@ -42,6 +47,13 @@ export type MainNavigationProps = {
   MonthFolder: { year: string; month: string };
   PicselBookFolder: { bookId: string; bookName: string };
   SelectBookCover: { variant: 'cover'; bookName: string };
+
+  // Mypage
+  Mypage: undefined;
+  MypageSetting: undefined;
+  MypageAccount: undefined;
+  MypageWithdrawal: undefined;
+  MypageWithdrawalSuccess: undefined;
 };
 
 const MainRoute = () => {
@@ -96,6 +108,16 @@ const MainRoute = () => {
       <Stack.Screen
         name="PicselBookFolder"
         component={PicselBookFolderScreen}
+      />
+
+      {/* Mypage */}
+      <Stack.Screen name="Mypage" component={MypageScreen} />
+      <Stack.Screen name="MypageSetting" component={MypageSettingScreen} />
+      <Stack.Screen name="MypageAccount" component={MypageAccountScreen} />
+      <Stack.Screen name="MypageWithdrawal" component={WithdrawalScreen} />
+      <Stack.Screen
+        name="MypageWithdrawalSuccess"
+        component={WithdrawalSuccessScreen}
       />
     </Stack.Navigator>
   );

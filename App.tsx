@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { NavigationContainer } from '@react-navigation/native';
+
 import MainRoute from '@/navigation';
 import SignupRoute from '@/navigation/route/signup';
 import AppProvider from '@/providers/AppProvider';
@@ -9,7 +11,11 @@ function App() {
   const { refreshToken } = useUserStore();
 
   return (
-    <AppProvider>{refreshToken ? <MainRoute /> : <SignupRoute />}</AppProvider>
+    <AppProvider>
+      <NavigationContainer key={refreshToken ? 'authenticated' : 'guest'}>
+        {refreshToken ? <MainRoute /> : <SignupRoute />}
+      </NavigationContainer>
+    </AppProvider>
   );
 }
 

@@ -3,16 +3,18 @@ import { useCallback } from 'react';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 import { useToastStore } from '@/shared/store/ui/toast';
 
-export const usePhotoSelection = (variant: 'main' | 'extra') => {
+export const usePhotoSelection = (variant: 'main' | 'extra' | 'cover') => {
   const MAX_EXTRA_COUNT = 10;
   const { showToast } = useToastStore();
 
   const {
     mainPhoto,
     extraPhotos,
+    bookCoverPhoto,
     setMainPhoto,
     addExtraPhotos,
     setExtraPhotos,
+    setBookCoverPhoto,
     removeExtraPhoto,
   } = usePhotoStore();
 
@@ -31,6 +33,17 @@ export const usePhotoSelection = (variant: 'main' | 'extra') => {
       setMainPhoto(uri);
     },
     [mainPhoto, setMainPhoto, showToast],
+  );
+
+  const selectBookCoverPhoto = useCallback(
+    (uri: string) => {
+      if (bookCoverPhoto === uri) {
+        setBookCoverPhoto(null);
+        return;
+      }
+      setBookCoverPhoto(uri);
+    },
+    [bookCoverPhoto, setBookCoverPhoto],
   );
 
   const selectExtraPhoto = useCallback(
@@ -55,16 +68,20 @@ export const usePhotoSelection = (variant: 'main' | 'extra') => {
   const resetCurrentPhoto = useCallback(() => {
     if (variant === 'main') {
       setMainPhoto(null);
-    } else {
+    } else if (variant === 'extra') {
       setExtraPhotos([]);
+    } else {
+      setBookCoverPhoto(null);
     }
-  }, [variant, setMainPhoto]);
+  }, [variant, setMainPhoto, setBookCoverPhoto, setExtraPhotos]);
 
   return {
     mainPhoto,
     extraPhotos,
+    bookCoverPhoto,
     selectMainPhoto,
     selectExtraPhoto,
+    selectBookCoverPhoto,
     resetCurrentPhoto,
   };
 };

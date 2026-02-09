@@ -14,14 +14,17 @@ export const useHandleScroll = () => {
 
   const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const { contentOffset } = event.nativeEvent;
+      const { contentOffset, contentSize, layoutMeasurement } =
+        event.nativeEvent;
+      const isScrollable = contentSize.height > layoutMeasurement.height;
       const isScrolled = contentOffset.y > 100;
+      const shouldShow = isScrollable && isScrolled;
 
-      if (isScrolled && !showFloatingRef.current) {
+      if (shouldShow && !showFloatingRef.current) {
         showFloatingRef.current = true;
         setShowFloatingButton(true);
       }
-      if (!isScrolled && showFloatingRef.current) {
+      if (!shouldShow && showFloatingRef.current) {
         showFloatingRef.current = false;
         setShowFloatingButton(false);
       }

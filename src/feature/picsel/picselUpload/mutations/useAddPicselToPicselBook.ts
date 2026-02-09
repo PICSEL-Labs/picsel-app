@@ -12,7 +12,7 @@ export const useAddPicselToPicselBook = () => {
     mutationFn: async (request: PicselUploadRequest) => {
       const s3ImageUrls = await uploadMultipleImagesToS3(
         request.imagePaths,
-        'PICSELBOOK',
+        'PICSEL',
       );
 
       return addPicselToPicselBookApi({

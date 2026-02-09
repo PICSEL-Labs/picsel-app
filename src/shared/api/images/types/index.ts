@@ -9,4 +9,4 @@ export interface PresignedUrlResponse extends CommonResponseType {
   data: PresignedUrlData;
 }
 
-export type ImageType = 'PROFILE' | 'PICSELBOOK';
+export type ImageType = 'PROFILE' | 'PICSELBOOK' | 'PICSEL';

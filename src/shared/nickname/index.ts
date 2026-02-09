@@ -14,4 +14,4 @@ export {
 } from './api/validateNicknameApi';
 
 // Utils
-export { validateFormat } from './utils/validateNickname';
+export { validateNickname } from './utils/validateNickname';

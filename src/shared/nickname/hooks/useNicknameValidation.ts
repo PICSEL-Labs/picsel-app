@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { validateNicknameApi } from '../api/validateNicknameApi';
-import { validateFormat } from '../utils/validateNickname';
+import { validateNickname } from '../utils/validateNickname';
 
 export const useNicknameValidation = (initialNickname: string = '') => {
   const [userNickname, setUserNickname] = useState(initialNickname);
@@ -20,7 +20,7 @@ export const useNicknameValidation = (initialNickname: string = '') => {
     setIsAvailable(null);
     setErrorMessage('');
 
-    const error = validateFormat(value);
+    const error = validateNickname(value);
     if (error) {
       setErrorMessage(error);
       setIsValidFormat(false);

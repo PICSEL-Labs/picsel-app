@@ -26,6 +26,7 @@ interface Props {
   onChangeCover?: (id: string) => void;
   onDelete?: (id: string, title: string) => void;
   onAddBook?: () => void;
+  isUploadStep?: boolean;
 }
 
 const PicselBookList = ({
@@ -38,6 +39,7 @@ const PicselBookList = ({
   onChangeCover,
   onDelete,
   onAddBook,
+  isUploadStep = false,
 }: Props) => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
@@ -87,7 +89,11 @@ const PicselBookList = ({
       renderItem={({ item }) => {
         if (item.type === 'add') {
           return (
-            <View className={cn(isSelecting && 'opacity-40', 'mb-7')}>
+            <View
+              className={cn(
+                !isUploadStep && isSelecting && 'opacity-40',
+                'mb-7',
+              )}>
               <AddBookButton onPress={onAddBook} />
             </View>
           );

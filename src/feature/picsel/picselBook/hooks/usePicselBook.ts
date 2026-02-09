@@ -1,8 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 
+import { usePicselUploadStore } from '../../picselUpload/hooks/usePicselUploadStore';
+import { CoverType } from '../../shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
+import { useCreatePicselBook } from '../mutations/useCreatePicselBook';
 import { useDeletePicselBooks } from '../mutations/useDeletePicselBooks';
 import { useGetPicselBooks } from '../queries/useGetPicselBooks';
 import { PicselBookItem } from '../types';
@@ -20,6 +23,7 @@ import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionBut
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { usePicselBookStore } from '@/shared/store/picselBook';
+import { usePhotoStore } from '@/shared/store/picselUpload';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 /**
@@ -48,15 +52,23 @@ export const usePicselBook = () => {
     sort: sortType,
   });
 
+  // 픽셀북 생성 mutation
+  const { mutate: createPicselBook } = useCreatePicselBook();
+
   // 픽셀북 삭제 mutation
   const { mutate: deletePicselBooks } = useDeletePicselBooks();
+
+  const { bookCoverPhoto, reset: resetPhotoStore } = usePhotoStore();
 
   const books: PicselBookItem[] = data ?? [];
   const totalBooks = books.length;
   const hasBooks = books.length > 0;
 
+  const savedBookId = usePicselUploadStore(state => state.picselbookId);
+
   // 선택 관련
   const { isSelecting, setIsSelecting, resetSelection } = usePhotoSelection();
+  const setPicselbookId = usePicselUploadStore(state => state.setPicselbookId);
   const [selectedBookIds, setSelectedBookIds] = useState<string[]>([]);
 
   // 스크롤 관리
@@ -94,23 +106,54 @@ export const usePicselBook = () => {
   };
 
   // 픽셀북 생성
-  const handleSubmit = (bookName: string) => {
-    // TODO: 픽셀북 생성 API 호출
-    console.log('픽셀북 생성:', bookName);
-    refetch();
+  const handleSubmit = (bookName: string, coverType: CoverType) => {
+    const payload = {
+      bookName,
+      coverImagePath: coverType === 'photo' ? bookCoverPhoto : null,
+    };
+
+    createPicselBook(payload, {
+      onSuccess: response => {
+        navigation.pop(1);
+        picselBookRef.current?.dismiss();
+
+        const newBookId = response.data?.picselbookId;
+
+        if (newBookId) {
+          setPicselbookId(newBookId);
+          refetch();
+        }
+
+        resetPhotoStore();
+      },
+      onError: error => {
+        console.log('픽셀북 생성 실패:', error);
+      },
+    });
   };
 
   // 픽셀북 클릭
-  const handleBookPress = (bookId: string, bookName: string) => {
+  const handleBookPress = (
+    bookId: string,
+    bookName: string,
+    isUploadStep: boolean = false,
+  ) => {
     if (isSelecting) {
       setSelectedBookIds(prev =>
         prev.includes(bookId)
           ? prev.filter(id => id !== bookId)
           : [...prev, bookId],
       );
-    } else {
-      navigation.navigate('PicselBookFolder', { bookId, bookName });
+      return;
     }
+
+    // 픽셀 업로드 내 픽셀북 선택 단계일 때
+    if (isUploadStep) {
+      setSelectedBookIds(prev => (prev.includes(bookId) ? [] : [bookId]));
+      return;
+    }
+
+    navigation.navigate('PicselBookFolder', { bookId, bookName });
   };
 
   // 전체 선택
@@ -145,6 +188,15 @@ export const usePicselBook = () => {
       );
     });
   };
+
+  useEffect(() => {
+    if (selectedBookIds.length === 0 && savedBookId && books.length > 0) {
+      const target = books.find(b => b.picselbookId === savedBookId);
+      if (target) {
+        handleBookPress(target.picselbookId, target.bookName, true);
+      }
+    }
+  }, [books, savedBookId, selectedBookIds.length, handleBookPress]);
 
   return {
     // 데이터

@@ -1,12 +1,12 @@
-import React, { forwardRef, useMemo, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 
 import {
+  BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetView,
-  BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, Keyboard, Pressable } from 'react-native';
+import { Keyboard, Pressable, Text, View } from 'react-native';
 
 import PicselBookInput from '../../atoms/PicselBookInput';
 
@@ -18,10 +18,11 @@ import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
 import Button from '@/shared/ui/atoms/Button';
 
 interface Props {
-  onSubmit: (bookName: string) => void;
+  onSubmit: (bookName: string, coverType: CoverType) => void;
+  initialBookName?: string;
 }
 
-type CoverType = 'default' | 'photo';
+export type CoverType = 'default' | 'photo';
 
 /**
  * 픽셀북 생성/수정 바텀시트
@@ -29,21 +30,26 @@ type CoverType = 'default' | 'photo';
  * - 확인 버튼으로 제출
  */
 const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
-  ({ onSubmit }, ref) => {
+  ({ onSubmit, initialBookName = '' }, ref) => {
     const navigation = useNavigation<RootStackNavigationProp>();
-    const [bookName, setBookName] = useState('');
+    const [bookName, setBookName] = useState(initialBookName);
     const [errorMessage, setErrorMessage] = useState('');
     const [isEdited, setIsEdited] = useState(true);
     const [selectedCover, setSelectedCover] = useState<CoverType>('default');
     const snapPoints = useMemo(() => ['100%'], []);
 
-    const handleSubmit = () => {
-      if (bookName.trim() && !errorMessage) {
-        onSubmit(bookName.trim());
-        setIsEdited(false);
-        Keyboard.dismiss();
+    useEffect(() => {
+      if (initialBookName) {
+        setBookName(initialBookName);
+        setIsEdited(false); // 이름이 있다면 바로 '커버 설정' 단계로 건너뜀
+        setSelectedCover('photo'); // 사진 선택 후 돌아온 것이므로 '사진 지정'을 활성화
+      }
+    }, [initialBookName]);
 
-        // 이후 로직 구현
+    const handleNextStep = () => {
+      if (bookName.trim() && !errorMessage) {
+        setIsEdited(false); // 커버 설정 영역을 보여줌
+        Keyboard.dismiss();
       }
     };
 
@@ -72,15 +78,19 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
     };
 
     const handleComplete = () => {
-      // TODO: 픽셀북 생성 완료 로직
-      console.log('픽셀북 생성 완료:', { bookName, selectedCover });
+      onSubmit(bookName.trim(), selectedCover);
       // @ts-ignore
       ref?.current?.dismiss();
     };
 
     const handleSelectedCover = () => {
       setSelectedCover('photo');
-      navigation.navigate('SelectMainPhoto');
+      navigation.navigate('SelectBookCover', {
+        variant: 'cover',
+        bookName: bookName,
+      });
+      // @ts-ignore
+      ref?.current?.dismiss();
     };
 
     const renderBackdrop = (props: any) => (
@@ -137,7 +147,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
                 text="확인"
                 color="active"
                 textColor="white"
-                onPress={handleSubmit}
+                onPress={handleNextStep}
                 disabled={!isButtonEnabled}
               />
             )}

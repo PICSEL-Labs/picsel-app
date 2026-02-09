@@ -6,17 +6,21 @@ import { useDatePickerController } from '@/feature/picsel/picselUpload/hooks/use
 
 interface Props {
   initialDate?: string;
+  initialStoreId?: string;
   initialLocation?: string;
-  onNext: (date: string, location: string) => void;
+  onNext: (date: string, storeId: string, locationName: string) => void;
 }
 
 export const useDateLocationForm = ({
   initialDate,
+  initialStoreId,
   initialLocation,
   onNext,
 }: Props) => {
   const [selectedDate, setSelectedDate] = useState(initialDate);
-  const [selectedLocation, setSelectedLocation] = useState(initialLocation);
+  const [selectedLocationName, setSelectedLocationName] =
+    useState(initialLocation);
+  const [selectedStoreId, setSelectedStoreId] = useState(initialStoreId || '');
 
   const [activeSheet, setActiveSheet] = useState<'date' | 'location' | null>(
     null,
@@ -26,33 +30,37 @@ export const useDateLocationForm = ({
 
   const openDatePicker = () => setActiveSheet('date');
   const openLocationSearch = () => setActiveSheet('location');
-  const closeSheet = () => setActiveSheet(null);
+  const closeSheet = useCallback(() => setActiveSheet(null), []);
 
   const handleConfirmDate = useCallback(() => {
     const date = datePicker.confirm();
     if (date) {
-      setSelectedDate(dayjs(date).format('YYYY년 MM월 DD일'));
+      setSelectedDate(dayjs(date).format('YYYY-MM-DD'));
     }
     closeSheet();
   }, [datePicker]);
 
-  const handleSelectLocation = useCallback((locationName: string) => {
-    setSelectedLocation(locationName);
-    closeSheet();
-  }, []);
+  const handleSelectLocation = useCallback(
+    (id: string, name: string) => {
+      setSelectedStoreId(id);
+      setSelectedLocationName(name);
+      closeSheet();
+    },
+    [closeSheet],
+  );
 
   const handleSubmit = useCallback(() => {
-    if (selectedDate && selectedLocation) {
-      onNext(selectedDate, selectedLocation);
+    if (selectedDate && selectedStoreId) {
+      onNext(selectedDate, selectedStoreId, selectedLocationName);
     }
-  }, [selectedDate, selectedLocation, onNext]);
+  }, [selectedDate, selectedStoreId, selectedLocationName, onNext]);
 
-  const isFilled = selectedDate.length > 0 && selectedLocation.length > 0;
+  const isFilled = !!(selectedDate && selectedStoreId);
 
   return {
     state: {
       selectedDate,
-      selectedLocation,
+      selectedLocation: selectedLocationName,
       isDatePickerVisible: activeSheet === 'date',
       isLocationVisible: activeSheet === 'location',
       isFilled,

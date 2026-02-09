@@ -15,7 +15,7 @@ import Input from '@/shared/ui/atoms/Input';
 interface Props {
   visible: boolean;
   onClose: () => void;
-  onSelect: (location: string) => void;
+  onSelect: (id: string, name: string) => void;
 }
 
 const LocationSearchBottomSheet = ({ visible, onClose, onSelect }: Props) => {

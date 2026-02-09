@@ -170,7 +170,7 @@ const BrandSearchScreen = () => {
       )}
 
       {variant === 'mypage' && mypageSelectedBrands.length > 0 && (
-        <View className="px-4 pb-2">
+        <View className="px-4 pb-2 pt-[47.5px]">
           <Button
             className="w-full"
             text={`선택완료(${mypageSelectedBrands.length})`}

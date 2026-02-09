@@ -32,6 +32,7 @@ import FloatingButton from '@/shared/icons/FloatingButton';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 import SearchIcons from '@/shared/icons/SearchIcons';
+import SparkleImages from '@/shared/images/Sparkle';
 import {
   useBrandListStore,
   useFavoriteStore,
@@ -374,7 +375,7 @@ const BrandSettingScreen = () => {
 
   // ─── Render: Guide Text ───
   const renderGuideText = useCallback(() => {
-    if (mode === 'remove') {
+    if (mode === 'remove' && favoriteBrands.length > 0) {
       return (
         <View className="-mb-3 flex items-center justify-center px-1 py-2">
           <Text className="text-gray-500 headline-01">
@@ -395,7 +396,7 @@ const BrandSettingScreen = () => {
       );
     }
     return null;
-  }, [mode]);
+  }, [mode, favoriteBrands.length]);
 
   return (
     <ScreenLayout>
@@ -469,13 +470,11 @@ const BrandSettingScreen = () => {
           contentContainerStyle={{ paddingBottom: 10 }}>
           {renderAddBrandGrid()}
         </ScrollView>
-      ) : favoriteBrands.length === 0 && mode === 'default' ? (
+      ) : favoriteBrands.length === 0 ? (
         <View className="flex-1 items-center justify-center">
-          <Text className="text-gray-900 headline-02">
-            아직 찜한 브랜드가 없어요
-          </Text>
-          <Text className="mt-1 text-gray-500 body-rg-02">
-            마음에 드는 브랜드를 찜해보세요
+          <SparkleImages shape="bg-opacity" height={418} width={340} />
+          <Text className="absolute text-gray-900 headline-04">
+            찜한 브랜드가 없어요
           </Text>
         </View>
       ) : (
@@ -505,7 +504,7 @@ const BrandSettingScreen = () => {
       )}
 
       {/* ─── Bottom Action ─── */}
-      {mode === 'remove' && (
+      {mode === 'remove' && favoriteBrands.length > 0 && (
         <View className="flex-row">
           <Pressable
             className="ml-2 mt-1 flex-1 flex-row items-center justify-center space-x-1 rounded-lg py-3"

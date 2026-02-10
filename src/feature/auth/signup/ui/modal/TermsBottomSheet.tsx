@@ -31,7 +31,6 @@ const TermsBottomSheet = ({
 
   return (
     <BottomSheet
-      onClose={onClose}
       title="이용약관 동의"
       visible={visible}
       animatedStyle={animatedStyle}

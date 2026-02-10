@@ -2,13 +2,9 @@ import React from 'react';
 
 import { TouchableWithoutFeedback, View } from 'react-native';
 
-interface Props {
-  onClose: () => void;
-}
-
-const BackDrop = ({ onClose }: Props) => {
+const BackDrop = () => {
   return (
-    <TouchableWithoutFeedback onPress={onClose}>
+    <TouchableWithoutFeedback>
       <View className="flex-1 bg-[#11111480]" />
     </TouchableWithoutFeedback>
   );

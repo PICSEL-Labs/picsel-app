@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { Linking } from 'react-native';
 
 import { SETTING_MENU_ITEMS } from '../constants/settingMenuItems';
 
@@ -33,18 +34,19 @@ export const useSettingMenu = () => {
   }, []);
 
   const handleNotificationSetting = useCallback(() => {
-    console.log('알림 설정');
-    // navigation.navigate('NotificationSetting');
+    navigation.navigate('NotificationSettingScreen');
   }, []);
 
   const handleTerms = useCallback(() => {
-    console.log('이용약관');
-    // navigation.navigate('Terms'); or Linking 처리
+    Linking.openURL(
+      'https://daisy-tamarillo-7ee.notion.site/2152a4516dff8001bcc4c7fb6a3229da',
+    );
   }, []);
 
   const handlePrivacy = useCallback(() => {
-    console.log('개인정보처리방침');
-    // navigation.navigate('Privacy'); or Linking 처리
+    Linking.openURL(
+      'https://daisy-tamarillo-7ee.notion.site/2672a4516dff801d9ee1d7edbdfa3323',
+    );
   }, []);
 
   const menuItems = SETTING_MENU_ITEMS.map(item => {

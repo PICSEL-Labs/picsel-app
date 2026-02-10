@@ -17,7 +17,7 @@ export const useHandleScroll = () => {
       const { contentOffset, contentSize, layoutMeasurement } =
         event.nativeEvent;
       const isScrollable = contentSize.height > layoutMeasurement.height;
-      const isScrolled = contentOffset.y > 100;
+      const isScrolled = contentOffset.y > 400;
       const shouldShow = isScrollable && isScrolled;
 
       if (shouldShow && !showFloatingRef.current) {

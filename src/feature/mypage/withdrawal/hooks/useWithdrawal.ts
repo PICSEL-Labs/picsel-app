@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
 
+import { withdrawApi } from '../api/withdrawApi';
 import { ETC_REASON_ID } from '../constants/withdrawalText';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
@@ -26,10 +27,14 @@ export const useWithdrawal = () => {
     });
   }, []);
 
-  const executeWithdrawal = () => {
-    // 회원탈퇴 API
-    navigation.navigate('MypageWithdrawalSuccess');
-  };
+  const executeWithdrawal = useCallback(async () => {
+    try {
+      await withdrawApi();
+      navigation.navigate('MypageWithdrawalSuccess');
+    } catch (error) {
+      console.error('Withdrawal error:', error);
+    }
+  }, [navigation]);
 
   const handleWithdraw = useCallback(() => {
     Keyboard.dismiss();

@@ -7,16 +7,16 @@ import MypageTopBar from '@/feature/mypage/main/components/ui/atoms/MypageTopBar
 import NicknameSection from '@/feature/mypage/main/components/ui/atoms/NicknameSection';
 import MypageMenuItem from '@/feature/mypage/main/components/ui/molecules/MypageMenuItem';
 import { useMypageMenu } from '@/feature/mypage/main/hooks/useMypageMenu';
+import { useGetUser } from '@/feature/mypage/main/queries/useGetUser';
 import ListGroup from '@/feature/mypage/shared/components/ui/organisms/ListGroup';
 import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import StarIcons from '@/shared/icons/StarIcons';
-import { useUserStore } from '@/shared/store';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 const MypageScreen = () => {
-  const { userNickname } = useUserStore();
+  const { data: user } = useGetUser();
   const { menuItems } = useMypageMenu();
   const navigation = useNavigation<RootStackNavigationProp>();
   const route = useRoute<RouteProp<MainNavigationProps, 'Mypage'>>();
@@ -37,7 +37,7 @@ const MypageScreen = () => {
       />
 
       <NicknameSection
-        nickname={userNickname}
+        nickname={user?.userNickname ?? null}
         onPressEdit={() => navigation.navigate('EditNicknameScreen')}
       />
 

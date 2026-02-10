@@ -12,7 +12,7 @@ interface Props {
 const EtcReasonInput = ({ value, onChangeText }: Props) => {
   return (
     <TextInput
-      className="mt-1 h-40 w-full rounded-xl border border-gray-300 p-4 font-nanum-square-ac-regular text-[16px] text-primary-black"
+      className="mt-1 h-40 w-full rounded-xl border border-gray-300 p-4 font-nanum-square-ac-regular text-[16px] leading-5 text-primary-black"
       placeholder={INPUT_PLACEHOLDER}
       placeholderTextColor="#7E8392"
       multiline

@@ -1,10 +1,11 @@
+import { SocialTypes } from '@/feature/auth/login/types';
 import { axiosInstance } from '@/shared/api/axiosInstance';
 import { CommonResponseType } from '@/shared/api/types';
 
 export interface UserData {
   userNickname: string;
   email: string;
-  socialType: string;
+  socialType: SocialTypes;
   createdAt: string;
 }
 

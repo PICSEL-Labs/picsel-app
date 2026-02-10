@@ -1,11 +1,18 @@
 import React from 'react';
 
-import { Text, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
 import WithdrawalContent from '@/feature/mypage/withdrawal/component/ui/organisms/WithdrawalContent';
+import { useKeyboardEvent } from '@/feature/mypage/withdrawal/hooks/useKeyboardEvent';
 import { useWithdrawal } from '@/feature/mypage/withdrawal/hooks/useWithdrawal';
-import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import Button from '@/shared/ui/atoms/Button';
 
 const WithdrawalScreen = () => {
@@ -19,27 +26,40 @@ const WithdrawalScreen = () => {
     isButtonDisabled,
   } = useWithdrawal();
 
+  const { scrollViewRef, isKeyboardVisible, handleFocusInput } =
+    useKeyboardEvent();
+
   return (
-    <ScreenLayout>
+    <SafeAreaView
+      className="h-full w-full flex-1 bg-white"
+      edges={['top', 'left', 'right']}>
       <MypageHeader title="탈퇴하기" />
 
-      <View className="flex-1 px-4">
-        <View className="pt-2">
-          <Text className="text-gray-900 title-05">
-            탈퇴하기 전 확인해주세요
-          </Text>
-        </View>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          ref={scrollViewRef}
+          className="flex-1 px-4"
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
+          <View className="pt-2">
+            <Text className="text-gray-900 title-05">
+              탈퇴하기 전 확인해주세요
+            </Text>
+          </View>
 
-        {/* 기타 (직접입력) -> 기획 디자인 파트 문의, 피그마 코멘트 */}
-        <WithdrawalContent
-          selectedReasons={selectedReasons}
-          etcReason={etcReason}
-          onToggleReason={handleToggleReason}
-          onChangeEtcReason={setEtcReason}
-          isEtcSelected={isEtcSelected}
-        />
+          <WithdrawalContent
+            selectedReasons={selectedReasons}
+            etcReason={etcReason}
+            onToggleReason={handleToggleReason}
+            onChangeEtcReason={setEtcReason}
+            isEtcSelected={isEtcSelected}
+            onFocusInput={handleFocusInput}
+          />
+        </ScrollView>
 
-        <View className="pb-4">
+        <View className={`px-4 py-2 ${isKeyboardVisible ? '-mb-2' : 'mb-8'}`}>
           <Button
             text="탈퇴하기"
             color={isButtonDisabled ? 'disabled' : 'active'}
@@ -49,8 +69,8 @@ const WithdrawalScreen = () => {
             className="w-full"
           />
         </View>
-      </View>
-    </ScreenLayout>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { Keyboard } from 'react-native';
 
 import { ETC_REASON_ID } from '../constants/withdrawalText';
 
@@ -31,6 +32,7 @@ export const useWithdrawal = () => {
   };
 
   const handleWithdraw = useCallback(() => {
+    Keyboard.dismiss();
     showConfirmModal(
       '지금까지 저장된 모든 정보가 삭제되고,\n복구할 수 없어요.',
       executeWithdrawal,
@@ -43,7 +45,9 @@ export const useWithdrawal = () => {
   }, [executeWithdrawal]);
 
   const isEtcSelected = selectedReasons.includes(ETC_REASON_ID);
-  const isButtonDisabled = selectedReasons.length === 0;
+  const isButtonDisabled =
+    selectedReasons.length === 0 ||
+    (isEtcSelected && etcReason.trim().length === 0);
 
   return {
     selectedReasons,

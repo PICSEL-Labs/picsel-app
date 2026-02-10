@@ -5,8 +5,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
+import BrandSearchScreen from '@/screens/brandSearch';
 import MypageScreen from '@/screens/mypage';
 import MypageAccountScreen from '@/screens/mypage/account';
+import BrandSettingScreen from '@/screens/mypage/brand';
+import EditNicknameScreen from '@/screens/mypage/editNickname';
+import NotificationScreen from '@/screens/mypage/notification';
+import NotificationSettingScreen from '@/screens/mypage/notification/setting';
 import MypageSettingScreen from '@/screens/mypage/setting';
 import WithdrawalScreen from '@/screens/mypage/withdrawal';
 import WithdrawalSuccessScreen from '@/screens/mypage/withdrawal/success';
@@ -49,11 +54,16 @@ export type MainNavigationProps = {
   SelectBookCover: { variant: 'cover'; bookName: string };
 
   // Mypage
-  Mypage: undefined;
+  Mypage: { toastMessage?: string } | undefined;
   MypageSetting: undefined;
   MypageAccount: undefined;
   MypageWithdrawal: undefined;
   MypageWithdrawalSuccess: undefined;
+  EditNicknameScreen: undefined;
+  NotificationScreen: undefined;
+  NotificationSettingScreen: undefined;
+  BrandSettingScreen: undefined;
+  BrandSearchScreen: { variant: 'signup' | 'mypage' };
 };
 
 const MainRoute = () => {
@@ -118,6 +128,18 @@ const MainRoute = () => {
       <Stack.Screen
         name="MypageWithdrawalSuccess"
         component={WithdrawalSuccessScreen}
+      />
+      <Stack.Screen name="EditNicknameScreen" component={EditNicknameScreen} />
+      <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+      <Stack.Screen
+        name="NotificationSettingScreen"
+        component={NotificationSettingScreen}
+      />
+      <Stack.Screen name="BrandSettingScreen" component={BrandSettingScreen} />
+      <Stack.Screen
+        name="BrandSearchScreen"
+        component={BrandSearchScreen}
+        initialParams={{ variant: 'mypage' }}
       />
     </Stack.Navigator>
   );

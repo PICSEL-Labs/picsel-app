@@ -15,6 +15,8 @@ interface Props {
   search?: boolean;
   highlightWeight?: string;
   fontWeight?: string;
+  numberOfLines?: number;
+  className?: string;
 }
 
 export const HighlightedText = ({
@@ -26,6 +28,8 @@ export const HighlightedText = ({
   highlightColor = 'text-pink-500',
   highlightWeight,
   fontWeight,
+  numberOfLines,
+  className,
 }: Props) => {
   const regex = keyword
     ? new RegExp(
@@ -39,7 +43,10 @@ export const HighlightedText = ({
   const parts = useHighlightText(formattedText);
 
   return (
-    <Text className={cn(font, textAlign)} style={{ color }}>
+    <Text
+      className={cn(font, textAlign, className)}
+      style={{ color }}
+      numberOfLines={numberOfLines}>
       {parts.map((part, index) => (
         <Text
           key={index}

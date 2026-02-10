@@ -20,6 +20,7 @@ interface Props {
   keyword?: string;
   highlight?: boolean;
   excludeNoneBrand?: boolean;
+  disabledBrandIds?: Set<string>;
 }
 
 const BrandGridList = ({
@@ -29,6 +30,7 @@ const BrandGridList = ({
   keyword = '',
   highlight = false,
   excludeNoneBrand = false,
+  disabledBrandIds,
 }: Props) => {
   const filteredBrandList = excludeNoneBrand
     ? brandList.filter(brand => brand.brandId !== 'NONE')
@@ -36,20 +38,26 @@ const BrandGridList = ({
   return (
     <>
       {chunkArray(filteredBrandList, 3).map((row, rowIndex) => (
-        <View key={rowIndex} className="mb-6 flex-row justify-between py-2">
+        <View key={rowIndex} className="mb-3 flex-row justify-between py-2">
           {row.map(item => {
             const isSelected = selectedList.some(
               selected => selected.brandId === item.brandId,
             );
+            const isDisabled = disabledBrandIds?.has(item.brandId) ?? false;
 
             return (
-              <View key={item.brandId} className="flex-1 items-center">
+              <View
+                key={item.brandId}
+                className="flex-1 items-center px-4"
+                style={isDisabled ? { opacity: 0.35 } : undefined}>
                 <View style={defaultShadow} className="mb-[7px] rounded-full">
-                  <Pressable onPress={() => onPress(item.brandId, item.name)}>
+                  <Pressable
+                    onPress={() => onPress(item.brandId, item.name)}
+                    disabled={isDisabled}>
                     <ImageBackground
                       source={{ uri: Config.IMAGE_URL + item.iconImageUrl }}
                       className="h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full">
-                      {isSelected && (
+                      {isSelected && !isDisabled && (
                         <View className="w-full flex-1 items-center justify-center rounded-full bg-black/30">
                           <CheckIcons shape="white" width={24} height={24} />
                         </View>

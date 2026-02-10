@@ -4,12 +4,11 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 
 import { useSignupFlow } from '@/feature/auth/signup/model/useSignupFlow';
 import { TermsBottomSheet } from '@/feature/auth/signup/ui/modal';
-import NicknameFeedback from '@/feature/auth/signup/ui/organisms/NicknameFeedback';
-import NicknameInput from '@/feature/auth/signup/ui/organisms/NicknameInput';
 import NicknameSubmitButton from '@/feature/auth/signup/ui/organisms/NicknameSubmitButton';
 import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
 import SignupIntro from '@/feature/auth/signup/ui/organisms/SignupIntro';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { NicknameInput, NicknameFeedback } from '@/shared/nickname';
 
 const NicknameInputScreen = () => {
   const {

@@ -1,11 +1,10 @@
 import { useRef, useState } from 'react';
 
-import { validateUserInfoApi } from '../api/validateApi';
+import { validateNicknameApi } from '../api/validateNicknameApi';
+import { validateFormat } from '../utils/validateNickname';
 
-import { validateFormat } from '@/feature/auth/signup/utils/validateNickname';
-
-export const useNicknameValidation = () => {
-  const [userNickname, setUserNickname] = useState('');
+export const useNicknameValidation = (initialNickname: string = '') => {
+  const [userNickname, setUserNickname] = useState(initialNickname);
   const [errorMessage, setErrorMessage] = useState('');
   const [isValidFormat, setIsValidFormat] = useState(false);
   const [isAvailable, setIsAvailable] = useState<null | boolean>(null);
@@ -40,7 +39,7 @@ export const useNicknameValidation = () => {
 
     blurTimeoutRef.current = setTimeout(async () => {
       try {
-        const res = await validateUserInfoApi(userNickname);
+        const res = await validateNicknameApi(userNickname);
 
         if (res.code === 14001) {
           setIsAvailable(false);

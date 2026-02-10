@@ -38,7 +38,9 @@ const SelectBrandScreen = () => {
       <SignupHeader
         text="회원가입"
         search
-        onPressIn={() => navigation.navigate('BrandSearch')}
+        onPressIn={() =>
+          navigation.navigate('BrandSearch', { variant: 'signup' })
+        }
       />
 
       <SignupIntro
@@ -57,7 +59,7 @@ const SelectBrandScreen = () => {
         className="pt-[14px]"
         showsVerticalScrollIndicator
         indicatorStyle="black"
-        contentContainerStyle={{ paddingBottom: 100 }}>
+        contentContainerStyle={{ paddingBottom: 50 }}>
         <BrandGridList
           brandList={brandList}
           selectedList={selectedList}

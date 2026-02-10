@@ -25,8 +25,7 @@ export const useAccountMenu = () => {
   };
 
   const handleEditNickname = () => {
-    console.log('닉네임 수정');
-    // navigation.navigate('EditNickname');
+    navigation.navigate('EditNicknameScreen');
   };
 
   const handleWithdraw = () => {

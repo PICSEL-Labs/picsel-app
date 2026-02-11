@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -24,17 +23,17 @@ const getIconByType = (iconType?: string) => {
 export const useMypageMenu = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
-  const handleNotice = useCallback(() => {
+  const handleNotice = () => {
     navigation.navigate('NoticeScreen');
-  }, []);
+  };
 
-  const handleInquiry = useCallback(() => {
-    console.log('문의사항');
-  }, []);
+  const handleInquiry = () => {
+    navigation.navigate('InquiryScreen');
+  };
 
-  const handleTeamIntro = useCallback(() => {
+  const handleTeamIntro = () => {
     console.log('픽셀 팀원 소개');
-  }, []);
+  };
 
   const menuItems = MYPAGE_MENU_ITEMS.map(item => {
     let onPress = () => {};

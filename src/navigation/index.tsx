@@ -10,6 +10,7 @@ import MypageScreen from '@/screens/mypage';
 import MypageAccountScreen from '@/screens/mypage/account';
 import BrandSettingScreen from '@/screens/mypage/brand';
 import EditNicknameScreen from '@/screens/mypage/editNickname';
+import InquiryScreen from '@/screens/mypage/inquiry';
 import NoticeScreen from '@/screens/mypage/notice';
 import NotificationScreen from '@/screens/mypage/notification';
 import NotificationSettingScreen from '@/screens/mypage/notification/setting';
@@ -66,6 +67,7 @@ export type MainNavigationProps = {
   BrandSettingScreen: undefined;
   BrandSearchScreen: { variant: 'signup' | 'mypage' };
   NoticeScreen: undefined;
+  InquiryScreen: undefined;
 };
 
 const MainRoute = () => {
@@ -144,6 +146,7 @@ const MainRoute = () => {
         initialParams={{ variant: 'mypage' }}
       />
       <Stack.Screen name="NoticeScreen" component={NoticeScreen} />
+      <Stack.Screen name="InquiryScreen" component={InquiryScreen} />
     </Stack.Navigator>
   );
 };

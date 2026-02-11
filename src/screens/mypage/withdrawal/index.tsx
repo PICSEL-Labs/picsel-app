@@ -11,8 +11,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
 import WithdrawalContent from '@/feature/mypage/withdrawal/component/ui/organisms/WithdrawalContent';
-import { useKeyboardEvent } from '@/feature/mypage/withdrawal/hooks/useKeyboardEvent';
 import { useWithdrawal } from '@/feature/mypage/withdrawal/hooks/useWithdrawal';
+import { useKeyboardEvent } from '@/shared/hooks/useKeyboardEvent';
 import Button from '@/shared/ui/atoms/Button';
 
 const WithdrawalScreen = () => {
@@ -27,7 +27,7 @@ const WithdrawalScreen = () => {
   } = useWithdrawal();
 
   const { scrollViewRef, isKeyboardVisible, handleFocusInput } =
-    useKeyboardEvent();
+    useKeyboardEvent({ scrollToEndOnFocus: true });
 
   return (
     <SafeAreaView

@@ -15,6 +15,7 @@ import NoticeScreen from '@/screens/mypage/notice';
 import NotificationScreen from '@/screens/mypage/notification';
 import NotificationSettingScreen from '@/screens/mypage/notification/setting';
 import MypageSettingScreen from '@/screens/mypage/setting';
+import TeamIntroScreen from '@/screens/mypage/teamIntro';
 import WithdrawalScreen from '@/screens/mypage/withdrawal';
 import WithdrawalSuccessScreen from '@/screens/mypage/withdrawal/success';
 import PicselTabScreen from '@/screens/picsel';
@@ -68,6 +69,7 @@ export type MainNavigationProps = {
   BrandSearchScreen: { variant: 'signup' | 'mypage' };
   NoticeScreen: undefined;
   InquiryScreen: undefined;
+  TeamIntro: undefined;
 };
 
 const MainRoute = () => {
@@ -147,6 +149,7 @@ const MainRoute = () => {
       />
       <Stack.Screen name="NoticeScreen" component={NoticeScreen} />
       <Stack.Screen name="InquiryScreen" component={InquiryScreen} />
+      <Stack.Screen name="TeamIntro" component={TeamIntroScreen} />
     </Stack.Navigator>
   );
 };

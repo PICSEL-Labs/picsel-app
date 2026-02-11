@@ -32,7 +32,7 @@ export const useMypageMenu = () => {
   };
 
   const handleTeamIntro = () => {
-    console.log('픽셀 팀원 소개');
+    navigation.navigate('TeamIntro');
   };
 
   const menuItems = MYPAGE_MENU_ITEMS.map(item => {

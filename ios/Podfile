@@ -19,6 +19,7 @@ setup_permissions([
   'LocationAccuracy',
   'LocationAlways',
   'LocationWhenInUse',
+  'Notifications',
 ])
 
 linkage = ENV['USE_FRAMEWORKS']

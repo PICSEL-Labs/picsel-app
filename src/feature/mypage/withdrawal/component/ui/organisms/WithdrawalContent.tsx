@@ -13,6 +13,7 @@ interface Props {
   onToggleReason: (id: string) => void;
   onChangeEtcReason: (text: string) => void;
   isEtcSelected: boolean;
+  onFocusInput?: () => void;
 }
 const WithdrawalContent = ({
   selectedReasons,
@@ -20,6 +21,7 @@ const WithdrawalContent = ({
   onToggleReason,
   onChangeEtcReason,
   isEtcSelected,
+  onFocusInput,
 }: Props) => {
   return (
     <View className="flex-1 pt-4">
@@ -47,7 +49,11 @@ const WithdrawalContent = ({
         </View>
 
         {isEtcSelected && (
-          <EtcReasonInput value={etcReason} onChangeText={onChangeEtcReason} />
+          <EtcReasonInput
+            value={etcReason}
+            onChangeText={onChangeEtcReason}
+            onFocus={onFocusInput}
+          />
         )}
       </View>
     </View>

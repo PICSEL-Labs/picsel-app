@@ -10,9 +10,12 @@ import MypageScreen from '@/screens/mypage';
 import MypageAccountScreen from '@/screens/mypage/account';
 import BrandSettingScreen from '@/screens/mypage/brand';
 import EditNicknameScreen from '@/screens/mypage/editNickname';
+import InquiryScreen from '@/screens/mypage/inquiry';
+import NoticeScreen from '@/screens/mypage/notice';
 import NotificationScreen from '@/screens/mypage/notification';
 import NotificationSettingScreen from '@/screens/mypage/notification/setting';
 import MypageSettingScreen from '@/screens/mypage/setting';
+import TeamIntroScreen from '@/screens/mypage/teamIntro';
 import WithdrawalScreen from '@/screens/mypage/withdrawal';
 import WithdrawalSuccessScreen from '@/screens/mypage/withdrawal/success';
 import PicselTabScreen from '@/screens/picsel';
@@ -64,6 +67,9 @@ export type MainNavigationProps = {
   NotificationSettingScreen: undefined;
   BrandSettingScreen: undefined;
   BrandSearchScreen: { variant: 'signup' | 'mypage' };
+  NoticeScreen: undefined;
+  InquiryScreen: undefined;
+  TeamIntro: undefined;
 };
 
 const MainRoute = () => {
@@ -141,6 +147,9 @@ const MainRoute = () => {
         component={BrandSearchScreen}
         initialParams={{ variant: 'mypage' }}
       />
+      <Stack.Screen name="NoticeScreen" component={NoticeScreen} />
+      <Stack.Screen name="InquiryScreen" component={InquiryScreen} />
+      <Stack.Screen name="TeamIntro" component={TeamIntroScreen} />
     </Stack.Navigator>
   );
 };

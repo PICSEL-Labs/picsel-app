@@ -1,8 +1,10 @@
-import { useCallback } from 'react';
 import React from 'react';
+
+import { useNavigation } from '@react-navigation/native';
 
 import { MYPAGE_MENU_ITEMS } from '../constants/menuItems';
 
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import MypageIcons from '@/shared/icons/MypageIcons';
 
 const getIconByType = (iconType?: string) => {
@@ -19,19 +21,19 @@ const getIconByType = (iconType?: string) => {
 };
 
 export const useMypageMenu = () => {
-  // const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<RootStackNavigationProp>();
 
-  const handleNotice = useCallback(() => {
-    console.log('공지사항');
-  }, []);
+  const handleNotice = () => {
+    navigation.navigate('NoticeScreen');
+  };
 
-  const handleInquiry = useCallback(() => {
-    console.log('문의사항');
-  }, []);
+  const handleInquiry = () => {
+    navigation.navigate('InquiryScreen');
+  };
 
-  const handleTeamIntro = useCallback(() => {
-    console.log('픽셀 팀원 소개');
-  }, []);
+  const handleTeamIntro = () => {
+    navigation.navigate('TeamIntro');
+  };
 
   const menuItems = MYPAGE_MENU_ITEMS.map(item => {
     let onPress = () => {};

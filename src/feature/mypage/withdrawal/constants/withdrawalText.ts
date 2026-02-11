@@ -9,4 +9,4 @@ export const WITHDRAWAL_REASONS = [
 export const ETC_REASON_ID = '5';
 
 export const INPUT_PLACEHOLDER =
-  '이용하면서 불편했던 점을 자유롭게 작성해주세요. 더 나은 픽셀이 되도록 노력하겠습니다.';
+  '이용하면서 불편했던 점을 자유롭게 작성해주세요.';

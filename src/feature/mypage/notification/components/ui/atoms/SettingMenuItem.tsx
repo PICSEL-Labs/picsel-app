@@ -9,6 +9,7 @@ interface Props {
   description: string;
   value: boolean;
   onValueChange: (value: boolean) => void;
+  subText?: string;
 }
 
 const SettingMenuItem = ({
@@ -16,14 +17,20 @@ const SettingMenuItem = ({
   description,
   value,
   onValueChange,
+  subText,
 }: Props) => {
   return (
-    <View className="flex flex-row items-center justify-between self-stretch py-3">
-      <View className="flex flex-col space-y-1">
-        <Text className="text-gray-900 headline-02">{title}</Text>
-        <Text className="text-gray-600 body-rg-02">{description}</Text>
+    <View className="flex flex-col self-stretch py-3">
+      <View className="flex flex-row items-center justify-between">
+        <View className="flex flex-col space-y-1">
+          <Text className="text-gray-900 headline-02">{title}</Text>
+          <Text className="text-gray-600 body-rg-02">{description}</Text>
+        </View>
+        <Toggle value={value} onValueChange={onValueChange} />
       </View>
-      <Toggle value={value} onValueChange={onValueChange} />
+      {subText && (
+        <Text className="mt-1 text-gray-400 body-rg-02">{subText}</Text>
+      )}
     </View>
   );
 };

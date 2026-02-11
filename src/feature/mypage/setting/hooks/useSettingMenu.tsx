@@ -2,8 +2,12 @@ import { useCallback } from 'react';
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { Linking } from 'react-native';
 
-import { SETTING_MENU_ITEMS } from '../constants/settingMenuItems';
+import {
+  EXTERNAL_LINKS,
+  SETTING_MENU_ITEMS,
+} from '../constants/settingMenuItems';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
@@ -33,18 +37,15 @@ export const useSettingMenu = () => {
   }, []);
 
   const handleNotificationSetting = useCallback(() => {
-    console.log('알림 설정');
-    // navigation.navigate('NotificationSetting');
+    navigation.navigate('NotificationSettingScreen');
   }, []);
 
   const handleTerms = useCallback(() => {
-    console.log('이용약관');
-    // navigation.navigate('Terms'); or Linking 처리
+    Linking.openURL(EXTERNAL_LINKS.terms);
   }, []);
 
   const handlePrivacy = useCallback(() => {
-    console.log('개인정보처리방침');
-    // navigation.navigate('Privacy'); or Linking 처리
+    Linking.openURL(EXTERNAL_LINKS.privacy);
   }, []);
 
   const menuItems = SETTING_MENU_ITEMS.map(item => {

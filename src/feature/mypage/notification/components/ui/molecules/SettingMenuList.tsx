@@ -10,6 +10,7 @@ interface SettingItem {
   description: string;
   value: boolean;
   onValueChange: (value: boolean) => void;
+  subText?: string;
 }
 
 interface Props {
@@ -26,6 +27,7 @@ const SettingMenuList = ({ items }: Props) => {
           description={item.description}
           value={item.value}
           onValueChange={item.onValueChange}
+          subText={item.subText}
         />
       ))}
     </View>

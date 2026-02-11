@@ -13,7 +13,6 @@ import { bottomSheetShadow } from '@/shared/styles/shadows';
 interface Props {
   children: ReactNode;
   title: string;
-  onClose?: () => void;
   visible: boolean;
   backDrop?: boolean;
   panGesture: PanGesture;
@@ -23,7 +22,6 @@ interface Props {
 
 const BottomSheet = ({
   children,
-  onClose,
   visible,
   title,
   panGesture,
@@ -33,7 +31,7 @@ const BottomSheet = ({
 }: Props) => {
   return (
     <Modal visible={visible} transparent animationType="slide">
-      {backDrop && <BackDrop onClose={onClose} />}
+      {backDrop && <BackDrop />}
 
       <GestureDetector gesture={panGesture}>
         <Animated.View

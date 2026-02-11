@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { Alert, Linking } from 'react-native';
 
+import { patchNotificationSettingApi } from '../api/notificationSettingApi';
 import {
   PERMISSION_ALERT,
   PICSEL_NEWS_TOAST,
@@ -10,8 +12,9 @@ import {
   EVENT_AGREE_ALERT,
   EVENT_AGREE_CONFIRM_ALERT,
 } from '../constants/notificationSettingTexts';
+import { useGetNotificationSetting } from '../queries/useGetNotificationSetting';
+import { formatISOToDate } from '../utils/formatDate';
 
-import { useMarketingConsent } from './useMarketingConsent';
 import { useNotificationPermission } from './useNotificationPermission';
 
 import { useToastStore } from '@/shared/store/ui/toast';
@@ -27,43 +30,37 @@ const showPermissionAlert = () => {
 };
 
 export const useNotificationSetting = () => {
-  const { isPermissionGranted, checkPermission } = useNotificationPermission();
-  const {
-    isConsented,
-    consentedAt,
-    isLoaded,
-    agreeMarketing,
-    rejectMarketing,
-  } = useMarketingConsent();
+  const { checkPermission } = useNotificationPermission();
+  const { data } = useGetNotificationSetting();
+  const queryClient = useQueryClient();
   const { showToast } = useToastStore();
 
-  const [isPicselNewsEnabled, setIsPicselNewsEnabled] = useState(false);
-  const [isEventNewsEnabled, setIsEventNewsEnabled] = useState(false);
+  const isPicselNewsEnabled = data?.isPicselNewsEnabled ?? false;
+  const isEventNewsEnabled = data?.isEventNewsEnabled ?? false;
+  const isMarketingAgreed = data?.isMarketingAgreementAgreed ?? false;
+  const marketingConsentedAt = data?.marketingConsentedAt ?? null;
 
-  useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
-
-    setIsPicselNewsEnabled(isPermissionGranted);
-    setIsEventNewsEnabled(isPermissionGranted && isConsented);
-  }, [isPermissionGranted, isConsented, isLoaded]);
+  const invalidateSetting = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['notificationSetting'] });
+  }, [queryClient]);
 
   const handlePicselNewsToggle = useCallback(async () => {
     if (isPicselNewsEnabled) {
-      setIsPicselNewsEnabled(false);
+      await patchNotificationSettingApi({ isPicselNewsEnabled: false });
+      invalidateSetting();
       showToast(PICSEL_NEWS_TOAST.reject);
     } else {
       const granted = await checkPermission();
 
       if (granted) {
-        setIsPicselNewsEnabled(true);
+        await patchNotificationSettingApi({ isPicselNewsEnabled: true });
+        invalidateSetting();
         showToast(PICSEL_NEWS_TOAST.agree);
       } else {
         showPermissionAlert();
       }
     }
-  }, [isPicselNewsEnabled, checkPermission, showToast]);
+  }, [isPicselNewsEnabled, checkPermission, showToast, invalidateSetting]);
 
   const handleEventNewsToggle = useCallback(async () => {
     if (isEventNewsEnabled) {
@@ -72,8 +69,14 @@ export const useNotificationSetting = () => {
         {
           text: EVENT_REJECT_ALERT.confirmText,
           onPress: async () => {
-            const dateStr = await rejectMarketing();
-            setIsEventNewsEnabled(false);
+            const result = await patchNotificationSettingApi({
+              isEventNewsEnabled: false,
+            });
+            invalidateSetting();
+
+            const dateStr = result.marketingRejectedAt
+              ? formatISOToDate(result.marketingRejectedAt)
+              : '';
 
             Alert.alert(
               EVENT_REJECT_CONFIRM_ALERT.title,
@@ -96,8 +99,14 @@ export const useNotificationSetting = () => {
         {
           text: EVENT_AGREE_ALERT.confirmText,
           onPress: async () => {
-            const dateStr = await agreeMarketing();
-            setIsEventNewsEnabled(true);
+            const result = await patchNotificationSettingApi({
+              isEventNewsEnabled: true,
+            });
+            invalidateSetting();
+
+            const dateStr = result.marketingConsentedAt
+              ? formatISOToDate(result.marketingConsentedAt)
+              : '';
 
             Alert.alert(
               EVENT_AGREE_CONFIRM_ALERT.title,
@@ -108,13 +117,13 @@ export const useNotificationSetting = () => {
         },
       ]);
     }
-  }, [isEventNewsEnabled, checkPermission, agreeMarketing, rejectMarketing]);
+  }, [isEventNewsEnabled, checkPermission, invalidateSetting]);
 
   return {
     isPicselNewsEnabled,
     isEventNewsEnabled,
-    consentedAt,
-    isConsented,
+    isMarketingAgreed,
+    marketingConsentedAt,
     handlePicselNewsToggle,
     handleEventNewsToggle,
   };

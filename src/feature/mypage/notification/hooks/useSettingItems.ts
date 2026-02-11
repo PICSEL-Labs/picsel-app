@@ -4,6 +4,7 @@ import {
   NOTIFICATION_SETTING_ITEMS,
   CONSENT_SUB_TEXT_PREFIX,
 } from '../constants/notificationSettingTexts';
+import { formatISOToDate } from '../utils/formatDate';
 
 import { useNotificationSetting } from './useNotificationSetting';
 
@@ -11,8 +12,7 @@ export const useSettingItems = () => {
   const {
     isPicselNewsEnabled,
     isEventNewsEnabled,
-    consentedAt,
-    isConsented,
+    marketingConsentedAt,
     handlePicselNewsToggle,
     handleEventNewsToggle,
   } = useNotificationSetting();
@@ -29,16 +29,15 @@ export const useSettingItems = () => {
         value: isEventNewsEnabled,
         onValueChange: handleEventNewsToggle,
         subText:
-          isConsented && consentedAt
-            ? `${CONSENT_SUB_TEXT_PREFIX} ${consentedAt}`
+          isEventNewsEnabled && marketingConsentedAt
+            ? `${CONSENT_SUB_TEXT_PREFIX} ${formatISOToDate(marketingConsentedAt)}`
             : undefined,
       },
     ],
     [
       isPicselNewsEnabled,
       isEventNewsEnabled,
-      isConsented,
-      consentedAt,
+      marketingConsentedAt,
       handlePicselNewsToggle,
       handleEventNewsToggle,
     ],

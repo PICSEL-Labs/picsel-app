@@ -24,15 +24,15 @@ export const useMypageMenu = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const handleNotice = () => {
-    navigation.navigate('NoticeScreen');
+    navigation.navigate('MypageRoute', { screen: 'NoticeScreen' });
   };
 
   const handleInquiry = () => {
-    navigation.navigate('InquiryScreen');
+    navigation.navigate('MypageRoute', { screen: 'InquiryScreen' });
   };
 
   const handleTeamIntro = () => {
-    navigation.navigate('TeamIntro');
+    navigation.navigate('MypageRoute', { screen: 'TeamIntro' });
   };
 
   const menuItems = MYPAGE_MENU_ITEMS.map(item => {

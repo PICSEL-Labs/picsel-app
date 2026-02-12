@@ -1,23 +1,12 @@
 import React from 'react';
 
+import { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import MypageRoute, { MypageNavigationProps } from './route/mypage';
 import SignupRoute from './route/signup';
 import BottomTabBar from './tabs';
 
-import BrandSearchScreen from '@/screens/brandSearch';
-import MypageScreen from '@/screens/mypage';
-import MypageAccountScreen from '@/screens/mypage/account';
-import BrandSettingScreen from '@/screens/mypage/brand';
-import EditNicknameScreen from '@/screens/mypage/editNickname';
-import InquiryScreen from '@/screens/mypage/inquiry';
-import NoticeScreen from '@/screens/mypage/notice';
-import NotificationScreen from '@/screens/mypage/notification';
-import NotificationSettingScreen from '@/screens/mypage/notification/setting';
-import MypageSettingScreen from '@/screens/mypage/setting';
-import TeamIntroScreen from '@/screens/mypage/teamIntro';
-import WithdrawalScreen from '@/screens/mypage/withdrawal';
-import WithdrawalSuccessScreen from '@/screens/mypage/withdrawal/success';
 import PicselTabScreen from '@/screens/picsel';
 import MonthFolderScreen from '@/screens/picsel/myPicsel/monthFolder';
 import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
@@ -57,19 +46,7 @@ export type MainNavigationProps = {
   SelectBookCover: { variant: 'cover'; bookName: string };
 
   // Mypage
-  Mypage: { toastMessage?: string } | undefined;
-  MypageSetting: undefined;
-  MypageAccount: undefined;
-  MypageWithdrawal: undefined;
-  MypageWithdrawalSuccess: undefined;
-  EditNicknameScreen: undefined;
-  NotificationScreen: undefined;
-  NotificationSettingScreen: undefined;
-  BrandSettingScreen: undefined;
-  BrandSearchScreen: { variant: 'signup' | 'mypage' };
-  NoticeScreen: undefined;
-  InquiryScreen: undefined;
-  TeamIntro: undefined;
+  MypageRoute: NavigatorScreenParams<MypageNavigationProps>;
 };
 
 const MainRoute = () => {
@@ -127,29 +104,7 @@ const MainRoute = () => {
       />
 
       {/* Mypage */}
-      <Stack.Screen name="Mypage" component={MypageScreen} />
-      <Stack.Screen name="MypageSetting" component={MypageSettingScreen} />
-      <Stack.Screen name="MypageAccount" component={MypageAccountScreen} />
-      <Stack.Screen name="MypageWithdrawal" component={WithdrawalScreen} />
-      <Stack.Screen
-        name="MypageWithdrawalSuccess"
-        component={WithdrawalSuccessScreen}
-      />
-      <Stack.Screen name="EditNicknameScreen" component={EditNicknameScreen} />
-      <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
-      <Stack.Screen
-        name="NotificationSettingScreen"
-        component={NotificationSettingScreen}
-      />
-      <Stack.Screen name="BrandSettingScreen" component={BrandSettingScreen} />
-      <Stack.Screen
-        name="BrandSearchScreen"
-        component={BrandSearchScreen}
-        initialParams={{ variant: 'mypage' }}
-      />
-      <Stack.Screen name="NoticeScreen" component={NoticeScreen} />
-      <Stack.Screen name="InquiryScreen" component={InquiryScreen} />
-      <Stack.Screen name="TeamIntro" component={TeamIntroScreen} />
+      <Stack.Screen name="MypageRoute" component={MypageRoute} />
     </Stack.Navigator>
   );
 };

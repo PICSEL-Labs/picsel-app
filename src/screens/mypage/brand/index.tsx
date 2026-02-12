@@ -25,7 +25,7 @@ import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
 import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavoriteBrand';
 import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import CheckIcons from '@/shared/icons/CheckIcons';
 import FloatingButton from '@/shared/icons/FloatingButton';
@@ -63,7 +63,7 @@ const BrandSettingScreen = () => {
     useSearchSelectedBrandsStore();
   const { showToast } = useToastStore();
   const { mutate: toggleFavorite } = useToggleFavoriteBrand();
-  const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<MypageNavigationProp>();
   const { showFloatingButton, handleScroll, scrollToTop, scrollViewRef } =
     useHandleScroll();
 

@@ -15,6 +15,7 @@ import { usePhotoFormat } from '@/feature/picsel/shared/utils/usePhotoFormat';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import SparkleImages from '@/shared/images/Sparkle';
 import { cn } from '@/shared/lib/cn';
+import { getImageUrl } from '@/shared/utils/image';
 
 interface Props {
   picsel: PicselBookPicselItem;
@@ -56,7 +57,9 @@ const PhotoTextListItem = ({
       {/* 이미지 */}
       <View className="relative flex-shrink-0">
         <Image
-          source={{ uri: picsel.representativeImagePath }}
+          source={{
+            uri: getImageUrl(picsel.representativeImagePath),
+          }}
           style={{
             width: TEXT_LIST_CARD.IMAGE_WIDTH,
             height: TEXT_LIST_CARD.IMAGE_HEIGHT,

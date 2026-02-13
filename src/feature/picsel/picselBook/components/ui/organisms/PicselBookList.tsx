@@ -15,6 +15,7 @@ import AddBookButton from './AddBookButton';
 
 import PicselBookSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PicselBookSkeleton';
 import { cn } from '@/shared/lib/cn';
+import { getImageUrl } from '@/shared/utils/image';
 
 interface Props {
   books: PicselBookItem[];
@@ -109,12 +110,14 @@ const PicselBookList = ({
 
         const book = item as PicselBookItem & { type: string };
 
+        console.log(book);
+
         return (
           <View className="mb-7">
             <PicselBookCard
               id={book.picselbookId}
               title={book.bookName}
-              coverImage={book.coverImagePath}
+              coverImage={getImageUrl(book.coverImagePath) || undefined}
               isSelecting={isSelecting}
               isSelected={selectedBookIds.includes(book.picselbookId)}
               onPress={onBookPress}

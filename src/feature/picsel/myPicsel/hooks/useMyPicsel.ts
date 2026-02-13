@@ -15,6 +15,7 @@ import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoS
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useMyPicselStore } from '@/shared/store';
+import { getImageUrl } from '@/shared/utils/image';
 
 /**
  * MyPicsel 템플릿을 위한 통합 hook
@@ -48,7 +49,7 @@ export const useMyPicsel = () => {
     }
     return myPicselsData.content.map(item => ({
       id: item.picselId,
-      uri: item.imagePath,
+      uri: getImageUrl(item.imagePath),
       date: item.takenDate,
       storeName: item.storeName,
     }));

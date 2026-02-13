@@ -11,6 +11,7 @@ import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoAct
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { useMyPicselStore } from '@/shared/store';
+import { getImageUrl } from '@/shared/utils/image';
 
 interface UseFolderViewOptions {
   filterType: 'year' | 'month';
@@ -63,7 +64,7 @@ export const useFolderView = ({
 
     return filtered.map(item => ({
       id: item.picselId,
-      uri: item.imagePath,
+      uri: getImageUrl(item.imagePath),
       date: item.takenDate,
       storeName: item.storeName,
     }));

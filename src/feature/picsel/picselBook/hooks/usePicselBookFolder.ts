@@ -13,6 +13,7 @@ import {
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { getImageUrl } from '@/shared/utils/image';
 
 type ViewMode = 'list' | 'textList';
 
@@ -49,7 +50,7 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
     }
     return data.content.map((item: PicselBookPicselItem) => ({
       id: item.picselId,
-      uri: item.representativeImagePath,
+      uri: getImageUrl(item.representativeImagePath),
       date: item.takenDate,
       storeName: item.storeName,
     }));

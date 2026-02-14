@@ -14,6 +14,7 @@ import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoAct
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { useImagePrefetch } from '@/shared/hooks/useImagePrefetch';
 import { useMyPicselStore } from '@/shared/store';
 import { getImageUrl } from '@/shared/utils/image';
 
@@ -54,6 +55,10 @@ export const useMyPicsel = () => {
       storeName: item.storeName,
     }));
   }, [myPicselsData]);
+
+  // 전체 탭에서 로드된 이미지를 메모리에 prefetch (월/년 탭 전환 시 즉시 렌더링)
+  const photoUris = useMemo(() => photoData.map(p => p.uri), [photoData]);
+  useImagePrefetch(photoUris);
 
   // 년/월별 그룹 데이터
   const yearGroups: YearGroup[] = useMemo(() => {

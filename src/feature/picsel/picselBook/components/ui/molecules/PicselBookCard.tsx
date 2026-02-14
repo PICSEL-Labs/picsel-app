@@ -18,6 +18,8 @@ interface Props {
   onEdit?: (id: string, title: string) => void;
   onChangeCover?: (id: string) => void;
   onDelete?: (id: string, title: string) => void;
+  onImageLoad?: () => void;
+  onImageError?: () => void;
 }
 
 const PicselBookCard = ({
@@ -31,6 +33,8 @@ const PicselBookCard = ({
   onEdit,
   onChangeCover,
   onDelete,
+  onImageLoad,
+  onImageError,
 }: Props) => {
   const handlePress = () => {
     onPress?.(id, title);
@@ -51,6 +55,8 @@ const PicselBookCard = ({
           height={72}
           imageUri={coverImage}
           opacity={isSelecting && coverImage ? 0.3 : 1}
+          onImageLoad={onImageLoad}
+          onImageError={onImageError}
         />
 
         {/* 선택 모드 체크박스 */}

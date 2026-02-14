@@ -62,8 +62,8 @@ const MyPicselTemplate = () => {
       <EmptyStateLayout
         floatingButton={
           <>
-            <UploadTooltip />
-            <View className="absolute bottom-1 right-1">
+            <View className="absolute bottom-8 right-0.5">
+              <UploadTooltip />
               {showFunctionButtons ? (
                 <FunctionButton
                   onAlbumPress={handleAlbumPress}

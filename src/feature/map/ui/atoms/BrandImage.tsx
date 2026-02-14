@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Image } from 'react-native';
-
+import CachedImage from '@/shared/components/CachedImage';
 import { getImageUrl } from '@/shared/utils/image';
 
 interface Props {
@@ -10,9 +9,9 @@ interface Props {
 
 const BrandImage = ({ imageUrl }: Props) => {
   return (
-    <Image
-      className="h-[60px] w-[60px] rounded-full"
-      source={{ uri: getImageUrl(imageUrl) }}
+    <CachedImage
+      uri={getImageUrl(imageUrl)}
+      style={{ width: 60, height: 60, borderRadius: 30 }}
       resizeMode="cover"
     />
   );

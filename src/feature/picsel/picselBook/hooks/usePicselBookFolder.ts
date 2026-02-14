@@ -56,8 +56,6 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
     }));
   }, [data]);
 
-  console.log(data);
-
   // 원본 데이터 (텍스트 리스트 뷰용)
   const rawData: PicselBookPicselItem[] = data?.content ?? [];
 

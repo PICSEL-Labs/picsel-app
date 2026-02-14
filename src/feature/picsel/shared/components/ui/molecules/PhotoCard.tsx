@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { Image, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { formatDate } from '../../../../myPicsel/utils/dateUtils';
 
+import CachedImage from '@/shared/components/CachedImage';
 import SparkleImages from '@/shared/images/Sparkle';
 
 interface PhotoCardProps {
@@ -19,6 +20,8 @@ interface PhotoCardProps {
   showDate?: boolean;
   showStoreName?: boolean;
   onPress?: () => void;
+  onImageLoad?: (uri: string) => void;
+  onImageError?: (uri: string) => void;
 }
 
 const PhotoCard = ({
@@ -29,6 +32,8 @@ const PhotoCard = ({
   showDate = true,
   showStoreName = true,
   onPress,
+  onImageLoad,
+  onImageError,
 }: PhotoCardProps) => {
   return (
     <View style={{ width: imageWidth }}>
@@ -44,10 +49,12 @@ const PhotoCard = ({
         <View
           className="overflow-hidden"
           style={{ width: imageWidth, height: imageHeight }}>
-          <Image
-            source={{ uri: photo.uri }}
+          <CachedImage
+            uri={photo.uri}
             style={{ width: imageWidth, height: imageHeight }}
             resizeMode="cover"
+            onLoad={() => onImageLoad?.(photo.uri)}
+            onError={() => onImageError?.(photo.uri)}
           />
         </View>
 

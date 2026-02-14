@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 
 import BookAdd from '@/assets/icons/picselBook/picselBook-add.svg';
 import BookCoverSelected from '@/assets/icons/picselBook/picselBook-cover-selected.svg';
 import BookDefault from '@/assets/icons/picselBook/picselBook-default.svg';
 import Spring from '@/assets/icons/picselBook/spring.svg';
+import CachedImage from '@/shared/components/CachedImage';
 
 interface Props {
   shape: 'default' | 'add' | 'cover-selected';
@@ -13,6 +14,8 @@ interface Props {
   height: number;
   imageUri?: string;
   opacity?: number;
+  onImageLoad?: () => void;
+  onImageError?: () => void;
 }
 
 const PicselBookIcons = ({
@@ -21,6 +24,8 @@ const PicselBookIcons = ({
   height,
   imageUri,
   opacity,
+  onImageLoad,
+  onImageError,
 }: Props) => {
   const renderIcon = () => {
     switch (shape) {
@@ -35,14 +40,13 @@ const PicselBookIcons = ({
     }
   };
 
-  // 커버 사진이 있을 경우 custom picsel-book
   if (imageUri) {
     return (
       <View style={{ width, height, position: 'relative' }}>
         {renderIcon()}
         <Spring className="absolute z-50" />
-        <Image
-          source={{ uri: imageUri }}
+        <CachedImage
+          uri={imageUri}
           style={{
             position: 'absolute',
             left: '7%',
@@ -51,6 +55,8 @@ const PicselBookIcons = ({
             borderRadius: 5,
           }}
           resizeMode="cover"
+          onLoad={onImageLoad}
+          onError={onImageError}
         />
         {opacity < 1 && (
           <View

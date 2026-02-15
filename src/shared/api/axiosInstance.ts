@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 import Config from 'react-native-config';
+import DeviceInfo from 'react-native-device-info';
 
 import { useUserStore } from '../store';
 
@@ -10,21 +12,36 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// accessToken Header interceptor
+// User-Agent 캐싱
+let cachedUserAgent: string | null = null;
+
+const getUserAgent = async (): Promise<string> => {
+  if (cachedUserAgent) {
+    return cachedUserAgent;
+  }
+  const appVersion = DeviceInfo.getVersion();
+  const platform = Platform.OS === 'ios' ? 'iOS' : 'Android';
+  const deviceModel = DeviceInfo.getModel();
+  const deviceUUID = await DeviceInfo.getUniqueId();
+  cachedUserAgent = `PICSEL/${appVersion} (${platform}; ${deviceModel}; ${deviceUUID})`;
+  return cachedUserAgent;
+};
+
+// accessToken + User-Agent Header interceptor
 axiosInstance.interceptors.request.use(
-  config => {
+  async config => {
     const accessToken = useUserStore.getState().accessToken;
 
     if (accessToken) {
       config.headers['Access-Token'] = accessToken;
     }
-    console.log('axios config : ', config);
+
+    config.headers['User-Agent'] = await getUserAgent();
 
     return config;
   },
 
   error => {
-    console.log('axios config : ', error);
     return Promise.reject(error);
   },
 );

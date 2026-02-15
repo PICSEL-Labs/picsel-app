@@ -56,7 +56,7 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
           isSelecting={isSelecting}
           isSelected={isSelected}
           onToggleSelection={onToggleSelection}
-          onPress={onPhotoPress}
+          onPress={() => !isSelecting && onPhotoPress?.(item.picselId)}
           onImageLoad={handleImageLoad}
           onImageError={handleImageError}
         />

@@ -8,7 +8,6 @@ export const useGetPicselDetail = (picselId: string) => {
     queryKey: ['picselDetail', picselId],
     queryFn: () => getPicselDetailApi(picselId),
     enabled: !!picselId,
-
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
     retry: 2,

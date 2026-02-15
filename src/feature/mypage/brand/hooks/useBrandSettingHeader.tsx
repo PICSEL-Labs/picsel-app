@@ -14,7 +14,7 @@ import PicselActionIcons from '@/shared/icons/PicselActionIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
 import SearchIcons from '@/shared/icons/SearchIcons';
 
-interface Params {
+interface Props {
   mode: BrandSettingMode;
   removeSelectedCount: number;
   resetRemoveSelection: () => void;
@@ -30,7 +30,7 @@ export const useBrandSettingHeader = ({
   enterAddMode,
   enterRemoveMode,
   hideDropdown,
-}: Params) => {
+}: Props) => {
   const navigation = useNavigation<MypageNavigationProp>();
 
   const dropdownItems: DropdownMenuItem[] = useMemo(

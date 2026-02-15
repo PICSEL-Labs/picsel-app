@@ -98,7 +98,7 @@ const RecordWriteStep = ({ onNext }: Props) => {
               onChangeText={setTitle}
               placeholder="✏️ 제목 입력"
               placeholderTextColor="#7E8392"
-              className="mb-2 text-primary-black headline-02"
+              className="mb-2 font-nanum-square-ac-regular text-primary-black headline-02"
               maxLength={20}
               multiline
               returnKeyType="next"
@@ -115,7 +115,7 @@ const RecordWriteStep = ({ onNext }: Props) => {
               placeholderTextColor="#7E8392"
               multiline
               textAlignVertical="top"
-              className="text-gray-900 body-rg-03"
+              className="font-nanum-square-ac-regular text-gray-900"
               style={{ minHeight: 180, lineHeight: 22 }}
               selectionColor="#FF6C9A"
             />

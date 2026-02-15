@@ -6,9 +6,7 @@ import { PicselDetailResponse } from '../types';
 export const useGetPicselDetail = (picselId: string) => {
   return useQuery<PicselDetailResponse>({
     queryKey: ['picselDetail', picselId],
-
     queryFn: () => getPicselDetailApi(picselId),
-
     enabled: !!picselId,
 
     staleTime: 1000 * 60 * 5,

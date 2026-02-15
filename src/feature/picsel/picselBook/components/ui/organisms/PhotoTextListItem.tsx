@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Image, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import {
   CONTENT_MAX_LINES,
@@ -12,9 +12,11 @@ import { CARD_SHADOW, TEXT_LIST_CARD } from '../../../constants/styles';
 
 import { PicselBookPicselItem } from '@/feature/picsel/picselBook/types';
 import { usePhotoFormat } from '@/feature/picsel/shared/utils/usePhotoFormat';
+import CachedImage from '@/shared/components/CachedImage';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import SparkleImages from '@/shared/images/Sparkle';
 import { cn } from '@/shared/lib/cn';
+import { getImageUrl } from '@/shared/utils/image';
 
 interface Props {
   picsel: PicselBookPicselItem;
@@ -22,6 +24,8 @@ interface Props {
   isSelected: boolean;
   onToggleSelection: (photoId: string) => void;
   onPress?: (photoId: string) => void;
+  onImageLoad?: (uri: string) => void;
+  onImageError?: (uri: string) => void;
 }
 
 const PhotoTextListItem = ({
@@ -30,6 +34,8 @@ const PhotoTextListItem = ({
   isSelected,
   onToggleSelection,
   onPress,
+  onImageLoad,
+  onImageError,
 }: Props) => {
   const { formatDate } = usePhotoFormat();
 
@@ -55,13 +61,15 @@ const PhotoTextListItem = ({
       }}>
       {/* 이미지 */}
       <View className="relative flex-shrink-0">
-        <Image
-          source={{ uri: picsel.representativeImagePath }}
+        <CachedImage
+          uri={getImageUrl(picsel.representativeImagePath)}
           style={{
             width: TEXT_LIST_CARD.IMAGE_WIDTH,
             height: TEXT_LIST_CARD.IMAGE_HEIGHT,
           }}
           resizeMode="cover"
+          onLoad={() => onImageLoad?.(picsel.picselId)}
+          onError={() => onImageError?.(picsel.picselId)}
         />
       </View>
 

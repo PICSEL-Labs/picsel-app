@@ -8,12 +8,12 @@ import React, {
 } from 'react';
 
 import { NaverMapMarkerOverlay } from '@mj-studio/react-native-naver-map';
-import Config from 'react-native-config';
 
 import { BrandData, StoreData, StoreDetail } from '../../types';
 import { getFavoriteImageUrl } from '../../utils/imageUtils';
 
 import { useFavoriteStore, useMapLocationStore } from '@/shared/store';
+import { getImageUrl } from '@/shared/utils/image';
 
 interface Props {
   store?: StoreData[];
@@ -100,7 +100,7 @@ const MapOverlay = memo(
           if (shouldShowBrandImage) {
             const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
             return {
-              imageConfig: { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` },
+              imageConfig: { httpUri: getImageUrl(finalImageUrl) },
               size: 48,
               zIndex: 2000,
             };
@@ -108,7 +108,7 @@ const MapOverlay = memo(
 
           return {
             imageConfig: {
-              httpUri: `${Config.IMAGE_URL}/common/search-marker.png`,
+              httpUri: getImageUrl('/common/search-marker.png'),
             },
             size: 22,
             zIndex: 2000,
@@ -118,7 +118,7 @@ const MapOverlay = memo(
         // 일반 스토어인 경우
         const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
         return {
-          imageConfig: { httpUri: `${Config.IMAGE_URL}${finalImageUrl}` },
+          imageConfig: { httpUri: getImageUrl(finalImageUrl) },
           size: isSelected ? 48 : 28,
           zIndex: isSelected ? 1000 : 0,
         };

@@ -6,6 +6,7 @@ import {
   NativeSyntheticEvent,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   View,
 } from 'react-native';
@@ -16,6 +17,7 @@ import { MonthGroup, YearGroup } from '../../../types';
 import PhotoCard from '@/feature/picsel/shared/components/ui/molecules/PhotoCard';
 import FilterViewSkeleton from '@/feature/picsel/shared/components/ui/molecules/Skeleton/FilterViewSkeleton';
 import { useImageDimensions } from '@/feature/picsel/shared/hooks/photo/useImageDimensions';
+import { useImagePreload } from '@/shared/hooks/useImagePreload';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 
 interface FlattenedMonthItem {
@@ -52,9 +54,20 @@ const MonthFilterView = forwardRef<FlatList, Props>(
       return items;
     }, [yearGroups]);
 
-    if (isLoading) {
-      return <FilterViewSkeleton type="month" />;
-    }
+    // 모든 사진 URI 추출
+    const allPhotoUris = useMemo(
+      () =>
+        flattenedData.flatMap(item =>
+          item.monthGroup.photos.map(photo => photo.uri),
+        ),
+      [flattenedData],
+    );
+
+    const { isImagesLoaded, handleImageLoad, handleImageError } =
+      useImagePreload(allPhotoUris);
+
+    const showSkeleton =
+      isLoading || (!isImagesLoaded && flattenedData.length > 0);
 
     const renderMonthSection = ({ item }: { item: FlattenedMonthItem }) => (
       <View className="mb-6">
@@ -78,6 +91,8 @@ const MonthFilterView = forwardRef<FlatList, Props>(
                   imageWidth={imageWidth}
                   imageHeight={imageHeight}
                   showYear={false}
+                  onImageLoad={handleImageLoad}
+                  onImageError={handleImageError}
                 />
               </View>
             ))}
@@ -87,25 +102,41 @@ const MonthFilterView = forwardRef<FlatList, Props>(
     );
 
     return (
-      <FlatList
-        ref={ref}
-        data={flattenedData}
-        renderItem={renderMonthSection}
-        keyExtractor={(item, index) =>
-          `${item.year}-${item.monthGroup.month}-${index}`
-        }
-        showsVerticalScrollIndicator={false}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        contentContainerStyle={{
-          paddingHorizontal: HORIZONTAL_PADDING,
-          paddingBottom: 40,
-          paddingTop: 12,
-        }}
-      />
+      <View style={styles.container}>
+        {flattenedData.length > 0 && (
+          <FlatList
+            style={{ opacity: showSkeleton ? 0 : 1 }}
+            ref={ref}
+            data={flattenedData}
+            renderItem={renderMonthSection}
+            keyExtractor={(item, index) =>
+              `${item.year}-${item.monthGroup.month}-${index}`
+            }
+            showsVerticalScrollIndicator={false}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+            contentContainerStyle={{
+              paddingHorizontal: HORIZONTAL_PADDING,
+              paddingBottom: 40,
+              paddingTop: 12,
+            }}
+          />
+        )}
+        {showSkeleton && (
+          <View style={StyleSheet.absoluteFill}>
+            <FilterViewSkeleton type="month" />
+          </View>
+        )}
+      </View>
     );
   },
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 MonthFilterView.displayName = 'MonthFilterView';
 

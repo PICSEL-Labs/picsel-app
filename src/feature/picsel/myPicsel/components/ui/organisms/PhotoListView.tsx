@@ -1,9 +1,10 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 
 import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  StyleSheet,
   View,
 } from 'react-native';
 
@@ -12,6 +13,7 @@ import { HORIZONTAL_PADDING, ITEM_SPACING } from '../../../constants/photoGrid';
 import GridPhotoSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/GridPhotoSkeleton';
 import SelectablePhotoCard from '@/feature/picsel/shared/components/ui/molecules/SelectablePhotoCard';
 import { useImageDimensions } from '@/feature/picsel/shared/hooks/photo/useImageDimensions';
+import { useImagePreload } from '@/shared/hooks/useImagePreload';
 
 export interface Photo {
   id: string;
@@ -50,18 +52,11 @@ const PhotoListView = forwardRef<FlatList, Props>(
       aspectRatio: 1.5,
     });
 
-    if (isLoading) {
-      return (
-        <GridPhotoSkeleton
-          imageWidth={imageWidth}
-          imageHeight={imageHeight}
-          columns={2}
-          itemSpacing={ITEM_SPACING}
-          count={6}
-          horizontalPadding={HORIZONTAL_PADDING}
-        />
-      );
-    }
+    const uris = useMemo(() => data.map(p => p.uri), [data]);
+    const { isImagesLoaded, handleImageLoad, handleImageError } =
+      useImagePreload(uris);
+
+    const showSkeleton = isLoading || (!isImagesLoaded && data.length > 0);
 
     const renderPhoto = ({
       item: photo,
@@ -88,26 +83,45 @@ const PhotoListView = forwardRef<FlatList, Props>(
             isSelected={isSelected}
             showYear={showYear}
             onToggleSelection={onToggleSelection}
+            onImageLoad={handleImageLoad}
+            onImageError={handleImageError}
           />
         </View>
       );
     };
 
     return (
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        ref={ref}
-        data={data}
-        renderItem={renderPhoto}
-        keyExtractor={item => item.id}
-        numColumns={2}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        contentContainerStyle={{
-          paddingHorizontal: HORIZONTAL_PADDING,
-          paddingBottom: 40,
-        }}
-      />
+      <View className="flex-1">
+        {data.length > 0 && (
+          <FlatList
+            style={{ opacity: showSkeleton ? 0 : 1 }}
+            showsVerticalScrollIndicator={false}
+            ref={ref}
+            data={data}
+            renderItem={renderPhoto}
+            keyExtractor={item => item.id}
+            numColumns={2}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+            contentContainerStyle={{
+              paddingHorizontal: HORIZONTAL_PADDING,
+              paddingBottom: 40,
+            }}
+          />
+        )}
+        {showSkeleton && (
+          <View style={StyleSheet.absoluteFill}>
+            <GridPhotoSkeleton
+              imageWidth={imageWidth}
+              imageHeight={imageHeight}
+              columns={2}
+              itemSpacing={ITEM_SPACING}
+              count={6}
+              horizontalPadding={HORIZONTAL_PADDING}
+            />
+          </View>
+        )}
+      </View>
     );
   },
 );

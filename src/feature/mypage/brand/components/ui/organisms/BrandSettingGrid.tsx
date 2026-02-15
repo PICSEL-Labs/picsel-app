@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { ImageBackground, Pressable, Text, View } from 'react-native';
-import Config from 'react-native-config';
 
 import { Brand } from '@/feature/brand/types';
 import { chunkArray } from '@/feature/brand/utils/arrayUtils';
 import CheckIcons from '@/shared/icons/CheckIcons';
 import { defaultShadow } from '@/shared/styles/shadows';
+import { getImageUrl } from '@/shared/utils/image';
 
 interface Props {
   brands: Brand[];
@@ -41,7 +41,7 @@ const BrandSettingGrid = ({
                     onPress={onPress ? () => onPress(item.brandId) : undefined}
                     disabled={isDisabled}>
                     <ImageBackground
-                      source={{ uri: Config.IMAGE_URL + item.iconImageUrl }}
+                      source={{ uri: getImageUrl(item.iconImageUrl) }}
                       className="h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full">
                       {isSelected && !isDisabled && (
                         <View className="w-full flex-1 items-center justify-center rounded-full bg-black/30">

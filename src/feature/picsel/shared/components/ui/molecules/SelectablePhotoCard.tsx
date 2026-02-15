@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Image, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { formatDate } from '../../../../myPicsel/utils/dateUtils';
 
 import SelectionCheckbox from '@/feature/picsel/myPicsel/components/ui/atoms/SelectionCheckbox';
+import CachedImage from '@/shared/components/CachedImage';
 import SparkleImages from '@/shared/images/Sparkle';
 
 interface Props {
@@ -20,6 +21,8 @@ interface Props {
   isSelected: boolean;
   showYear?: boolean;
   onToggleSelection: (photoId: string) => void;
+  onImageLoad?: (uri: string) => void;
+  onImageError?: (uri: string) => void;
 }
 
 const SelectablePhotoCard = ({
@@ -30,6 +33,8 @@ const SelectablePhotoCard = ({
   isSelected,
   showYear = true,
   onToggleSelection,
+  onImageLoad,
+  onImageError,
 }: Props) => {
   return (
     <View style={{ width: imageWidth }}>
@@ -48,10 +53,12 @@ const SelectablePhotoCard = ({
         <View
           className="overflow-hidden"
           style={{ width: imageWidth, height: imageHeight }}>
-          <Image
-            source={{ uri: photo.uri }}
+          <CachedImage
+            uri={photo.uri}
             style={{ width: imageWidth, height: imageHeight }}
             resizeMode="cover"
+            onLoad={() => onImageLoad?.(photo.uri)}
+            onError={() => onImageError?.(photo.uri)}
           />
         </View>
 

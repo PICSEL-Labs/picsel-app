@@ -2,9 +2,11 @@ import { GroupPhoto, MyPicselItem, YearGroup } from '../types';
 
 import { getMonthFromDate, getYearFromDate } from './dateUtils';
 
+import { getImageUrl } from '@/shared/utils/image';
+
 const toGroupPhoto = (item: MyPicselItem): GroupPhoto => ({
   id: item.picselId,
-  uri: item.imagePath,
+  uri: getImageUrl(item.imagePath),
   date: item.takenDate,
   storeName: item.storeName,
 });

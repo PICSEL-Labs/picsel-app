@@ -48,8 +48,6 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     handleMove,
   } = useMonthFolder({ year, month });
 
-  console.log(photoData);
-
   return (
     <ScreenLayout>
       <FolderHeader title={`${year}년 ${month}`} onBack={onBack} />

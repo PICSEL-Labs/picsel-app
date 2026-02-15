@@ -10,6 +10,7 @@ interface PicselUploadStore {
   locationName: string;
 
   picselbookId: string;
+  bookName: string;
 
   title: string;
   content: string;
@@ -25,7 +26,7 @@ interface PicselUploadStore {
     storeId: string,
     locationName?: string,
   ) => void;
-  setPicselbookId: (id: string) => void;
+  setPicselbookId: (id: string, name: string) => void;
   setRecord: (title: string, content: string) => void;
 
   getImagePaths: () => string[];
@@ -39,6 +40,7 @@ export const usePicselUploadStore = create<PicselUploadStore>((set, get) => ({
   storeId: '',
   locationName: '',
   picselbookId: '',
+  bookName: '',
   title: '',
   content: '',
 
@@ -61,7 +63,7 @@ export const usePicselUploadStore = create<PicselUploadStore>((set, get) => ({
       locationName: locationName,
     }),
 
-  setPicselbookId: id => set({ picselbookId: id }),
+  setPicselbookId: (id, name) => set({ picselbookId: id, bookName: name }),
 
   setRecord: (title, content) => set({ title, content }),
 
@@ -78,6 +80,7 @@ export const usePicselUploadStore = create<PicselUploadStore>((set, get) => ({
       storeId: '',
       locationName: '',
       picselbookId: '',
+      bookName: '',
       title: '',
       content: '',
     }),

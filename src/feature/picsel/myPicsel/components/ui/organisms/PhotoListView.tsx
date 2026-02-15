@@ -91,7 +91,7 @@ const PhotoListView = forwardRef<FlatList, Props>(
     };
 
     return (
-      <View style={styles.container}>
+      <View className="flex-1">
         {data.length > 0 && (
           <FlatList
             style={{ opacity: showSkeleton ? 0 : 1 }}
@@ -125,12 +125,6 @@ const PhotoListView = forwardRef<FlatList, Props>(
     );
   },
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 PhotoListView.displayName = 'PhotoListView';
 

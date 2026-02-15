@@ -6,11 +6,11 @@ import { Keyboard } from 'react-native';
 import { withdrawApi } from '../api/withdrawApi';
 import { ETC_REASON_ID } from '../constants/withdrawalText';
 
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 
 export const useWithdrawal = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<MypageNavigationProp>();
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [etcReason, setEtcReason] = useState('');
 

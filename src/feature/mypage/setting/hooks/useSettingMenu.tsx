@@ -9,7 +9,7 @@ import {
   SETTING_MENU_ITEMS,
 } from '../constants/settingMenuItems';
 
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import BellIcons from '@/shared/icons/BellIcons';
 import MypageIcons from '@/shared/icons/MypageIcons';
@@ -30,7 +30,7 @@ const getIconByType = (iconType?: string) => {
 };
 
 export const useSettingMenu = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<MypageNavigationProp>();
 
   const handleAccountManage = useCallback(() => {
     navigation.navigate('MypageAccount');

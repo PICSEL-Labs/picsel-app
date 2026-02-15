@@ -8,12 +8,12 @@ import {
   MOCK_NOTIFICATIONS,
 } from '@/feature/mypage/notification';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import MypageIcons from '@/shared/icons/MypageIcons';
 
 const NotificationScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<MypageNavigationProp>();
 
   // TODO: 실제 알림 데이터로 교체
   const notifications = MOCK_NOTIFICATIONS;

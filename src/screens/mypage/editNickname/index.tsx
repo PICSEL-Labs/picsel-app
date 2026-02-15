@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAvoidingView, Platform, View, Text } from 'react-native';
 
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { HighlightedText } from '@/shared/components/HighlightedText';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import {
@@ -16,9 +16,11 @@ import {
   updateNicknameApi,
 } from '@/shared/nickname';
 import { useUserStore } from '@/shared/store';
+import { useToastStore } from '@/shared/store/ui/toast';
 
 const EditNicknameScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<MypageNavigationProp>();
+  const { showToast } = useToastStore();
   const {
     userNickname: currentNickname,
     setUserNickname,
@@ -45,13 +47,11 @@ const EditNicknameScreen = () => {
       setUserNickname(response.data.userNickname);
       setEmail(response.data.email);
 
-      navigation.navigate('Mypage', {
-        toastMessage: '닉네임 변경을 완료했어요',
-      });
+      showToast('닉네임 변경을 완료했어요');
+      navigation.getParent()?.goBack();
     } catch (error) {
-      navigation.navigate('Mypage', {
-        toastMessage: '닉네임 변경에 실패했어요',
-      });
+      showToast('닉네임 변경에 실패했어요');
+      navigation.getParent()?.goBack();
     }
   };
 

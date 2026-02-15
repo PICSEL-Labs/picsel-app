@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import MypageTopBar from '@/feature/mypage/main/components/ui/atoms/MypageTopBar';
@@ -9,36 +9,35 @@ import MypageMenuItem from '@/feature/mypage/main/components/ui/molecules/Mypage
 import { useMypageMenu } from '@/feature/mypage/main/hooks/useMypageMenu';
 import { useGetUser } from '@/feature/mypage/main/queries/useGetUser';
 import ListGroup from '@/feature/mypage/shared/components/ui/organisms/ListGroup';
-import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import StarIcons from '@/shared/icons/StarIcons';
-import { useToastStore } from '@/shared/store/ui/toast';
 
 const MypageScreen = () => {
   const { data: user } = useGetUser();
   const { menuItems } = useMypageMenu();
   const navigation = useNavigation<RootStackNavigationProp>();
-  const route = useRoute<RouteProp<MainNavigationProps, 'Mypage'>>();
-  const { showToast } = useToastStore();
-
-  useEffect(() => {
-    if (route.params?.toastMessage) {
-      showToast(route.params.toastMessage);
-      navigation.setParams({ toastMessage: undefined });
-    }
-  }, [route.params?.toastMessage]);
 
   return (
     <ScreenLayout>
       <MypageTopBar
-        onPressNotification={() => navigation.navigate('NotificationScreen')}
-        onPressSetting={() => navigation.navigate('MypageSetting')}
+        onPressNotification={() =>
+          navigation.navigate('MypageRoute', {
+            screen: 'NotificationScreen',
+          })
+        }
+        onPressSetting={() =>
+          navigation.navigate('MypageRoute', { screen: 'MypageSetting' })
+        }
       />
 
       <NicknameSection
         nickname={user?.userNickname ?? null}
-        onPressEdit={() => navigation.navigate('EditNicknameScreen')}
+        onPressEdit={() =>
+          navigation.navigate('MypageRoute', {
+            screen: 'EditNicknameScreen',
+          })
+        }
       />
 
       <View className="mb-4 mt-4 px-4" style={{ gap: 12 }}>
@@ -47,7 +46,11 @@ const MypageScreen = () => {
           description="내가 찜한 브랜드를 한눈에 보고 관리해요"
           backgroundColor="bg-pink-100"
           icon={<StarIcons shape="empty" width={24} height={24} />}
-          onPress={() => navigation.navigate('BrandSettingScreen')}
+          onPress={() =>
+            navigation.navigate('MypageRoute', {
+              screen: 'BrandSettingScreen',
+            })
+          }
         />
 
         <MypageMenuItem

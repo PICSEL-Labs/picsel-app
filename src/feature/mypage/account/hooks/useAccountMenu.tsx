@@ -3,13 +3,13 @@ import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { useUserStore } from '@/shared/store';
 
 export const useAccountMenu = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+  const navigation = useNavigation<MypageNavigationProp>();
   const { logout } = useUserStore();
 
   const executeLogout = useCallback(() => {

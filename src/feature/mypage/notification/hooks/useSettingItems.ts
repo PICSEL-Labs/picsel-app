@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
 
-import {
-  NOTIFICATION_SETTING_ITEMS,
-  CONSENT_SUB_TEXT_PREFIX,
-} from '../constants/notificationSettingTexts';
-import { formatISOToDate } from '../utils/formatDate';
+import { NOTIFICATION_SETTING_ITEMS } from '../constants/notificationSettingTexts';
 
 import { useNotificationSetting } from './useNotificationSetting';
 
@@ -28,10 +24,6 @@ export const useSettingItems = () => {
         ...NOTIFICATION_SETTING_ITEMS[1],
         value: isEventNewsEnabled,
         onValueChange: handleEventNewsToggle,
-        subText:
-          isEventNewsEnabled && marketingConsentedAt
-            ? `${CONSENT_SUB_TEXT_PREFIX} ${formatISOToDate(marketingConsentedAt)}`
-            : undefined,
       },
     ],
     [

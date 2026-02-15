@@ -66,21 +66,20 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
       setSelectedCover('default');
     };
 
-    const handleBackdropPress = () => {
-      // 키보드 먼저 닫기
-      Keyboard.dismiss();
+    const dismiss = () => {
+      if (ref && 'current' in ref) {
+        ref.current?.dismiss();
+      }
+    };
 
-      // 약간의 딜레이 후 바텀시트 닫기
-      setTimeout(() => {
-        // @ts-ignore
-        ref?.current?.dismiss();
-      }, 100);
+    const handleBackdropPress = () => {
+      Keyboard.dismiss();
+      setTimeout(dismiss, 100);
     };
 
     const handleComplete = () => {
       onSubmit(bookName.trim(), selectedCover);
-      // @ts-ignore
-      ref?.current?.dismiss();
+      dismiss();
     };
 
     const handleSelectedCover = () => {
@@ -89,8 +88,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
         variant: 'cover',
         bookName: bookName,
       });
-      // @ts-ignore
-      ref?.current?.dismiss();
+      dismiss();
     };
 
     const renderBackdrop = (props: any) => (

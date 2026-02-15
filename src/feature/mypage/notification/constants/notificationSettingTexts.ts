@@ -53,5 +53,3 @@ export const EVENT_AGREE_CONFIRM_ALERT = {
     `이벤트·혜택 등 마케팅 정보 수신에\n동의하셨습니다\n설정에서 언제든 변경할 수 있어요\n(동의 일자: ${dateStr})`,
   confirmText: '확인',
 } as const;
-
-export const CONSENT_SUB_TEXT_PREFIX = '수신동의 일자:' as const;

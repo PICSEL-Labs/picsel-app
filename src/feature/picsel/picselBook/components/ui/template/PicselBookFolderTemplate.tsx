@@ -24,9 +24,15 @@ interface Props {
   bookId: string;
   bookName?: string;
   onBack: () => void;
+  onPhotoPress: (picselId: string) => void;
 }
 
-const PicselBookFolderTemplate = ({ bookId, bookName = '', onBack }: Props) => {
+const PicselBookFolderTemplate = ({
+  bookId,
+  bookName = '',
+  onBack,
+  onPhotoPress,
+}: Props) => {
   const {
     photoData,
     rawData,
@@ -142,6 +148,7 @@ const PicselBookFolderTemplate = ({ bookId, bookName = '', onBack }: Props) => {
               isLoading={isLoading}
               onScroll={handleScroll}
               onToggleSelection={toggleSelection}
+              onPhotoPress={onPhotoPress}
             />
           )}
           <FloatingActionButtons

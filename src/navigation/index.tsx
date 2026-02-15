@@ -11,6 +11,7 @@ import PicselTabScreen from '@/screens/picsel';
 import MonthFolderScreen from '@/screens/picsel/myPicsel/monthFolder';
 import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
 import PicselBookFolderScreen from '@/screens/picsel/picselBook/picselBookFolder';
+import PicselDetailScreen from '@/screens/picsel/picselDetail';
 import PicselUploadScreen from '@/screens/picsel/picselUpload';
 import RegisterPhotoScreen from '@/screens/picsel/picselUpload/registerPhoto';
 import SelectPhotoScreen from '@/screens/picsel/picselUpload/selectPhoto';
@@ -37,6 +38,7 @@ export type MainNavigationProps = {
   SelectExtraPhoto: { variant: 'extra' };
   RegisterPhoto: undefined;
   PicselUpload: undefined;
+  PicselDetail: { picselId: string };
 
   // Picsel Tab & Book
   PicselTab: undefined;
@@ -93,6 +95,8 @@ const MainRoute = () => {
       <Stack.Screen name="RegisterPhoto" component={RegisterPhotoScreen} />
 
       <Stack.Screen name="PicselUpload" component={PicselUploadScreen} />
+
+      <Stack.Screen name="PicselDetail" component={PicselDetailScreen} />
 
       {/* Picsel Tab & Book */}
       <Stack.Screen name="PicselTab" component={PicselTabScreen} />

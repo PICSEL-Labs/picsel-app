@@ -80,10 +80,10 @@ const RecordWriteStep = () => {
       className="flex-1">
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        keyboardDismissMode="on-drag"
+        keyboardDismissMode="none"
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
         bounces={false}
-        onScrollBeginDrag={() => Keyboard.dismiss()}
         className="flex-1">
         <UploadStepHeader
           title={

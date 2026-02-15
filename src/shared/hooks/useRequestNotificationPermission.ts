@@ -9,12 +9,13 @@ export const useRequestNotificationPermission = () => {
   const hasRequested = useNotificationPromptStore(
     state => state.hasRequestedNotification,
   );
+  const hasHydrated = useNotificationPromptStore(state => state._hasHydrated);
   const setHasRequested = useNotificationPromptStore(
     state => state.setHasRequestedNotification,
   );
 
   useEffect(() => {
-    if (hasRequested) {
+    if (!hasHydrated || hasRequested) {
       return;
     }
 
@@ -40,5 +41,5 @@ export const useRequestNotificationPermission = () => {
     };
 
     requestPermission();
-  }, [hasRequested, setHasRequested]);
+  }, [hasHydrated, hasRequested, setHasRequested]);
 };

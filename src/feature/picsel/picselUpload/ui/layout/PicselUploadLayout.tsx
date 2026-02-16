@@ -26,9 +26,19 @@ const PicselUploadLayout = ({ children, onBack }: Props) => {
     }
   };
 
+  const handleClose = () => {
+    confirmExitUpload(() => {
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      } else {
+        navigation.navigate('Home');
+      }
+    });
+  };
+
   return (
     <ScreenLayout>
-      <PicselUploadHeader onBack={handleBack} onClose={confirmExitUpload} />
+      <PicselUploadHeader onBack={handleBack} onClose={handleClose} />
       {children}
     </ScreenLayout>
   );

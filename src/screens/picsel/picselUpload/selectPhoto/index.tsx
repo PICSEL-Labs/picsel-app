@@ -53,10 +53,10 @@ const SelectPhotoScreen = () => {
   const handleSelectedCompleted = () => {
     if (variant === 'main') {
       setMainPhoto(selectedUris[0]);
-      navigation.navigate('PicselUpload');
+      navigation.replace('PicselUpload');
     } else if (variant === 'extra') {
       addExtraPhotos(selectedUris);
-      navigation.navigate('PicselUpload');
+      navigation.replace('PicselUpload');
     } else if (variant === 'cover') {
       picselBookRef.current?.present();
     }

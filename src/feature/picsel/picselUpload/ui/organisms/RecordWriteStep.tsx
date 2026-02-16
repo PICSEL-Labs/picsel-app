@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import {
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -14,19 +14,19 @@ import { usePicselUploadStore } from '../../hooks/usePicselUploadStore';
 import { useAddPicselToPicselBook } from '../../mutations/useAddPicselToPicselBook';
 
 import UploadStepHeader from '@/feature/picsel/shared/components/ui/molecules/UploadStepHeader';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 import Button from '@/shared/ui/atoms/Button';
 
-interface Props {
-  onNext: () => void;
-}
-const RecordWriteStep = ({ onNext }: Props) => {
+const RecordWriteStep = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const {
     title: savedTitle,
     content: savedContent,
     takenDate,
     storeId,
     picselbookId,
+    bookName,
     setRecord,
     getImagePaths,
     resetUploadData,
@@ -50,14 +50,21 @@ const RecordWriteStep = ({ onNext }: Props) => {
     };
 
     uploadPicsel(requestPayload, {
-      onSuccess: () => {
+      onSuccess: data => {
+        navigation.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'PicselBookFolder',
+              params: { bookId: picselbookId, bookName: bookName },
+            },
+            { name: 'PicselDetail', params: { picselId: data.data.picselId } },
+          ],
+        });
+
         setRecord(title, content);
         resetUploadData();
         resetPhotoStore();
-
-        // TODO : 다음 화면(완료 페이지 등)으로 이동
-        onNext();
-        console.log('업로드 성공! 완료 페이지로 이동 필요');
       },
       onError: error => {
         console.log('픽셀 업로드 중 에러 발생:', error.message);
@@ -73,10 +80,10 @@ const RecordWriteStep = ({ onNext }: Props) => {
       className="flex-1">
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        keyboardDismissMode="on-drag"
+        keyboardDismissMode="none"
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
         bounces={false}
-        onScrollBeginDrag={() => Keyboard.dismiss()}
         className="flex-1">
         <UploadStepHeader
           title={
@@ -98,9 +105,8 @@ const RecordWriteStep = ({ onNext }: Props) => {
               onChangeText={setTitle}
               placeholder="✏️ 제목 입력"
               placeholderTextColor="#7E8392"
-              className="mb-2 text-primary-black headline-02"
+              className="mb-2 font-nanum-square-ac-regular text-primary-black headline-02"
               maxLength={20}
-              multiline
               returnKeyType="next"
               style={{ lineHeight: 20 }}
               selectionColor="#FF6C9A"
@@ -114,15 +120,16 @@ const RecordWriteStep = ({ onNext }: Props) => {
               }
               placeholderTextColor="#7E8392"
               multiline
+              scrollEnabled
               textAlignVertical="top"
-              className="text-gray-900 body-rg-03"
+              className="font-nanum-square-ac-regular text-gray-900"
               style={{ minHeight: 180, lineHeight: 22 }}
               selectionColor="#FF6C9A"
             />
           </View>
         </View>
       </ScrollView>
-      <View className="absolute bottom-[-5px] w-full items-center">
+      <View className="w-full items-center">
         <Button
           text="완료"
           color={isFilled ? 'active' : 'disabled'}

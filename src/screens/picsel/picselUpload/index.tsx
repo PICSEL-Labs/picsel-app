@@ -16,7 +16,6 @@ const PicselUploadScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const { step, goNext, goBack, isFirstStep } = useUploadStep();
-
   const handleBack = () => {
     if (isFirstStep) {
       navigation.goBack();
@@ -34,7 +33,7 @@ const PicselUploadScreen = () => {
       case UPLOAD_STEP.PICSEL_BOOK_SELECT:
         return <PicselBookSelectStep onNext={goNext} />;
       case UPLOAD_STEP.RECORD_WRITE:
-        return <RecordWriteStep onNext={goNext} />;
+        return <RecordWriteStep />;
       default:
         return null;
     }

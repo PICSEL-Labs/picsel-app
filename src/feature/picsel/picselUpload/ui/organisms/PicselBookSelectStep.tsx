@@ -36,7 +36,7 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
 
     if (targetBook) {
       if (targetBook) {
-        setPicselbookId(targetBook.picselbookId);
+        setPicselbookId(targetBook.picselbookId, targetBook.bookName);
 
         onNext(targetBook.picselbookId, targetBook.bookName);
       }

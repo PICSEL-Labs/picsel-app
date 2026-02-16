@@ -19,11 +19,16 @@ const PicselBookFolderScreen = () => {
     navigation.goBack();
   };
 
+  const handlePhotoPress = (picselId: string) => {
+    navigation.navigate('PicselDetail', { picselId });
+  };
+
   return (
     <PicselBookFolderTemplate
       bookId={bookId}
       bookName={bookName}
       onBack={handleBack}
+      onPhotoPress={handlePhotoPress}
     />
   );
 };

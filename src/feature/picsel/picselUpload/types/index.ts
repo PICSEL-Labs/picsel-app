@@ -1,3 +1,5 @@
+import { CommonResponseType } from '@/shared/api/types';
+
 // 픽셀 추가 요청
 export interface PicselUploadRequest {
   picselbookId: string;
@@ -9,9 +11,13 @@ export interface PicselUploadRequest {
 }
 
 // 픽셀 추가 응답
-export interface PicselUploadResponse {
+export interface PicselUploadResult {
   picselId: string;
   picselbookId: string;
   representativeImagePath: string;
   createdAt: string;
+}
+
+export interface PicselUploadResponse extends CommonResponseType {
+  data: PicselUploadResult;
 }

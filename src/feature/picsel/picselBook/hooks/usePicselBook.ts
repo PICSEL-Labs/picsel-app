@@ -114,13 +114,15 @@ export const usePicselBook = () => {
 
     createPicselBook(payload, {
       onSuccess: response => {
+        showToast(`"${bookName}"을 추가했어요`, 60);
+
         navigation.pop(1);
         picselBookRef.current?.dismiss();
 
         const newBookId = response.data?.picselbookId;
 
         if (newBookId) {
-          setPicselbookId(newBookId);
+          setPicselbookId(newBookId, bookName);
           refetch();
         }
 
@@ -150,6 +152,8 @@ export const usePicselBook = () => {
     // 픽셀 업로드 내 픽셀북 선택 단계일 때
     if (isUploadStep) {
       setSelectedBookIds(prev => (prev.includes(bookId) ? [] : [bookId]));
+
+      setPicselbookId(bookId, bookName);
       return;
     }
 

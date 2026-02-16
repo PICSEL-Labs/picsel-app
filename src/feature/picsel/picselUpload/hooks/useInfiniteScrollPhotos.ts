@@ -22,8 +22,10 @@ export const useInfiniteScrollPhotos = () => {
 
     loadingRef.current = true;
     try {
+      const fetchCount = endCursor ? 100 : 15;
+
       const { edges, page_info } = await CameraRoll.getPhotos({
-        first: 40,
+        first: fetchCount,
         after: endCursor,
         assetType: 'Photos',
       });

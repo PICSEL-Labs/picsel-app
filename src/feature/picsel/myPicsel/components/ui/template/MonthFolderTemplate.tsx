@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { View } from 'react-native';
-
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import { useMonthFolder } from '@/feature/picsel/myPicsel/hooks/useMonthFolder';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
@@ -80,20 +78,16 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         onMove={handleMove}
       />
 
-      {!isSelecting && (
-        <View className="absolute bottom-0 right-4">
-          <FloatingActionButtons
-            isSelecting={isSelecting}
-            showUpButton={showUpButton}
-            showFunctionButtons={showFunctionButtons}
-            onToggleFunctionButtons={toggleFunctionButtons}
-            onScrollToTop={scrollToTop}
-            onAlbumPress={handleAlbumPress}
-            onQrPress={handleQrPress}
-            onCloseFunctionButtons={closeFunctionButtons}
-          />
-        </View>
-      )}
+      <FloatingActionButtons
+        isSelecting={isSelecting}
+        showUpButton={showUpButton}
+        showFunctionButtons={showFunctionButtons}
+        onToggleFunctionButtons={toggleFunctionButtons}
+        onScrollToTop={scrollToTop}
+        onAlbumPress={handleAlbumPress}
+        onQrPress={handleQrPress}
+        onCloseFunctionButtons={closeFunctionButtons}
+      />
     </ScreenLayout>
   );
 };

@@ -7,9 +7,7 @@ import AddBookButton from '../organisms/AddBookButton';
 import PicselBookList from '../organisms/PicselBookList';
 
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
-import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
-import FunctionButton from '@/feature/picsel/shared/components/ui/atoms/Button/FunctionButton';
-import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
+import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
@@ -55,17 +53,16 @@ const PicselBookTemplate = () => {
     return (
       <EmptyStateLayout
         floatingButton={
-          <View className="absolute bottom-8 right-0">
-            {showFunctionButtons ? (
-              <FunctionButton
-                onAlbumPress={handleAlbumPress}
-                onQrPress={handleQrPress}
-                onClose={closeFunctionButtons}
-              />
-            ) : (
-              <AddButton onPress={toggleFunctionButtons} />
-            )}
-          </View>
+          <FloatingActionButtons
+            isSelecting={false}
+            showUpButton={false}
+            showFunctionButtons={showFunctionButtons}
+            onScrollToTop={scrollToTop}
+            onToggleFunctionButtons={toggleFunctionButtons}
+            onAlbumPress={handleAlbumPress}
+            onQrPress={handleQrPress}
+            onCloseFunctionButtons={closeFunctionButtons}
+          />
         }>
         <View className="flex-1">
           <View className="absolute left-[41px] top-16">
@@ -116,27 +113,16 @@ const PicselBookTemplate = () => {
         />
       )}
 
-      {!isSelecting && (
-        <View className="absolute bottom-4 right-4">
-          {showUpButton && (
-            <View
-              style={{
-                marginBottom: showFunctionButtons ? 200 : 56,
-              }}>
-              <UpButton onPress={scrollToTop} />
-            </View>
-          )}
-          {showFunctionButtons ? (
-            <FunctionButton
-              onAlbumPress={handleAlbumPress}
-              onQrPress={handleQrPress}
-              onClose={closeFunctionButtons}
-            />
-          ) : (
-            <AddButton onPress={toggleFunctionButtons} />
-          )}
-        </View>
-      )}
+      <FloatingActionButtons
+        isSelecting={isSelecting}
+        showUpButton={showUpButton}
+        showFunctionButtons={showFunctionButtons}
+        onScrollToTop={scrollToTop}
+        onToggleFunctionButtons={toggleFunctionButtons}
+        onAlbumPress={handleAlbumPress}
+        onQrPress={handleQrPress}
+        onCloseFunctionButtons={closeFunctionButtons}
+      />
     </View>
   );
 };

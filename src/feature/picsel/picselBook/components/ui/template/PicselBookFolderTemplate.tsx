@@ -1,15 +1,11 @@
 import React from 'react';
 
-import { View } from 'react-native';
-
 import { PicselBookEditType } from '../../../types';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import PhotoTextListView from '@/feature/picsel/picselBook/components/ui/organisms/PhotoTextListView';
 import { usePicselBookFolder } from '@/feature/picsel/picselBook/hooks/usePicselBookFolder';
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
-import AddButton from '@/feature/picsel/shared/components/ui/atoms/Button/AddButton';
-import FunctionButton from '@/feature/picsel/shared/components/ui/atoms/Button/FunctionButton';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
@@ -109,20 +105,17 @@ const PicselBookFolderTemplate = ({
       {photoData.length === 0 && !isLoading ? (
         <EmptyStateLayout
           floatingButton={
-            <>
-              <UploadTooltip bottom={120} />
-              <View className="absolute bottom-14 right-1">
-                {showFunctionButtons ? (
-                  <FunctionButton
-                    onAlbumPress={handleAlbumPress}
-                    onQrPress={handleQrPress}
-                    onClose={closeFunctionButtons}
-                  />
-                ) : (
-                  <AddButton onPress={toggleFunctionButtons} />
-                )}
-              </View>
-            </>
+            <FloatingActionButtons
+              isSelecting={false}
+              showUpButton={false}
+              showFunctionButtons={showFunctionButtons}
+              onScrollToTop={scrollToTop}
+              onToggleFunctionButtons={toggleFunctionButtons}
+              onAlbumPress={handleAlbumPress}
+              onQrPress={handleQrPress}
+              onCloseFunctionButtons={closeFunctionButtons}
+              tooltip={<UploadTooltip />}
+            />
           }>
           <EmptyMessage message="픽셀북이 비어있어요" />
         </EmptyStateLayout>

@@ -7,16 +7,18 @@ export const useConfirmExit = () => {
   const { reset: resetPhotoStore } = usePhotoStore();
   const { resetUploadData } = usePicselUploadStore();
 
-  const confirmExitUpload = (onExit: () => void) => {
-    const handleConfirmExit = () => {
-      resetPhotoStore();
-      resetUploadData();
-      onExit();
-    };
+  const resetAllUploadData = () => {
+    resetPhotoStore();
+    resetUploadData();
+  };
 
+  const confirmExitUpload = (onExit: () => void) => {
     showConfirmModal(
       '지금까지 입력한 정보가\n모두 지워져요',
-      handleConfirmExit,
+      () => {
+        resetAllUploadData();
+        onExit();
+      },
       {
         title: '업로드를 종료할까요?',
         confirmText: '종료',

@@ -3,8 +3,6 @@ import React from 'react';
 import { View } from 'react-native';
 
 import EmptyStateLayout from '../../../../shared/components/layouts/EmptyStateLayout';
-import AddButton from '../../../../shared/components/ui/atoms/Button/AddButton';
-import FunctionButton from '../../../../shared/components/ui/atoms/Button/FunctionButton';
 import EmptyMessage from '../../../../shared/components/ui/molecules/EmptyMessage';
 import UploadTooltip from '../../../../shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '../../../../shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
@@ -14,7 +12,7 @@ import DateFilterButton from '../atoms/DateFilterButton';
 import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/MonthFilterView';
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
-import UpButton from '@/feature/picsel/shared/components/ui/atoms/Button/UpButton';
+import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
@@ -61,20 +59,17 @@ const MyPicselTemplate = () => {
     return (
       <EmptyStateLayout
         floatingButton={
-          <>
-            <View className="absolute bottom-8 right-0.5">
-              <UploadTooltip />
-              {showFunctionButtons ? (
-                <FunctionButton
-                  onAlbumPress={handleAlbumPress}
-                  onQrPress={handleQrPress}
-                  onClose={closeFunctionButtons}
-                />
-              ) : (
-                <AddButton onPress={toggleFunctionButtons} />
-              )}
-            </View>
-          </>
+          <FloatingActionButtons
+            isSelecting={false}
+            showUpButton={false}
+            showFunctionButtons={showFunctionButtons}
+            onScrollToTop={scrollToTop}
+            onToggleFunctionButtons={toggleFunctionButtons}
+            onAlbumPress={handleAlbumPress}
+            onQrPress={handleQrPress}
+            onCloseFunctionButtons={closeFunctionButtons}
+            tooltip={<UploadTooltip />}
+          />
         }>
         <EmptyMessage message="당신의 네컷사진을 올려보세요!" />
       </EmptyStateLayout>
@@ -140,25 +135,16 @@ const MyPicselTemplate = () => {
             />
           </View>
 
-          <View className="absolute bottom-4 right-4">
-            {showUpButton && (
-              <View
-                style={{
-                  marginBottom: showFunctionButtons ? 200 : 56,
-                }}>
-                <UpButton onPress={scrollToTop} />
-              </View>
-            )}
-            {showFunctionButtons ? (
-              <FunctionButton
-                onAlbumPress={handleAlbumPress}
-                onQrPress={handleQrPress}
-                onClose={closeFunctionButtons}
-              />
-            ) : (
-              <AddButton onPress={toggleFunctionButtons} />
-            )}
-          </View>
+          <FloatingActionButtons
+            isSelecting={isSelecting}
+            showUpButton={showUpButton}
+            showFunctionButtons={showFunctionButtons}
+            onScrollToTop={scrollToTop}
+            onToggleFunctionButtons={toggleFunctionButtons}
+            onAlbumPress={handleAlbumPress}
+            onQrPress={handleQrPress}
+            onCloseFunctionButtons={closeFunctionButtons}
+          />
         </>
       )}
     </View>

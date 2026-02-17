@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { View } from 'react-native';
 
@@ -16,6 +16,7 @@ interface FloatingActionButtonsProps {
   onAlbumPress: () => void;
   onQrPress: () => void;
   onCloseFunctionButtons: () => void;
+  tooltip?: ReactNode;
 }
 
 const FloatingActionButtons = ({
@@ -27,15 +28,17 @@ const FloatingActionButtons = ({
   onAlbumPress,
   onQrPress,
   onCloseFunctionButtons,
+  tooltip,
 }: FloatingActionButtonsProps) => {
   if (isSelecting) {
     return null;
   }
 
   return (
-    <View className="absolute bottom-11 right-4">
+    <View className="absolute bottom-3 right-4 items-end">
+      {!showFunctionButtons && tooltip}
       {showUpButton && (
-        <View className="mb-14">
+        <View className="mb-4">
           <UpButton onPress={onScrollToTop} />
         </View>
       )}

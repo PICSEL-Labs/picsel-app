@@ -51,15 +51,18 @@ const SelectPhotoScreen = () => {
   const { handleSubmit } = usePicselBook();
 
   const handleSelectedCompleted = () => {
-    if (variant === 'main') {
-      setMainPhoto(selectedUris[0]);
-      navigation.replace('PicselUpload');
-    } else if (variant === 'extra') {
-      addExtraPhotos(selectedUris);
-      navigation.replace('PicselUpload');
-    } else if (variant === 'cover') {
-      picselBookRef.current?.present();
+    switch (variant) {
+      case 'cover':
+        picselBookRef.current?.present();
+        return;
+      case 'main':
+        setMainPhoto(selectedUris[0]);
+        break;
+      case 'extra':
+        addExtraPhotos(selectedUris);
+        break;
     }
+    navigation.replace('PicselUpload');
   };
 
   return (

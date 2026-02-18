@@ -43,13 +43,9 @@ const SelectablePhotoCard = ({
         {formatDate(photo.date, { showYear })}
       </Text>
 
-      {/* 선택 체크박스 */}
-      {isSelecting && <SelectionCheckbox isSelected={isSelected} />}
+      <Pressable onPress={() => isSelecting && onToggleSelection(photo.id)}>
+        {isSelecting && <SelectionCheckbox isSelected={isSelected} />}
 
-      <Pressable
-        onPress={() => isSelecting && onToggleSelection(photo.id)}
-        className="relative">
-        {/* 사진 */}
         <View
           className="overflow-hidden"
           style={{ width: imageWidth, height: imageHeight }}>
@@ -61,19 +57,18 @@ const SelectablePhotoCard = ({
             onError={() => onImageError?.(photo.uri)}
           />
         </View>
-
-        {/* 매장명 */}
-        <View
-          className="mt-1 flex-row items-center"
-          style={{ width: imageWidth }}>
-          <SparkleImages shape="icon-one" width={25} height={25} />
-          <Text
-            className="ml-1 flex-1 text-gray-900 body-rg-03"
-            numberOfLines={1}>
-            {photo.storeName}
-          </Text>
-        </View>
       </Pressable>
+
+      <View
+        className="mt-1 flex-row items-center"
+        style={{ width: imageWidth }}>
+        <SparkleImages shape="icon-one" width={25} height={25} />
+        <Text
+          className="ml-1 flex-1 text-gray-900 body-rg-03"
+          numberOfLines={1}>
+          {photo.storeName}
+        </Text>
+      </View>
     </View>
   );
 };

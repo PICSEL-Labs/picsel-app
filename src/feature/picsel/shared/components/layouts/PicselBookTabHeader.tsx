@@ -50,7 +50,7 @@ const PicselBookTabHeader = ({
         className="flex-1 flex-row items-center justify-center space-x-1 py-4"
         style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
         <BookIcons
-          shape={activeTab === 'book' ? 'fill' : 'gray'}
+          shape={activeTab === 'book' ? 'fill' : 'fill-gray'}
           height={24}
           width={24}
         />

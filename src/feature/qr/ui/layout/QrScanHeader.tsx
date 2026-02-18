@@ -14,12 +14,7 @@ const QrScanHeader = () => {
       <Text className="px-4 py-2 text-white title-01">QR 스캔</Text>
       <Pressable
         className="absolute right-4"
-        onPress={() => {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Home' }],
-          });
-        }}>
+        onPress={() => navigation.popToTop()}>
         <CloseIcons shape="white" width={24} height={24} />
       </Pressable>
     </View>

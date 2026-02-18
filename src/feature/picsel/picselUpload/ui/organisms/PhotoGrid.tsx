@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import {
   Dimensions,
@@ -36,10 +36,13 @@ export const PhotoGrid = ({
   onOpenCamera,
   onLoadMore,
 }: Props) => {
-  const data: GridItem[] = [
-    { type: 'camera' },
-    ...photos.map(photo => ({ type: 'photo' as const, photo })),
-  ];
+  const data: GridItem[] = useMemo(
+    () => [
+      { type: 'camera' },
+      ...photos.map(photo => ({ type: 'photo' as const, photo })),
+    ],
+    [photos],
+  );
 
   const renderItem = ({ item }: { item: GridItem }) => {
     if (item.type === 'camera') {
@@ -97,11 +100,11 @@ export const PhotoGrid = ({
     <FlatList
       data={data}
       numColumns={3}
-      keyExtractor={(_, idx) => idx.toString()}
+      keyExtractor={item => (item.type === 'camera' ? 'camera' : item.photo.id)}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
       onEndReached={onLoadMore}
-      onEndReachedThreshold={0.6}
+      onEndReachedThreshold={2.0}
       bounces={false}
       contentContainerStyle={{ paddingBottom: 100 }}
     />

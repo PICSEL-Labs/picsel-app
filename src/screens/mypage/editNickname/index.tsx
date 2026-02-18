@@ -1,59 +1,25 @@
 import React from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { KeyboardAvoidingView, Platform, View, Text } from 'react-native';
 
+import { useEditNickname } from '@/feature/mypage/account/hooks/useEditNickname';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
-import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { HighlightedText } from '@/shared/components/HighlightedText';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import {
   NicknameInput,
   NicknameFeedback,
   NicknameEditButton,
-  useNicknameValidation,
-  useKeyboardHeight,
-  updateNicknameApi,
 } from '@/shared/nickname';
-import { useUserStore } from '@/shared/store';
-import { useToastStore } from '@/shared/store/ui/toast';
 
 const EditNicknameScreen = () => {
-  const navigation = useNavigation<MypageNavigationProp>();
-  const { showToast } = useToastStore();
   const {
-    userNickname: currentNickname,
-    setUserNickname,
-    setEmail,
-  } = useUserStore();
-  const nicknameValidation = useNicknameValidation();
-  const { keyboardHeight } = useKeyboardHeight();
-
-  const isSameAsCurrentNickname =
-    nicknameValidation.userNickname === currentNickname;
-
-  const errorMessage = isSameAsCurrentNickname
-    ? '현재 닉네임과 동일한 닉네임이에요'
-    : nicknameValidation.errorMessage;
-
-  const handleSubmit = async () => {
-    if (!nicknameValidation.isAvailable || isSameAsCurrentNickname) {
-      return;
-    }
-
-    try {
-      const response = await updateNicknameApi(nicknameValidation.userNickname);
-
-      setUserNickname(response.data.userNickname);
-      setEmail(response.data.email);
-
-      showToast('닉네임 변경을 완료했어요');
-      navigation.getParent()?.goBack();
-    } catch (error) {
-      showToast('닉네임 변경에 실패했어요');
-      navigation.getParent()?.goBack();
-    }
-  };
+    nicknameValidation,
+    keyboardHeight,
+    errorMessage,
+    isSubmittable,
+    handleSubmit,
+  } = useEditNickname();
 
   return (
     <ScreenLayout>
@@ -84,18 +50,14 @@ const EditNicknameScreen = () => {
           userNickname={nicknameValidation.userNickname}>
           <NicknameFeedback
             errorMessage={errorMessage}
-            isAvailable={
-              nicknameValidation.isAvailable && !isSameAsCurrentNickname
-            }
+            isAvailable={isSubmittable}
             length={nicknameValidation.userNickname.length}
           />
         </NicknameInput>
 
         <NicknameEditButton
           focus={nicknameValidation.focus}
-          isAvailable={
-            nicknameValidation.isAvailable && !isSameAsCurrentNickname
-          }
+          isAvailable={isSubmittable}
           keyboardHeight={keyboardHeight}
           onSubmit={handleSubmit}
         />

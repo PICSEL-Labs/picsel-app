@@ -5,23 +5,23 @@ import { AppState } from 'react-native';
 import { useUserStore } from '@/shared/store';
 
 export const useWithdrawalSuccess = () => {
-  const { logout } = useUserStore();
-  const hasLoggedOut = useRef(false);
+  const { withdraw } = useUserStore();
+  const hasWithdrawn = useRef(false);
 
   useEffect(() => {
     return () => {
-      if (!hasLoggedOut.current) {
-        logout();
+      if (!hasWithdrawn.current) {
+        withdraw();
       }
     };
-  }, [logout]);
+  }, [withdraw]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'background' || nextAppState === 'inactive') {
-        if (!hasLoggedOut.current) {
-          logout();
-          hasLoggedOut.current = true;
+        if (!hasWithdrawn.current) {
+          withdraw();
+          hasWithdrawn.current = true;
         }
       }
     });
@@ -29,11 +29,11 @@ export const useWithdrawalSuccess = () => {
     return () => {
       subscription.remove();
     };
-  }, [logout]);
+  }, [withdraw]);
 
   const handleComplete = () => {
-    hasLoggedOut.current = true;
-    logout();
+    hasWithdrawn.current = true;
+    withdraw();
   };
 
   return {

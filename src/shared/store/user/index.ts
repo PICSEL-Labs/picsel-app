@@ -20,6 +20,7 @@ interface UserState {
   setEmail: (email: string | null) => void;
 
   logout: () => void;
+  withdraw: () => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -46,6 +47,15 @@ export const useUserStore = create<UserState>()(
       setEmail: (email: UserState['email']) => set({ email }),
 
       logout: () =>
+        set({
+          socialAccessToken: null,
+          accessToken: null,
+          refreshToken: null,
+          userNickname: null,
+          email: null,
+        }),
+
+      withdraw: () =>
         set({
           socialAccessToken: null,
           accessToken: null,

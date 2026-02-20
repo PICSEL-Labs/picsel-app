@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
 
+import { SELECT_BRAND_TEXT } from '@/feature/auth/signup/constants/selectBrand';
 import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
 import SignupIntro from '@/feature/auth/signup/ui/organisms/SignupIntro';
 import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
@@ -39,17 +40,14 @@ const SelectBrandScreen = () => {
 
   useEffect(() => {
     if (route.params?.marketingConsent) {
-      showToast(
-        '마케팅 정보 수신에 동의했어요\n설정에서 수신여부를 변경할 수 있어요',
-        { height: 60 },
-      );
+      showToast(SELECT_BRAND_TEXT.MARKETING_TOAST, { height: 60 });
     }
   }, []);
 
   return (
     <ScreenLayout className="relative">
       <SignupHeader
-        text="회원가입"
+        text={SELECT_BRAND_TEXT.HEADER}
         search
         onPressIn={() =>
           navigation.navigate('BrandSearch', { variant: 'signup' })
@@ -57,10 +55,8 @@ const SelectBrandScreen = () => {
       />
 
       <SignupIntro
-        title={'좋아하는 포토부스\n[브랜드]를 선택해주세요'}
-        sub={
-          '좋아하는 브랜드를 저장하면 가까운 매장을\n검색 없이 바로 확인할 수 있어요!'
-        }
+        title={SELECT_BRAND_TEXT.TITLE}
+        sub={SELECT_BRAND_TEXT.SUB}
       />
 
       <SelectedBrand onPressIn={removeBrand} selectedList={selectedList} />

@@ -10,7 +10,7 @@ export const useSelectedBrands = (navigation: NavigationProp<any>) => {
   const actualCount = selectedList.some(b => b.brandId === 'NONE')
     ? 0
     : selectedList.length;
-  const isDisabled = selectedList.length > 0;
+  const isDisabled = selectedList.length < 1;
 
   const handleSelectedCompleted = async () => {
     const brandIds = selectedList.map(value => value.brandId);

@@ -14,7 +14,7 @@ export type SignupNavigationProps = {
   Onboarding: undefined;
   Login: undefined;
   NicknameInput: undefined;
-  SelectBrand: undefined;
+  SelectBrand: { marketingConsent?: boolean } | undefined;
   BrandSearch: { variant: 'signup' | 'mypage' };
   SignupSuccess: undefined;
   Home: undefined;

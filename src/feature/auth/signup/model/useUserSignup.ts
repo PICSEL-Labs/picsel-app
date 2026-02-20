@@ -42,7 +42,9 @@ export const useUserSignup = ({
       });
 
       closeModal();
-      navigation.navigate('SelectBrand');
+      navigation.navigate('SelectBrand', {
+        marketingConsent: agreementData.marketingConsent,
+      });
     } catch (err) {
       console.error('Signup failed:', err);
     }

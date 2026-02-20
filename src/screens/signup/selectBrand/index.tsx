@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
 
 import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
@@ -11,12 +11,16 @@ import { useGetBrandsList } from '@/feature/brand/queries/useGetBrandList';
 import BrandGridList from '@/feature/brand/ui/organisms/BrandGridList';
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
 import SelectedBrand from '@/feature/brand/ui/organisms/SelectedBrand';
+import { SignupNavigationProps } from '@/navigation/route/signup';
 import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useBrandListStore, useSelectedBrandsStore } from '@/shared/store';
+import { useToastStore } from '@/shared/store/ui/toast';
 
 const SelectBrandScreen = () => {
   const navigation = useNavigation<SignupNavigationProp>();
+  const route = useRoute<RouteProp<SignupNavigationProps, 'SelectBrand'>>();
+  const { showToast } = useToastStore();
 
   const { data: brands } = useGetBrandsList();
   const { setBrandList, brandList } = useBrandListStore();
@@ -32,6 +36,15 @@ const SelectBrandScreen = () => {
       setBrandList(brands);
     }
   }, [brands]);
+
+  useEffect(() => {
+    if (route.params?.marketingConsent) {
+      showToast(
+        '마케팅 정보 수신에 동의했어요\n설정에서 수신여부를 변경할 수 있어요',
+        { height: 60 },
+      );
+    }
+  }, []);
 
   return (
     <ScreenLayout className="relative">

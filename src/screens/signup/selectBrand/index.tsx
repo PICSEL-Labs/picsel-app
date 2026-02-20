@@ -65,10 +65,10 @@ const SelectBrandScreen = () => {
         ref={scrollViewRef}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        className="pt-[14px]"
+        className="pt-[4px]"
         showsVerticalScrollIndicator
         indicatorStyle="black"
-        contentContainerStyle={{ paddingBottom: 50 }}>
+        contentContainerStyle={{ paddingBottom: 20 }}>
         <BrandGridList
           brandList={brandList}
           selectedList={selectedList}

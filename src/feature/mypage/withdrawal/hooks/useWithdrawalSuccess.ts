@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { AppState } from 'react-native';
 
+import { clearUserData } from '@/shared/lib/clearUserData';
 import { useUserStore } from '@/shared/store';
 
 export const useWithdrawalSuccess = () => {
@@ -33,6 +34,7 @@ export const useWithdrawalSuccess = () => {
 
   const handleComplete = () => {
     hasWithdrawn.current = true;
+    clearUserData();
     withdraw();
   };
 

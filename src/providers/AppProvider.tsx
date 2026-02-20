@@ -26,7 +26,7 @@ interface TextInputWithDefaultProps extends TextInput {
   defaultProps?: { allowFontScaling?: boolean };
 }
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,

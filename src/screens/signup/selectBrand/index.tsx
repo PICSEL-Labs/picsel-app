@@ -45,7 +45,7 @@ const SelectBrandScreen = () => {
   }, []);
 
   return (
-    <ScreenLayout className="relative">
+    <ScreenLayout className="relative" edges={['top', 'left', 'right']}>
       <SignupHeader
         text={SELECT_BRAND_TEXT.HEADER}
         search
@@ -68,7 +68,7 @@ const SelectBrandScreen = () => {
         className="pt-[4px]"
         showsVerticalScrollIndicator
         indicatorStyle="black"
-        contentContainerStyle={{ paddingBottom: 20 }}>
+        contentContainerStyle={{ paddingBottom: 100 }}>
         <BrandGridList
           brandList={brandList}
           selectedList={selectedList}

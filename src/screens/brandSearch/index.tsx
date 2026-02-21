@@ -115,7 +115,7 @@ const BrandSearchScreen = () => {
     variant === 'signup' ? selectBrand : handleSelectBrandMypage;
 
   return (
-    <ScreenLayout>
+    <ScreenLayout edges={['top', 'left', 'right']}>
       {variant === 'signup' ? (
         <SignupHeader text="브랜드 검색" back onPressIn={handleGoBack} />
       ) : (
@@ -137,9 +137,9 @@ const BrandSearchScreen = () => {
           ref={scrollViewRef}
           onScroll={handleScroll}
           scrollEventThrottle={16}
-          showsVerticalScrollIndicator
+          showsVerticalScrollIndicator={false}
           indicatorStyle="black"
-          contentContainerStyle={{ paddingBottom: 50 }}
+          contentContainerStyle={{ paddingBottom: 100 }}
           keyboardShouldPersistTaps="handled">
           <BrandGridList
             brandList={searchedList}
@@ -170,7 +170,7 @@ const BrandSearchScreen = () => {
       )}
 
       {variant === 'mypage' && mypageSelectedBrands.length > 0 && (
-        <View className="px-4 pb-2 pt-2">
+        <View className="absolute bottom-10 w-full px-4">
           <Button
             className="w-full"
             text={`선택완료(${mypageSelectedBrands.length})`}

@@ -30,7 +30,7 @@ const SelectBrandScreen = () => {
   const { handleScroll, showFloatingButton, scrollToTop, scrollViewRef } =
     useHandleScroll();
   const { handleSelectedCompleted, actualCount, isDisabled } =
-    useSelectedBrands(navigation);
+    useSelectedBrands(navigation, route.params?.refreshToken);
 
   useEffect(() => {
     if (brands) {

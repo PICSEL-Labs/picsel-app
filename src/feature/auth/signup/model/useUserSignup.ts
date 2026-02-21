@@ -1,8 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { signupApi } from '../api/signupApi';
 
 import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { useUserStore } from '@/shared/store';
 
 interface Props {
   socialAccessToken: string;
@@ -21,6 +22,8 @@ export const useUserSignup = ({
   closeModal,
   navigation,
 }: Props) => {
+  const { setAccessToken, setSocialAccessToken } = useUserStore();
+
   const agreementData = useMemo(
     () => ({
       ageConsent: checkedStates[0],
@@ -32,30 +35,34 @@ export const useUserSignup = ({
     [checkedStates],
   );
 
-  const handleSignup = useCallback(async () => {
+  const saveTokens = (accessToken: string) => {
+    setAccessToken(accessToken);
+    setSocialAccessToken(null);
+  };
+
+  const navigateToSelectBrand = (refreshToken: string) => {
+    navigation.navigate('SelectBrand', {
+      marketingConsent: agreementData.marketingConsent,
+      refreshToken,
+    });
+  };
+
+  const handleSignup = async () => {
     try {
-      await signupApi({
+      const response = await signupApi({
         socialAccessToken,
         socialType: userSocialType,
         userNickname,
         userAgreementConsentRequestDto: agreementData,
       });
 
+      saveTokens(response.accessToken);
       closeModal();
-      navigation.navigate('SelectBrand', {
-        marketingConsent: agreementData.marketingConsent,
-      });
+      navigateToSelectBrand(response.refreshToken);
     } catch (err) {
       console.error('Signup failed:', err);
     }
-  }, [
-    socialAccessToken,
-    userSocialType,
-    userNickname,
-    agreementData,
-    closeModal,
-    navigation,
-  ]);
+  };
 
   return { handleSignup };
 };

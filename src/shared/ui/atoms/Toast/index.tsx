@@ -21,7 +21,7 @@ import {
 import { useToastStore } from '@/shared/store/ui/toast';
 
 const Toast = () => {
-  const { message, visible, hideToast, marginBottom } = useToastStore();
+  const { message, visible, hideToast, marginBottom, height } = useToastStore();
   const insets = useSafeAreaInsets();
 
   const [shouldRender, setShouldRender] = useState(false);
@@ -156,7 +156,8 @@ const Toast = () => {
         locations={GRADIENT_LOCATIONS}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
-        className="h-[40px] w-[288px] items-center justify-center rounded-xl">
+        className="w-[288px] items-center justify-center rounded-xl"
+        style={{ height }}>
         <Text className="text-center text-white body-rg-02">
           {displayMessage}
         </Text>

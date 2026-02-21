@@ -1,15 +1,17 @@
 import React from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import SuccessHeader from '@/feature/success/ui/organisms/SuccessHeader';
-import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { SignupNavigationProps } from '@/navigation/route/signup';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { useUserStore } from '@/shared/store';
 import Button from '@/shared/ui/atoms/Button';
 
 const SignupSuccessScreen = () => {
-  const navigation = useNavigation<SignupNavigationProp>();
+  const route = useRoute<RouteProp<SignupNavigationProps, 'SignupSuccess'>>();
+  const { setRefreshToken } = useUserStore();
 
   return (
     <ScreenLayout className="bg-primary-black">
@@ -20,7 +22,7 @@ const SignupSuccessScreen = () => {
           text="시작하기"
           color="white"
           textColor="pink"
-          onPressIn={() => navigation.navigate('Home')}
+          onPressIn={() => setRefreshToken(route.params.refreshToken)}
         />
       </View>
     </ScreenLayout>

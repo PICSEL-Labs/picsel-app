@@ -1,15 +1,19 @@
 import React from 'react';
 
 import { ViewProps } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Edge, SafeAreaView } from 'react-native-safe-area-context';
 
 interface Props extends ViewProps {
   children: React.ReactNode;
+  edges?: Edge[];
 }
 
-const ScreenLayout = ({ children, ...rest }: Props) => {
+const ScreenLayout = ({ children, edges, ...rest }: Props) => {
   return (
-    <SafeAreaView className="h-full w-full flex-1 bg-white" {...rest}>
+    <SafeAreaView
+      className="h-full w-full flex-1 bg-white"
+      edges={edges}
+      {...rest}>
       {children}
     </SafeAreaView>
   );

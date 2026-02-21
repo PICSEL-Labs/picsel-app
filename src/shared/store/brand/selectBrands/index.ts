@@ -11,6 +11,7 @@ interface BrandStore {
   selectedList: SelectedBrand[];
   selectBrand: (brandId: string, name: string) => void;
   removeBrand: (brandId: string) => void;
+  resetSelectedBrands: () => void;
 }
 
 export const useSelectedBrandsStore = create<BrandStore>()(
@@ -50,6 +51,8 @@ export const useSelectedBrandsStore = create<BrandStore>()(
             list => list.brandId !== brandId,
           ),
         })),
+
+      resetSelectedBrands: () => set({ selectedList: [] }),
     }),
     {
       name: 'selected-brands-storage', // AsyncStorage key

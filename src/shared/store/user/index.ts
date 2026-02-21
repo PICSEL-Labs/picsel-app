@@ -68,6 +68,14 @@ export const useUserStore = create<UserState>()(
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => AsyncStorage),
+      partialize: state => ({
+        socialAccessToken: state.socialAccessToken,
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
+        userSocialType: state.userSocialType,
+        userNickname: state.userNickname,
+        email: state.email,
+      }),
     },
   ),
 );

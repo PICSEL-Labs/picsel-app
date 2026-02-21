@@ -85,7 +85,7 @@ const BrandGridList = ({
           {/* 3개 이하일 경우 공백 채우기 */}
           {row.length < 3 &&
             Array.from({ length: 3 - row.length }).map((_, i) => (
-              <View key={`empty-${i}`} className="flex-1" />
+              <View key={`empty-${i}`} className="flex-1 px-4" />
             ))}
         </View>
       ))}

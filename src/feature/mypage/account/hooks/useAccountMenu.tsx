@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
+import { clearUserData } from '@/shared/lib/clearUserData';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { useUserStore } from '@/shared/store';
 
@@ -13,8 +14,9 @@ export const useAccountMenu = () => {
   const { logout } = useUserStore();
 
   const executeLogout = useCallback(() => {
+    clearUserData();
     logout();
-  }, [logout, navigation]);
+  }, [logout]);
 
   const handleLogout = () => {
     showConfirmModal('', executeLogout, {

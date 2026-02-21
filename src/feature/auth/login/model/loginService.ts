@@ -2,10 +2,10 @@ import { loginApi } from '../api/loginApi';
 import { loginStrategies } from '../lib/socialStrategies';
 import { LoginRequest, LoginResponse, SocialTypes } from '../types';
 
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { SignupNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useUserStore } from '@/shared/store';
 
-export const useLoginService = (navigation: RootStackNavigationProp) => {
+export const useLoginService = (navigation: SignupNavigationProp) => {
   const {
     setSocialAccessToken,
     setAccessToken,
@@ -36,7 +36,7 @@ export const useLoginService = (navigation: RootStackNavigationProp) => {
           setUserSocialType(response.data.socialType);
         }, 500);
 
-        navigation.navigate('SignupRoute');
+        navigation.navigate('NicknameInput');
       }
     } catch (err) {
       console.error('로그인 실패:', err);

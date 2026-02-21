@@ -14,9 +14,9 @@ export type SignupNavigationProps = {
   Onboarding: undefined;
   Login: undefined;
   NicknameInput: undefined;
-  SelectBrand: undefined;
+  SelectBrand: { marketingConsent: boolean; refreshToken: string } | undefined;
   BrandSearch: { variant: 'signup' | 'mypage' };
-  SignupSuccess: undefined;
+  SignupSuccess: { refreshToken: string };
   Home: undefined;
 };
 

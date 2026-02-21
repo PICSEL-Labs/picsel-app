@@ -26,7 +26,7 @@ const SelectButton = ({
   onPress,
 }: Props) => {
   return (
-    <View className="w-full items-center">
+    <View className="absolute bottom-10 w-full items-center">
       <Button
         color={disabled ? 'disabled' : 'active'}
         textColor="white"

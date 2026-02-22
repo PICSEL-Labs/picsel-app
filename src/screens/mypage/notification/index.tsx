@@ -6,6 +6,7 @@ import {
   EmptyNotification,
   NotificationList,
   MOCK_NOTIFICATIONS,
+  Notification,
 } from '@/feature/mypage/notification';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
 import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
@@ -19,6 +20,10 @@ const NotificationScreen = () => {
   const notifications = MOCK_NOTIFICATIONS;
   const hasNotifications = notifications.length > 0;
 
+  const handlePressItem = (notification: Notification) => {
+    navigation.navigate('NotificationDetailScreen', { notification });
+  };
+
   return (
     <ScreenLayout>
       <MypageHeader
@@ -28,7 +33,10 @@ const NotificationScreen = () => {
       />
 
       {hasNotifications ? (
-        <NotificationList notifications={notifications} />
+        <NotificationList
+          notifications={notifications}
+          onPressItem={handlePressItem}
+        />
       ) : (
         <EmptyNotification />
       )}

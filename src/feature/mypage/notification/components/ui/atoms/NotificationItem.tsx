@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Text } from 'react-native';
+import { Pressable, View, Text } from 'react-native';
 
 import { Notification } from '../../../types';
 
@@ -9,13 +9,15 @@ import SparkleIcons from '@/shared/icons/SparkleIcons';
 interface Props {
   notification: Notification;
   isLast?: boolean;
+  onPress?: () => void;
 }
 
-const NotificationItem = ({ notification, isLast = false }: Props) => {
+const NotificationItem = ({ notification, isLast = false, onPress }: Props) => {
   const { title, description, date } = notification;
 
   return (
-    <View
+    <Pressable
+      onPress={onPress}
       className={`flex flex-row space-x-1 self-stretch py-3 ${
         !isLast ? 'border-b border-b-gray-50' : ''
       }`}>
@@ -32,7 +34,7 @@ const NotificationItem = ({ notification, isLast = false }: Props) => {
         )}
         <Text className="text-gray-600 body-rg-02">{date}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

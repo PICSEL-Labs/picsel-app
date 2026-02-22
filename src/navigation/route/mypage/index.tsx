@@ -2,6 +2,7 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { Notification } from '@/feature/mypage/notification/types';
 import BrandSearchScreen from '@/screens/brandSearch';
 import MypageAccountScreen from '@/screens/mypage/account';
 import BrandSettingScreen from '@/screens/mypage/brand';
@@ -9,6 +10,7 @@ import EditNicknameScreen from '@/screens/mypage/editNickname';
 import InquiryScreen from '@/screens/mypage/inquiry';
 import NoticeScreen from '@/screens/mypage/notice';
 import NotificationScreen from '@/screens/mypage/notification';
+import NotificationDetailScreen from '@/screens/mypage/notification/detail';
 import NotificationSettingScreen from '@/screens/mypage/notification/setting';
 import MypageSettingScreen from '@/screens/mypage/setting';
 import TeamIntroScreen from '@/screens/mypage/teamIntro';
@@ -22,6 +24,7 @@ export type MypageNavigationProps = {
   MypageWithdrawalSuccess: undefined;
   EditNicknameScreen: undefined;
   NotificationScreen: undefined;
+  NotificationDetailScreen: { notification: Notification };
   NotificationSettingScreen: undefined;
   BrandSettingScreen: undefined;
   BrandSearchScreen: { variant: 'signup' | 'mypage' };
@@ -36,7 +39,7 @@ const MypageRoute = () => {
   return (
     <Stack.Navigator
       id={undefined}
-      initialRouteName="MypageSetting"
+      initialRouteName="NotificationScreen"
       screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MypageSetting" component={MypageSettingScreen} />
       <Stack.Screen name="MypageAccount" component={MypageAccountScreen} />
@@ -47,6 +50,10 @@ const MypageRoute = () => {
       />
       <Stack.Screen name="EditNicknameScreen" component={EditNicknameScreen} />
       <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+      <Stack.Screen
+        name="NotificationDetailScreen"
+        component={NotificationDetailScreen}
+      />
       <Stack.Screen
         name="NotificationSettingScreen"
         component={NotificationSettingScreen}

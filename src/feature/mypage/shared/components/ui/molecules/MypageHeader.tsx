@@ -43,9 +43,11 @@ const MypageHeader = ({
 
       <Text
         className={clsx(
-          'flex-1 text-center text-gray-900 title-01',
+          'flex-1 px-10 text-center text-gray-900 title-01',
           white && 'text-white',
-        )}>
+        )}
+        numberOfLines={1}
+        ellipsizeMode="tail">
         {title}
       </Text>
 

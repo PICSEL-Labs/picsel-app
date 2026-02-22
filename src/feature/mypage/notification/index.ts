@@ -1,5 +1,8 @@
 // Components - Notification
 export { default as NotificationItem } from './components/ui/atoms/NotificationItem';
+export { default as NotificationDate } from './components/ui/atoms/NotificationDate';
+export { default as NotificationTitle } from './components/ui/atoms/NotificationTitle';
+export { default as NotificationBody } from './components/ui/atoms/NotificationBody';
 export { default as NotificationList } from './components/ui/molecules/NotificationList';
 export { default as EmptyNotification } from './components/ui/molecules/EmptyNotification';
 

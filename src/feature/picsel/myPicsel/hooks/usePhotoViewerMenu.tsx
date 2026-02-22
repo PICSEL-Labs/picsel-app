@@ -5,68 +5,75 @@ import { useNavigation } from '@react-navigation/native';
 import {
   DELETE_ALERT,
   DROPDOWN_ITEMS,
+  SET_REPRESENTATIVE_ALERT,
   TOAST_MESSAGES,
-} from '../constants/picselDetailTexts';
+} from '../constants/photoViewerTexts';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { DropdownMenuItem } from '@/shared/components/ui/molecules/DropdownMenu';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
+import PicselPhotoIcons from '@/shared/icons/PicselPhotoIcons';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 interface Props {
   picselId: string;
+  imagePath: string;
   hideDropdown: (onComplete?: () => void) => void;
 }
 
-export const usePicselDetailHeader = ({ picselId, hideDropdown }: Props) => {
+export const usePhotoViewerMenu = ({
+  picselId,
+  imagePath,
+  hideDropdown,
+}: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { showToast } = useToastStore();
 
   const dropdownItems: DropdownMenuItem[] = useMemo(
     () => [
       {
-        label: DROPDOWN_ITEMS.EDIT,
+        label: DROPDOWN_ITEMS.SET_REPRESENTATIVE,
         onPress: () => {
           hideDropdown(() => {
-            console.log('전체 편집', picselId);
+            showConfirmModal(
+              SET_REPRESENTATIVE_ALERT.DESCRIPTION,
+              () => {
+                console.log('대표사진으로 변경:', picselId);
+                showToast(TOAST_MESSAGES.REPRESENTATIVE_SUCCESS);
+              },
+              {
+                title: SET_REPRESENTATIVE_ALERT.TITLE,
+                confirmText: SET_REPRESENTATIVE_ALERT.CONFIRM,
+              },
+            );
           });
         },
-        icon: <PicselActionIcons shape="edit" width={24} height={24} />,
+        icon: <PicselPhotoIcons shape="darkgray" height={24} width={24} />,
       },
       {
-        label: DROPDOWN_ITEMS.MOVE,
+        label: DROPDOWN_ITEMS.SAVE_PHOTO,
         onPress: () => {
           hideDropdown(() => {
-            console.log('다른 픽셀북으로 이동');
+            console.log('사진 저장:', imagePath);
           });
         },
-        icon: <PicselActionIcons shape="move" width={24} height={24} />,
-      },
-      {
-        label: DROPDOWN_ITEMS.SHARE,
-        onPress: () => {
-          hideDropdown(() => {
-            console.log('공유');
-          });
-        },
-        icon: <PicselActionIcons shape="share" width={24} height={24} />,
+        icon: <PicselActionIcons shape="save" width={24} height={24} />,
       },
       {
         label: DROPDOWN_ITEMS.DELETE,
         onPress: () => {
-          console.log('삭제');
           hideDropdown(() => {
             showConfirmModal(
               DELETE_ALERT.DESCRIPTION,
               () => {
+                console.log('삭제');
                 showToast(TOAST_MESSAGES.DELETE_SUCCESS);
                 navigation.goBack();
               },
               {
                 title: DELETE_ALERT.TITLE,
                 confirmText: DELETE_ALERT.CONFIRM,
-                cancelText: DELETE_ALERT.CANCEL,
               },
             );
           });
@@ -75,7 +82,7 @@ export const usePicselDetailHeader = ({ picselId, hideDropdown }: Props) => {
         icon: <PicselActionIcons shape="delete" width={24} height={24} />,
       },
     ],
-    [hideDropdown, picselId, showConfirmModal, showToast, navigation],
+    [hideDropdown, picselId, showToast, navigation, imagePath],
   );
 
   return { dropdownItems };

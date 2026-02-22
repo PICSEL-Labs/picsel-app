@@ -12,7 +12,7 @@ import { useTeamIntro } from '@/feature/mypage/teamIntro/hooks/useTeamIntro';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 
 const TeamIntroScreen = () => {
-  const { handleDonation, handleIntroduce, handleInstagram } = useTeamIntro();
+  const { handleIntroduce, handleInstagram } = useTeamIntro();
 
   return (
     <ScreenLayout className="bg-primary-black">
@@ -32,10 +32,7 @@ const TeamIntroScreen = () => {
         className="flex flex-col items-center self-stretch px-9"
         style={{ gap: 8 }}>
         <TeamMemberGrid />
-        <TeamActionCards
-          onDonation={handleDonation}
-          onIntroduce={handleIntroduce}
-        />
+        <TeamActionCards onIntroduce={handleIntroduce} />
       </View>
 
       <TeamFooter onPress={handleInstagram} />

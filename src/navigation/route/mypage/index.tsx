@@ -39,7 +39,7 @@ const MypageRoute = () => {
   return (
     <Stack.Navigator
       id={undefined}
-      initialRouteName="NotificationScreen"
+      initialRouteName="MypageSetting"
       screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MypageSetting" component={MypageSettingScreen} />
       <Stack.Screen name="MypageAccount" component={MypageAccountScreen} />

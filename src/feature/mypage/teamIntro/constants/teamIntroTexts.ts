@@ -7,13 +7,17 @@ export const TEAM_MEMBERS = [
     { role: 'Product Designer', name: '정다은' },
   ],
   [
-    { role: 'Backend Engineer', name: '조준희' },
-    { role: 'Frontend Engineer', name: '김현중  채수린' },
+    { role: 'Backend Developer', name: '조준희' },
+    { role: 'Frontend Developer', name: '김현중  채수린' },
   ],
-] as const;
+];
 
 export const TEAM_LINKS = {
-  instagram: '',
-  donation: '',
+  instagram: 'https://www.instagram.com/picsel_kr/',
   introduce: '',
-} as const;
+};
+
+export const TEAM_ACTION_CARDS_TEXT = {
+  SUBTITLE: 'Picsel의 이야기를 더 만나보세요!',
+  TITLE: '픽셀 소개 페이지 보러가기',
+};

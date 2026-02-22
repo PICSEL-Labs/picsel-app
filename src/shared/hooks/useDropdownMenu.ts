@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  runOnJS,
   Easing,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 
 const SHOW_DURATION = 180;
@@ -17,6 +17,14 @@ export const useDropdownMenu = () => {
   const [isVisible, setIsVisible] = useState(false);
   const opacity = useSharedValue(0);
   const scale = useSharedValue(INITIAL_SCALE);
+
+  const onCompleteRef = useRef<(() => void) | undefined>(undefined);
+
+  const unmount = useCallback(() => setIsMounted(false), []);
+  const callOnComplete = useCallback(() => {
+    onCompleteRef.current?.();
+    onCompleteRef.current = undefined;
+  }, []);
 
   const show = useCallback(() => {
     setIsMounted(true);
@@ -33,16 +41,16 @@ export const useDropdownMenu = () => {
 
   const hide = useCallback(
     (onComplete?: () => void) => {
+      onCompleteRef.current = onComplete;
+
       setIsVisible(false);
       opacity.value = withTiming(
         0,
         { duration: HIDE_DURATION, easing: Easing.in(Easing.ease) },
         finished => {
           if (finished) {
-            runOnJS(setIsMounted)(false);
-            if (onComplete) {
-              runOnJS(onComplete)();
-            }
+            runOnJS(unmount)();
+            runOnJS(callOnComplete)();
           }
         },
       );
@@ -51,7 +59,7 @@ export const useDropdownMenu = () => {
         easing: Easing.in(Easing.ease),
       });
     },
-    [opacity, scale],
+    [opacity, scale, unmount, callOnComplete],
   );
 
   const toggle = useCallback(() => {

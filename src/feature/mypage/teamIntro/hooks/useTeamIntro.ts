@@ -5,12 +5,6 @@ import { Linking } from 'react-native';
 import { TEAM_LINKS } from '../constants/teamIntroTexts';
 
 export const useTeamIntro = () => {
-  const handleDonation = useCallback(() => {
-    if (TEAM_LINKS.donation) {
-      Linking.openURL(TEAM_LINKS.donation);
-    }
-  }, []);
-
   const handleIntroduce = useCallback(() => {
     if (TEAM_LINKS.introduce) {
       Linking.openURL(TEAM_LINKS.introduce);
@@ -23,5 +17,5 @@ export const useTeamIntro = () => {
     }
   }, []);
 
-  return { handleDonation, handleIntroduce, handleInstagram };
+  return { handleIntroduce, handleInstagram };
 };

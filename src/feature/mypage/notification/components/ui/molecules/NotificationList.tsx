@@ -7,9 +7,10 @@ import NotificationItem from '../atoms/NotificationItem';
 
 interface Props {
   notifications: Notification[];
+  onPressItem: (notification: Notification) => void;
 }
 
-const NotificationList = ({ notifications }: Props) => {
+const NotificationList = ({ notifications, onPressItem }: Props) => {
   return (
     <View className="flex flex-col px-4">
       {notifications.map((notification, index) => (
@@ -17,6 +18,7 @@ const NotificationList = ({ notifications }: Props) => {
           key={notification.id}
           notification={notification}
           isLast={index === notifications.length - 1}
+          onPress={() => onPressItem?.(notification)}
         />
       ))}
     </View>

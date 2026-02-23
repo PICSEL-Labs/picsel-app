@@ -1476,7 +1476,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-ios-context-menu (3.1.0-0):
+  - react-native-ios-context-menu (3.2.1):
     - ContextMenuAuxiliaryPreview (~> 0.5)
     - DGSwiftUtilities
     - DoubleConversion
@@ -1493,6 +1493,8 @@ PODS:
     - React-hermes
     - React-ImageManager
     - React-jsi
+    - React-jsinspector
+    - React-jsinspectortracing
     - react-native-ios-utilities
     - React-NativeModulesApple
     - React-RCTAppDelegate
@@ -2767,7 +2769,7 @@ SPEC CHECKSUMS:
   react-native-config: 3367df9c1f25bb96197007ec531c7087ed4554c3
   react-native-geolocation: 2cd348a829e84fff7bbb98b6e66b0093a3aa8e1a
   react-native-image-picker: c73e6edfdbc2bbc1c12b3fe9c2149441fa08f149
-  react-native-ios-context-menu: d6671c91dfb7fa0c93bce659a392d9d71b77c934
+  react-native-ios-context-menu: bfb4ddfb9617de7be3cc1377ded3c1c71af2b125
   react-native-ios-utilities: ba7381d7986ece2c922faf4ad3af94bba676f330
   react-native-safe-area-context: 00d03dc688ba86664be66f9e3f203fc7d747d899
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
@@ -2818,7 +2820,7 @@ SPEC CHECKSUMS:
   RNSVG: 50819276c95d91ccd8fbe5cfea7e09a416c9beaa
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   VisionCamera: 2230ecfd78a1f6cddd8be0fe4e6589f21a6385e1
-  Yoga: fee373fb83c58550e84555a4e6bdafc34b4c5790
+  Yoga: d15f5aa644c466e917569ac43b19cbf17975239a
 
 PODFILE CHECKSUM: a5f20e2696faf03fd044d5a352984d44c4544bf6
 

@@ -7,8 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { AnimatedStyle } from 'react-native-reanimated';
+import Animated, { AnimatedStyle } from 'react-native-reanimated';
 
 export interface DropdownMenuItem {
   label: string;
@@ -17,7 +16,7 @@ export interface DropdownMenuItem {
   textClassName?: string;
 }
 
-interface Props {
+export interface DropdownMenuProps {
   isMounted: boolean;
   animatedStyle: AnimatedStyle;
   items: DropdownMenuItem[];
@@ -33,7 +32,7 @@ const DropdownMenu = ({
   onClose,
   top = 115,
   minWidth = 250,
-}: Props) => {
+}: DropdownMenuProps) => {
   return (
     <Modal
       transparent

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 type ImageSource = { uri: string };
 
@@ -12,17 +12,17 @@ export const useImageViewer = (options: Options = {}) => {
   const [visible, setVisible] = useState(false);
   const [uri, setUri] = useState<string>('');
 
-  const open = useCallback((nextUri: string) => {
+  const open = (nextUri: string) => {
     setUri(nextUri);
     setVisible(true);
-  }, []);
+  };
 
-  const close = useCallback(() => {
+  const close = () => {
     setVisible(false);
     if (clearOnClose) {
       setUri('');
     }
-  }, [clearOnClose]);
+  };
 
   const images = useMemo<ImageSource[]>(() => {
     return uri ? [{ uri }] : [];
@@ -34,7 +34,5 @@ export const useImageViewer = (options: Options = {}) => {
     images,
     open,
     close,
-    setVisible,
-    setUri,
   };
 };

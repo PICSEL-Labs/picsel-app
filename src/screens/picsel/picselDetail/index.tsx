@@ -64,10 +64,10 @@ const PicselDetailScreen = ({ route, navigation }: Props) => {
     hideDropdown: viewerDropdown.hide,
   });
 
-  const closeViewer = useCallback(() => {
+  const closeViewer = () => {
     viewerDropdown.hide();
     viewer.close();
-  }, [viewerDropdown, viewer]);
+  };
 
   const renderViewerHeader = useCallback(
     () => (

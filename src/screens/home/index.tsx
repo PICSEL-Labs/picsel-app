@@ -14,6 +14,7 @@ import BrandDetailBottomSheet from '@/feature/map/ui/organisms/BrandDetailBottom
 import EmptyBottomSheet from '@/feature/map/ui/organisms/EmptyBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
+import { usePrefetchMyPage } from '@/feature/mypage/main/hooks/usePrefetchMyPage';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { useRequestNotificationPermission } from '@/shared/hooks/useRequestNotificationPermission';
 import { useMapLocationStore } from '@/shared/store';
@@ -21,6 +22,7 @@ import Input from '@/shared/ui/atoms/Input';
 
 const HomeScreen = () => {
   useRequestNotificationPermission();
+  usePrefetchMyPage();
   const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
 
   const {

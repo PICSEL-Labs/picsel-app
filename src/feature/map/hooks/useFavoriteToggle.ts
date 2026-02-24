@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { useToggleFavoriteBrand } from '@/feature/brand/mutations/useToggleFavoriteBrand';
 import { useFavoriteStore } from '@/shared/store';
 import { useToastStore } from '@/shared/store/ui/toast';
@@ -10,20 +8,17 @@ interface Props {
 }
 
 export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
-  const { optimisticFavorites, toggleOptimisticFavorite, syncFavorite } =
-    useFavoriteStore();
+  const {
+    optimisticFavorites,
+    toggleOptimisticFavorite,
+    setOptimisticFavorite,
+  } = useFavoriteStore();
   const { mutate: toggleFavorite, isPending } = useToggleFavoriteBrand();
   const { showToast } = useToastStore();
 
   const optimisticFavorite = brandId
     ? (optimisticFavorites[brandId] ?? isFavorite)
     : isFavorite;
-
-  useEffect(() => {
-    if (brandId && optimisticFavorites[brandId] === undefined) {
-      syncFavorite(brandId, isFavorite);
-    }
-  }, [brandId, isFavorite, syncFavorite, optimisticFavorites]);
 
   const handleToggleFavorite = (margin: number) => {
     if (!brandId) {
@@ -40,21 +35,18 @@ export const useFavoriteToggle = ({ brandId, isFavorite }: Props) => {
       margin,
     );
 
-    if (!isPending) {
-      toggleFavorite(
-        {
-          brandId,
-          action,
+    toggleFavorite(
+      {
+        brandId,
+        action,
+      },
+      {
+        onError: () => {
+          setOptimisticFavorite(brandId, isFavorite);
+          showToast('찜 처리 중 오류가 발생했어요', margin);
         },
-        {
-          onError: () => {
-            toggleOptimisticFavorite(brandId);
-            syncFavorite(brandId, isFavorite);
-            showToast('찜 처리 중 오류가 발생했어요', margin);
-          },
-        },
-      );
-    }
+      },
+    );
   };
 
   return {

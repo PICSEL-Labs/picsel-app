@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
@@ -89,13 +88,11 @@ const SelectPhotoScreen = () => {
       />
 
       {selectedCount > 0 && (
-        <View className="absolute bottom-6 left-0 right-0 px-5">
-          <SelectButton
-            disabled={selectedCount === 0}
-            actualSelectedCount={selectedCount}
-            handleSelectedCompleted={handleSelectedCompleted}
-          />
-        </View>
+        <SelectButton
+          disabled={selectedCount === 0}
+          actualSelectedCount={selectedCount}
+          handleSelectedCompleted={handleSelectedCompleted}
+        />
       )}
     </SafeAreaView>
   );

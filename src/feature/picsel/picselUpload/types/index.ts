@@ -2,6 +2,7 @@ import { CommonResponseType } from '@/shared/api/types';
 
 // 픽셀 추가 요청
 export interface PicselUploadRequest {
+  picselId: string;
   picselbookId: string;
   storeId: string;
   takenDate: string;
@@ -20,4 +21,14 @@ export interface PicselUploadResult {
 
 export interface PicselUploadResponse extends CommonResponseType {
   data: PicselUploadResult;
+}
+
+// 픽셀 드래프트 생성 응답 Data
+export interface CreatePicselDraftData {
+  draftUuid: string;
+}
+
+// 픽셀 드래프트 생성 응답
+export interface CreatePicselDraftResponse extends CommonResponseType {
+  data: CreatePicselDraftData;
 }

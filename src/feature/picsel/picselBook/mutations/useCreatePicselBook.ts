@@ -10,12 +10,26 @@ export const useCreatePicselBook = () => {
 
   return useMutation({
     mutationFn: async ({
+      picselbookId,
       bookName,
       coverImagePath,
     }: CreatePicselBookRequest) => {
-      const s3ImageUrl = await uploadImageToS3(coverImagePath, 'PICSELBOOK');
+      if (!coverImagePath) {
+        return createPicselBookApi({
+          picselbookId,
+          bookName,
+          coverImagePath: null,
+        });
+      }
+
+      const s3ImageUrl = await uploadImageToS3(
+        coverImagePath,
+        picselbookId,
+        'PICSELBOOK',
+      );
 
       return createPicselBookApi({
+        picselbookId,
         bookName,
         coverImagePath: s3ImageUrl,
       });

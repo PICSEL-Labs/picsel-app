@@ -131,6 +131,7 @@ const PicselBookFolderTemplate = ({
               isLoading={isLoading}
               onScroll={handleScroll}
               onToggleSelection={toggleSelection}
+              onPhotoPress={onPhotoPress}
             />
           ) : (
             <PhotoTextListView

@@ -21,6 +21,7 @@ interface Props {
   isSelected: boolean;
   showYear?: boolean;
   onToggleSelection: (photoId: string) => void;
+  onPress?: (photoId: string) => void;
   onImageLoad?: (uri: string) => void;
   onImageError?: (uri: string) => void;
 }
@@ -33,9 +34,18 @@ const SelectablePhotoCard = ({
   isSelected,
   showYear = true,
   onToggleSelection,
+  onPress,
   onImageLoad,
   onImageError,
 }: Props) => {
+  const handlePress = () => {
+    if (isSelecting) {
+      onToggleSelection(photo.id);
+    } else {
+      onPress?.(photo.id);
+    }
+  };
+
   return (
     <View style={{ width: imageWidth }}>
       {/* 날짜 */}
@@ -43,7 +53,7 @@ const SelectablePhotoCard = ({
         {formatDate(photo.date, { showYear })}
       </Text>
 
-      <Pressable onPress={() => isSelecting && onToggleSelection(photo.id)}>
+      <Pressable onPress={handlePress}>
         {isSelecting && <SelectionCheckbox isSelected={isSelected} />}
 
         <View

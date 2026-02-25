@@ -30,6 +30,7 @@ interface Props {
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   data: Photo[];
   showYear?: boolean;
+  onPhotoPress?: (photoId: string) => void;
 }
 
 const PhotoListView = forwardRef<FlatList, Props>(
@@ -42,6 +43,7 @@ const PhotoListView = forwardRef<FlatList, Props>(
       onScroll,
       data,
       showYear = true,
+      onPhotoPress,
     },
     ref,
   ) => {
@@ -85,6 +87,7 @@ const PhotoListView = forwardRef<FlatList, Props>(
             onToggleSelection={onToggleSelection}
             onImageLoad={handleImageLoad}
             onImageError={handleImageError}
+            onPress={() => !isSelecting && onPhotoPress?.(photo.id)}
           />
         </View>
       );

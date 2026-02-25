@@ -79,7 +79,11 @@ const SelectBrandScreen = () => {
       <SelectButton
         actualSelectedCount={actualCount}
         disabled={isDisabled}
-        handleNavigation={() => navigation.navigate('SignupSuccess')}
+        handleNavigation={() =>
+          navigation.navigate('SignupSuccess', {
+            refreshToken: route.params?.refreshToken,
+          })
+        }
         handleSelectedCompleted={handleSelectedCompleted}
         scrollToTop={scrollToTop}
         showFloatingButton={showFloatingButton}

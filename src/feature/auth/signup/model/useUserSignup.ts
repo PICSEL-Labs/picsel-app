@@ -56,9 +56,9 @@ export const useUserSignup = ({
         userAgreementConsentRequestDto: agreementData,
       });
 
-      saveTokens(response.accessToken);
+      saveTokens(response.data.accessToken);
       closeModal();
-      navigateToSelectBrand(response.refreshToken);
+      navigateToSelectBrand(response.data.refreshToken);
     } catch (err) {
       console.error('Signup failed:', err);
     }

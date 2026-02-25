@@ -10,9 +10,11 @@ export interface ValidateResponse {
 }
 
 export interface SignupResponse {
-  socialType: string;
-  accessToken: string;
-  refreshToken: string;
+  data: {
+    socialType: string;
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 export interface SignupRequest {

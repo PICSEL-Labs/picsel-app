@@ -62,7 +62,7 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
       <View className="flex-1 pt-6">
         <Text className="px-5 text-gray-900 headline-02">픽셀북 선택</Text>
 
-        <View className="py-6">
+        <View className="flex-1 py-6">
           <PicselBookList
             books={books}
             isSelecting={true}

@@ -11,7 +11,10 @@ export const usePhotoFormat = () => {
       /**
        * 날짜를 YYYY.MM.DD 형식으로 포맷팅
        */
-      formatDate: (date: string) => {
+      formatDate: (date?: string | null) => {
+        if (!date) {
+          return '';
+        }
         return date.replace(/-/g, DATE_FORMAT_SEPARATOR);
       },
 

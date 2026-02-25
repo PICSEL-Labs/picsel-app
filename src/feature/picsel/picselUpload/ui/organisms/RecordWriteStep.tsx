@@ -12,6 +12,7 @@ import {
 
 import { usePicselUploadStore } from '../../hooks/usePicselUploadStore';
 import { useAddPicselToPicselBook } from '../../mutations/useAddPicselToPicselBook';
+import { useCreatePicselDraft } from '../../mutations/useCreatePicselDraft';
 
 import UploadStepHeader from '@/feature/picsel/shared/components/ui/molecules/UploadStepHeader';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
@@ -39,8 +40,13 @@ const RecordWriteStep = () => {
   // 픽셀 업로드 mutation
   const { mutate: uploadPicsel, isPending } = useAddPicselToPicselBook();
 
-  const handleComplete = () => {
+  const { mutateAsync: createDraft } = useCreatePicselDraft();
+
+  const handleComplete = async () => {
+    const draftUuid = await createDraft(picselbookId);
+
     const requestPayload = {
+      picselId: draftUuid,
       picselbookId,
       storeId,
       takenDate,
@@ -58,7 +64,13 @@ const RecordWriteStep = () => {
               name: 'PicselBookFolder',
               params: { bookId: picselbookId, bookName: bookName },
             },
-            { name: 'PicselDetail', params: { picselId: data.data.picselId } },
+            {
+              name: 'PicselDetail',
+              params: {
+                picselId: data.data.picselId,
+                bookId: data.data.picselbookId,
+              },
+            },
           ],
         });
 

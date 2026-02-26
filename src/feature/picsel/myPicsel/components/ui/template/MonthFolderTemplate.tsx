@@ -87,6 +87,7 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         onAlbumPress={handleAlbumPress}
         onQrPress={handleQrPress}
         onCloseFunctionButtons={closeFunctionButtons}
+        noTabBar
       />
     </ScreenLayout>
   );

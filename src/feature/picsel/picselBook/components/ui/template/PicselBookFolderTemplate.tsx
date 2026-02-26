@@ -115,6 +115,7 @@ const PicselBookFolderTemplate = ({
               onQrPress={handleQrPress}
               onCloseFunctionButtons={closeFunctionButtons}
               tooltip={<UploadTooltip />}
+              noTabBar
             />
           }>
           <EmptyMessage message="픽셀북이 비어있어요" />
@@ -153,6 +154,7 @@ const PicselBookFolderTemplate = ({
             onAlbumPress={handleAlbumPress}
             onQrPress={handleQrPress}
             onCloseFunctionButtons={closeFunctionButtons}
+            noTabBar
           />
         </>
       )}

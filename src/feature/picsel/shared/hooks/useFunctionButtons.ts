@@ -21,13 +21,13 @@ export const useFunctionButtons = (): UseFunctionButtonsReturn => {
   };
 
   const handleAlbumPress = () => {
-    setShowFunctionButtons(false);
     navigation.navigate('SelectMainPhoto');
+    setTimeout(() => setShowFunctionButtons(false), 300);
   };
 
   const handleQrPress = () => {
-    setShowFunctionButtons(false);
     navigation.navigate('QrScan');
+    setTimeout(() => setShowFunctionButtons(false), 300);
   };
 
   const closeFunctionButtons = () => {

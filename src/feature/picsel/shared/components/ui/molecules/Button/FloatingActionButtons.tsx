@@ -17,6 +17,7 @@ interface FloatingActionButtonsProps {
   onQrPress: () => void;
   onCloseFunctionButtons: () => void;
   tooltip?: ReactNode;
+  noTabBar?: boolean;
 }
 
 const FloatingActionButtons = ({
@@ -29,13 +30,15 @@ const FloatingActionButtons = ({
   onQrPress,
   onCloseFunctionButtons,
   tooltip,
+  noTabBar,
 }: FloatingActionButtonsProps) => {
   if (isSelecting) {
     return null;
   }
 
   return (
-    <View className="absolute bottom-3 right-4 items-end">
+    <View
+      className={`absolute right-4 items-end ${noTabBar ? 'bottom-12' : 'bottom-3'}`}>
       {!showFunctionButtons && tooltip}
       {showUpButton && (
         <View className="mb-4">

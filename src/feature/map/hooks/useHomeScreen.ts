@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { NaverMapViewRef } from '@mj-studio/react-native-naver-map';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,7 @@ import { useStoreFavorite } from './useStoreFavorite';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useModal } from '@/shared/hooks/useModal';
+import { useFavoriteStore } from '@/shared/store';
 
 export const useHomeScreen = () => {
   const mapRef = useRef<NaverMapViewRef>(null);
@@ -69,6 +70,19 @@ export const useHomeScreen = () => {
   });
 
   const isFavorite = useStoreFavorite(stores?.data?.brands, selectedStore);
+
+  const { syncFavorites } = useFavoriteStore();
+
+  useEffect(() => {
+    const brands = stores?.data?.brands;
+    if (brands && brands.length > 0) {
+      const favoritesMap = brands.reduce<Record<string, boolean>>(
+        (acc, b) => ({ ...acc, [b.brandId]: b.isFavorite }),
+        {},
+      );
+      syncFavorites(favoritesMap);
+    }
+  }, [stores?.data?.brands, syncFavorites]);
 
   return {
     // Refs

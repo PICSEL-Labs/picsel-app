@@ -5,6 +5,7 @@ import { View } from 'react-native';
 
 import MypageTopBar from '@/feature/mypage/main/components/ui/atoms/MypageTopBar';
 import NicknameSection from '@/feature/mypage/main/components/ui/atoms/NicknameSection';
+import NicknameSectionSkeleton from '@/feature/mypage/main/components/ui/atoms/NicknameSectionSkeleton';
 import MypageMenuItem from '@/feature/mypage/main/components/ui/molecules/MypageMenuItem';
 import { useMypageMenu } from '@/feature/mypage/main/hooks/useMypageMenu';
 import { useGetUser } from '@/feature/mypage/main/queries/useGetUser';
@@ -14,7 +15,7 @@ import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import StarIcons from '@/shared/icons/StarIcons';
 
 const MypageScreen = () => {
-  const { data: user } = useGetUser();
+  const { data: user, isLoading } = useGetUser();
   const { menuItems } = useMypageMenu();
   const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -31,14 +32,18 @@ const MypageScreen = () => {
         }
       />
 
-      <NicknameSection
-        nickname={user?.userNickname ?? null}
-        onPressEdit={() =>
-          navigation.navigate('MypageRoute', {
-            screen: 'EditNicknameScreen',
-          })
-        }
-      />
+      {isLoading ? (
+        <NicknameSectionSkeleton />
+      ) : (
+        <NicknameSection
+          nickname={user?.userNickname ?? ''}
+          onPressEdit={() =>
+            navigation.navigate('MypageRoute', {
+              screen: 'EditNicknameScreen',
+            })
+          }
+        />
+      )}
 
       <View className="mb-4 mt-4 px-4" style={{ gap: 12 }}>
         <MypageMenuItem

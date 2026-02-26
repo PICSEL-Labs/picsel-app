@@ -4,7 +4,8 @@ interface FavoriteStore {
   optimisticFavorites: Record<string, boolean>;
   setOptimisticFavorite: (brandId: string, isFavorite: boolean) => void;
   toggleOptimisticFavorite: (brandId: string) => void;
-  syncFavorite: (brandId: string, isFavorite: boolean) => void;
+  syncFavorites: (favorites: Record<string, boolean>) => void;
+  resetFavorites: () => void;
 }
 
 export const useFavoriteStore = create<FavoriteStore>(set => ({
@@ -26,11 +27,13 @@ export const useFavoriteStore = create<FavoriteStore>(set => ({
       },
     })),
 
-  syncFavorite: (brandId, isFavorite) =>
+  syncFavorites: favorites =>
     set(state => ({
       optimisticFavorites: {
+        ...favorites,
         ...state.optimisticFavorites,
-        [brandId]: isFavorite,
       },
     })),
+
+  resetFavorites: () => set({ optimisticFavorites: {} }),
 }));

@@ -16,7 +16,15 @@ const PicselBookFolderScreen = () => {
   const { bookId, bookName } = route.params;
 
   const handleBack = () => {
-    navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PicselTab' }],
+    });
   };
 
   const handlePhotoPress = (picselId: string) => {

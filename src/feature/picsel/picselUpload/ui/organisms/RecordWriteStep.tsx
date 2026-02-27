@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,69 +9,23 @@ import {
   View,
 } from 'react-native';
 
+import { useCompletePicselUpload } from '../../hooks/useCompletePicselUpload';
 import { usePicselUploadStore } from '../../hooks/usePicselUploadStore';
-import { useAddPicselToPicselBook } from '../../mutations/useAddPicselToPicselBook';
 
 import UploadStepHeader from '@/feature/picsel/shared/components/ui/molecules/UploadStepHeader';
-import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
-import { usePhotoStore } from '@/shared/store/picselUpload';
 import Button from '@/shared/ui/atoms/Button';
 
 const RecordWriteStep = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const {
-    title: savedTitle,
-    content: savedContent,
-    takenDate,
-    storeId,
-    picselbookId,
-    bookName,
-    setRecord,
-    getImagePaths,
-    resetUploadData,
-  } = usePicselUploadStore();
-  const { reset: resetPhotoStore } = usePhotoStore();
+  const { title: savedTitle, content: savedContent } = usePicselUploadStore();
 
   const [title, setTitle] = useState(savedTitle || '');
   const [content, setContent] = useState(savedContent || '');
 
-  // 픽셀 업로드 mutation
-  const { mutate: uploadPicsel, isPending } = useAddPicselToPicselBook();
-
-  const handleComplete = () => {
-    const requestPayload = {
-      picselbookId,
-      storeId,
-      takenDate,
-      title,
-      content,
-      imagePaths: getImagePaths(),
-    };
-
-    uploadPicsel(requestPayload, {
-      onSuccess: data => {
-        navigation.reset({
-          index: 1,
-          routes: [
-            {
-              name: 'PicselBookFolder',
-              params: { bookId: picselbookId, bookName: bookName },
-            },
-            { name: 'PicselDetail', params: { picselId: data.data.picselId } },
-          ],
-        });
-
-        setRecord(title, content);
-        resetUploadData();
-        resetPhotoStore();
-      },
-      onError: error => {
-        console.log('픽셀 업로드 중 에러 발생:', error.message);
-      },
-    });
-  };
+  const { complete, isPending } = useCompletePicselUpload();
 
   const isFilled = title.trim().length > 0 && content.trim().length > 0;
+
+  const handleComplete = () => complete({ title, content });
 
   return (
     <KeyboardAvoidingView
@@ -98,7 +51,6 @@ const RecordWriteStep = () => {
         <View className="px-5 pt-6">
           <Text className="mb-3 text-gray-900 headline-02">내용</Text>
 
-          {/* 입력 컨테이너 */}
           <View className="min-h-[300px] rounded-xl border border-gray-300 p-4">
             <TextInput
               value={title}

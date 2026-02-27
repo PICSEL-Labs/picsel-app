@@ -67,6 +67,7 @@ export interface DeletePicselBooksRequest {
 
 // 픽셀북 생성 요청
 export interface CreatePicselBookRequest {
+  picselbookId: string;
   bookName: string;
   coverImagePath: string;
 }
@@ -74,4 +75,14 @@ export interface CreatePicselBookRequest {
 // 픽셀북 생성 응답
 export interface CreatePicselbookResponse extends CommonResponseType {
   data: PicselBookItem;
+}
+
+// 픽셀북 드래프트 생성 응답 Data
+export interface CreatePicselBookDraftData {
+  draftUuid: string;
+}
+
+// 픽셀북 드래프트 생성 응답
+export interface CreatePicselBookDraftResponse extends CommonResponseType {
+  data: CreatePicselBookDraftData;
 }

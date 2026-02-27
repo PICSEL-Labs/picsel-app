@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { usePicselUploadStore } from '../../picselUpload/hooks/usePicselUploadStore';
 import { CoverType } from '../../shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import { useCreatePicselBook } from '../mutations/useCreatePicselBook';
+import { useCreatePicselBookDraft } from '../mutations/useCreatePicselBookDraft';
 import { useDeletePicselBooks } from '../mutations/useDeletePicselBooks';
 import { useGetPicselBooks } from '../queries/useGetPicselBooks';
 import { PicselBookItem } from '../types';
@@ -60,6 +61,8 @@ export const usePicselBook = () => {
 
   const { bookCoverPhoto, reset: resetPhotoStore } = usePhotoStore();
 
+  const { mutateAsync: createDraft } = useCreatePicselBookDraft();
+
   const books: PicselBookItem[] = data ?? [];
   const totalBooks = books.length;
   const hasBooks = books.length > 0;
@@ -106,8 +109,16 @@ export const usePicselBook = () => {
   };
 
   // 픽셀북 생성
-  const handleSubmit = (bookName: string, coverType: CoverType) => {
+  const handleSubmit = async (bookName: string, coverType: CoverType) => {
+    picselBookRef.current?.dismiss();
+    if (bookCoverPhoto) {
+      navigation.pop(1);
+    }
+
+    const draftUuid = await createDraft();
+
     const payload = {
+      picselbookId: draftUuid,
       bookName,
       coverImagePath: coverType === 'photo' ? bookCoverPhoto : null,
     };
@@ -115,9 +126,6 @@ export const usePicselBook = () => {
     createPicselBook(payload, {
       onSuccess: response => {
         showToast(`"${bookName}"을 추가했어요`, 60);
-
-        navigation.pop(1);
-        picselBookRef.current?.dismiss();
 
         const newBookId = response.data?.picselbookId;
 

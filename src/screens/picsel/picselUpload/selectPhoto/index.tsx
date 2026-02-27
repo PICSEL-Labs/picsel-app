@@ -43,6 +43,7 @@ const SelectPhotoScreen = () => {
   const {
     albums,
     selectedAlbum,
+    selectedGroupTypes,
     displayAlbumName,
     isAlbumListOpen,
     toggleAlbumList,
@@ -57,7 +58,7 @@ const SelectPhotoScreen = () => {
     handleSelectPhoto,
     handleOpenCamera,
     resetSelection,
-  } = usePhotoPicker(variant, selectedAlbum);
+  } = usePhotoPicker(variant, selectedAlbum, selectedGroupTypes);
 
   const { handleSubmit } = usePicselBook();
 

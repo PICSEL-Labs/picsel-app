@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Alert } from 'react-native';
@@ -9,7 +9,10 @@ export type GridPhoto = {
   source: 'gallery' | 'camera';
 };
 
-export const useInfiniteScrollPhotos = () => {
+export const useInfiniteScrollPhotos = (
+  albumName: string | null,
+  groupTypes: 'Album' | 'SmartAlbum' | null,
+) => {
   const [photos, setPhotos] = useState<GridPhoto[]>([]);
   const [endCursor, setEndCursor] = useState<string | undefined>();
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -28,6 +31,11 @@ export const useInfiniteScrollPhotos = () => {
         first: fetchCount,
         after: endCursor,
         assetType: 'Photos',
+        ...(albumName &&
+          groupTypes && {
+            groupName: albumName,
+            groupTypes,
+          }),
       });
 
       const mappedPhotos: GridPhoto[] = edges.map(edge => ({
@@ -50,7 +58,44 @@ export const useInfiniteScrollPhotos = () => {
     } finally {
       loadingRef.current = false;
     }
-  }, [endCursor, hasNextPage]);
+  }, [endCursor, hasNextPage, albumName, groupTypes]);
+
+  useEffect(() => {
+    setPhotos([]);
+    setEndCursor(undefined);
+    setHasNextPage(true);
+    loadingRef.current = true;
+
+    const loadFirstPage = async () => {
+      try {
+        const { edges, page_info } = await CameraRoll.getPhotos({
+          first: 15,
+          assetType: 'Photos',
+          ...(albumName &&
+            groupTypes && {
+              groupName: albumName,
+              groupTypes,
+            }),
+        });
+
+        const mappedPhotos: GridPhoto[] = edges.map(edge => ({
+          id: edge.node.id,
+          uri: edge.node.image.uri,
+          source: 'gallery',
+        }));
+
+        setPhotos(mappedPhotos);
+        setEndCursor(page_info.end_cursor);
+        setHasNextPage(page_info.has_next_page);
+      } catch (error) {
+        console.log('사진 불러오기 실패:', error);
+      } finally {
+        loadingRef.current = false;
+      }
+    };
+
+    loadFirstPage();
+  }, [albumName, groupTypes]);
 
   const resetPhotos = useCallback(() => {
     setPhotos([]);

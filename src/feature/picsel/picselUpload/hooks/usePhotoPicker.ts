@@ -7,9 +7,10 @@ import { usePhotoSelection } from './usePhotoSelection';
 export const usePhotoPicker = (
   variant: 'main' | 'extra' | 'cover',
   albumName: string | null,
+  groupTypes: 'Album' | 'SmartAlbum' | null,
 ) => {
   const { photos, fetchPhotos, hasNextPage, appendCapturedPhoto } =
-    usePhotoGrid(albumName);
+    usePhotoGrid(albumName, groupTypes);
 
   const {
     mainPhoto,

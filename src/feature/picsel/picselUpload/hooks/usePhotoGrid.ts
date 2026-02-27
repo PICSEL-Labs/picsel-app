@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 
 import { GridPhoto, useInfiniteScrollPhotos } from './useInfiniteScrollPhotos';
 
-export const usePhotoGrid = () => {
+export const usePhotoGrid = (albumName: string | null) => {
   const [capturedPhotos, setCapturedPhotos] = useState<GridPhoto[]>([]);
   const { photos, fetchPhotos, hasNextPage, resetPhotos } =
-    useInfiniteScrollPhotos();
+    useInfiniteScrollPhotos(albumName);
 
   const combinedPhotos = useMemo(
     () => [

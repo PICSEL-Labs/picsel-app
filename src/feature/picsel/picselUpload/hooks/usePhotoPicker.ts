@@ -4,9 +4,12 @@ import { useCameraCapture } from './useCameraCapture';
 import { usePhotoGrid } from './usePhotoGrid';
 import { usePhotoSelection } from './usePhotoSelection';
 
-export const usePhotoPicker = (variant: 'main' | 'extra' | 'cover') => {
+export const usePhotoPicker = (
+  variant: 'main' | 'extra' | 'cover',
+  albumName: string | null,
+) => {
   const { photos, fetchPhotos, hasNextPage, appendCapturedPhoto } =
-    usePhotoGrid();
+    usePhotoGrid(albumName);
 
   const {
     mainPhoto,

@@ -2,13 +2,16 @@ import React, { useRef } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
 import { usePicselBook } from '@/feature/picsel/picselBook/hooks/usePicselBook';
+import { useAlbumList } from '@/feature/picsel/picselUpload/hooks/useAlbumList';
 import { usePhotoPicker } from '@/feature/picsel/picselUpload/hooks/usePhotoPicker';
 import { usePicselUploadStore } from '@/feature/picsel/picselUpload/hooks/usePicselUploadStore';
 import PhotoSelectHeader from '@/feature/picsel/picselUpload/ui/layout/PhotoSelectHeader';
+import AlbumListPanel from '@/feature/picsel/picselUpload/ui/organisms/AlbumListPanel';
 import { PhotoGrid } from '@/feature/picsel/picselUpload/ui/organisms/PhotoGrid';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import { MainNavigationProps } from '@/navigation';
@@ -38,6 +41,15 @@ const SelectPhotoScreen = () => {
   const { setMainPhoto, addExtraPhotos } = usePicselUploadStore();
 
   const {
+    albums,
+    selectedAlbum,
+    displayAlbumName,
+    isAlbumListOpen,
+    toggleAlbumList,
+    selectAlbum,
+  } = useAlbumList();
+
+  const {
     photos,
     selectedUris,
     selectedCount,
@@ -45,7 +57,7 @@ const SelectPhotoScreen = () => {
     handleSelectPhoto,
     handleOpenCamera,
     resetSelection,
-  } = usePhotoPicker(variant);
+  } = usePhotoPicker(variant, selectedAlbum);
 
   const { handleSubmit } = usePicselBook();
 
@@ -69,17 +81,29 @@ const SelectPhotoScreen = () => {
       <PhotoSelectHeader
         variant={variant}
         onReset={resetSelection}
-        hasSelected={!!selectedUris}
+        hasSelected={!!selectedUris.length}
+        albumName={displayAlbumName}
+        isAlbumListOpen={isAlbumListOpen}
+        onToggleAlbumList={toggleAlbumList}
       />
 
-      <PhotoGrid
-        photos={photos}
-        selectedUris={selectedUris}
-        variant={variant}
-        onSelectPhoto={handleSelectPhoto}
-        onOpenCamera={handleOpenCamera}
-        onLoadMore={fetchPhotos}
-      />
+      <View style={{ flex: 1 }}>
+        <PhotoGrid
+          photos={photos}
+          selectedUris={selectedUris}
+          variant={variant}
+          onSelectPhoto={handleSelectPhoto}
+          onOpenCamera={handleOpenCamera}
+          onLoadMore={fetchPhotos}
+        />
+
+        <AlbumListPanel
+          albums={albums}
+          selectedAlbum={selectedAlbum}
+          isVisible={isAlbumListOpen}
+          onSelectAlbum={selectAlbum}
+        />
+      </View>
 
       <PicselBookBottomSheet
         ref={picselBookRef}

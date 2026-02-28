@@ -15,6 +15,7 @@ export const useAlbumList = () => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
   const [isAlbumListOpen, setIsAlbumListOpen] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const fetchAlbums = useCallback(async () => {
     try {
@@ -38,9 +39,22 @@ export const useAlbumList = () => {
           arr.findIndex(a => a.title === album.title) === idx,
       );
 
-      const albumsWithThumbnails: Album[] = await Promise.all(
-        uniqueAlbumData.map(async album => {
-          let thumbnailUri: string | undefined;
+      const sorted = uniqueAlbumData
+        .map(a => ({
+          title: a.title,
+          count: a.count,
+          groupTypes: a.groupTypes,
+        }))
+        .sort((a, b) => b.count - a.count);
+
+      setAlbums(sorted);
+      if (sorted.length > 0) {
+        setSelectedAlbum(sorted[0].title);
+      }
+      setIsReady(true);
+
+      const thumbnails = await Promise.all(
+        sorted.map(async album => {
           try {
             const { edges } = await CameraRoll.getPhotos({
               first: 1,
@@ -48,23 +62,22 @@ export const useAlbumList = () => {
               groupName: album.title,
               groupTypes: album.groupTypes,
             });
-            thumbnailUri = edges[0]?.node.image.uri;
+            return edges[0]?.node.image.uri;
           } catch {
-            thumbnailUri = undefined;
+            return undefined;
           }
-          return {
-            title: album.title,
-            count: album.count,
-            thumbnailUri,
-            groupTypes: album.groupTypes,
-          };
         }),
       );
 
-      const sorted = albumsWithThumbnails.sort((a, b) => b.count - a.count);
-      setAlbums(sorted);
+      setAlbums(prev =>
+        prev.map((album, i) => ({
+          ...album,
+          thumbnailUri: thumbnails[i],
+        })),
+      );
     } catch (error) {
       console.log('앨범 목록 불러오기 실패:', error);
+      setIsReady(true);
     }
   }, []);
 
@@ -86,8 +99,9 @@ export const useAlbumList = () => {
     albums,
     selectedAlbum,
     selectedGroupTypes,
-    displayAlbumName: selectedAlbum ?? albums[0]?.title ?? '',
+    displayAlbumName: selectedAlbum ?? '',
     isAlbumListOpen,
+    isReady,
     toggleAlbumList,
     selectAlbum,
   };

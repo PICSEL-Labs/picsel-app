@@ -46,6 +46,7 @@ const SelectPhotoScreen = () => {
     selectedGroupTypes,
     displayAlbumName,
     isAlbumListOpen,
+    isReady,
     toggleAlbumList,
     selectAlbum,
   } = useAlbumList();
@@ -89,14 +90,16 @@ const SelectPhotoScreen = () => {
       />
 
       <View style={{ flex: 1 }}>
-        <PhotoGrid
-          photos={photos}
-          selectedUris={selectedUris}
-          variant={variant}
-          onSelectPhoto={handleSelectPhoto}
-          onOpenCamera={handleOpenCamera}
-          onLoadMore={fetchPhotos}
-        />
+        {isReady && (
+          <PhotoGrid
+            photos={photos}
+            selectedUris={selectedUris}
+            variant={variant}
+            onSelectPhoto={handleSelectPhoto}
+            onOpenCamera={handleOpenCamera}
+            onLoadMore={fetchPhotos}
+          />
+        )}
 
         <AlbumListPanel
           albums={albums}

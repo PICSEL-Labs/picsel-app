@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Alert } from 'react-native';
 
+import { AlbumGroupType } from './useAlbumList';
+
 export type GridPhoto = {
   id: string;
   uri: string;
@@ -11,30 +13,40 @@ export type GridPhoto = {
 
 export const useInfiniteScrollPhotos = (
   albumName: string | null,
-  groupTypes: 'Album' | 'SmartAlbum' | null,
+  groupTypes: AlbumGroupType | null,
 ) => {
   const [photos, setPhotos] = useState<GridPhoto[]>([]);
   const [endCursor, setEndCursor] = useState<string | undefined>();
   const [hasNextPage, setHasNextPage] = useState(true);
   const loadingRef = useRef(false);
 
+  const albumNameRef = useRef(albumName);
+  const groupTypesRef = useRef(groupTypes);
+  albumNameRef.current = albumName;
+  groupTypesRef.current = groupTypes;
+
+  const endCursorRef = useRef(endCursor);
+  const hasNextPageRef = useRef(hasNextPage);
+  endCursorRef.current = endCursor;
+  hasNextPageRef.current = hasNextPage;
+
   const fetchPhotos = useCallback(async () => {
-    if (loadingRef.current || !hasNextPage) {
+    if (loadingRef.current || !hasNextPageRef.current) {
       return;
     }
 
     loadingRef.current = true;
     try {
-      const fetchCount = endCursor ? 100 : 15;
+      const fetchCount = endCursorRef.current ? 100 : 15;
 
       const { edges, page_info } = await CameraRoll.getPhotos({
         first: fetchCount,
-        after: endCursor,
+        after: endCursorRef.current,
         assetType: 'Photos',
-        ...(albumName &&
-          groupTypes && {
-            groupName: albumName,
-            groupTypes,
+        ...(albumNameRef.current &&
+          groupTypesRef.current && {
+            groupName: albumNameRef.current,
+            groupTypes: groupTypesRef.current,
           }),
       });
 
@@ -44,12 +56,11 @@ export const useInfiniteScrollPhotos = (
         source: 'gallery',
       }));
 
-      if (page_info.end_cursor === endCursor) {
+      if (page_info.end_cursor === endCursorRef.current) {
         return;
       }
 
       setPhotos(prev => [...prev, ...mappedPhotos]);
-
       setEndCursor(page_info.end_cursor);
       setHasNextPage(page_info.has_next_page);
     } catch (error) {
@@ -58,9 +69,13 @@ export const useInfiniteScrollPhotos = (
     } finally {
       loadingRef.current = false;
     }
-  }, [endCursor, hasNextPage, albumName, groupTypes]);
+  }, []);
 
   useEffect(() => {
+    if (!albumName || !groupTypes) {
+      return;
+    }
+
     setPhotos([]);
     setEndCursor(undefined);
     setHasNextPage(true);
@@ -71,11 +86,8 @@ export const useInfiniteScrollPhotos = (
         const { edges, page_info } = await CameraRoll.getPhotos({
           first: 15,
           assetType: 'Photos',
-          ...(albumName &&
-            groupTypes && {
-              groupName: albumName,
-              groupTypes,
-            }),
+          groupName: albumName,
+          groupTypes,
         });
 
         const mappedPhotos: GridPhoto[] = edges.map(edge => ({

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
 import { FlatList, Image, Pressable, Text, View } from 'react-native';
 import Animated, {
@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { ALBUM_PANEL, ITEM_HEIGHT } from '../../constants/album';
 import { Album } from '../../hooks/useAlbumList';
 
 interface Props {
@@ -18,8 +19,47 @@ interface Props {
   onSelectAlbum: (albumTitle: string) => void;
 }
 
-const SLIDE_DURATION = 250;
-const PANEL_HEIGHT = 400;
+const AlbumItem = memo(
+  ({
+    item,
+    isSelected,
+    onPress,
+  }: {
+    item: Album;
+    isSelected: boolean;
+    onPress: () => void;
+  }) => (
+    <Pressable
+      onPress={onPress}
+      className="flex-row items-center border-b border-gray-100 px-5 py-3"
+      style={{ height: ITEM_HEIGHT, gap: 12 }}>
+      {item.thumbnailUri ? (
+        <Image
+          source={{ uri: item.thumbnailUri }}
+          className="h-14 w-14 rounded-lg"
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="h-14 w-14 items-center justify-center rounded-lg bg-gray-200" />
+      )}
+      <View className="flex-1">
+        <Text
+          className={`${isSelected ? 'text-pink-500' : 'text-gray-900'} headline-01`}>
+          {item.title}
+        </Text>
+        <Text className="text-gray-500 body-rg-01">
+          {item.count.toLocaleString()}
+        </Text>
+      </View>
+    </Pressable>
+  ),
+);
+
+const getItemLayout = (_: unknown, index: number) => ({
+  length: ITEM_HEIGHT,
+  offset: ITEM_HEIGHT * index,
+  index,
+});
 
 const AlbumListPanel = ({
   albums,
@@ -28,7 +68,7 @@ const AlbumListPanel = ({
   onSelectAlbum,
 }: Props) => {
   const [shouldRender, setShouldRender] = useState(false);
-  const translateY = useSharedValue(-PANEL_HEIGHT);
+  const height = useSharedValue(0);
 
   useEffect(() => {
     if (isVisible) {
@@ -38,10 +78,10 @@ const AlbumListPanel = ({
 
   useEffect(() => {
     if (shouldRender && isVisible) {
-      translateY.value = -PANEL_HEIGHT;
+      height.value = 0;
       requestAnimationFrame(() => {
-        translateY.value = withTiming(0, {
-          duration: SLIDE_DURATION,
+        height.value = withTiming(ALBUM_PANEL.SCREEN_HEIGHT, {
+          duration: ALBUM_PANEL.SLIDE_DURATION,
           easing: Easing.out(Easing.cubic),
         });
       });
@@ -50,9 +90,12 @@ const AlbumListPanel = ({
 
   useEffect(() => {
     if (!isVisible && shouldRender) {
-      translateY.value = withTiming(
-        -PANEL_HEIGHT,
-        { duration: SLIDE_DURATION, easing: Easing.in(Easing.cubic) },
+      height.value = withTiming(
+        0,
+        {
+          duration: ALBUM_PANEL.SLIDE_DURATION,
+          easing: Easing.in(Easing.cubic),
+        },
         () => {
           runOnJS(setShouldRender)(false);
         },
@@ -61,42 +104,28 @@ const AlbumListPanel = ({
   }, [isVisible]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
+    height: height.value,
   }));
+
+  const renderAlbumItem = useCallback(
+    ({ item }: { item: Album }) => (
+      <AlbumItem
+        item={item}
+        isSelected={item.title === selectedAlbum}
+        onPress={() => onSelectAlbum(item.title)}
+      />
+    ),
+    [selectedAlbum, onSelectAlbum],
+  );
+
+  const keyExtractor = useCallback(
+    (item: Album, index: number) => `${item.title}-${index}`,
+    [],
+  );
 
   if (!shouldRender) {
     return null;
   }
-
-  const renderAlbumItem = ({ item }: { item: Album }) => {
-    const isSelected = item.title === selectedAlbum;
-
-    return (
-      <Pressable
-        onPress={() => onSelectAlbum(item.title)}
-        className="flex-row items-center border-b border-gray-100 px-5 py-3"
-        style={{ gap: 12 }}>
-        {item.thumbnailUri ? (
-          <Image
-            source={{ uri: item.thumbnailUri }}
-            className="h-14 w-14 rounded-lg"
-            resizeMode="cover"
-          />
-        ) : (
-          <View className="h-14 w-14 items-center justify-center rounded-lg bg-gray-200" />
-        )}
-        <View className="flex-1">
-          <Text
-            className={`headline-03 ${isSelected ? 'text-pink-500' : 'text-gray-900'}`}>
-            {item.title}
-          </Text>
-          <Text className="text-gray-500 body-rg-01">
-            {item.count.toLocaleString()}
-          </Text>
-        </View>
-      </Pressable>
-    );
-  };
 
   return (
     <Animated.View
@@ -109,16 +138,21 @@ const AlbumListPanel = ({
           top: 0,
           zIndex: 10,
           backgroundColor: 'white',
+          overflow: 'hidden',
         },
       ]}
       pointerEvents={isVisible ? 'auto' : 'none'}>
       <FlatList
         data={albums}
-        keyExtractor={(item, index) => `${item.title}-${index}`}
+        keyExtractor={keyExtractor}
         renderItem={renderAlbumItem}
+        getItemLayout={getItemLayout}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         bounces={false}
-        style={{ maxHeight: PANEL_HEIGHT }}
+        style={{ flex: 1 }}
       />
     </Animated.View>
   );

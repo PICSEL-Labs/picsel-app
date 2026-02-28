@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { AlbumGroupType } from './useAlbumList';
 import { useCameraCapture } from './useCameraCapture';
 import { usePhotoGrid } from './usePhotoGrid';
 import { usePhotoSelection } from './usePhotoSelection';
@@ -7,7 +8,7 @@ import { usePhotoSelection } from './usePhotoSelection';
 export const usePhotoPicker = (
   variant: 'main' | 'extra' | 'cover',
   albumName: string | null,
-  groupTypes: 'Album' | 'SmartAlbum' | null,
+  groupTypes: AlbumGroupType | null,
 ) => {
   const { photos, fetchPhotos, hasNextPage, appendCapturedPhoto } =
     usePhotoGrid(albumName, groupTypes);

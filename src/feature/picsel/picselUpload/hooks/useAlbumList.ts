@@ -11,6 +11,49 @@ export interface Album {
   groupTypes: AlbumGroupType;
 }
 
+const getAlbumsByType = async () => {
+  const [userAlbums, smartAlbums] = await Promise.all([
+    CameraRoll.getAlbums({ assetType: 'Photos', albumType: 'Album' }),
+    CameraRoll.getAlbums({ assetType: 'Photos', albumType: 'SmartAlbum' }),
+  ]);
+
+  const tagged = [
+    ...userAlbums.map(a => ({ ...a, groupTypes: 'Album' as const })),
+    ...smartAlbums.map(a => ({ ...a, groupTypes: 'SmartAlbum' as const })),
+  ];
+
+  return tagged
+    .filter(
+      (album, idx, arr) =>
+        album.count > 0 && arr.findIndex(a => a.title === album.title) === idx,
+    )
+    .map(({ title, count, groupTypes }) => ({ title, count, groupTypes }))
+    .sort((a, b) => b.count - a.count);
+};
+
+const fetchThumbnails = async (albumList: Album[]) => {
+  const uris = await Promise.all(
+    albumList.map(async album => {
+      try {
+        const { edges } = await CameraRoll.getPhotos({
+          first: 1,
+          assetType: 'Photos',
+          groupName: album.title,
+          groupTypes: album.groupTypes,
+        });
+        return edges[0]?.node.image.uri;
+      } catch {
+        return undefined;
+      }
+    }),
+  );
+
+  return albumList.map((album, i) => ({
+    ...album,
+    thumbnailUri: uris[i],
+  }));
+};
+
 export const useAlbumList = () => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
@@ -19,33 +62,7 @@ export const useAlbumList = () => {
 
   const fetchAlbums = useCallback(async () => {
     try {
-      const [userAlbums, smartAlbums] = await Promise.all([
-        CameraRoll.getAlbums({ assetType: 'Photos', albumType: 'Album' }),
-        CameraRoll.getAlbums({ assetType: 'Photos', albumType: 'SmartAlbum' }),
-      ]);
-      const taggedUser = userAlbums.map(a => ({
-        ...a,
-        groupTypes: 'Album' as const,
-      }));
-      const taggedSmart = smartAlbums.map(a => ({
-        ...a,
-        groupTypes: 'SmartAlbum' as const,
-      }));
-      const albumData = [...taggedUser, ...taggedSmart];
-
-      const uniqueAlbumData = albumData.filter(
-        (album, idx, arr) =>
-          album.count > 0 &&
-          arr.findIndex(a => a.title === album.title) === idx,
-      );
-
-      const sorted = uniqueAlbumData
-        .map(a => ({
-          title: a.title,
-          count: a.count,
-          groupTypes: a.groupTypes,
-        }))
-        .sort((a, b) => b.count - a.count);
+      const sorted = await getAlbumsByType();
 
       setAlbums(sorted);
       if (sorted.length > 0) {
@@ -53,28 +70,8 @@ export const useAlbumList = () => {
       }
       setIsReady(true);
 
-      const thumbnails = await Promise.all(
-        sorted.map(async album => {
-          try {
-            const { edges } = await CameraRoll.getPhotos({
-              first: 1,
-              assetType: 'Photos',
-              groupName: album.title,
-              groupTypes: album.groupTypes,
-            });
-            return edges[0]?.node.image.uri;
-          } catch {
-            return undefined;
-          }
-        }),
-      );
-
-      setAlbums(prev =>
-        prev.map((album, i) => ({
-          ...album,
-          thumbnailUri: thumbnails[i],
-        })),
-      );
+      const withThumbnails = await fetchThumbnails(sorted);
+      setAlbums(withThumbnails);
     } catch (error) {
       console.log('앨범 목록 불러오기 실패:', error);
       setIsReady(true);

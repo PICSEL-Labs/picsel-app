@@ -27,7 +27,7 @@ const AlbumItem = memo(({ item, isSelected, onPress }: Props) => (
     )}
     <View className="flex-1">
       <Text
-        className={`${isSelected ? 'text-pink-500' : 'text-gray-900'} headline-01`}>
+        className={`${isSelected ? 'text-pink-500' : 'text-gray-900'} body-rg-02`}>
         {item.title}
       </Text>
       <Text className="text-gray-500 body-rg-01">

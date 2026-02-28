@@ -111,7 +111,7 @@ const PhotoSelectHeader = ({
           onPress={onToggleAlbumList}
           className="flex-row items-center self-start"
           style={{ gap: 4 }}>
-          <Text className="text-gray-900 headline-03">{albumName}</Text>
+          <Text className="text-gray-900 headline-02">{albumName}</Text>
           <Animated.View style={toggleAnimatedStyle}>
             <ToggleIcons shape="down" width={24} height={24} />
           </Animated.View>

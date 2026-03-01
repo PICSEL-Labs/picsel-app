@@ -1,19 +1,16 @@
-export interface NotificationPreview {
+export interface NotificationBase {
   notificationId: number;
   title: string;
-  bodyPreview: string;
   type: 'NORMAL';
   publishedAt: string;
   receivedAt: string;
   isRead: boolean;
 }
 
-export interface NotificationDetail {
-  notificationId: number;
-  title: string;
+export interface NotificationPreview extends NotificationBase {
+  bodyPreview: string;
+}
+
+export interface NotificationDetail extends NotificationBase {
   body: string;
-  type: 'NORMAL';
-  publishedAt: string;
-  receivedAt: string;
-  isRead: boolean;
 }

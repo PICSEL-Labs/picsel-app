@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { MYPAGE_MENU_ITEMS } from '../constants/menuItems';
+import { MYPAGE_MENU_ITEMS, MypageScreenName } from '../constants/menuItems';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import MypageIcons from '@/shared/icons/MypageIcons';
@@ -57,5 +57,11 @@ export const useMypageMenu = () => {
     };
   });
 
-  return { menuItems };
+  const handleCardPress = (screenName: MypageScreenName | null) => {
+    if (screenName) {
+      navigation.navigate('MypageRoute', { screen: screenName });
+    }
+  };
+
+  return { menuItems, handleCardPress };
 };

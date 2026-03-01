@@ -8,7 +8,10 @@ interface Props {
 
 const NotificationBody = ({ content }: Props) => {
   return (
-    <ScrollView className="mt-4 px-4">
+    <ScrollView
+      className="mt-4 flex-1 px-4"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 40 }}>
       <View className="self-stretch">
         {content ? (
           <Text className="text-gray-900 body-rg-03">{content}</Text>

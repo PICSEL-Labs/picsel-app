@@ -9,6 +9,7 @@ import NicknameSectionSkeleton from '@/feature/mypage/main/components/ui/atoms/N
 import MypageMenuItem from '@/feature/mypage/main/components/ui/molecules/MypageMenuItem';
 import { useMypageMenu } from '@/feature/mypage/main/hooks/useMypageMenu';
 import { useGetUser } from '@/feature/mypage/main/queries/useGetUser';
+import { useGetNotifications } from '@/feature/mypage/notification/queries/useGetNotifications';
 import ListGroup from '@/feature/mypage/shared/components/ui/organisms/ListGroup';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
@@ -16,12 +17,16 @@ import StarIcons from '@/shared/icons/StarIcons';
 
 const MypageScreen = () => {
   const { data: user, isLoading } = useGetUser();
+  const { data: notifications } = useGetNotifications();
   const { menuItems } = useMypageMenu();
   const navigation = useNavigation<RootStackNavigationProp>();
+
+  const hasUnread = notifications?.some(n => !n.isRead) ?? false;
 
   return (
     <ScreenLayout>
       <MypageTopBar
+        hasUnread={hasUnread}
         onPressNotification={() =>
           navigation.navigate('MypageRoute', {
             screen: 'NotificationScreen',

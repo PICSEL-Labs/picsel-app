@@ -2,7 +2,6 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { Notification } from '@/feature/mypage/notification/types';
 import BrandSearchScreen from '@/screens/brandSearch';
 import MypageAccountScreen from '@/screens/mypage/account';
 import BrandSettingScreen from '@/screens/mypage/brand';
@@ -24,7 +23,7 @@ export type MypageNavigationProps = {
   MypageWithdrawalSuccess: undefined;
   EditNicknameScreen: undefined;
   NotificationScreen: undefined;
-  NotificationDetailScreen: { notification: Notification };
+  NotificationDetailScreen: { notificationId: number };
   NotificationSettingScreen: undefined;
   BrandSettingScreen: undefined;
   BrandSearchScreen: { variant: 'signup' | 'mypage' };

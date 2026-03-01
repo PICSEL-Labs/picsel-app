@@ -5,9 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import {
   EmptyNotification,
   NotificationList,
-  MOCK_NOTIFICATIONS,
-  Notification,
 } from '@/feature/mypage/notification';
+import { useGetNotifications } from '@/feature/mypage/notification/queries/useGetNotifications';
+import { NotificationPreview } from '@/feature/mypage/notification/types';
 import MypageHeader from '@/feature/mypage/shared/components/ui/molecules/MypageHeader';
 import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
@@ -15,13 +15,14 @@ import MypageIcons from '@/shared/icons/MypageIcons';
 
 const NotificationScreen = () => {
   const navigation = useNavigation<MypageNavigationProp>();
+  const { data: notifications = [] } = useGetNotifications();
 
-  // TODO: 실제 알림 데이터로 교체
-  const notifications = MOCK_NOTIFICATIONS;
   const hasNotifications = notifications.length > 0;
 
-  const handlePressItem = (notification: Notification) => {
-    navigation.navigate('NotificationDetailScreen', { notification });
+  const handlePressItem = (notification: NotificationPreview) => {
+    navigation.navigate('NotificationDetailScreen', {
+      notificationId: notification.notificationId,
+    });
   };
 
   return (

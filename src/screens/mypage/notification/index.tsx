@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import {
   EmptyNotification,
@@ -15,7 +15,13 @@ import MypageIcons from '@/shared/icons/MypageIcons';
 
 const NotificationScreen = () => {
   const navigation = useNavigation<MypageNavigationProp>();
-  const { data: notifications = [] } = useGetNotifications();
+  const { data: notifications = [], refetch } = useGetNotifications();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch]),
+  );
 
   const hasNotifications = notifications.length > 0;
 

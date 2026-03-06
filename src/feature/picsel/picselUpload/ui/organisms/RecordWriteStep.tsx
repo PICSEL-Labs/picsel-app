@@ -54,7 +54,7 @@ const RecordWriteStep = () => {
         <View className="px-5 pt-6">
           <Text className="mb-3 text-gray-900 headline-02">내용</Text>
 
-          <View className="min-h-[300px] gap-2 rounded-xl border border-gray-300 p-2">
+          <View className="h-[300px] gap-2 rounded-xl border border-gray-300 p-2">
             <TextInput
               value={title}
               onChangeText={setTitle}

@@ -2,18 +2,19 @@ import React from 'react';
 
 import { Pressable, View, Text } from 'react-native';
 
-import { Notification } from '../../../types';
+import { NotificationPreview } from '../../../types';
+import { formatISOToDate } from '../../../utils/formatDate';
 
 import SparkleIcons from '@/shared/icons/SparkleIcons';
 
 interface Props {
-  notification: Notification;
+  notification: NotificationPreview;
   isLast?: boolean;
   onPress?: () => void;
 }
 
 const NotificationItem = ({ notification, isLast = false, onPress }: Props) => {
-  const { title, description, date } = notification;
+  const { title, bodyPreview, publishedAt, isRead } = notification;
 
   return (
     <Pressable
@@ -23,16 +24,21 @@ const NotificationItem = ({ notification, isLast = false, onPress }: Props) => {
       }`}>
       <SparkleIcons shape="double" width={40} height={40} />
       <View className="flex flex-1 space-y-1">
-        <Text className="text-gray-900 headline-02">{title}</Text>
-        {description && (
+        <Text
+          className={`headline-02 ${isRead ? 'text-gray-400' : 'text-gray-900'}`}>
+          {title}
+        </Text>
+        {bodyPreview ? (
           <Text
-            className="text-gray-900 body-rg-02"
+            className={`body-rg-02 ${isRead ? 'text-gray-400' : 'text-gray-900'}`}
             numberOfLines={1}
             ellipsizeMode="tail">
-            {description}
+            {bodyPreview}
           </Text>
-        )}
-        <Text className="text-gray-600 body-rg-02">{date}</Text>
+        ) : null}
+        <Text className="text-gray-600 body-rg-02">
+          {formatISOToDate(publishedAt)}
+        </Text>
       </View>
     </Pressable>
   );

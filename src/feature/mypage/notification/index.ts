@@ -12,7 +12,4 @@ export { default as SettingMenuList } from './components/ui/molecules/SettingMen
 export { default as SettingInfoText } from './components/ui/molecules/SettingInfoText';
 
 // Types
-export type { Notification } from './types';
-
-// Constants
-export { MOCK_NOTIFICATIONS } from './constants/mockData';
+export type { NotificationPreview, NotificationDetail } from './types';

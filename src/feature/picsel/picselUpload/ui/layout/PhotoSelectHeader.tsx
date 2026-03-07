@@ -1,20 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, View } from 'react-native';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ArrowIcons from '@/shared/icons/ArrowIcons';
 import ReplayIcons from '@/shared/icons/ReplayIcon';
+import ToggleIcons from '@/shared/icons/ToggleIcons';
 
 interface Props {
-  variant: 'main' | 'extra' | 'cover'; // 대표사진 / 추가사진 / 픽셀북 커버 사진
+  variant: 'main' | 'extra' | 'cover';
   onReset?: () => void;
   hasSelected?: boolean;
+  albumName: string;
+  isAlbumListOpen: boolean;
+  onToggleAlbumList: () => void;
 }
 
-const PhotoSelectHeader = ({ variant, onReset, hasSelected }: Props) => {
+const PhotoSelectHeader = ({
+  variant,
+  onReset,
+  hasSelected,
+  albumName,
+  isAlbumListOpen,
+  onToggleAlbumList,
+}: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
+
+  const rotation = useSharedValue(0);
+
+  useEffect(() => {
+    rotation.value = withTiming(isAlbumListOpen ? 180 : 0, {
+      duration: 300,
+      easing: Easing.out(Easing.cubic),
+    });
+  }, [isAlbumListOpen]);
+
+  const toggleAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value}deg` }],
+  }));
 
   const getHeaderText = () => {
     switch (variant) {
@@ -75,6 +105,18 @@ const PhotoSelectHeader = ({ variant, onReset, hasSelected }: Props) => {
       </View>
 
       <View className="px-1 py-2">{content.desc}</View>
+
+      <View className="border-b border-gray-100 px-5 py-2">
+        <Pressable
+          onPress={onToggleAlbumList}
+          className="flex-row items-center self-start"
+          style={{ gap: 4 }}>
+          <Text className="text-gray-900 headline-02">{albumName}</Text>
+          <Animated.View style={toggleAnimatedStyle}>
+            <ToggleIcons shape="down" width={24} height={24} />
+          </Animated.View>
+        </Pressable>
+      </View>
     </>
   );
 };

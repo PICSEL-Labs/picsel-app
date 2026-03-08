@@ -31,6 +31,7 @@ const PicselDetailScreen = ({ route, navigation }: Props) => {
   const postDropdown = useDropdownMenu();
   const { dropdownItems: postDropdownItems } = usePicselDetailMenu({
     picselId,
+    currentPicselbookId: picselData?.picselbook.picselbookId ?? '',
     hideDropdown: postDropdown.hide,
   });
 
@@ -105,17 +106,19 @@ const PicselDetailScreen = ({ route, navigation }: Props) => {
             </Text>
           </View>
         </View>
-        <View className="mb-6 px-4">
-          <Pressable
-            onPress={() =>
-              viewer.open(getImageUrl(picselData?.representativeImagePath))
-            }>
-            <AspectRatioImage
-              uri={getImageUrl(picselData?.representativeImagePath)}
-              style={{ width: '100%' }}
-            />
-          </Pressable>
-        </View>
+        {picselData?.representativeImagePath && (
+          <View className="mb-6 px-4">
+            <Pressable
+              onPress={() =>
+                viewer.open(getImageUrl(picselData.representativeImagePath))
+              }>
+              <AspectRatioImage
+                uri={getImageUrl(picselData.representativeImagePath)}
+                style={{ width: '100%' }}
+              />
+            </Pressable>
+          </View>
+        )}
         <View className="px-6 pb-6 pt-2">
           <Text className="text-gray-900 body-rg-02">
             {picselData?.content}

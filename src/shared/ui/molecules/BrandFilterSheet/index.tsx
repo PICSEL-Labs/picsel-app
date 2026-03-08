@@ -1,6 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 import { View } from 'react-native';
 
 import BrandFilterHeader from './BrandFilterHeader';
@@ -42,6 +47,20 @@ const BrandFilterSheet = () => {
     hideBrandFilterSheet();
   };
 
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior="none"
+        style={[props.style, { backgroundColor: '#11111480' }]}
+        opacity={1}
+      />
+    ),
+    [],
+  );
+
   const handlePressBrand = (brandId: string, name: string) => {
     const success = filterBrand(brandId, name);
     if (!success) {
@@ -68,6 +87,7 @@ const BrandFilterSheet = () => {
       animationConfigs={animationConfigs}
       enableContentPanningGesture={false}
       onChange={handleSheetChange}
+      backdropComponent={renderBackdrop}
       enablePanDownToClose>
       <View className="flex-1">
         <BrandFilterHeader onReset={handleReset} onApply={handleApply} />

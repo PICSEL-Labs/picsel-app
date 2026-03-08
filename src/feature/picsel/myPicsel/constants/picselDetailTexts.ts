@@ -19,7 +19,15 @@ export const EDIT_ALERT = {
   CONFIRM: '종료',
 } as const;
 
+export const MOVE_ALERT = {
+  TITLE: (bookName: string) => `"${bookName}"으로 사진을 옮길까요?`,
+  DESCRIPTION: '선택한 픽셀북으로 사진이 이동돼요',
+  CANCEL: '취소',
+  CONFIRM: '옮기기',
+} as const;
+
 export const TOAST_MESSAGES = {
   DELETE_SUCCESS: '픽셀을 삭제했어요',
   EDIT_SUCCESS: '픽셀 편집이 완료됐어요',
+  MOVE_SUCCESS: '선택한 픽셀북으로 사진을 옮겼어요',
 } as const;

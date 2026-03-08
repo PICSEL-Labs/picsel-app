@@ -16,6 +16,7 @@ import { PhotoGrid } from '@/feature/picsel/picselUpload/ui/organisms/PhotoGrid'
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
+import { usePhotoStore } from '@/shared/store/picselUpload';
 
 type SelectPhotoRouteProp =
   | RouteProp<MainNavigationProps, 'SelectMainPhoto'>
@@ -28,17 +29,14 @@ const SelectPhotoScreen = () => {
   const variant = route.params.variant;
   const picselBookRef = useRef<BottomSheetModal>(null);
 
-  const pendingBookName =
-    route.params.variant === 'cover'
-      ? (
-          route.params as RouteProp<
-            MainNavigationProps,
-            'SelectBookCover'
-          >['params']
-        ).bookName
-      : '';
+  const { from, bookName: pendingBookName = '' } = route.params as {
+    from?: 'edit';
+    bookName?: string;
+  };
 
   const { setMainPhoto, addExtraPhotos } = usePicselUploadStore();
+  const { setMainPhoto: setEditMainPhoto, addExtraPhotos: addEditExtraPhotos } =
+    usePhotoStore();
 
   const {
     albums,
@@ -69,13 +67,18 @@ const SelectPhotoScreen = () => {
         picselBookRef.current?.present();
         return;
       case 'main':
-        setMainPhoto(selectedUris[0]);
+        from === 'edit'
+          ? setEditMainPhoto(selectedUris[0])
+          : setMainPhoto(selectedUris[0]);
         break;
       case 'extra':
-        addExtraPhotos(selectedUris);
+        from === 'edit'
+          ? addEditExtraPhotos(selectedUris)
+          : addExtraPhotos(selectedUris);
         break;
     }
-    navigation.replace('PicselUpload');
+
+    from === 'edit' ? navigation.goBack() : navigation.replace('PicselUpload');
   };
 
   return (

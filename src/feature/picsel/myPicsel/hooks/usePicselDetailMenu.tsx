@@ -7,6 +7,7 @@ import {
   DROPDOWN_ITEMS,
   TOAST_MESSAGES,
 } from '../constants/picselDetailTexts';
+import { useDeletePicsels } from '../mutations/useDeletePicsels';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { DropdownMenuItem } from '@/shared/components/ui/molecules/DropdownMenu';
@@ -16,12 +17,19 @@ import { useToastStore } from '@/shared/store/ui/toast';
 
 interface Props {
   picselId: string;
+  currentPicselbookId: string;
   hideDropdown: (onComplete?: () => void) => void;
 }
 
-export const usePicselDetailMenu = ({ picselId, hideDropdown }: Props) => {
+export const usePicselDetailMenu = ({
+  picselId,
+  currentPicselbookId,
+  hideDropdown,
+}: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { showToast } = useToastStore();
+
+  const { mutate: deletePicsels } = useDeletePicsels();
 
   const dropdownItems: DropdownMenuItem[] = useMemo(
     () => [
@@ -29,7 +37,7 @@ export const usePicselDetailMenu = ({ picselId, hideDropdown }: Props) => {
         label: DROPDOWN_ITEMS.EDIT,
         onPress: () => {
           hideDropdown(() => {
-            console.log('전체 편집', picselId);
+            navigation.navigate('PicselEdit', { picselId });
           });
         },
         icon: <PicselActionIcons shape="edit" width={24} height={24} />,
@@ -38,7 +46,10 @@ export const usePicselDetailMenu = ({ picselId, hideDropdown }: Props) => {
         label: DROPDOWN_ITEMS.MOVE,
         onPress: () => {
           hideDropdown(() => {
-            console.log('다른 픽셀북으로 이동');
+            navigation.navigate('PicselMove', {
+              picselId,
+              currentPicselbookId,
+            });
           });
         },
         icon: <PicselActionIcons shape="move" width={24} height={24} />,
@@ -55,13 +66,19 @@ export const usePicselDetailMenu = ({ picselId, hideDropdown }: Props) => {
       {
         label: DROPDOWN_ITEMS.DELETE,
         onPress: () => {
-          console.log('삭제');
           hideDropdown(() => {
             showConfirmModal(
               DELETE_ALERT.DESCRIPTION,
               () => {
-                showToast(TOAST_MESSAGES.DELETE_SUCCESS);
-                navigation.goBack();
+                deletePicsels(
+                  { picselIds: [picselId] },
+                  {
+                    onSuccess: () => {
+                      showToast(TOAST_MESSAGES.DELETE_SUCCESS);
+                      navigation.goBack();
+                    },
+                  },
+                );
               },
               {
                 title: DELETE_ALERT.TITLE,
@@ -75,7 +92,14 @@ export const usePicselDetailMenu = ({ picselId, hideDropdown }: Props) => {
         icon: <PicselActionIcons shape="delete" width={24} height={24} />,
       },
     ],
-    [hideDropdown, picselId, showConfirmModal, showToast, navigation],
+    [
+      hideDropdown,
+      picselId,
+      currentPicselbookId,
+      showToast,
+      navigation,
+      deletePicsels,
+    ],
   );
 
   return { dropdownItems };

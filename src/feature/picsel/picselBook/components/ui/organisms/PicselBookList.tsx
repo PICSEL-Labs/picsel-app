@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { FlatList, StyleSheet, View, useWindowDimensions } from 'react-native';
 
@@ -29,6 +29,7 @@ interface Props {
   onDelete?: (id: string, title: string) => void;
   onAddBook?: () => void;
   isUploadStep?: boolean;
+  onImagesReady?: () => void;
 }
 
 const PicselBookList = ({
@@ -42,6 +43,7 @@ const PicselBookList = ({
   onDelete,
   onAddBook,
   isUploadStep = false,
+  onImagesReady,
 }: Props) => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
@@ -73,6 +75,12 @@ const PicselBookList = ({
     useImagePreload(coverImageUris);
 
   const showSkeleton = isLoading || (!isImagesLoaded && books.length > 0);
+
+  useEffect(() => {
+    if (!showSkeleton) {
+      onImagesReady?.();
+    }
+  }, [showSkeleton]);
 
   const bookItems = useMemo(
     () => [

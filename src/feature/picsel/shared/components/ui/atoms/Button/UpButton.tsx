@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Pressable } from 'react-native';
 
-import FloatingButton from '@/shared/icons/FloatingButton';
+import ArrowUpIcon from '@/assets/button/floating.svg';
 
 interface Props {
   onPress: () => void;
@@ -10,8 +10,10 @@ interface Props {
 
 const UpButton = ({ onPress }: Props) => {
   return (
-    <Pressable onPress={onPress}>
-      <FloatingButton shape="floating" />
+    <Pressable
+      onPress={onPress}
+      className="h-12 w-12 items-center justify-center">
+      <ArrowUpIcon width={40} height={40} />
     </Pressable>
   );
 };

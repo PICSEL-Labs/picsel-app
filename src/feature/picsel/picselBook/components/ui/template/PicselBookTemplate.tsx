@@ -7,6 +7,7 @@ import AddBookButton from '../organisms/AddBookButton';
 import PicselBookList from '../organisms/PicselBookList';
 
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
+import SparkleBackground from '@/feature/picsel/shared/components/ui/atoms/SparkleBackground';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
@@ -65,6 +66,8 @@ const PicselBookTemplate = () => {
           />
         }>
         <View className="flex-1">
+          <SparkleBackground />
+
           <View className="absolute left-[41px] top-16">
             <AddBookButton onPress={handleAddBook} />
           </View>
@@ -82,6 +85,8 @@ const PicselBookTemplate = () => {
 
   return (
     <View className="flex-1 bg-white">
+      <SparkleBackground />
+
       <PixelToolbar
         totalPhotos={totalBooks}
         isSelecting={isSelecting}

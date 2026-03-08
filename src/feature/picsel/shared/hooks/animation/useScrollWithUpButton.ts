@@ -23,7 +23,7 @@ interface UseScrollWithUpButtonOptions {
 export const useScrollWithUpButton = (
   options: UseScrollWithUpButtonOptions = {},
 ): UseScrollWithUpButtonReturn => {
-  const { threshold = 100, useScrollView = false } = options;
+  const { threshold = 300, useScrollView = false } = options;
   const [showUpButton, setShowUpButton] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const scrollViewRef = useRef<ScrollView>(null);

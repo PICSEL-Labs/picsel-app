@@ -97,17 +97,15 @@ const MainRoute = () => {
         initialParams={{ variant: 'cover', bookName: '' }}
       />
       <Stack.Screen name="RegisterPhoto" component={RegisterPhotoScreen} />
-
       <Stack.Screen name="PicselUpload" component={PicselUploadScreen} />
 
+      {/* Picsel Detail & Edit Flow */}
       <Stack.Screen name="PicselDetail" component={PicselDetailScreen} />
-
       <Stack.Screen
         name="PicselEdit"
         component={PicselEditScreen}
         options={{ gestureEnabled: false }}
       />
-
       <Stack.Screen name="PicselMove" component={PicselMoveScreen} />
 
       {/* Picsel Tab & Book */}

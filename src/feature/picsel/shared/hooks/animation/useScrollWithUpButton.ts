@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import {
   FlatList,
@@ -23,24 +23,37 @@ interface UseScrollWithUpButtonOptions {
 export const useScrollWithUpButton = (
   options: UseScrollWithUpButtonOptions = {},
 ): UseScrollWithUpButtonReturn => {
-  const { threshold = 100, useScrollView = false } = options;
+  const { threshold = 300, useScrollView = false } = options;
   const [showUpButton, setShowUpButton] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const scrollViewRef = useRef<ScrollView>(null);
+  const isScrollingToTop = useRef(false);
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    setShowUpButton(offsetY > threshold);
-  };
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offsetY = event.nativeEvent.contentOffset.y;
 
-  const scrollToTop = () => {
+      if (isScrollingToTop.current) {
+        if (offsetY <= 0) {
+          isScrollingToTop.current = false;
+        }
+        return;
+      }
+
+      setShowUpButton(offsetY > threshold);
+    },
+    [threshold],
+  );
+
+  const scrollToTop = useCallback(() => {
+    isScrollingToTop.current = true;
     setShowUpButton(false);
     if (useScrollView) {
       scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     } else {
       flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
     }
-  };
+  }, [useScrollView]);
 
   return {
     showUpButton,

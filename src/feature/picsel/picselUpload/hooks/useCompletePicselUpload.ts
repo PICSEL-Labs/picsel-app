@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useAddPicselToPicselBook } from '../mutations/useAddPicselToPicselBook';
 import { useCreatePicselDraft } from '../mutations/useCreatePicselDraft';
@@ -15,6 +16,7 @@ type Params = {
 
 export const useCompletePicselUpload = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const queryClient = useQueryClient();
 
   const {
     takenDate,
@@ -46,6 +48,9 @@ export const useCompletePicselUpload = () => {
 
     uploadPicsel(requestPayload, {
       onSuccess: data => {
+        queryClient.invalidateQueries({
+          queryKey: ['picselBookPicsels', picselbookId],
+        });
         navigation.reset({
           index: 1,
           routes: [

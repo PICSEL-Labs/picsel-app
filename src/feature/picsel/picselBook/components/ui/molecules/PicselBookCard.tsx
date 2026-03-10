@@ -98,70 +98,83 @@ const PicselBookCard = ({
     );
   }
 
+  const menuConfig = {
+    menuTitle: '',
+    menuItems: [
+      {
+        actionKey: 'edit',
+        actionTitle: '이름 변경',
+        icon: {
+          type: 'IMAGE_SYSTEM',
+          imageValue: { systemName: 'pencil' },
+        },
+      },
+      {
+        actionKey: 'cover',
+        actionTitle: '커버사진 변경',
+        icon: {
+          type: 'IMAGE_SYSTEM',
+          imageValue: { systemName: 'photo' },
+        },
+      },
+      {
+        actionKey: 'delete',
+        actionTitle: '삭제',
+        menuAttributes: ['destructive'],
+        icon: {
+          type: 'IMAGE_SYSTEM',
+          imageValue: { systemName: 'trash' },
+        },
+      },
+    ],
+  };
+
+  const handleMenuItem = ({
+    nativeEvent,
+  }: {
+    nativeEvent: { actionKey: string };
+  }) => {
+    switch (nativeEvent.actionKey) {
+      case 'edit':
+        onEdit?.(id, title);
+        break;
+      case 'cover':
+        onChangeCover?.(id);
+        break;
+      case 'delete':
+        onDelete?.(id, title);
+        break;
+    }
+  };
+
   // 선택 모드가 아닐 때는 ContextMenuView 사용
   return (
-    <ContextMenuView
-      menuConfig={{
-        menuTitle: '',
-        menuItems: [
-          {
-            actionKey: 'edit',
-            actionTitle: '이름 변경',
-            icon: {
-              type: 'IMAGE_SYSTEM',
-              imageValue: {
-                systemName: 'pencil',
-              },
-            },
-          },
-          {
-            actionKey: 'cover',
-            actionTitle: '커버사진 변경',
-            icon: {
-              type: 'IMAGE_SYSTEM',
-              imageValue: {
-                systemName: 'photo',
-              },
-            },
-          },
-          {
-            actionKey: 'delete',
-            actionTitle: '삭제',
-            menuAttributes: ['destructive'],
-            icon: {
-              type: 'IMAGE_SYSTEM',
-              imageValue: {
-                systemName: 'trash',
-              },
-            },
-          },
-        ],
-      }}
-      previewConfig={{
-        previewType: 'DEFAULT',
-        previewSize: 'STRETCH',
-        isResizeAnimated: false,
-        borderRadius: 0,
-      }}
-      onPressMenuItem={({ nativeEvent }) => {
-        switch (nativeEvent.actionKey) {
-          case 'edit':
-            onEdit?.(id, title);
-            break;
-          case 'cover':
-            onChangeCover?.(id);
-            break;
-          case 'delete':
-            onDelete?.(id, title);
-            break;
-        }
-      }}>
-      <GestureDetector gesture={tapGesture}>
-        <View className="flex flex-col items-center" style={{ width: 80 }}>
-          {cardContent}
+    <GestureDetector gesture={tapGesture}>
+      <View className="flex flex-col items-center" style={{ width: 80 }}>
+        <View className="mb-2">
+          <ContextMenuView
+            menuConfig={menuConfig}
+            onPressMenuItem={handleMenuItem}>
+            <PicselBookIcons
+              shape={coverImage ? 'cover-selected' : 'default'}
+              width={80}
+              height={72}
+              imageUri={coverImage}
+              onImageLoad={onImageLoad}
+              onImageError={onImageError}
+            />
+          </ContextMenuView>
         </View>
-      </GestureDetector>
-    </ContextMenuView>
+
+        <Text
+          className="mb-1 text-center text-gray-900 body-rg-02"
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={{ width: 80 }}>
+          {title}
+        </Text>
+      </View>
+    </GestureDetector>
   );
 };
 

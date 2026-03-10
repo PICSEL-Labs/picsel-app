@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Pressable, Text, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { ContextMenuView } from 'react-native-ios-context-menu';
 
 import PicselBookSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PicselBookSkeleton';
@@ -36,9 +37,12 @@ const PicselBookCard = ({
   onImageLoad,
   onImageError,
 }: Props) => {
-  const handlePress = () => {
-    onPress?.(id, title);
-  };
+  const tapGesture = Gesture.Tap()
+    .maxDuration(400)
+    .onEnd(() => {
+      onPress?.(id, title);
+    })
+    .runOnJS(true);
 
   // 스켈레톤 상태일 때
   if (isLoading) {
@@ -86,7 +90,7 @@ const PicselBookCard = ({
   if (isSelecting) {
     return (
       <Pressable
-        onPress={handlePress}
+        onPress={() => onPress?.(id, title)}
         className="flex flex-col items-center"
         style={{ width: 80 }}>
         {cardContent}
@@ -152,12 +156,11 @@ const PicselBookCard = ({
             break;
         }
       }}>
-      <Pressable
-        onPress={handlePress}
-        className="flex flex-col items-center"
-        style={{ width: 80 }}>
-        {cardContent}
-      </Pressable>
+      <GestureDetector gesture={tapGesture}>
+        <View className="flex flex-col items-center" style={{ width: 80 }}>
+          {cardContent}
+        </View>
+      </GestureDetector>
     </ContextMenuView>
   );
 };

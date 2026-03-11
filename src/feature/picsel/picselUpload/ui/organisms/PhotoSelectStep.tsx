@@ -3,6 +3,8 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View } from 'react-native';
 
+import { STEP_TEXTS } from '../../constants/stepTexts';
+
 import ExtraPhotoList from '@/feature/picsel/picselUpload/ui/organisms/ExtraPhotoList';
 import MainPhotoCard from '@/feature/picsel/picselUpload/ui/organisms/MainPhotoCard';
 import UploadStepHeader from '@/feature/picsel/shared/components/ui/molecules/UploadStepHeader';
@@ -29,12 +31,7 @@ const PhotoSelectStep = ({ onNext }: Props) => {
               등록해주세요
             </>
           }
-          description={
-            <>
-              네컷 사진과 함께 추억이 담긴{'\n'}
-              다른 사진도 추가해 저장할 수 있어요.
-            </>
-          }
+          description={STEP_TEXTS.PHOTO_SELECT.DESCRIPTION}
         />
         <MainPhotoCard
           uri={mainPhoto}

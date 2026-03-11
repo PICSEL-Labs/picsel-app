@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
+import { STEP_TEXTS } from '../../constants/stepTexts';
 import { usePicselUploadStore } from '../../hooks/usePicselUploadStore';
 
 import PicselBookList from '@/feature/picsel/picselBook/components/ui/organisms/PicselBookList';
@@ -52,12 +53,7 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
             선택해주세요
           </>
         }
-        description={
-          <>
-            추억을 담을 픽셀북을 선택하거나{'\n'}
-            새롭게 추가할 수 있어요.
-          </>
-        }
+        description={STEP_TEXTS.PICSEL_BOOK_SELECT.DESCRIPTION}
       />
       <View className="flex-1 pt-6">
         <Text className="px-5 text-gray-900 headline-02">픽셀북 선택</Text>

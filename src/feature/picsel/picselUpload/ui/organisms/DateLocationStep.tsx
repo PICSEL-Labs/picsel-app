@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Text, View } from 'react-native';
 
+import { STEP_TEXTS } from '../../constants/stepTexts';
 import { usePicselUploadStore } from '../../hooks/usePicselUploadStore';
 
 import Calendar from '@/assets/icons/calendar/icon-calendar.svg';
@@ -41,7 +42,7 @@ const DateLocationStep = ({ onNext }: Props) => {
             <Text className="text-pink-500 title-02">위치</Text>를 선택해주세요
           </>
         }
-        description="촬영 일자와 장소는 필수 입력 정보에요."
+        description={STEP_TEXTS.DATE_LOCATION.DESCRIPTION}
       />
 
       <View className="pt-6">

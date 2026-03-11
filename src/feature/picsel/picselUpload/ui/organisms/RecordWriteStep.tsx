@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 
+import { STEP_TEXTS } from '../../constants/stepTexts';
 import { useCompletePicselUpload } from '../../hooks/useCompletePicselUpload';
 import { usePicselUploadStore } from '../../hooks/usePicselUploadStore';
 import UploadLoadingOverlay from '../molecules/UploadLoadingOverlay';
@@ -46,7 +47,7 @@ const RecordWriteStep = () => {
                 기록해보세요
               </>
             }
-            description={'사진과 함께 이 날의 이야기를 간단히 남겨보세요!'}
+            description={STEP_TEXTS.RECORD_WRITE.DESCRIPTION}
           />
 
           <ContentInput

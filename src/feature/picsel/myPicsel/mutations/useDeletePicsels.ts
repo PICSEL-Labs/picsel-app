@@ -10,6 +10,7 @@ export const useDeletePicsels = () => {
     mutationFn: (request: DeletePicselsRequest) => deletePicselsApi(request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPicsels'] });
+      queryClient.invalidateQueries({ queryKey: ['picselBooks'] });
     },
     onError: error => {
       console.error('픽셀 삭제 실패:', error);

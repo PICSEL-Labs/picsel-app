@@ -10,12 +10,18 @@ interface Props {
   shape: 'delete' | 'move' | 'edit' | 'share' | 'save';
   width: number;
   height: number;
+  color?: string;
 }
 
-const PicselActionIcons = ({ shape, width, height }: Props) => {
+const PicselActionIcons = ({
+  shape,
+  width,
+  height,
+  color = '#F91E34',
+}: Props) => {
   switch (shape) {
     case 'delete':
-      return <Delete width={width} height={height} />;
+      return <Delete width={width} height={height} color={color} />;
     case 'move':
       return <Moving width={width} height={height} />;
     case 'edit':

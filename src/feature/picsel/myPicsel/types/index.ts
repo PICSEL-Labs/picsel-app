@@ -92,3 +92,12 @@ export interface PicselDetailResponse {
 export interface getPicselDetailResponse extends CommonResponseType {
   data: PicselDetailResponse;
 }
+
+export interface MovePicselsRequest {
+  targetPicselbookId: string;
+  picselIds: string[];
+}
+
+export interface MovePicselsResponse extends CommonResponseType {
+  data: null;
+}

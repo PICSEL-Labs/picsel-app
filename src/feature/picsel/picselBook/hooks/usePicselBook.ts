@@ -49,7 +49,7 @@ export const usePicselBook = () => {
     usePicselBookActions();
 
   // 픽셀북 데이터 로딩 (API 연동)
-  const { data, isLoading, refetch } = useGetPicselBooks({
+  const { data, isLoading, isFetching, refetch } = useGetPicselBooks({
     sort: sortType,
   });
 
@@ -111,9 +111,6 @@ export const usePicselBook = () => {
   // 픽셀북 생성
   const handleSubmit = async (bookName: string, coverType: CoverType) => {
     picselBookRef.current?.dismiss();
-    if (bookCoverPhoto) {
-      navigation.pop(1);
-    }
 
     const draftUuid = await createDraft();
 
@@ -125,6 +122,9 @@ export const usePicselBook = () => {
 
     createPicselBook(payload, {
       onSuccess: response => {
+        if (bookCoverPhoto) {
+          navigation.pop(1);
+        }
         showToast(`"${bookName}"을 추가했어요`, 60);
 
         const newBookId = response.data?.picselbookId;
@@ -214,6 +214,7 @@ export const usePicselBook = () => {
     // 데이터
     books,
     isLoading,
+    isFetching,
     totalBooks,
     hasBooks,
 

@@ -12,6 +12,8 @@ import MonthFolderScreen from '@/screens/picsel/myPicsel/monthFolder';
 import YearFolderScreen from '@/screens/picsel/myPicsel/yearFolder';
 import PicselBookFolderScreen from '@/screens/picsel/picselBook/picselBookFolder';
 import PicselDetailScreen from '@/screens/picsel/picselDetail';
+import PicselEditScreen from '@/screens/picsel/picselEdit';
+import PicselMoveScreen from '@/screens/picsel/picselMove';
 import PicselUploadScreen from '@/screens/picsel/picselUpload';
 import RegisterPhotoScreen from '@/screens/picsel/picselUpload/registerPhoto';
 import SelectPhotoScreen from '@/screens/picsel/picselUpload/selectPhoto';
@@ -34,11 +36,13 @@ export type MainNavigationProps = {
   QrViewer: { url: string };
 
   // PicselUpload Flow
-  SelectMainPhoto: { variant: 'main' };
-  SelectExtraPhoto: { variant: 'extra' };
+  SelectMainPhoto: { variant: 'main'; from?: 'edit' };
+  SelectExtraPhoto: { variant: 'extra'; from?: 'edit' };
   RegisterPhoto: undefined;
   PicselUpload: undefined;
   PicselDetail: { picselId: string };
+  PicselEdit: { picselId: string };
+  PicselMove: { picselId: string; currentPicselbookId: string };
 
   // Picsel Tab & Book
   PicselTab: undefined;
@@ -93,10 +97,16 @@ const MainRoute = () => {
         initialParams={{ variant: 'cover', bookName: '' }}
       />
       <Stack.Screen name="RegisterPhoto" component={RegisterPhotoScreen} />
-
       <Stack.Screen name="PicselUpload" component={PicselUploadScreen} />
 
+      {/* Picsel Detail & Edit Flow */}
       <Stack.Screen name="PicselDetail" component={PicselDetailScreen} />
+      <Stack.Screen
+        name="PicselEdit"
+        component={PicselEditScreen}
+        options={{ gestureEnabled: false }}
+      />
+      <Stack.Screen name="PicselMove" component={PicselMoveScreen} />
 
       {/* Picsel Tab & Book */}
       <Stack.Screen name="PicselTab" component={PicselTabScreen} />

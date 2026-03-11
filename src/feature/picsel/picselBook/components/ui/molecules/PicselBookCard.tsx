@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Pressable, Text, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { ContextMenuView } from 'react-native-ios-context-menu';
 
 import PicselBookSkeleton from '@/feature/picsel/shared/components/ui/atoms/Skeleton/PicselBookSkeleton';
@@ -36,9 +37,12 @@ const PicselBookCard = ({
   onImageLoad,
   onImageError,
 }: Props) => {
-  const handlePress = () => {
-    onPress?.(id, title);
-  };
+  const tapGesture = Gesture.Tap()
+    .maxDuration(400)
+    .onEnd(() => {
+      onPress?.(id, title);
+    })
+    .runOnJS(true);
 
   // 스켈레톤 상태일 때
   if (isLoading) {
@@ -86,7 +90,7 @@ const PicselBookCard = ({
   if (isSelecting) {
     return (
       <Pressable
-        onPress={handlePress}
+        onPress={() => onPress?.(id, title)}
         className="flex flex-col items-center"
         style={{ width: 80 }}>
         {cardContent}
@@ -94,71 +98,83 @@ const PicselBookCard = ({
     );
   }
 
+  const menuConfig = {
+    menuTitle: '',
+    menuItems: [
+      {
+        actionKey: 'edit',
+        actionTitle: '이름 변경',
+        icon: {
+          type: 'IMAGE_SYSTEM',
+          imageValue: { systemName: 'pencil' },
+        },
+      },
+      {
+        actionKey: 'cover',
+        actionTitle: '커버사진 변경',
+        icon: {
+          type: 'IMAGE_SYSTEM',
+          imageValue: { systemName: 'photo' },
+        },
+      },
+      {
+        actionKey: 'delete',
+        actionTitle: '삭제',
+        menuAttributes: ['destructive'],
+        icon: {
+          type: 'IMAGE_SYSTEM',
+          imageValue: { systemName: 'trash' },
+        },
+      },
+    ],
+  };
+
+  const handleMenuItem = ({
+    nativeEvent,
+  }: {
+    nativeEvent: { actionKey: string };
+  }) => {
+    switch (nativeEvent.actionKey) {
+      case 'edit':
+        onEdit?.(id, title);
+        break;
+      case 'cover':
+        onChangeCover?.(id);
+        break;
+      case 'delete':
+        onDelete?.(id, title);
+        break;
+    }
+  };
+
   // 선택 모드가 아닐 때는 ContextMenuView 사용
   return (
-    <ContextMenuView
-      menuConfig={{
-        menuTitle: '',
-        menuItems: [
-          {
-            actionKey: 'edit',
-            actionTitle: '이름 변경',
-            icon: {
-              type: 'IMAGE_SYSTEM',
-              imageValue: {
-                systemName: 'pencil',
-              },
-            },
-          },
-          {
-            actionKey: 'cover',
-            actionTitle: '커버사진 변경',
-            icon: {
-              type: 'IMAGE_SYSTEM',
-              imageValue: {
-                systemName: 'photo',
-              },
-            },
-          },
-          {
-            actionKey: 'delete',
-            actionTitle: '삭제',
-            menuAttributes: ['destructive'],
-            icon: {
-              type: 'IMAGE_SYSTEM',
-              imageValue: {
-                systemName: 'trash',
-              },
-            },
-          },
-        ],
-      }}
-      previewConfig={{
-        previewType: 'DEFAULT',
-        previewSize: 'STRETCH',
-        isResizeAnimated: false,
-        borderRadius: 0,
-      }}
-      onPressMenuItem={({ nativeEvent }) => {
-        switch (nativeEvent.actionKey) {
-          case 'edit':
-            onEdit?.(id, title);
-            break;
-          case 'cover':
-            onChangeCover?.(id);
-            break;
-          case 'delete':
-            onDelete?.(id, title);
-            break;
-        }
-      }}>
-      <Pressable
-        onPress={handlePress}
-        className="flex flex-col items-center"
-        style={{ width: 80 }}>
-        {cardContent}
-      </Pressable>
-    </ContextMenuView>
+    <GestureDetector gesture={tapGesture}>
+      <View className="flex flex-col items-center" style={{ width: 80 }}>
+        <View className="mb-2">
+          <ContextMenuView
+            menuConfig={menuConfig}
+            onPressMenuItem={handleMenuItem}>
+            <PicselBookIcons
+              shape={coverImage ? 'cover-selected' : 'default'}
+              width={80}
+              height={72}
+              imageUri={coverImage}
+              onImageLoad={onImageLoad}
+              onImageError={onImageError}
+            />
+          </ContextMenuView>
+        </View>
+
+        <Text
+          className="mb-1 text-center text-gray-900 body-rg-02"
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={{ width: 80 }}>
+          {title}
+        </Text>
+      </View>
+    </GestureDetector>
   );
 };
 

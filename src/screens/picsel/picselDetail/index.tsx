@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, Text, View } from 'react-native';
@@ -9,6 +9,7 @@ import PicselDetailHeader from '@/feature/picsel/myPicsel/components/ui/molecule
 import { useImageViewer } from '@/feature/picsel/myPicsel/hooks/useImageViewer';
 import { usePhotoViewerMenu } from '@/feature/picsel/myPicsel/hooks/usePhotoViewerMenu';
 import { usePicselDetailMenu } from '@/feature/picsel/myPicsel/hooks/usePicselDetailMenu';
+import { useViewerHeader } from '@/feature/picsel/myPicsel/hooks/useViewerHeader';
 import { useGetPicselDetail } from '@/feature/picsel/myPicsel/queries/useGetPicselDetail';
 import { usePhotoFormat } from '@/feature/picsel/shared/utils/usePhotoFormat';
 import { MainNavigationProps } from '@/navigation';
@@ -17,6 +18,7 @@ import AspectRatioImage from '@/shared/components/ui/atoms/AspectRatioImage';
 import DropdownMenu from '@/shared/components/ui/molecules/DropdownMenu';
 import { useDropdownMenu } from '@/shared/hooks/useDropdownMenu';
 import SparkleImages from '@/shared/images/Sparkle';
+import { useToastStore } from '@/shared/store/ui/toast';
 import { getImageUrl } from '@/shared/utils/image';
 
 type Props = NativeStackScreenProps<MainNavigationProps, 'PicselDetail'>;
@@ -40,42 +42,26 @@ const PicselDetailScreen = ({ route, navigation }: Props) => {
   const viewer = useImageViewer();
 
   const { dropdownItems: viewerDropdownItems } = usePhotoViewerMenu({
-    picselId,
-    imagePath: viewer.uri,
+    uri: viewer.uri,
     hideDropdown: viewerDropdown.hide,
   });
 
   const extraPhotos = picselData?.photos.slice(1) ?? [];
 
+  const { hideToast } = useToastStore();
+
   const closeViewer = () => {
     viewerDropdown.hide();
     viewer.close();
+    hideToast();
   };
 
-  const renderViewerHeader = useCallback(
-    () => (
-      <View style={{ paddingTop: insets.top }}>
-        <PicselDetailHeader
-          onBackPress={closeViewer}
-          rightIconPress={viewerDropdown.toggle}
-        />
-        {viewerDropdown.isMounted && (
-          <DropdownMenu
-            isMounted={viewerDropdown.isMounted}
-            animatedStyle={viewerDropdown.animatedStyle}
-            items={viewerDropdownItems}
-            onClose={() => viewerDropdown.hide()}
-          />
-        )}
-      </View>
-    ),
-    [
-      insets.top,
-      viewerDropdown.isMounted,
-      viewerDropdown.animatedStyle,
-      viewerDropdownItems,
-    ],
-  );
+  const { renderHeader: renderViewerHeader } = useViewerHeader({
+    insets,
+    dropdown: viewerDropdown,
+    dropdownItems: viewerDropdownItems,
+    onClose: closeViewer,
+  });
 
   const handleBack = () => {
     if (navigation.canGoBack()) {

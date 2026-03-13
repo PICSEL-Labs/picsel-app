@@ -27,6 +27,9 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
     const allAlreadyLoaded =
       uris.length > 0 && uris.every(uri => globalLoadedUris.has(uri));
 
+    // 삭제 판별용: 업데이트 전 이전 URI 목록 캡처
+    const prevUrisForSubset = new Set(prevKeyRef.current.split(','));
+
     prevKeyRef.current = stableKey;
     totalRef.current = uris.length;
 
@@ -37,6 +40,10 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
         setIsImagesLoaded(true);
       }
     } else {
+      // 삭제 등으로 URI가 줄어든 경우 (subset) → 스켈레톤 유지하지 않음
+      const isSubset =
+        uris.length > 0 && uris.every(uri => prevUrisForSubset.has(uri));
+
       // 새 URI 중 이미 로드된 것은 유지
       const preserved = new Set<string>();
       uris.forEach(uri => {
@@ -54,6 +61,8 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
         if (!isImagesLoaded) {
           setIsImagesLoaded(true);
         }
+      } else if (isImagesLoaded && isSubset) {
+        // 이전 목록의 부분집합 (삭제만 발생) → 로드 상태 유지
       } else {
         if (isImagesLoaded) {
           setIsImagesLoaded(false);

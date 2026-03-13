@@ -39,7 +39,7 @@ export const useMyPicsel = () => {
   // 내 픽셀 데이터 페칭
   const { data: myPicselsData, isLoading } = useGetMyPicsels({
     page: 0,
-    size: 20,
+    size: 1000,
     sort: sortType,
   });
 

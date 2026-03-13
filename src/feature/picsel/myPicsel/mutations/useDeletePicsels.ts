@@ -11,6 +11,7 @@ export const useDeletePicsels = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPicsels'] });
       queryClient.invalidateQueries({ queryKey: ['picselBooks'] });
+      queryClient.invalidateQueries({ queryKey: ['picselBookPicsels'] });
     },
     onError: error => {
       console.error('픽셀 삭제 실패:', error);

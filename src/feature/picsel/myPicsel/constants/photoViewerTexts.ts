@@ -1,5 +1,6 @@
 export const DROPDOWN_ITEMS = {
   SET_REPRESENTATIVE: '대표사진으로 변경',
+  CHANGE_PHOTO: '다른 사진으로 변경',
   SAVE_PHOTO: '사진 저장',
   DELETE: '삭제',
 } as const;

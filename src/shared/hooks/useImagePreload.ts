@@ -18,17 +18,26 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
 
   // 렌더 중 동기적으로 key 변경 감지 → 1프레임 깜빡임 방지
   if (prevKeyRef.current !== stableKey) {
+    const prevUris = new Set(prevKeyRef.current.split(',').filter(Boolean));
+    const isSubset = uris.every(uri => prevUris.has(uri));
+
     prevKeyRef.current = stableKey;
-    loadedSetRef.current = new Set();
     totalRef.current = uris.length;
 
-    if (uris.length === 0) {
-      if (!isImagesLoaded) {
-        setIsImagesLoaded(true);
-      }
+    if (isSubset && isImagesLoaded) {
+      // 항목이 줄어들기만 한 경우 (삭제) → 이미 로드된 상태 유지
+      loadedSetRef.current = new Set(uris);
     } else {
-      if (isImagesLoaded) {
-        setIsImagesLoaded(false);
+      loadedSetRef.current = new Set();
+
+      if (uris.length === 0) {
+        if (!isImagesLoaded) {
+          setIsImagesLoaded(true);
+        }
+      } else {
+        if (isImagesLoaded) {
+          setIsImagesLoaded(false);
+        }
       }
     }
   }

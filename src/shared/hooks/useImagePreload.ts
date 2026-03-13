@@ -18,15 +18,18 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
 
   // 렌더 중 동기적으로 key 변경 감지 → 1프레임 깜빡임 방지
   if (prevKeyRef.current !== stableKey) {
-    const prevUris = new Set(prevKeyRef.current.split(',').filter(Boolean));
-    const isSubset = uris.every(uri => prevUris.has(uri));
+    const allAlreadyLoaded =
+      uris.length > 0 && uris.every(uri => loadedSetRef.current.has(uri));
 
     prevKeyRef.current = stableKey;
     totalRef.current = uris.length;
 
-    if (isSubset && isImagesLoaded) {
-      // 항목이 줄어들기만 한 경우 (삭제) → 이미 로드된 상태 유지
+    if (allAlreadyLoaded) {
+      // 모든 URI가 이미 로드 완료된 경우 (삭제, 재정렬 등) → 스켈레톤 스킵
       loadedSetRef.current = new Set(uris);
+      if (!isImagesLoaded) {
+        setIsImagesLoaded(true);
+      }
     } else {
       loadedSetRef.current = new Set();
 

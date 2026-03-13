@@ -33,7 +33,10 @@ export const useDeletePicselBooks = () => {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['picselBooks'] });
+      queryClient.invalidateQueries({
+        queryKey: ['picselBooks'],
+        refetchType: 'none',
+      });
     },
   });
 };

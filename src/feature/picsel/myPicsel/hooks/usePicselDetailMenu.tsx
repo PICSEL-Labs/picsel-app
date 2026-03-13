@@ -55,15 +55,6 @@ export const usePicselDetailMenu = ({
         icon: <PicselActionIcons shape="move" width={24} height={24} />,
       },
       {
-        label: DROPDOWN_ITEMS.SHARE,
-        onPress: () => {
-          hideDropdown(() => {
-            console.log('공유');
-          });
-        },
-        icon: <PicselActionIcons shape="share" width={24} height={24} />,
-      },
-      {
         label: DROPDOWN_ITEMS.DELETE,
         onPress: () => {
           hideDropdown(() => {

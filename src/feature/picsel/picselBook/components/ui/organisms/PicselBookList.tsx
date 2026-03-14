@@ -30,6 +30,7 @@ interface Props {
   onAddBook?: () => void;
   isUploadStep?: boolean;
   onImagesReady?: () => void;
+  onShowSkeletonChange?: (showSkeleton: boolean) => void;
 }
 
 const PicselBookList = ({
@@ -44,6 +45,7 @@ const PicselBookList = ({
   onAddBook,
   isUploadStep = false,
   onImagesReady,
+  onShowSkeletonChange,
 }: Props) => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
@@ -80,6 +82,7 @@ const PicselBookList = ({
     if (!showSkeleton) {
       onImagesReady?.();
     }
+    onShowSkeletonChange?.(showSkeleton);
   }, [showSkeleton]);
 
   const bookItems = useMemo(

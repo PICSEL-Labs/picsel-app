@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import { useMonthFolder } from '@/feature/picsel/myPicsel/hooks/useMonthFolder';
@@ -46,6 +46,11 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
     handleMove,
   } = useMonthFolder({ year, month });
 
+  const [showingSkeleton, setShowingSkeleton] = useState(false);
+  const handleShowSkeletonChange = useCallback((show: boolean) => {
+    setShowingSkeleton(show);
+  }, []);
+
   return (
     <ScreenLayout>
       <FolderHeader title={`${year}년 ${month}`} onBack={onBack} />
@@ -54,6 +59,7 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         totalPhotos={totalPhotos}
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}
+        disabled={showingSkeleton}
         onToggleSelecting={handleEnterSelecting}
         onSelectAll={() => selectAll(totalPhotos, photoData)}
         onClose={handleExitSelecting}
@@ -70,6 +76,7 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         isLoading={isLoading}
         onScroll={handleScroll}
         showYear={false}
+        onShowSkeletonChange={handleShowSkeletonChange}
       />
 
       <SelectionBottomSheet

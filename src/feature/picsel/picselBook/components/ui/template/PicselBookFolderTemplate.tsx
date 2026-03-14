@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { PicselBookEditType } from '../../../types';
 
@@ -67,6 +67,11 @@ const PicselBookFolderTemplate = ({
     handleEndReached,
   } = usePicselBookFolder({ bookId });
 
+  const [showingSkeleton, setShowingSkeleton] = useState(false);
+  const handleShowSkeletonChange = useCallback((show: boolean) => {
+    setShowingSkeleton(show);
+  }, []);
+
   // TODO: 편집 로직 구현
   const handleEdit = (editType: PicselBookEditType) => {
     console.log('편집 타입:', editType);
@@ -95,6 +100,7 @@ const PicselBookFolderTemplate = ({
           totalPhotos={totalPhotos}
           selectedCount={selectedPhotos.length}
           isSelecting={isSelecting}
+          disabled={showingSkeleton}
           onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}
@@ -136,6 +142,7 @@ const PicselBookFolderTemplate = ({
               onToggleSelection={toggleSelection}
               onPhotoPress={onPhotoPress}
               onEndReached={handleEndReached}
+              onShowSkeletonChange={handleShowSkeletonChange}
             />
           ) : (
             <PhotoTextListView
@@ -148,6 +155,7 @@ const PicselBookFolderTemplate = ({
               onToggleSelection={toggleSelection}
               onPhotoPress={onPhotoPress}
               onEndReached={handleEndReached}
+              onShowSkeletonChange={handleShowSkeletonChange}
             />
           )}
           <FloatingActionButtons

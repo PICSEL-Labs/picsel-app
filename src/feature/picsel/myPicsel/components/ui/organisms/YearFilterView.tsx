@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useEffect, useMemo } from 'react';
 
 import {
   FlatList,
@@ -30,10 +30,21 @@ interface Props {
   onViewMore: (year: string, month: string) => void;
   onViewAllYear: (year: string) => void;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onShowSkeletonChange?: (showSkeleton: boolean) => void;
 }
 
 const YearFilterView = forwardRef<FlatList, Props>(
-  ({ yearGroups, isLoading, onViewMore, onViewAllYear, onScroll }, ref) => {
+  (
+    {
+      yearGroups,
+      isLoading,
+      onViewMore,
+      onViewAllYear,
+      onScroll,
+      onShowSkeletonChange,
+    },
+    ref,
+  ) => {
     const { imageWidth, imageHeight } = useImageDimensions({
       horizontalPadding: HORIZONTAL_PADDING,
       itemSpacing: ITEM_SPACING,
@@ -72,6 +83,10 @@ const YearFilterView = forwardRef<FlatList, Props>(
 
     const showSkeleton =
       isLoading || (!isImagesLoaded && flattenedData.length > 0);
+
+    useEffect(() => {
+      onShowSkeletonChange?.(showSkeleton);
+    }, [showSkeleton, onShowSkeletonChange]);
 
     const renderItem = ({ item }: { item: FlattenedItem }) => {
       if (item.type === 'yearHeader') {

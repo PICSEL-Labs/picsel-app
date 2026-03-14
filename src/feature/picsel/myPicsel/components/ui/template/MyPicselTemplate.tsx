@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { View } from 'react-native';
 
@@ -57,6 +57,11 @@ const MyPicselTemplate = () => {
     handleViewMonthFolder,
   } = useMyPicsel();
 
+  const [showingSkeleton, setShowingSkeleton] = useState(false);
+  const handleShowSkeletonChange = useCallback((show: boolean) => {
+    setShowingSkeleton(show);
+  }, []);
+
   if (!isLoading && !hasPhotos) {
     return (
       <EmptyStateLayout
@@ -85,6 +90,7 @@ const MyPicselTemplate = () => {
           totalPhotos={totalPhotos}
           isSelecting={isSelecting}
           selectedCount={selectedPhotos.length}
+          disabled={showingSkeleton}
           onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}
@@ -101,6 +107,7 @@ const MyPicselTemplate = () => {
           isLoading={isLoading}
           onViewMore={handleViewMonthFolder}
           onViewAllYear={handleViewAllYear}
+          onShowSkeletonChange={handleShowSkeletonChange}
         />
       ) : dateFilter === 'month' ? (
         <MonthFilterView
@@ -109,6 +116,7 @@ const MyPicselTemplate = () => {
           yearGroups={yearGroups}
           isLoading={isLoading}
           onViewMonthFolder={handleViewMonthFolder}
+          onShowSkeletonChange={handleShowSkeletonChange}
         />
       ) : (
         <PhotoListView
@@ -120,6 +128,7 @@ const MyPicselTemplate = () => {
           isLoading={isLoading}
           onScroll={handleScroll}
           onEndReached={handleEndReached}
+          onShowSkeletonChange={handleShowSkeletonChange}
         />
       )}
 

@@ -10,6 +10,7 @@ import ViewModeIcons from '@/shared/icons/ViewModeIcons';
 interface Props {
   totalPhotos: number;
   listViewMode?: 'list' | 'textList';
+  disabled?: boolean;
   onToggleSelecting: () => void;
   onSort?: () => void;
   onFilter?: () => void;
@@ -19,6 +20,7 @@ interface Props {
 const DefaultToolbar = ({
   totalPhotos,
   listViewMode,
+  disabled = false,
   onToggleSelecting,
   onSort,
   onFilter,
@@ -53,21 +55,26 @@ const DefaultToolbar = ({
 
   return (
     <View
+      style={disabled ? { opacity: 0.4 } : undefined}
+      pointerEvents={disabled ? 'none' : 'auto'}
       className={`flex-row items-center bg-white/90 px-6 py-4 ${onFilter ? 'justify-between' : 'justify-end'}`}>
       {renderLeftContent()}
 
       <View className="flex-row items-center space-x-4">
         {onFilter && (
-          <Pressable onPress={onFilter}>
+          <Pressable onPress={onFilter} disabled={disabled}>
             <FilterIcons height={24} width={24} shape="gray" />
           </Pressable>
         )}
 
-        <Pressable onPress={onSort} className={!onFilter ? 'mr-5' : ''}>
+        <Pressable
+          onPress={onSort}
+          disabled={disabled}
+          className={!onFilter ? 'mr-5' : ''}>
           <SortIcons height={24} width={24} shape="sort" />
         </Pressable>
 
-        <Pressable onPress={onToggleSelecting}>
+        <Pressable onPress={onToggleSelecting} disabled={disabled}>
           <CheckRoundIcons height={24} width={24} shape="check-round" />
         </Pressable>
       </View>

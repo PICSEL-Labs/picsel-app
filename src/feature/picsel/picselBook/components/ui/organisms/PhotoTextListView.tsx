@@ -23,6 +23,7 @@ interface Props {
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onToggleSelection: (photoId: string) => void;
   onPhotoPress?: (photoId: string) => void;
+  onEndReached?: () => void;
 }
 
 const PhotoTextListView = forwardRef<FlatList, Props>(
@@ -35,6 +36,7 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
       onScroll,
       onToggleSelection,
       onPhotoPress,
+      onEndReached,
     },
     ref,
   ) => {
@@ -81,6 +83,8 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
             showsVerticalScrollIndicator={false}
             onScroll={onScroll}
             scrollEventThrottle={16}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
           />
         )}
         {showSkeleton && (

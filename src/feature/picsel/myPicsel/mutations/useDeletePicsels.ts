@@ -7,6 +7,8 @@ import {
 import { deletePicselsApi } from '../api/deletePicselsApi';
 import { DeletePicselsRequest, MyPicselResult } from '../types';
 
+import { PicselBookFolderResult } from '@/feature/picsel/picselBook/types';
+
 export const useDeletePicsels = () => {
   const queryClient = useQueryClient();
 
@@ -14,13 +16,23 @@ export const useDeletePicsels = () => {
     mutationFn: (request: DeletePicselsRequest) => deletePicselsApi(request),
     onMutate: async (request: DeletePicselsRequest) => {
       await queryClient.cancelQueries({ queryKey: ['myPicsels'] });
+      await queryClient.cancelQueries({ queryKey: ['picselBookPicsels'] });
 
-      const previousQueries = queryClient.getQueriesData<
+      // 내 픽셀 캐시 백업
+      const previousMyPicsels = queryClient.getQueriesData<
         InfiniteData<MyPicselResult>
       >({
         queryKey: ['myPicsels'],
       });
 
+      // 픽셀북 폴더 캐시 백업
+      const previousBookPicsels = queryClient.getQueriesData<
+        InfiniteData<PicselBookFolderResult>
+      >({
+        queryKey: ['picselBookPicsels'],
+      });
+
+      // 내 픽셀 optimistic update
       queryClient.setQueriesData<InfiniteData<MyPicselResult>>(
         { queryKey: ['myPicsels'] },
         oldData => {
@@ -46,11 +58,40 @@ export const useDeletePicsels = () => {
         },
       );
 
-      return { previousQueries };
+      // 픽셀북 폴더 optimistic update
+      queryClient.setQueriesData<InfiniteData<PicselBookFolderResult>>(
+        { queryKey: ['picselBookPicsels'] },
+        oldData => {
+          if (!oldData) {
+            return oldData;
+          }
+
+          const deletedCount = request.picselIds.length;
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map(page => {
+              const filtered = page.content.filter(
+                picsel => !request.picselIds.includes(picsel.picselId),
+              );
+              return {
+                ...page,
+                content: filtered,
+                totalElements: page.totalElements - deletedCount,
+              };
+            }),
+          };
+        },
+      );
+
+      return { previousMyPicsels, previousBookPicsels };
     },
     onError: (error, _request, context) => {
       console.error('픽셀 삭제 실패:', error);
-      context?.previousQueries.forEach(([queryKey, data]) => {
+      context?.previousMyPicsels.forEach(([queryKey, data]) => {
+        queryClient.setQueryData(queryKey, data);
+      });
+      context?.previousBookPicsels.forEach(([queryKey, data]) => {
         queryClient.setQueryData(queryKey, data);
       });
     },
@@ -61,6 +102,10 @@ export const useDeletePicsels = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ['picselBooks'],
+        refetchType: 'none',
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['picselBookPicsels'],
         refetchType: 'none',
       });
     },

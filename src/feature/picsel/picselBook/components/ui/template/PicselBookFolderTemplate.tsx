@@ -63,6 +63,8 @@ const PicselBookFolderTemplate = ({
     handleMove,
 
     formatPhotoCount,
+
+    handleEndReached,
   } = usePicselBookFolder({ bookId });
 
   // TODO: 편집 로직 구현
@@ -133,6 +135,7 @@ const PicselBookFolderTemplate = ({
               onScroll={handleScroll}
               onToggleSelection={toggleSelection}
               onPhotoPress={onPhotoPress}
+              onEndReached={handleEndReached}
             />
           ) : (
             <PhotoTextListView
@@ -144,6 +147,7 @@ const PicselBookFolderTemplate = ({
               onScroll={handleScroll}
               onToggleSelection={toggleSelection}
               onPhotoPress={onPhotoPress}
+              onEndReached={handleEndReached}
             />
           )}
           <FloatingActionButtons

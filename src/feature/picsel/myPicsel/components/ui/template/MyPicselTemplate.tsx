@@ -51,6 +51,8 @@ const MyPicselTemplate = () => {
     handleDelete,
     handleMove,
 
+    handleEndReached,
+
     handleViewAllYear,
     handleViewMonthFolder,
   } = useMyPicsel();
@@ -117,6 +119,7 @@ const MyPicselTemplate = () => {
           onToggleSelection={toggleSelection}
           isLoading={isLoading}
           onScroll={handleScroll}
+          onEndReached={handleEndReached}
         />
       )}
 

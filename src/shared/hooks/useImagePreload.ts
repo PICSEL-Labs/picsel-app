@@ -18,33 +18,35 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
   const [isImagesLoaded, setIsImagesLoaded] = useState(allCached);
   const loadedSetRef = useRef<Set<string>>(new Set());
   const totalRef = useRef(uris.length);
-  const prevKeyRef = useRef<string>(uris.join(','));
+  const prevUrisRef = useRef<Set<string>>(new Set(uris));
+  const prevLengthRef = useRef(uris.length);
+  const changeCountRef = useRef(0);
 
-  const stableKey = uris.join(',');
+  // 경량 변경 감지: 길이 변경 또는 새 URI 존재 여부
+  const hasChanged =
+    uris.length !== prevLengthRef.current ||
+    uris.some(uri => !prevUrisRef.current.has(uri));
 
-  // 렌더 중 동기적으로 key 변경 감지 → 1프레임 깜빡임 방지
-  if (prevKeyRef.current !== stableKey) {
+  if (hasChanged) {
+    const prevUris = prevUrisRef.current;
+
+    prevUrisRef.current = new Set(uris);
+    prevLengthRef.current = uris.length;
+    changeCountRef.current += 1;
+    totalRef.current = uris.length;
+
     const allAlreadyLoaded =
       uris.length > 0 && uris.every(uri => globalLoadedUris.has(uri));
 
-    // 삭제 판별용: 업데이트 전 이전 URI 목록 캡처
-    const prevUrisForSubset = new Set(prevKeyRef.current.split(','));
-
-    prevKeyRef.current = stableKey;
-    totalRef.current = uris.length;
-
     if (allAlreadyLoaded) {
-      // 모든 URI가 이미 로드 완료된 경우 (삭제, 재정렬, 탭 전환 등) → 스켈레톤 스킵
       loadedSetRef.current = new Set(uris);
       if (!isImagesLoaded) {
         setIsImagesLoaded(true);
       }
     } else {
-      // 삭제 등으로 URI가 줄어든 경우 (subset) → 스켈레톤 유지하지 않음
-      const isSubset =
-        uris.length > 0 && uris.every(uri => prevUrisForSubset.has(uri));
+      // 삭제 판별: 새 URI가 모두 이전 목록에 존재 (부분집합)
+      const isSubset = uris.length > 0 && uris.every(uri => prevUris.has(uri));
 
-      // 새 URI 중 이미 로드된 것은 유지
       const preserved = new Set<string>();
       uris.forEach(uri => {
         if (globalLoadedUris.has(uri)) {
@@ -62,7 +64,7 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
           setIsImagesLoaded(true);
         }
       } else if (isImagesLoaded && isSubset) {
-        // 이전 목록의 부분집합 (삭제만 발생) → 로드 상태 유지
+        // 삭제만 발생 → 로드 상태 유지
       } else {
         if (isImagesLoaded) {
           setIsImagesLoaded(false);
@@ -82,7 +84,7 @@ export const useImagePreload = (uris: string[]): UseImagePreloadResult => {
     }, TIMEOUT_MS);
 
     return () => clearTimeout(timer);
-  }, [stableKey]);
+  }, [changeCountRef.current]);
 
   const handleComplete = useCallback((uri: string) => {
     globalLoadedUris.add(uri);

@@ -31,6 +31,7 @@ interface Props {
   data: Photo[];
   showYear?: boolean;
   onPhotoPress?: (photoId: string) => void;
+  onEndReached?: () => void;
 }
 
 const PhotoListView = forwardRef<FlatList, Props>(
@@ -44,6 +45,7 @@ const PhotoListView = forwardRef<FlatList, Props>(
       data,
       showYear = true,
       onPhotoPress,
+      onEndReached,
     },
     ref,
   ) => {
@@ -106,6 +108,8 @@ const PhotoListView = forwardRef<FlatList, Props>(
             numColumns={2}
             onScroll={onScroll}
             scrollEventThrottle={16}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
             contentContainerStyle={{
               paddingHorizontal: HORIZONTAL_PADDING,
               paddingBottom: 40,

@@ -1,14 +1,23 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { getMyPicselsApi } from '../api/getMyPicselsApi';
-import { MyPicselParams, MyPicselResult } from '../types';
+import { MyPicselResult, MyPicselSortType } from '../types';
 
-export const useGetMyPicsels = (params: MyPicselParams = {}) => {
-  const { page = 0, size = 20, sort = 'RECENT_DESC' } = params;
+interface UseGetMyPicselsParams {
+  size?: number;
+  sort?: MyPicselSortType;
+}
 
-  return useQuery<MyPicselResult>({
-    queryKey: ['myPicsels', page, size, sort],
-    queryFn: () => getMyPicselsApi({ page, size, sort }),
+export const useGetMyPicsels = (params: UseGetMyPicselsParams = {}) => {
+  const { size = 50, sort = 'RECENT_DESC' } = params;
+
+  return useInfiniteQuery<MyPicselResult>({
+    queryKey: ['myPicsels', size, sort],
+    queryFn: ({ pageParam }) =>
+      getMyPicselsApi({ page: pageParam as number, size, sort }),
+    initialPageParam: 0,
+    getNextPageParam: lastPage =>
+      lastPage.last ? undefined : lastPage.pageNumber + 1,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
     retry: 2,

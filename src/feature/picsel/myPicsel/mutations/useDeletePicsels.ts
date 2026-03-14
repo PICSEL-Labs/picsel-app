@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { deletePicselsApi } from '../api/deletePicselsApi';
 import { DeletePicselsRequest, MyPicselResult } from '../types';
@@ -11,25 +15,33 @@ export const useDeletePicsels = () => {
     onMutate: async (request: DeletePicselsRequest) => {
       await queryClient.cancelQueries({ queryKey: ['myPicsels'] });
 
-      const previousQueries = queryClient.getQueriesData<MyPicselResult>({
+      const previousQueries = queryClient.getQueriesData<
+        InfiniteData<MyPicselResult>
+      >({
         queryKey: ['myPicsels'],
       });
 
-      queryClient.setQueriesData<MyPicselResult>(
+      queryClient.setQueriesData<InfiniteData<MyPicselResult>>(
         { queryKey: ['myPicsels'] },
         oldData => {
           if (!oldData) {
             return oldData;
           }
-          const filtered = oldData.content.filter(
-            picsel => !request.picselIds.includes(picsel.picselId),
-          );
+
+          const deletedCount = request.picselIds.length;
+
           return {
             ...oldData,
-            content: filtered,
-            totalElements:
-              oldData.totalElements -
-              (oldData.content.length - filtered.length),
+            pages: oldData.pages.map(page => {
+              const filtered = page.content.filter(
+                picsel => !request.picselIds.includes(picsel.picselId),
+              );
+              return {
+                ...page,
+                content: filtered,
+                totalElements: page.totalElements - deletedCount,
+              };
+            }),
           };
         },
       );

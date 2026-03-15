@@ -10,6 +10,7 @@ import DropdownMenu, {
 } from '@/shared/components/ui/molecules/DropdownMenu';
 import { useDropdownMenu } from '@/shared/hooks/useDropdownMenu';
 import Toast from '@/shared/ui/atoms/Toast';
+import ConfirmModal from '@/shared/ui/molecules/ConfirmModal';
 
 interface Props {
   insets: EdgeInsets;
@@ -44,6 +45,7 @@ export const useViewerHeader = ({
           />
         )}
         <Toast />
+        <ConfirmModal animationType="none" />
       </View>
     );
   }, []);

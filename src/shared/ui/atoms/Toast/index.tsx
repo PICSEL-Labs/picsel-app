@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Text } from 'react-native';
+import { Modal, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
   Easing,
@@ -140,29 +140,31 @@ const Toast = () => {
   }
 
   return (
-    <Animated.View
-      style={[
-        animatedStyle,
-        {
-          position: 'absolute',
-          bottom: insets.bottom + (marginBottom ?? 48),
-          width: '100%',
-          zIndex: 9999,
-        },
-      ]}
-      className="items-center">
-      <LinearGradient
-        colors={GRADIENT_COLORS}
-        locations={GRADIENT_LOCATIONS}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        className="w-[288px] items-center justify-center rounded-xl"
-        style={{ height }}>
-        <Text className="text-center text-white body-rg-02">
-          {displayMessage}
-        </Text>
-      </LinearGradient>
-    </Animated.View>
+    <Modal transparent animationType="none" visible>
+      <Animated.View
+        style={[
+          animatedStyle,
+          {
+            position: 'absolute',
+            bottom: insets.bottom + (marginBottom ?? 48),
+            width: '100%',
+            zIndex: 9999,
+          },
+        ]}
+        className="items-center">
+        <LinearGradient
+          colors={GRADIENT_COLORS}
+          locations={GRADIENT_LOCATIONS}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          className="w-[288px] items-center justify-center rounded-xl"
+          style={{ height }}>
+          <Text className="text-center text-white body-rg-02">
+            {displayMessage}
+          </Text>
+        </LinearGradient>
+      </Animated.View>
+    </Modal>
   );
 };
 

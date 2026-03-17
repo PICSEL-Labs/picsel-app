@@ -36,24 +36,31 @@ export const useMyPicsel = () => {
   // 정렬 상태 (전역 store)
   const { sortType, setSortType } = useMyPicselStore();
 
-  // 내 픽셀 데이터 페칭
-  const { data: myPicselsData, isLoading } = useGetMyPicsels({
-    page: 0,
-    size: 20,
+  // 내 픽셀 데이터 페칭 (무한 스크롤)
+  const {
+    data: myPicselsData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetMyPicsels({
+    size: 50,
     sort: sortType,
   });
 
-  // API 데이터를 Photo 형태로 변환
+  // 모든 페이지의 content를 합쳐서 Photo 형태로 변환
   const photoData: Photo[] = useMemo(() => {
-    if (!myPicselsData?.content) {
+    if (!myPicselsData?.pages) {
       return [];
     }
-    return myPicselsData.content.map(item => ({
-      id: item.picselId,
-      uri: getImageUrl(item.imagePath),
-      date: item.takenDate,
-      storeName: item.storeName,
-    }));
+    return myPicselsData.pages.flatMap(page =>
+      page.content.map(item => ({
+        id: item.picselId,
+        uri: getImageUrl(item.imagePath),
+        date: item.takenDate,
+        storeName: item.storeName,
+      })),
+    );
   }, [myPicselsData]);
 
   // 전체 탭에서 로드된 이미지를 메모리에 prefetch (월/년 탭 전환 시 즉시 렌더링)
@@ -61,14 +68,17 @@ export const useMyPicsel = () => {
   useImagePrefetch(photoUris);
 
   // 년/월별 그룹 데이터
-  const yearGroups: YearGroup[] = useMemo(() => {
-    if (!myPicselsData?.content) {
-      return [];
-    }
-    return groupByYearMonth(myPicselsData.content);
-  }, [myPicselsData]);
+  const allContent = useMemo(
+    () => myPicselsData?.pages.flatMap(page => page.content) ?? [],
+    [myPicselsData],
+  );
 
-  const totalPhotos = myPicselsData?.totalElements ?? 0;
+  const yearGroups: YearGroup[] = useMemo(
+    () => groupByYearMonth(allContent),
+    [allContent],
+  );
+
+  const totalPhotos = myPicselsData?.pages[0]?.totalElements ?? 0;
   const hasPhotos = totalPhotos > 0;
 
   // 사진 선택
@@ -131,11 +141,19 @@ export const useMyPicsel = () => {
     onSort: setSortType,
   });
 
+  // 무한 스크롤: 끝에 도달 시 다음 페이지 로드
+  const handleEndReached = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
   return {
     // 데이터
     photoData,
     yearGroups,
     isLoading,
+    isFetchingNextPage,
     totalPhotos,
     hasPhotos,
 
@@ -172,6 +190,9 @@ export const useMyPicsel = () => {
     // 사진 액션
     handleDelete,
     handleMove,
+
+    // 무한 스크롤
+    handleEndReached,
 
     // 네비게이션
     handleViewAllYear,

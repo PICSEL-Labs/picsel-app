@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useEffect, useMemo } from 'react';
 
 import {
   FlatList,
@@ -23,6 +23,8 @@ interface Props {
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onToggleSelection: (photoId: string) => void;
   onPhotoPress?: (photoId: string) => void;
+  onEndReached?: () => void;
+  onShowSkeletonChange?: (showSkeleton: boolean) => void;
 }
 
 const PhotoTextListView = forwardRef<FlatList, Props>(
@@ -35,6 +37,8 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
       onScroll,
       onToggleSelection,
       onPhotoPress,
+      onEndReached,
+      onShowSkeletonChange,
     },
     ref,
   ) => {
@@ -46,6 +50,10 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
       useImagePreload(uris);
 
     const showSkeleton = isLoading || (!isImagesLoaded && data.length > 0);
+
+    useEffect(() => {
+      onShowSkeletonChange?.(showSkeleton);
+    }, [showSkeleton, onShowSkeletonChange]);
 
     const renderItem = ({ item }: { item: PicselBookPicselItem }) => {
       const isSelected = selectedPhotos.includes(item.picselId);
@@ -81,6 +89,8 @@ const PhotoTextListView = forwardRef<FlatList, Props>(
             showsVerticalScrollIndicator={false}
             onScroll={onScroll}
             scrollEventThrottle={16}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
           />
         )}
         {showSkeleton && (

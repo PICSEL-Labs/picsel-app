@@ -37,18 +37,19 @@ export const useFolderView = ({
 
   // API에서 전체 데이터 페칭
   const { data: myPicselsData, isLoading } = useGetMyPicsels({
-    page: 0,
     size: 1000,
     sort: sortType,
   });
 
   // 년도별/월별 필터링
   const photoData: Photo[] = useMemo(() => {
-    if (!myPicselsData?.content) {
+    if (!myPicselsData?.pages) {
       return [];
     }
 
-    const filtered = myPicselsData.content.filter(item => {
+    const allContent = myPicselsData.pages.flatMap(page => page.content);
+
+    const filtered = allContent.filter(item => {
       const itemYear = getYearFromDate(item.takenDate);
       if (itemYear !== year) {
         return false;

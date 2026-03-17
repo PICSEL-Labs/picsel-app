@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { View } from 'react-native';
 
@@ -50,6 +50,11 @@ const PicselBookTemplate = () => {
     showSortSheet,
   } = usePicselBook();
 
+  const [showingSkeleton, setShowingSkeleton] = useState(false);
+  const handleShowSkeletonChange = useCallback((show: boolean) => {
+    setShowingSkeleton(show);
+  }, []);
+
   if (!isLoading && !hasBooks) {
     return (
       <EmptyStateLayout
@@ -91,6 +96,7 @@ const PicselBookTemplate = () => {
         totalPhotos={totalBooks}
         isSelecting={isSelecting}
         selectedCount={selectedBookIds.length}
+        disabled={showingSkeleton}
         onToggleSelecting={handleEnterSelecting}
         onSelectAll={handleSelectAll}
         onClose={handleExitSelecting}
@@ -107,6 +113,7 @@ const PicselBookTemplate = () => {
         onChangeCover={handleChangeCover}
         onDelete={handleDelete}
         onAddBook={isSelecting ? undefined : handleAddBook}
+        onShowSkeletonChange={handleShowSkeletonChange}
       />
 
       <PicselBookBottomSheet ref={picselBookRef} onSubmit={handleSubmit} />

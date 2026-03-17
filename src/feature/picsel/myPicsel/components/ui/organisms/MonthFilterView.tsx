@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useEffect, useMemo } from 'react';
 
 import {
   FlatList,
@@ -30,10 +30,20 @@ interface Props {
   isLoading: boolean;
   onViewMonthFolder: (year: string, month: string) => void;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onShowSkeletonChange?: (showSkeleton: boolean) => void;
 }
 
 const MonthFilterView = forwardRef<FlatList, Props>(
-  ({ yearGroups, isLoading, onViewMonthFolder, onScroll }, ref) => {
+  (
+    {
+      yearGroups,
+      isLoading,
+      onViewMonthFolder,
+      onScroll,
+      onShowSkeletonChange,
+    },
+    ref,
+  ) => {
     const { imageWidth, imageHeight } = useImageDimensions({
       horizontalPadding: HORIZONTAL_PADDING,
       itemSpacing: ITEM_SPACING,
@@ -68,6 +78,10 @@ const MonthFilterView = forwardRef<FlatList, Props>(
 
     const showSkeleton =
       isLoading || (!isImagesLoaded && flattenedData.length > 0);
+
+    useEffect(() => {
+      onShowSkeletonChange?.(showSkeleton);
+    }, [showSkeleton, onShowSkeletonChange]);
 
     const renderMonthSection = ({ item }: { item: FlattenedMonthItem }) => (
       <View className="mb-6">

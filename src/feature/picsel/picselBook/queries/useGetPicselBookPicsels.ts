@@ -1,20 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { getPicselBookPicselsApi } from '../api/getPicselBookPicselsApi';
-import { PicselBookFolderParams, PicselBookFolderResult } from '../types';
+import { PicselBookFolderResult, PicselBookFolderSortType } from '../types';
 
-export const useGetPicselBookPicsels = (params: PicselBookFolderParams) => {
-  const {
-    picselbookId,
-    page = 0,
-    size = 20,
-    sortType = 'RECENT_DESC',
-  } = params;
+interface UseGetPicselBookPicselsParams {
+  picselbookId: string;
+  size?: number;
+  sortType?: PicselBookFolderSortType;
+}
 
-  return useQuery<PicselBookFolderResult>({
-    queryKey: ['picselBookPicsels', picselbookId, page, size, sortType],
-    queryFn: () =>
-      getPicselBookPicselsApi({ picselbookId, page, size, sortType }),
+export const useGetPicselBookPicsels = (
+  params: UseGetPicselBookPicselsParams,
+) => {
+  const { picselbookId, size = 50, sortType = 'RECENT_DESC' } = params;
+
+  return useInfiniteQuery<PicselBookFolderResult>({
+    queryKey: ['picselBookPicsels', picselbookId, size, sortType],
+    queryFn: ({ pageParam }) =>
+      getPicselBookPicselsApi({
+        picselbookId,
+        page: pageParam as number,
+        size,
+        sortType,
+      }),
+    initialPageParam: 0,
+    getNextPageParam: lastPage =>
+      lastPage.last ? undefined : lastPage.pageNumber + 1,
     enabled: !!picselbookId,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,

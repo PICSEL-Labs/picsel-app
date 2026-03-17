@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import { useYearFolder } from '@/feature/picsel/myPicsel/hooks/useYearFolder';
@@ -45,6 +45,11 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     handleMove,
   } = useYearFolder({ year });
 
+  const [showingSkeleton, setShowingSkeleton] = useState(false);
+  const handleShowSkeletonChange = useCallback((show: boolean) => {
+    setShowingSkeleton(show);
+  }, []);
+
   return (
     <ScreenLayout>
       <FolderHeader title={`${year}년`} onBack={onBack} />
@@ -53,6 +58,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
         totalPhotos={totalPhotos}
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}
+        disabled={showingSkeleton}
         onToggleSelecting={handleEnterSelecting}
         onSelectAll={() => selectAll(totalPhotos, photoData)}
         onClose={handleExitSelecting}
@@ -69,6 +75,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
         isLoading={isLoading}
         onScroll={handleScroll}
         showYear={true}
+        onShowSkeletonChange={handleShowSkeletonChange}
       />
 
       <SelectionBottomSheet

@@ -37,29 +37,42 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
   const [sortType, setSortType] =
     useState<PicselBookFolderSortType>('RECENT_DESC');
 
-  // 픽셀북 내 픽셀 데이터 페칭 (API 연동)
-  const { data, isLoading, refetch } = useGetPicselBookPicsels({
+  // 픽셀북 내 픽셀 데이터 페칭 (무한 스크롤)
+  const {
+    data,
+    isLoading,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetPicselBookPicsels({
     picselbookId: bookId,
+    size: 50,
     sortType,
   });
 
-  // API 데이터를 Photo 형태로 변환
+  // 모든 페이지의 content를 합쳐서 Photo 형태로 변환
   const photoData: Photo[] = useMemo(() => {
-    if (!data?.content) {
+    if (!data?.pages) {
       return [];
     }
-    return data.content.map((item: PicselBookPicselItem) => ({
-      id: item.picselId,
-      uri: getImageUrl(item.representativeImagePath),
-      date: item.takenDate,
-      storeName: item.storeName,
-    }));
+    return data.pages.flatMap(page =>
+      page.content.map((item: PicselBookPicselItem) => ({
+        id: item.picselId,
+        uri: getImageUrl(item.representativeImagePath),
+        date: item.takenDate,
+        storeName: item.storeName,
+      })),
+    );
   }, [data]);
 
   // 원본 데이터 (텍스트 리스트 뷰용)
-  const rawData: PicselBookPicselItem[] = data?.content ?? [];
+  const rawData: PicselBookPicselItem[] = useMemo(
+    () => data?.pages.flatMap(page => page.content) ?? [],
+    [data],
+  );
 
-  const totalPhotos = data?.totalElements ?? 0;
+  const totalPhotos = data?.pages[0]?.totalElements ?? 0;
   const hasPhotos = totalPhotos > 0;
 
   // 사진 선택
@@ -122,11 +135,19 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
     return count.toLocaleString();
   };
 
+  // 무한 스크롤: 끝에 도달 시 다음 페이지 로드
+  const handleEndReached = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
   return {
     // 데이터
     photoData,
     rawData,
     isLoading,
+    isFetchingNextPage,
     totalPhotos,
     hasPhotos,
 
@@ -166,6 +187,9 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
 
     // 유틸리티
     formatPhotoCount,
+
+    // 무한 스크롤
+    handleEndReached,
 
     // 리프레시
     refetch,

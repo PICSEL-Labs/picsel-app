@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useEffect, useMemo } from 'react';
 
 import {
   FlatList,
@@ -31,6 +31,8 @@ interface Props {
   data: Photo[];
   showYear?: boolean;
   onPhotoPress?: (photoId: string) => void;
+  onEndReached?: () => void;
+  onShowSkeletonChange?: (showSkeleton: boolean) => void;
 }
 
 const PhotoListView = forwardRef<FlatList, Props>(
@@ -44,6 +46,8 @@ const PhotoListView = forwardRef<FlatList, Props>(
       data,
       showYear = true,
       onPhotoPress,
+      onEndReached,
+      onShowSkeletonChange,
     },
     ref,
   ) => {
@@ -59,6 +63,10 @@ const PhotoListView = forwardRef<FlatList, Props>(
       useImagePreload(uris);
 
     const showSkeleton = isLoading || (!isImagesLoaded && data.length > 0);
+
+    useEffect(() => {
+      onShowSkeletonChange?.(showSkeleton);
+    }, [showSkeleton, onShowSkeletonChange]);
 
     const renderPhoto = ({
       item: photo,
@@ -106,6 +114,8 @@ const PhotoListView = forwardRef<FlatList, Props>(
             numColumns={2}
             onScroll={onScroll}
             scrollEventThrottle={16}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
             contentContainerStyle={{
               paddingHorizontal: HORIZONTAL_PADDING,
               paddingBottom: 40,

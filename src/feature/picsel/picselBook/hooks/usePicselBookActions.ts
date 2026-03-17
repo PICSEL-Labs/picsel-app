@@ -3,6 +3,8 @@ import { useRef } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 
+import { useDeletePicselBooks } from '../mutations/useDeletePicselBooks';
+
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
@@ -11,6 +13,7 @@ export const usePicselBookActions = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const editBottomSheetRef = useRef<BottomSheetModal>(null);
   const { showToast } = useToastStore();
+  const { mutate: deletePicselBooks } = useDeletePicselBooks();
 
   const handleEdit = (id: string, title: string) => {
     // TODO: 편집 바텀시트 열기 및 id 사용
@@ -28,9 +31,17 @@ export const usePicselBookActions = () => {
     showConfirmModal(
       '삭제 시 복구가 불가능해요',
       () => {
-        // TODO: 실제 삭제 로직 (id 사용)
-        console.log('Delete book:', id);
-        showToast(`${title} 픽셀북을 삭제했어요`);
+        deletePicselBooks(
+          { picselbookIds: [id] },
+          {
+            onSuccess: () => {
+              showToast(`${title} 픽셀북을 삭제했어요`);
+            },
+            onError: () => {
+              showToast('픽셀북 삭제에 실패했어요');
+            },
+          },
+        );
       },
       {
         title: `${title} 픽셀북을\n삭제할까요?`,

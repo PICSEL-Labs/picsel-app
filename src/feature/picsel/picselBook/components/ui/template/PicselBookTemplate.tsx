@@ -12,7 +12,7 @@ import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecul
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
+import PicselToolbar from '@/feature/picsel/shared/components/ui/organisms/PicselToolbar';
 
 const PicselBookTemplate = () => {
   const {
@@ -92,7 +92,7 @@ const PicselBookTemplate = () => {
     <View className="flex-1 bg-white">
       <SparkleBackground />
 
-      <PixelToolbar
+      <PicselToolbar
         totalPhotos={totalBooks}
         isSelecting={isSelecting}
         selectedCount={selectedBookIds.length}

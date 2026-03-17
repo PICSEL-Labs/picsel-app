@@ -5,7 +5,7 @@ import { useYearFolder } from '@/feature/picsel/myPicsel/hooks/useYearFolder';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
-import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
+import PicselToolbar from '@/feature/picsel/shared/components/ui/organisms/PicselToolbar';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
@@ -54,7 +54,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
     <ScreenLayout>
       <FolderHeader title={`${year}년`} onBack={onBack} />
 
-      <PixelToolbar
+      <PicselToolbar
         totalPhotos={totalPhotos}
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}

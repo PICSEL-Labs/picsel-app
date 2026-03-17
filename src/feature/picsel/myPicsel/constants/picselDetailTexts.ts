@@ -1,7 +1,6 @@
 export const DROPDOWN_ITEMS = {
   EDIT: '전체 편집',
   MOVE: '다른 픽셀북으로 이동',
-  SHARE: '공유',
   DELETE: '삭제',
 } as const;
 

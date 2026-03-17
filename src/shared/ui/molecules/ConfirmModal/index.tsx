@@ -15,7 +15,11 @@ import { useConfirmModalStore } from '@/shared/store/ui/confirmModal';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const MODAL_WIDTH = Math.min(SCREEN_WIDTH * 0.8, 400);
 
-const ConfirmModal = () => {
+interface Props {
+  animationType?: 'none' | 'fade';
+}
+
+const ConfirmModal = ({ animationType = 'fade' }: Props) => {
   const { visible, config, confirm, cancel } = useConfirmModalStore();
   const { isVisible, currentConfig } = useModalAnimation(visible, config);
 
@@ -34,7 +38,7 @@ const ConfirmModal = () => {
     <Modal
       visible={isVisible}
       transparent
-      animationType="fade"
+      animationType={animationType}
       onRequestClose={cancel}>
       <TouchableWithoutFeedback>
         <View className="flex-1 items-center justify-center bg-[#11111480]">

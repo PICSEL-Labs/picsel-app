@@ -13,7 +13,7 @@ import MonthFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/M
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import YearFilterView from '@/feature/picsel/myPicsel/components/ui/organisms/YearFilterView';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
-import PicselToolbar from '@/feature/picsel/shared/components/ui/organisms/PicselToolbar';
+import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
 const MyPicselTemplate = () => {
@@ -86,7 +86,7 @@ const MyPicselTemplate = () => {
   return (
     <View className="flex-1">
       {dateFilter === 'all' && (
-        <PicselToolbar
+        <PixelToolbar
           totalPhotos={totalPhotos}
           isSelecting={isSelecting}
           selectedCount={selectedPhotos.length}

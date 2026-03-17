@@ -17,7 +17,7 @@ interface Props {
   onToggleViewMode?: () => void;
 }
 
-const PicselToolbar = ({
+const PixelToolbar = ({
   totalPhotos,
   isSelecting,
   selectedCount,
@@ -54,4 +54,4 @@ const PicselToolbar = ({
   );
 };
 
-export default PicselToolbar;
+export default PixelToolbar;

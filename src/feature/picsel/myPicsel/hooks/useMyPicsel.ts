@@ -16,6 +16,7 @@ import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionBut
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useImagePrefetch } from '@/shared/hooks/useImagePrefetch';
 import { useMyPicselStore } from '@/shared/store';
+import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
 import { getImageUrl } from '@/shared/utils/image';
 
 /**
@@ -36,6 +37,14 @@ export const useMyPicsel = () => {
   // 정렬 상태 (전역 store)
   const { sortType, setSortType } = useMyPicselStore();
 
+  // 브랜드 필터 상태
+  const { filteredList } = useFilteredBrandsStore();
+  const brandIds = useMemo(
+    () => filteredList.map(b => b.brandId),
+    [filteredList],
+  );
+  const isFilterActive = filteredList.length > 0;
+
   // 내 픽셀 데이터 페칭 (무한 스크롤)
   const {
     data: myPicselsData,
@@ -48,38 +57,44 @@ export const useMyPicsel = () => {
     sort: sortType,
   });
 
-  // 모든 페이지의 content를 합쳐서 Photo 형태로 변환
+  // 모든 페이지의 content를 합쳐서 Photo 형태로 변환 + 브랜드 필터 적용
   const photoData: Photo[] = useMemo(() => {
     if (!myPicselsData?.pages) {
       return [];
     }
-    return myPicselsData.pages.flatMap(page =>
-      page.content.map(item => ({
-        id: item.picselId,
-        uri: getImageUrl(item.imagePath),
-        date: item.takenDate,
-        storeName: item.storeName,
-      })),
-    );
-  }, [myPicselsData]);
+    const allItems = myPicselsData.pages.flatMap(page => page.content);
+    const filtered = isFilterActive
+      ? allItems.filter(item => brandIds.includes(item.brand.brandId))
+      : allItems;
+    return filtered.map(item => ({
+      id: item.picselId,
+      uri: getImageUrl(item.imagePath),
+      date: item.takenDate,
+      storeName: item.storeName,
+    }));
+  }, [myPicselsData, brandIds, isFilterActive]);
 
   // 전체 탭에서 로드된 이미지를 메모리에 prefetch (월/년 탭 전환 시 즉시 렌더링)
   const photoUris = useMemo(() => photoData.map(p => p.uri), [photoData]);
   useImagePrefetch(photoUris);
 
-  // 년/월별 그룹 데이터
-  const allContent = useMemo(
-    () => myPicselsData?.pages.flatMap(page => page.content) ?? [],
-    [myPicselsData],
-  );
+  // 년/월별 그룹 데이터 (브랜드 필터 적용)
+  const allContent = useMemo(() => {
+    const items = myPicselsData?.pages.flatMap(page => page.content) ?? [];
+    return isFilterActive
+      ? items.filter(item => brandIds.includes(item.brand.brandId))
+      : items;
+  }, [myPicselsData, brandIds, isFilterActive]);
 
   const yearGroups: YearGroup[] = useMemo(
     () => groupByYearMonth(allContent),
     [allContent],
   );
 
-  const totalPhotos = myPicselsData?.pages[0]?.totalElements ?? 0;
-  const hasPhotos = totalPhotos > 0;
+  const totalPhotos = isFilterActive
+    ? photoData.length
+    : (myPicselsData?.pages[0]?.totalElements ?? 0);
+  const hasPhotos = (myPicselsData?.pages[0]?.totalElements ?? 0) > 0;
 
   // 사진 선택
   const {
@@ -160,6 +175,9 @@ export const useMyPicsel = () => {
     // 정렬
     sortType,
     showSortSheet,
+
+    // 브랜드 필터
+    isFilterActive,
 
     // 날짜 필터
     dateFilter,

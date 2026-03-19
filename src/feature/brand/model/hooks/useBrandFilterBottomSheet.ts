@@ -13,7 +13,7 @@ interface Props {
 
 export const useBrandFilterBottomSheet = ({ visible, hideSheet }: Props) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
-  const { resetFilter } = useFilteredBrandsStore();
+  const { syncTempFromApplied } = useFilteredBrandsStore();
 
   const snapPoints = useMemo(() => ['60%', '80%'], []);
 
@@ -28,7 +28,7 @@ export const useBrandFilterBottomSheet = ({ visible, hideSheet }: Props) => {
   useEffect(() => {
     if (visible) {
       bottomSheetRef.current?.present();
-      resetFilter();
+      syncTempFromApplied();
     } else {
       bottomSheetRef.current?.dismiss();
     }

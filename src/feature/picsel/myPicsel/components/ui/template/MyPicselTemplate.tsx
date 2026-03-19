@@ -26,6 +26,8 @@ const MyPicselTemplate = () => {
 
     showSortSheet,
 
+    isFilterActive,
+
     dateFilter,
     handleDateFilterChange,
 
@@ -91,6 +93,7 @@ const MyPicselTemplate = () => {
           isSelecting={isSelecting}
           selectedCount={selectedPhotos.length}
           disabled={showingSkeleton}
+          isFilterActive={isFilterActive}
           onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}

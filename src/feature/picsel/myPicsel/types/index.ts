@@ -13,6 +13,9 @@ export interface MyPicselItem {
   storeId: string;
   storeName: string;
   brandImagePath: string;
+  brand: {
+    brandId: string;
+  };
 }
 
 // 그룹핑용 Photo 타입

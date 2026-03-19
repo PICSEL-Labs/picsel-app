@@ -11,6 +11,7 @@ interface Props {
   totalPhotos: number;
   listViewMode?: 'list' | 'textList';
   disabled?: boolean;
+  isFilterActive?: boolean;
   onToggleSelecting: () => void;
   onSort?: () => void;
   onFilter?: () => void;
@@ -21,6 +22,7 @@ const DefaultToolbar = ({
   totalPhotos,
   listViewMode,
   disabled = false,
+  isFilterActive = false,
   onToggleSelecting,
   onSort,
   onFilter,
@@ -63,7 +65,12 @@ const DefaultToolbar = ({
       <View className="flex-row items-center space-x-4">
         {onFilter && (
           <Pressable onPress={onFilter} disabled={disabled}>
-            <FilterIcons height={24} width={24} shape="gray" />
+            <View>
+              <FilterIcons height={24} width={24} shape="gray" />
+              {isFilterActive && (
+                <View className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-pink-500" />
+              )}
+            </View>
           </Pressable>
         )}
 

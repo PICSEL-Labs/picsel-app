@@ -11,7 +11,9 @@ interface FilteredBrandStore {
   filterBrand: (brandId: string, name: string) => boolean;
   applyFilter: () => void;
   resetFilter: () => void;
+  resetTemp: () => void;
   clearAppliedFilter: () => void;
+  syncTempFromApplied: () => void;
 }
 
 export const useFilteredBrandsStore = create<FilteredBrandStore>(
@@ -53,11 +55,20 @@ export const useFilteredBrandsStore = create<FilteredBrandStore>(
       });
     },
 
+    resetTemp: () => {
+      set({ tempFilteredList: [] });
+    },
+
     clearAppliedFilter: () => {
       set({
         tempFilteredList: [],
         filteredList: [],
       });
+    },
+
+    syncTempFromApplied: () => {
+      const { filteredList } = get();
+      set({ tempFilteredList: [...filteredList] });
     },
   }),
 );

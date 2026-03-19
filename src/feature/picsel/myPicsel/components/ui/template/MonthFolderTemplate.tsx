@@ -64,7 +64,7 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         onSelectAll={() => selectAll(totalPhotos, photoData)}
         onClose={handleExitSelecting}
         onSort={showSortSheet}
-        onFilter={showBrandFilterSheet}
+        onFilter={() => showBrandFilterSheet('picsel')}
       />
 
       <PhotoListView

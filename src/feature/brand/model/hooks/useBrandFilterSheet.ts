@@ -10,6 +10,7 @@ import {
 
 import { HEIGHT } from '@/shared/constants/size';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
+import { useBrandFilterSheetStore } from '@/shared/store/ui/brandFilterSheet';
 
 interface Props {
   visible: boolean;
@@ -27,6 +28,7 @@ const DRAG_CLOSE_THRESHOLD = 150;
 export const useBrandFilterSheet = ({ visible, onClose }: Props) => {
   const translateY = useSharedValue(SNAP_POINTS.HIDDEN);
   const { resetFilter, syncTempFromApplied } = useFilteredBrandsStore();
+  const { source } = useBrandFilterSheetStore();
   const midpoint = (SNAP_POINTS.HALF + SNAP_POINTS.FULL) / 2;
 
   const panGesture = Gesture.Pan()
@@ -54,7 +56,7 @@ export const useBrandFilterSheet = ({ visible, onClose }: Props) => {
 
   useEffect(() => {
     if (visible) {
-      syncTempFromApplied();
+      syncTempFromApplied(source);
       translateY.value = withSpring(SNAP_POINTS.HALF);
     }
   }, [visible]);

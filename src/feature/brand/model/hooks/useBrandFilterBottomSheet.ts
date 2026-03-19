@@ -4,6 +4,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Easing } from 'react-native-reanimated';
 
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
+import { useBrandFilterSheetStore } from '@/shared/store/ui/brandFilterSheet';
 
 interface Props {
   visible: boolean;
@@ -14,6 +15,7 @@ interface Props {
 export const useBrandFilterBottomSheet = ({ visible, hideSheet }: Props) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { syncTempFromApplied } = useFilteredBrandsStore();
+  const { source } = useBrandFilterSheetStore();
 
   const snapPoints = useMemo(() => ['60%', '80%'], []);
 
@@ -28,7 +30,7 @@ export const useBrandFilterBottomSheet = ({ visible, hideSheet }: Props) => {
   useEffect(() => {
     if (visible) {
       bottomSheetRef.current?.present();
-      syncTempFromApplied();
+      syncTempFromApplied(source);
     } else {
       bottomSheetRef.current?.dismiss();
     }

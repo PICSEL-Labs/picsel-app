@@ -38,12 +38,13 @@ export const useMyPicsel = () => {
   const { sortType, setSortType } = useMyPicselStore();
 
   // 브랜드 필터 상태
-  const { filteredList } = useFilteredBrandsStore();
+  const { filteredListBySource } = useFilteredBrandsStore();
+  const picselFilteredList = filteredListBySource.picsel;
   const brandIds = useMemo(
-    () => filteredList.map(b => b.brandId),
-    [filteredList],
+    () => picselFilteredList.map(b => b.brandId),
+    [picselFilteredList],
   );
-  const isFilterActive = filteredList.length > 0;
+  const isFilterActive = picselFilteredList.length > 0;
 
   // 내 픽셀 데이터 페칭 (무한 스크롤)
   const {

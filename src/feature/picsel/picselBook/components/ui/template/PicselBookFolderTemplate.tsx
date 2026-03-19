@@ -104,7 +104,7 @@ const PicselBookFolderTemplate = ({
           onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}
-          onFilter={showBrandFilterSheet}
+          onFilter={() => showBrandFilterSheet('picsel')}
           onSort={showSortSheet}
           onToggleViewMode={handleToggleViewMode}
         />

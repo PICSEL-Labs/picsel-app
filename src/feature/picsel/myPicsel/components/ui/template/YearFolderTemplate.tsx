@@ -63,7 +63,7 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
         onSelectAll={() => selectAll(totalPhotos, photoData)}
         onClose={handleExitSelecting}
         onSort={showSortSheet}
-        onFilter={showBrandFilterSheet}
+        onFilter={() => showBrandFilterSheet('picsel')}
       />
 
       <PhotoListView

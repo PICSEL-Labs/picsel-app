@@ -98,7 +98,7 @@ const MyPicselTemplate = () => {
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}
           onSort={showSortSheet}
-          onFilter={showBrandFilterSheet}
+          onFilter={() => showBrandFilterSheet('picsel')}
         />
       )}
 

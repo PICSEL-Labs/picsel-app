@@ -1,13 +1,18 @@
 import { create } from 'zustand';
 
+export type BrandFilterSource = 'map' | 'picsel';
+
 interface BrandFilterSheetStore {
   visible: boolean;
-  showBrandFilterSheet: () => void;
+  source: BrandFilterSource;
+  showBrandFilterSheet: (source: BrandFilterSource) => void;
   hideBrandFilterSheet: () => void;
 }
 
 export const useBrandFilterSheetStore = create<BrandFilterSheetStore>(set => ({
   visible: false,
-  showBrandFilterSheet: () => set({ visible: true }),
+  source: 'map',
+  showBrandFilterSheet: (source: BrandFilterSource) =>
+    set({ visible: true, source }),
   hideBrandFilterSheet: () => set({ visible: false }),
 }));

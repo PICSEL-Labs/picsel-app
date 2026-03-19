@@ -22,7 +22,7 @@ import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/shared/styles/shadows';
 
 const BrandFilterSheet = () => {
-  const { visible, hideBrandFilterSheet } = useBrandFilterSheetStore();
+  const { visible, source, hideBrandFilterSheet } = useBrandFilterSheetStore();
   const { data: brands } = useGetBrandsList();
   const { brandList, setBrandList } = useBrandListStore();
   const { scrollViewRef, handleScroll } = useHandleScroll();
@@ -43,7 +43,7 @@ const BrandFilterSheet = () => {
   };
 
   const handleApply = () => {
-    applyFilter();
+    applyFilter(source);
     hideBrandFilterSheet();
   };
 

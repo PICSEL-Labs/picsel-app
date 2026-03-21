@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type BrandFilterSource = 'map' | 'picsel';
+export type BrandFilterSource = 'map' | 'picsel' | 'picselBook';
 
 interface BrandFilterSheetStore {
   visible: boolean;

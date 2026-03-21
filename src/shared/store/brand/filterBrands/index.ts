@@ -28,6 +28,7 @@ export const useFilteredBrandsStore = create<FilteredBrandStore>(
     filteredListBySource: {
       map: [],
       picsel: [],
+      picselBook: [],
     },
     // 하위 호환: map의 filteredList를 기본으로 노출
     filteredList: [] as FilteredBrand[],
@@ -70,7 +71,7 @@ export const useFilteredBrandsStore = create<FilteredBrandStore>(
     resetFilter: () => {
       set({
         tempFilteredList: [],
-        filteredListBySource: { map: [], picsel: [] },
+        filteredListBySource: { map: [], picsel: [], picselBook: [] },
         filteredList: [],
       });
     },

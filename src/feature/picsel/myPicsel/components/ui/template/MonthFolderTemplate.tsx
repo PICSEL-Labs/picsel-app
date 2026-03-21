@@ -23,6 +23,8 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
 
     showSortSheet,
 
+    isFilterActive,
+
     isSelecting,
     selectedPhotos,
     toggleSelection,
@@ -60,6 +62,7 @@ const MonthFolderTemplate = ({ year, month, onBack }: Props) => {
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}
         disabled={showingSkeleton}
+        isFilterActive={isFilterActive}
         onToggleSelecting={handleEnterSelecting}
         onSelectAll={() => selectAll(totalPhotos, photoData)}
         onClose={handleExitSelecting}

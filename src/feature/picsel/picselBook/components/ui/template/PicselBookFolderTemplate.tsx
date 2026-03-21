@@ -37,6 +37,8 @@ const PicselBookFolderTemplate = ({
 
     showSortSheet,
 
+    isFilterActive,
+
     viewMode,
     handleToggleViewMode,
 
@@ -94,7 +96,7 @@ const PicselBookFolderTemplate = ({
         onTogglePress={showEditSheet}
       />
 
-      {photoData.length !== 0 && (
+      {(photoData.length !== 0 || isFilterActive) && (
         <PixelToolbar
           listViewMode={viewMode}
           totalPhotos={totalPhotos}
@@ -104,7 +106,8 @@ const PicselBookFolderTemplate = ({
           onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}
-          onFilter={() => showBrandFilterSheet('picsel')}
+          isFilterActive={isFilterActive}
+          onFilter={() => showBrandFilterSheet('picselBook')}
           onSort={showSortSheet}
           onToggleViewMode={handleToggleViewMode}
         />

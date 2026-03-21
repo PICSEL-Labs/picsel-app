@@ -68,7 +68,10 @@ const DefaultToolbar = ({
 
       <View className="flex-row items-center space-x-4">
         {onFilter && (
-          <Pressable onPress={onFilter}>
+          <Pressable
+            onPress={onFilter}
+            disabled={disabled}
+            style={disabled ? { opacity: 0.4 } : undefined}>
             <View>
               <FilterIcons height={24} width={24} shape="gray" />
               {isFilterActive && (

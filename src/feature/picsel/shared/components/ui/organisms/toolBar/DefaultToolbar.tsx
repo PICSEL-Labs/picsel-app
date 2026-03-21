@@ -30,6 +30,7 @@ const DefaultToolbar = ({
 }: Props) => {
   const displayCount = totalPhotos > 999 ? '999+' : totalPhotos;
   const hasViewModeToggle = listViewMode && onToggleViewMode;
+  const isOtherDisabled = disabled || (isFilterActive && totalPhotos === 0);
 
   const renderLeftContent = () => {
     if (!onFilter) {
@@ -38,7 +39,10 @@ const DefaultToolbar = ({
 
     if (hasViewModeToggle) {
       return (
-        <Pressable onPress={onToggleViewMode}>
+        <Pressable
+          onPress={onToggleViewMode}
+          disabled={isOtherDisabled}
+          style={isOtherDisabled ? { opacity: 0.4 } : undefined}>
           <ViewModeIcons
             shape={listViewMode === 'list' ? 'list' : 'text-list'}
             width={24}
@@ -49,7 +53,9 @@ const DefaultToolbar = ({
     }
 
     return (
-      <Text className="text-gray-900 body-rg-03" style={{ lineHeight: 0 }}>
+      <Text
+        className="text-gray-900 body-rg-03"
+        style={[{ lineHeight: 0 }, isOtherDisabled && { opacity: 0.4 }]}>
         전체 {displayCount}
       </Text>
     );
@@ -57,14 +63,12 @@ const DefaultToolbar = ({
 
   return (
     <View
-      style={disabled ? { opacity: 0.4 } : undefined}
-      pointerEvents={disabled ? 'none' : 'auto'}
       className={`flex-row items-center bg-white/90 px-6 py-4 ${onFilter ? 'justify-between' : 'justify-end'}`}>
       {renderLeftContent()}
 
       <View className="flex-row items-center space-x-4">
         {onFilter && (
-          <Pressable onPress={onFilter} disabled={disabled}>
+          <Pressable onPress={onFilter}>
             <View>
               <FilterIcons height={24} width={24} shape="gray" />
               {isFilterActive && (
@@ -76,12 +80,16 @@ const DefaultToolbar = ({
 
         <Pressable
           onPress={onSort}
-          disabled={disabled}
+          disabled={isOtherDisabled}
+          style={isOtherDisabled ? { opacity: 0.4 } : undefined}
           className={!onFilter ? 'mr-5' : ''}>
           <SortIcons height={24} width={24} shape="sort" />
         </Pressable>
 
-        <Pressable onPress={onToggleSelecting} disabled={disabled}>
+        <Pressable
+          onPress={onToggleSelecting}
+          disabled={isOtherDisabled}
+          style={isOtherDisabled ? { opacity: 0.4 } : undefined}>
           <CheckRoundIcons height={24} width={24} shape="check-round" />
         </Pressable>
       </View>

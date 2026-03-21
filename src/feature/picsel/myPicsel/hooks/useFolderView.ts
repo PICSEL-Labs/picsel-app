@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { useSortActionSheet } from '../../shared/hooks/animation/useSortActionSheet';
 import { Photo } from '../components/ui/organisms/PhotoListView';
 import { useGetMyPicsels } from '../queries/useGetMyPicsels';
@@ -10,6 +12,7 @@ import { useSelectingMode } from '@/feature/picsel/shared/hooks/animation/useSel
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useMyPicselStore } from '@/shared/store';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
 import { getImageUrl } from '@/shared/utils/image';
@@ -33,6 +36,8 @@ export const useFolderView = ({
   year,
   month,
 }: UseFolderViewOptions) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
   // 정렬 상태 (전역 store)
   const { sortType, setSortType } = useMyPicselStore();
 
@@ -125,6 +130,7 @@ export const useFolderView = ({
   // 사진 액션 (삭제, 이동)
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
+    navigation,
     onDeleteSuccess: resetSelection,
     exitSelectingMode: handleExitSelecting,
   });

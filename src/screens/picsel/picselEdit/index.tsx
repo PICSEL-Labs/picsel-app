@@ -106,7 +106,7 @@ const PicselEditScreen = ({ route, navigation }: Props) => {
             picselbook={picselData?.picselbook}
             onMovePress={() =>
               navigation.navigate('PicselMove', {
-                picselId,
+                picselIds: [picselId],
                 currentPicselbookId: picselData?.picselbook.picselbookId ?? '',
               })
             }

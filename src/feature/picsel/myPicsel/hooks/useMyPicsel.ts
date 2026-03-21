@@ -134,6 +134,7 @@ export const useMyPicsel = () => {
   // 사진 액션 (삭제, 이동)
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
+    navigation,
     exitSelectingMode: handleExitSelecting,
   });
 

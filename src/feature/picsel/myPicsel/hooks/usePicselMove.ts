@@ -11,17 +11,19 @@ import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 interface Props {
-  picselId: string;
-  currentPicselbookId: string;
+  picselIds: string[];
+  currentPicselbookId?: string;
   navigation: NavigationProp<MainNavigationProps>;
 }
 
 export const usePicselMove = ({
-  picselId,
+  picselIds,
   currentPicselbookId,
   navigation,
 }: Props) => {
-  const [selectedBookId, setSelectedBookId] = useState(currentPicselbookId);
+  const [selectedBookId, setSelectedBookId] = useState(
+    currentPicselbookId ?? '',
+  );
   const [isListReady, setIsListReady] = useState(false);
 
   const {
@@ -36,7 +38,9 @@ export const usePicselMove = ({
   const { mutate: movePicsels } = useMovePicsels();
   const { showToast } = useToastStore();
 
-  const canMove = !!selectedBookId && selectedBookId !== currentPicselbookId;
+  const canMove = currentPicselbookId
+    ? !!selectedBookId && selectedBookId !== currentPicselbookId
+    : !!selectedBookId;
 
   const handleMove = () => {
     if (!canMove) {
@@ -50,7 +54,7 @@ export const usePicselMove = ({
       MOVE_ALERT.DESCRIPTION,
       () => {
         movePicsels(
-          { targetPicselbookId: selectedBookId, picselIds: [picselId] },
+          { targetPicselbookId: selectedBookId, picselIds },
           {
             onSuccess: () => {
               showToast(TOAST_MESSAGES.MOVE_SUCCESS, 60);

@@ -43,6 +43,9 @@ const QrViewerScreen = ({ route }: Props) => {
           color="active"
           textColor="white"
           className="w-full"
+          onPress={() =>
+            navigation.navigate('SelectMainPhoto', { variant: 'main' })
+          }
         />
       </View>
     </ScreenLayout>

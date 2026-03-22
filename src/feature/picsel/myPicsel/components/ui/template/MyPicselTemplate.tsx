@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 
 import EmptyStateLayout from '../../../../shared/components/layouts/EmptyStateLayout';
+import SparkleBackground from '../../../../shared/components/ui/atoms/SparkleBackground';
 import EmptyMessage from '../../../../shared/components/ui/molecules/EmptyMessage';
 import UploadTooltip from '../../../../shared/components/ui/molecules/UploadTooltip';
 import SelectionBottomSheet from '../../../../shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
@@ -80,7 +81,10 @@ const MyPicselTemplate = () => {
             tooltip={<UploadTooltip />}
           />
         }>
-        <EmptyMessage message="당신의 네컷사진을 올려보세요!" />
+        <View className="flex-1">
+          <SparkleBackground />
+          <EmptyMessage message="당신의 네컷사진을 올려보세요!" />
+        </View>
       </EmptyStateLayout>
     );
   }
@@ -103,7 +107,10 @@ const MyPicselTemplate = () => {
       )}
 
       {isFilterActive && photoData.length === 0 && !isLoading ? (
-        <EmptyMessage message="선택한 브랜드의 사진이 없어요" />
+        <View className="flex-1 pb-14">
+          <SparkleBackground />
+          <EmptyMessage message="선택한 브랜드의 사진이 없어요" />
+        </View>
       ) : dateFilter === 'year' ? (
         <YearFilterView
           ref={flatListRef}

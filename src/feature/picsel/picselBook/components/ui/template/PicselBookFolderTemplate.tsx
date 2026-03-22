@@ -1,11 +1,14 @@
 import React, { useCallback, useState } from 'react';
 
+import { View } from 'react-native';
+
 import { PicselBookEditType } from '../../../types';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import PhotoTextListView from '@/feature/picsel/picselBook/components/ui/organisms/PhotoTextListView';
 import { usePicselBookFolder } from '@/feature/picsel/picselBook/hooks/usePicselBookFolder';
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
+import SparkleBackground from '@/feature/picsel/shared/components/ui/atoms/SparkleBackground';
 import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecules/Button/FloatingActionButtons';
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
@@ -131,13 +134,16 @@ const PicselBookFolderTemplate = ({
               />
             ) : undefined
           }>
-          <EmptyMessage
-            message={
-              isFilterActive
-                ? '선택한 브랜드의 사진이 없어요'
-                : '픽셀북이 비어있어요'
-            }
-          />
+          <View className="flex-1 pb-14">
+            <SparkleBackground />
+            <EmptyMessage
+              message={
+                isFilterActive
+                  ? '선택한 브랜드의 사진이 없어요'
+                  : '픽셀북이 비어있어요'
+              }
+            />
+          </View>
         </EmptyStateLayout>
       ) : (
         <>

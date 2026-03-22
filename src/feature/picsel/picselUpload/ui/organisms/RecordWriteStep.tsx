@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import {
   KeyboardAvoidingView,
@@ -24,6 +24,7 @@ const RecordWriteStep = () => {
   const [content, setContent] = useState(savedContent || '');
 
   const { complete, isPending } = useCompletePicselUpload();
+  const scrollRef = useRef<ScrollView>(null);
 
   const isFilled = title.trim().length > 0 && content.trim().length > 0;
 
@@ -36,6 +37,7 @@ const RecordWriteStep = () => {
         behavior={Platform.select({ ios: 'padding' })}
         className="flex-1">
         <ScrollView
+          ref={scrollRef}
           keyboardDismissMode="none"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -55,6 +57,7 @@ const RecordWriteStep = () => {
             content={content}
             onChangeTitle={setTitle}
             onChangeContent={setContent}
+            onFocus={() => scrollRef.current?.scrollToEnd({ animated: true })}
           />
         </ScrollView>
         <View className="px-4">

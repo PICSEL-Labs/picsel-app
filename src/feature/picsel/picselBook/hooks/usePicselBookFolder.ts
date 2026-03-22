@@ -13,6 +13,7 @@ import {
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
 import { getImageUrl } from '@/shared/utils/image';
 
 type ViewMode = 'list' | 'textList';
@@ -37,6 +38,15 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
   const [sortType, setSortType] =
     useState<PicselBookFolderSortType>('RECENT_DESC');
 
+  // 브랜드 필터 상태
+  const { filteredListBySource } = useFilteredBrandsStore();
+  const picselBookFilteredList = filteredListBySource.picselBook;
+  const brandIds = useMemo(
+    () => picselBookFilteredList.map(b => b.brandId),
+    [picselBookFilteredList],
+  );
+  const isFilterActive = picselBookFilteredList.length > 0;
+
   // 픽셀북 내 픽셀 데이터 페칭 (무한 스크롤)
   const {
     data,
@@ -51,29 +61,37 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
     sortType,
   });
 
-  // 모든 페이지의 content를 합쳐서 Photo 형태로 변환
+  // 모든 페이지의 content를 합쳐서 Photo 형태로 변환 + 브랜드 필터 적용
   const photoData: Photo[] = useMemo(() => {
     if (!data?.pages) {
       return [];
     }
-    return data.pages.flatMap(page =>
-      page.content.map((item: PicselBookPicselItem) => ({
-        id: item.picselId,
-        uri: getImageUrl(item.representativeImagePath),
-        date: item.takenDate,
-        storeName: item.storeName,
-      })),
-    );
-  }, [data]);
+    const allItems = data.pages.flatMap(page => page.content);
+    const filtered = isFilterActive
+      ? allItems.filter((item: PicselBookPicselItem) =>
+          brandIds.includes(item.brand.brandId),
+        )
+      : allItems;
+    return filtered.map((item: PicselBookPicselItem) => ({
+      id: item.picselId,
+      uri: getImageUrl(item.representativeImagePath),
+      date: item.takenDate,
+      storeName: item.storeName,
+    }));
+  }, [data, brandIds, isFilterActive]);
 
-  // 원본 데이터 (텍스트 리스트 뷰용)
-  const rawData: PicselBookPicselItem[] = useMemo(
-    () => data?.pages.flatMap(page => page.content) ?? [],
-    [data],
-  );
+  // 원본 데이터 (텍스트 리스트 뷰용) + 브랜드 필터 적용
+  const rawData: PicselBookPicselItem[] = useMemo(() => {
+    const items = data?.pages.flatMap(page => page.content) ?? [];
+    return isFilterActive
+      ? items.filter(item => brandIds.includes(item.brand.brandId))
+      : items;
+  }, [data, brandIds, isFilterActive]);
 
-  const totalPhotos = data?.pages[0]?.totalElements ?? 0;
-  const hasPhotos = totalPhotos > 0;
+  const totalPhotos = isFilterActive
+    ? photoData.length
+    : (data?.pages[0]?.totalElements ?? 0);
+  const hasPhotos = (data?.pages[0]?.totalElements ?? 0) > 0;
 
   // 사진 선택
   const {
@@ -154,6 +172,9 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
     // 정렬
     sortType,
     showSortSheet,
+
+    // 브랜드 필터
+    isFilterActive,
 
     // 뷰 모드
     viewMode,

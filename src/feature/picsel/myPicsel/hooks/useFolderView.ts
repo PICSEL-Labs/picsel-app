@@ -11,6 +11,7 @@ import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoAct
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
 import { useMyPicselStore } from '@/shared/store';
+import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
 import { getImageUrl } from '@/shared/utils/image';
 
 interface UseFolderViewOptions {
@@ -35,13 +36,22 @@ export const useFolderView = ({
   // 정렬 상태 (전역 store)
   const { sortType, setSortType } = useMyPicselStore();
 
+  // 브랜드 필터 상태
+  const { filteredListBySource } = useFilteredBrandsStore();
+  const picselFilteredList = filteredListBySource.picsel;
+  const brandIds = useMemo(
+    () => picselFilteredList.map(b => b.brandId),
+    [picselFilteredList],
+  );
+  const isFilterActive = picselFilteredList.length > 0;
+
   // API에서 전체 데이터 페칭
   const { data: myPicselsData, isLoading } = useGetMyPicsels({
     size: 1000,
     sort: sortType,
   });
 
-  // 년도별/월별 필터링
+  // 년도별/월별 필터링 + 브랜드 필터 적용
   const photoData: Photo[] = useMemo(() => {
     if (!myPicselsData?.pages) {
       return [];
@@ -50,6 +60,11 @@ export const useFolderView = ({
     const allContent = myPicselsData.pages.flatMap(page => page.content);
 
     const filtered = allContent.filter(item => {
+      // 브랜드 필터
+      if (isFilterActive && !brandIds.includes(item.brand.brandId)) {
+        return false;
+      }
+
       const itemYear = getYearFromDate(item.takenDate);
       if (itemYear !== year) {
         return false;
@@ -69,7 +84,7 @@ export const useFolderView = ({
       date: item.takenDate,
       storeName: item.storeName,
     }));
-  }, [myPicselsData, filterType, year, month]);
+  }, [myPicselsData, filterType, year, month, brandIds, isFilterActive]);
 
   const totalPhotos = photoData.length;
 
@@ -128,6 +143,9 @@ export const useFolderView = ({
     // 정렬
     sortType,
     showSortSheet,
+
+    // 브랜드 필터
+    isFilterActive,
 
     // 선택 모드
     isSelecting,

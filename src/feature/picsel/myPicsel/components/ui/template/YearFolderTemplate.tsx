@@ -22,6 +22,8 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
 
     showSortSheet,
 
+    isFilterActive,
+
     isSelecting,
     selectedPhotos,
     toggleSelection,
@@ -59,11 +61,12 @@ const YearFolderTemplate = ({ year, onBack }: Props) => {
         isSelecting={isSelecting}
         selectedCount={selectedPhotos.length}
         disabled={showingSkeleton}
+        isFilterActive={isFilterActive}
         onToggleSelecting={handleEnterSelecting}
         onSelectAll={() => selectAll(totalPhotos, photoData)}
         onClose={handleExitSelecting}
         onSort={showSortSheet}
-        onFilter={showBrandFilterSheet}
+        onFilter={() => showBrandFilterSheet('picsel')}
       />
 
       <PhotoListView

@@ -9,6 +9,7 @@ interface Props {
   selectedCount: number;
   listViewMode?: 'list' | 'textList';
   disabled?: boolean;
+  isFilterActive?: boolean;
   onToggleSelecting: () => void;
   onSelectAll: () => void;
   onClose: () => void;
@@ -23,6 +24,7 @@ const PixelToolbar = ({
   selectedCount,
   listViewMode,
   disabled = false,
+  isFilterActive = false,
   onToggleSelecting,
   onSelectAll,
   onClose,
@@ -46,6 +48,7 @@ const PixelToolbar = ({
       totalPhotos={totalPhotos}
       listViewMode={listViewMode}
       disabled={disabled}
+      isFilterActive={isFilterActive}
       onToggleSelecting={onToggleSelecting}
       onSort={onSort}
       onFilter={onFilter}

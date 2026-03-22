@@ -26,6 +26,8 @@ const MyPicselTemplate = () => {
 
     showSortSheet,
 
+    isFilterActive,
+
     dateFilter,
     handleDateFilterChange,
 
@@ -91,15 +93,18 @@ const MyPicselTemplate = () => {
           isSelecting={isSelecting}
           selectedCount={selectedPhotos.length}
           disabled={showingSkeleton}
+          isFilterActive={isFilterActive}
           onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}
           onSort={showSortSheet}
-          onFilter={showBrandFilterSheet}
+          onFilter={() => showBrandFilterSheet('picsel')}
         />
       )}
 
-      {dateFilter === 'year' ? (
+      {isFilterActive && photoData.length === 0 && !isLoading ? (
+        <EmptyMessage message="선택한 브랜드의 사진이 없어요" />
+      ) : dateFilter === 'year' ? (
         <YearFilterView
           ref={flatListRef}
           onScroll={handleScroll}

@@ -22,12 +22,12 @@ import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/shared/styles/shadows';
 
 const BrandFilterSheet = () => {
-  const { visible, hideBrandFilterSheet } = useBrandFilterSheetStore();
+  const { visible, source, hideBrandFilterSheet } = useBrandFilterSheetStore();
   const { data: brands } = useGetBrandsList();
   const { brandList, setBrandList } = useBrandListStore();
   const { scrollViewRef, handleScroll } = useHandleScroll();
   const { showToast } = useToastStore();
-  const { tempFilteredList, filterBrand, resetFilter, applyFilter } =
+  const { tempFilteredList, filterBrand, resetTemp, applyFilter } =
     useFilteredBrandsStore();
   const { bottomSheetRef, snapPoints, animationConfigs, handleSheetChange } =
     useBrandFilterBottomSheet({
@@ -37,13 +37,13 @@ const BrandFilterSheet = () => {
 
   const handleReset = () => {
     if (tempFilteredList.length > 0) {
-      resetFilter();
+      resetTemp();
       showToast('선택한 브랜드가 모두 해제됐어요', 50);
     }
   };
 
   const handleApply = () => {
-    applyFilter();
+    applyFilter(source);
     hideBrandFilterSheet();
   };
 

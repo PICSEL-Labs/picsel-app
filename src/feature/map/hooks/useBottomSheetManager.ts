@@ -32,7 +32,7 @@ export const useBottomSheetManager = () => {
         break;
 
       case 'filter':
-        showBrandFilterSheet();
+        showBrandFilterSheet('map');
         setEmptyBrandVisible(false);
         setDetailBrandVisible(false);
         break;

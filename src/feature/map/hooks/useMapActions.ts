@@ -35,7 +35,7 @@ export const useMapActions = ({
   }, [setSelectedMarkerId, hideSearchButton, setActiveButton, showSheet]);
 
   const handleLocationSearch = useCallback(() => {
-    clearAppliedFilter();
+    clearAppliedFilter('map');
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
     resetSearchUI();
   }, [searchStoresByLocation, camera, clearAppliedFilter, resetSearchUI]);

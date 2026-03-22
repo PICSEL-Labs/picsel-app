@@ -47,6 +47,9 @@ export interface PicselBookPicselItem {
   storeId: string;
   storeName: string;
   brandImagePath: string;
+  brand: {
+    brandId: string;
+  };
 }
 
 // 픽셀북 폴더 API 응답 (페이지네이션)

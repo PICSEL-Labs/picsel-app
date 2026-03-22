@@ -37,6 +37,8 @@ const PicselBookFolderTemplate = ({
 
     showSortSheet,
 
+    isFilterActive,
+
     viewMode,
     handleToggleViewMode,
 
@@ -94,7 +96,7 @@ const PicselBookFolderTemplate = ({
         onTogglePress={showEditSheet}
       />
 
-      {photoData.length !== 0 && (
+      {(photoData.length !== 0 || isFilterActive) && (
         <PixelToolbar
           listViewMode={viewMode}
           totalPhotos={totalPhotos}
@@ -104,7 +106,8 @@ const PicselBookFolderTemplate = ({
           onToggleSelecting={handleEnterSelecting}
           onSelectAll={() => selectAll(totalPhotos, photoData)}
           onClose={handleExitSelecting}
-          onFilter={showBrandFilterSheet}
+          isFilterActive={isFilterActive}
+          onFilter={() => showBrandFilterSheet('picselBook')}
           onSort={showSortSheet}
           onToggleViewMode={handleToggleViewMode}
         />
@@ -113,20 +116,28 @@ const PicselBookFolderTemplate = ({
       {photoData.length === 0 && !isLoading ? (
         <EmptyStateLayout
           floatingButton={
-            <FloatingActionButtons
-              isSelecting={false}
-              showUpButton={false}
-              showFunctionButtons={showFunctionButtons}
-              onScrollToTop={scrollToTop}
-              onToggleFunctionButtons={toggleFunctionButtons}
-              onAlbumPress={handleAlbumPress}
-              onQrPress={handleQrPress}
-              onCloseFunctionButtons={closeFunctionButtons}
-              tooltip={<UploadTooltip />}
-              noTabBar
-            />
+            !isFilterActive ? (
+              <FloatingActionButtons
+                isSelecting={false}
+                showUpButton={false}
+                showFunctionButtons={showFunctionButtons}
+                onScrollToTop={scrollToTop}
+                onToggleFunctionButtons={toggleFunctionButtons}
+                onAlbumPress={handleAlbumPress}
+                onQrPress={handleQrPress}
+                onCloseFunctionButtons={closeFunctionButtons}
+                tooltip={<UploadTooltip />}
+                noTabBar
+              />
+            ) : undefined
           }>
-          <EmptyMessage message="픽셀북이 비어있어요" />
+          <EmptyMessage
+            message={
+              isFilterActive
+                ? '선택한 브랜드의 사진이 없어요'
+                : '픽셀북이 비어있어요'
+            }
+          />
         </EmptyStateLayout>
       ) : (
         <>

@@ -19,11 +19,11 @@ const resolveLocalFilePath = async (uri: string): Promise<string> => {
     const resolvedPath = imageData.node.image.filepath;
 
     if (!resolvedPath) {
-      console.log('파일 시스템 경로를 찾을 수 없음');
+      return uri;
     }
     return resolvedPath;
   } catch (error) {
-    console.log('iOS 이미지 경로 변환 실패', error);
+    console.error('iOS 이미지 경로 변환 실패:', error);
     return uri;
   }
 };
@@ -59,7 +59,7 @@ export const uploadImageToS3 = async (
   });
 
   if (!uploadResponse.ok) {
-    console.log(`S3 업로드 실패: ${uploadResponse.statusText}`);
+    throw new Error(`S3 업로드 실패: ${uploadResponse.statusText}`);
   }
 
   return fileUrl;

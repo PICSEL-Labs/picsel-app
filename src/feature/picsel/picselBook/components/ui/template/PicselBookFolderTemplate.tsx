@@ -78,8 +78,8 @@ const PicselBookFolderTemplate = ({
   }, []);
 
   // TODO: 편집 로직 구현
-  const handleEdit = (editType: PicselBookEditType) => {
-    console.log('편집 타입:', editType);
+  const handleEdit = (_editType: PicselBookEditType) => {
+    // TODO: 편집 로직 연동
   };
 
   const { showSortSheet: showEditSheet } = useSortActionSheet({

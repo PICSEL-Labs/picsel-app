@@ -18,10 +18,9 @@ export const useSelectedBrands = (
     const brandIds = selectedList.map(value => value.brandId);
 
     try {
-      const res = await favoriteBrandApi({ brandIds });
-      console.log(res.data);
+      await favoriteBrandApi({ brandIds });
     } catch (err) {
-      console.log(err);
+      console.error('즐겨찾기 등록 실패:', err);
     }
 
     navigation.navigate('SignupSuccess', { refreshToken });

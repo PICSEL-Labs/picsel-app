@@ -73,7 +73,7 @@ export const useAlbumList = () => {
       const withThumbnails = await fetchThumbnails(sorted);
       setAlbums(withThumbnails);
     } catch (error) {
-      console.log('앨범 목록 불러오기 실패:', error);
+      console.error('앨범 목록 불러오기 실패:', error);
       setIsReady(true);
     }
   }, []);

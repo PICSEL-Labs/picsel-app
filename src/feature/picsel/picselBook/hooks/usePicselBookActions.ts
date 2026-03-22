@@ -15,15 +15,13 @@ export const usePicselBookActions = () => {
   const { showToast } = useToastStore();
   const { mutate: deletePicselBooks } = useDeletePicselBooks();
 
-  const handleEdit = (id: string, title: string) => {
+  const handleEdit = (_id: string, _title: string) => {
     // TODO: 편집 바텀시트 열기 및 id 사용
-    console.log('Edit book:', id, title);
     editBottomSheetRef.current?.present();
   };
 
-  const handleChangeCover = (id: string) => {
+  const handleChangeCover = (_id: string) => {
     // TODO: 커버 사진 변경 플로우에서 id 사용
-    console.log('Change cover:', id);
     navigation.navigate('SelectMainPhoto');
   };
 

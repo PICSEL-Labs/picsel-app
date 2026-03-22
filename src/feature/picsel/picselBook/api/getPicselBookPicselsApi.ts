@@ -24,14 +24,5 @@ export const getPicselBookPicselsApi = async (
     },
   );
 
-  if (__DEV__) {
-    console.log('[API res] GET /picselbooks/{picselbookId}/picsels', {
-      picselbookId,
-      params: { page, size, sortType },
-      status: response.status,
-      data: response.data,
-    });
-  }
-
   return response.data.data;
 };

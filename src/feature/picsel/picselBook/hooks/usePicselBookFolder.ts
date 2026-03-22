@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { useGetPicselBookPicsels } from '../queries/useGetPicselBookPicsels';
 import { PicselBookFolderSortType, PicselBookPicselItem } from '../types';
 
@@ -13,6 +15,7 @@ import {
 import { usePhotoActions } from '@/feature/picsel/shared/hooks/photo/usePhotoActions';
 import { usePhotoSelection } from '@/feature/picsel/shared/hooks/photo/usePhotoSelection';
 import { useFunctionButtons } from '@/feature/picsel/shared/hooks/useFunctionButtons';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useFilteredBrandsStore } from '@/shared/store/brand/filterBrands';
 import { getImageUrl } from '@/shared/utils/image';
 
@@ -33,6 +36,8 @@ interface UsePicselBookFolderOptions {
  * - 정렬 기능
  */
 export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
   // 상태 관리
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [sortType, setSortType] =
@@ -130,6 +135,8 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
   // 사진 액션 (삭제, 이동)
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
+    navigation,
+    currentPicselbookId: bookId,
     onDeleteSuccess: () => {
       resetSelection();
       refetch();

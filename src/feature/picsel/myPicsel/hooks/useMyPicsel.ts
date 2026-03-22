@@ -58,38 +58,34 @@ export const useMyPicsel = () => {
     sort: sortType,
   });
 
-  // 모든 페이지의 content를 합쳐서 Photo 형태로 변환 + 브랜드 필터 적용
-  const photoData: Photo[] = useMemo(() => {
-    if (!myPicselsData?.pages) {
-      return [];
-    }
-    const allItems = myPicselsData.pages.flatMap(page => page.content);
-    const filtered = isFilterActive
+  // 모든 페이지의 content를 합치고 브랜드 필터 적용
+  const filteredContent = useMemo(() => {
+    const allItems = myPicselsData?.pages.flatMap(page => page.content) ?? [];
+
+    return isFilterActive
       ? allItems.filter(item => brandIds.includes(item.brand.brandId))
       : allItems;
-    return filtered.map(item => ({
-      id: item.picselId,
-      uri: getImageUrl(item.imagePath),
-      date: item.takenDate,
-      storeName: item.storeName,
-    }));
   }, [myPicselsData, brandIds, isFilterActive]);
+
+  // Photo 형태로 변환
+  const photoData: Photo[] = useMemo(
+    () =>
+      filteredContent.map(item => ({
+        id: item.picselId,
+        uri: getImageUrl(item.imagePath),
+        date: item.takenDate,
+        storeName: item.storeName,
+      })),
+    [filteredContent],
+  );
 
   // 전체 탭에서 로드된 이미지를 메모리에 prefetch (월/년 탭 전환 시 즉시 렌더링)
   const photoUris = useMemo(() => photoData.map(p => p.uri), [photoData]);
   useImagePrefetch(photoUris);
 
-  // 년/월별 그룹 데이터 (브랜드 필터 적용)
-  const allContent = useMemo(() => {
-    const items = myPicselsData?.pages.flatMap(page => page.content) ?? [];
-    return isFilterActive
-      ? items.filter(item => brandIds.includes(item.brand.brandId))
-      : items;
-  }, [myPicselsData, brandIds, isFilterActive]);
-
   const yearGroups: YearGroup[] = useMemo(
-    () => groupByYearMonth(allContent),
-    [allContent],
+    () => groupByYearMonth(filteredContent),
+    [filteredContent],
   );
 
   const totalPhotos = isFilterActive
@@ -134,6 +130,7 @@ export const useMyPicsel = () => {
   // 사진 액션 (삭제, 이동)
   const { handleDelete, handleMove } = usePhotoActions({
     selectedPhotos,
+    navigation,
     exitSelectingMode: handleExitSelecting,
   });
 

@@ -137,7 +137,7 @@ export const usePicselBook = () => {
         resetPhotoStore();
       },
       onError: error => {
-        console.log('픽셀북 생성 실패:', error);
+        console.error('픽셀북 생성 실패:', error);
       },
     });
   };

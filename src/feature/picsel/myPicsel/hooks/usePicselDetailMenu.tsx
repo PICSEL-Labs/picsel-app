@@ -47,7 +47,7 @@ export const usePicselDetailMenu = ({
         onPress: () => {
           hideDropdown(() => {
             navigation.navigate('PicselMove', {
-              picselId,
+              picselIds: [picselId],
               currentPicselbookId,
             });
           });

@@ -9,7 +9,7 @@ const QrSaveButton = () => {
   const [isPressed, setIsPressed] = useState(false);
 
   const handlePress = () => {
-    console.log('큐알 저장');
+    // TODO: 큐알 저장 로직 구현
   };
 
   return (

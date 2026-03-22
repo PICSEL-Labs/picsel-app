@@ -21,12 +21,11 @@ export const useAddPicselToPicselBook = () => {
         imagePaths: s3ImageUrls,
       });
     },
-    onSuccess: response => {
-      console.log('픽셀 업로드 성공:', response);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['picselBooks'] });
     },
     onError: error => {
-      console.log('픽셀 업로드 실패:', error);
+      console.error('픽셀 업로드 실패:', error);
     },
   });
 };

@@ -9,7 +9,7 @@ export const useCreatePicselDraft = () => {
       return response.data.draftUuid;
     },
     onError: error => {
-      console.log('픽셀 드래프트 생성 실패:', error);
+      console.error('픽셀 드래프트 생성 실패:', error);
     },
   });
 };

@@ -42,7 +42,7 @@ export type MainNavigationProps = {
   PicselUpload: undefined;
   PicselDetail: { picselId: string };
   PicselEdit: { picselId: string };
-  PicselMove: { picselId: string; currentPicselbookId: string };
+  PicselMove: { picselIds: string[]; currentPicselbookId?: string };
 
   // Picsel Tab & Book
   PicselTab: undefined;

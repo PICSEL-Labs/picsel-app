@@ -73,7 +73,7 @@ export const useCompletePicselUpload = () => {
         resetPhotoStore();
       },
       onError: error => {
-        console.log('픽셀 업로드 중 에러 발생:', error);
+        console.error('픽셀 업로드 중 에러 발생:', error);
       },
     });
   };

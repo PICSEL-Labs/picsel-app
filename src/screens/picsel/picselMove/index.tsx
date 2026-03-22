@@ -15,7 +15,7 @@ import SparkleImages from '@/shared/images/Sparkle';
 type Props = NativeStackScreenProps<MainNavigationProps, 'PicselMove'>;
 
 const PicselMoveScreen = ({ route, navigation }: Props) => {
-  const { picselId, currentPicselbookId } = route.params;
+  const { picselIds, currentPicselbookId } = route.params;
 
   const {
     picselBookRef,
@@ -29,7 +29,7 @@ const PicselMoveScreen = ({ route, navigation }: Props) => {
     isListReady,
     setIsListReady,
     handleMove,
-  } = usePicselMove({ picselId, currentPicselbookId, navigation });
+  } = usePicselMove({ picselIds, currentPicselbookId, navigation });
 
   return (
     <ScreenLayout>

@@ -1,11 +1,13 @@
 import { useDeletePicsels } from '@/feature/picsel/myPicsel/mutations/useDeletePicsels';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showDeleteConfirmModal } from '@/shared/lib/confirmModal';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 interface UsePhotoActionsOptions {
   selectedPhotos: string[];
+  navigation: RootStackNavigationProp;
+  currentPicselbookId?: string;
   onDeleteSuccess?: () => void;
-  onMoveSuccess?: () => void;
   exitSelectingMode?: () => void;
 }
 
@@ -17,8 +19,9 @@ interface UsePhotoActionsReturn {
 
 export const usePhotoActions = ({
   selectedPhotos,
+  navigation,
+  currentPicselbookId,
   onDeleteSuccess,
-  onMoveSuccess,
   exitSelectingMode,
 }: UsePhotoActionsOptions): UsePhotoActionsReturn => {
   const { showToast } = useToastStore();
@@ -52,9 +55,17 @@ export const usePhotoActions = ({
       showToast('이동할 픽셀북을 선택해주세요', 60);
       return;
     }
-    // TODO: 이동 로직 구현
-    onMoveSuccess?.();
-    exitSelectingMode?.();
+
+    if (selectedPhotos.length === 1) {
+      exitSelectingMode?.();
+      navigation.navigate('PicselMove', {
+        picselIds: selectedPhotos,
+        currentPicselbookId,
+      });
+    } else {
+      // TODO: 다중 선택 이동 구현
+      showToast('현재 1장씩만 이동할 수 있어요', 60);
+    }
   };
 
   return {

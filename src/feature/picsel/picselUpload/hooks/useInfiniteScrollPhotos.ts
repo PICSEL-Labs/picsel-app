@@ -64,7 +64,7 @@ export const useInfiniteScrollPhotos = (
       setEndCursor(page_info.end_cursor);
       setHasNextPage(page_info.has_next_page);
     } catch (error) {
-      console.log('사진 불러오기 실패:', error);
+      console.error('사진 불러오기 실패:', error);
       Alert.alert('사진을 불러올 수 없습니다.');
     } finally {
       loadingRef.current = false;
@@ -100,7 +100,7 @@ export const useInfiniteScrollPhotos = (
         setEndCursor(page_info.end_cursor);
         setHasNextPage(page_info.has_next_page);
       } catch (error) {
-        console.log('사진 불러오기 실패:', error);
+        console.error('사진 불러오기 실패:', error);
       } finally {
         loadingRef.current = false;
       }

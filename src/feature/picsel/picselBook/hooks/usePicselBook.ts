@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 import { usePicselUploadStore } from '../../picselUpload/hooks/usePicselUploadStore';
 import { CoverType } from '../../shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
@@ -38,6 +38,7 @@ import { useToastStore } from '@/shared/store/ui/toast';
  */
 export const usePicselBook = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
   const { showToast } = useToastStore();
   const picselBookRef = useRef<BottomSheetModal>(null);
 
@@ -45,8 +46,18 @@ export const usePicselBook = () => {
   const { sortType, setSortType } = usePicselBookStore();
 
   // 픽셀북 액션 (Context Menu)
-  const { handleEdit, handleChangeCover, handleDelete } =
-    usePicselBookActions();
+  const {
+    editNameBottomSheetRef,
+    editCoverBottomSheetRef,
+    editingBookId,
+    editingBookName,
+    bookCoverPhoto,
+    handleEdit,
+    handleEditSubmit,
+    handleChangeCover,
+    handleCoverEditSubmit,
+    handleDelete,
+  } = usePicselBookActions();
 
   // 픽셀북 데이터 로딩 (API 연동)
   const { data, isLoading, isFetching, refetch } = useGetPicselBooks({
@@ -59,8 +70,7 @@ export const usePicselBook = () => {
   // 픽셀북 삭제 mutation
   const { mutate: deletePicselBooks } = useDeletePicselBooks();
 
-  const { bookCoverPhoto, reset: resetPhotoStore } = usePhotoStore();
-
+  const { reset: resetPhotoStore } = usePhotoStore();
   const { mutateAsync: createDraft } = useCreatePicselBookDraft();
 
   const books: PicselBookItem[] = data ?? [];
@@ -201,6 +211,13 @@ export const usePicselBook = () => {
     });
   };
 
+  // 커버 편집 리턴 플로우: 이전 화면으로 돌아왔을 때만 바텀시트 오픈
+  useEffect(() => {
+    if (isFocused && editingBookId && bookCoverPhoto) {
+      editCoverBottomSheetRef.current?.present();
+    }
+  }, [isFocused, bookCoverPhoto, editingBookId]);
+
   useEffect(() => {
     if (selectedBookIds.length === 0 && savedBookId && books.length > 0) {
       const target = books.find(b => b.picselbookId === savedBookId);
@@ -247,8 +264,17 @@ export const usePicselBook = () => {
     handleBookPress,
     handleDeletePress,
     handleEdit,
+    handleEditSubmit,
     handleChangeCover,
+    handleCoverEditSubmit,
     handleDelete,
+
+    // 편집 상태
+    editNameBottomSheetRef,
+    editCoverBottomSheetRef,
+    editingBookId,
+    editingBookName,
+    bookCoverPhoto,
 
     // Refs
     picselBookRef,

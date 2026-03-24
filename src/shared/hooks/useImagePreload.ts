@@ -5,6 +5,11 @@ const TIMEOUT_MS = 8000;
 // 모듈 레벨 전역 캐시: 한번 로드된 URI는 컴포넌트 unmount 후에도 기억
 const globalLoadedUris = new Set<string>();
 
+/** 특정 URI를 전역 이미지 캐시에서 제거 */
+export const clearGlobalLoadedUri = (uri: string) => {
+  globalLoadedUris.delete(uri);
+};
+
 interface UseImagePreloadResult {
   isImagesLoaded: boolean;
   handleImageLoad: (uri: string) => void;

@@ -89,6 +89,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
     const handleNextStep = () => {
       if (bookName.trim() && !errorMessage) {
         if (isEditNameMode) {
+          Keyboard.dismiss();
           onSubmit(bookName.trim(), 'default');
           dismiss();
 

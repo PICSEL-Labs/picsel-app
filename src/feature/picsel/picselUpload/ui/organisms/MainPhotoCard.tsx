@@ -10,17 +10,24 @@ interface Props {
   uri: string | null;
   onDelete: () => void;
   onSelect: () => void;
+  variant?: 'upload' | 'edit';
 }
 
-const MainPhotoCard = ({ uri, onDelete, onSelect }: Props) => {
+const MainPhotoCard = ({
+  uri,
+  onDelete,
+  onSelect,
+  variant = 'upload',
+}: Props) => {
   const hasPhoto = !!uri;
+  const isEdit = variant === 'edit';
 
   return (
     <View className="items-center px-4 pb-8 pt-6">
       <View className="relative max-h-[280px] max-w-[280px]">
         <Pressable
-          onPress={!hasPhoto ? onSelect : undefined}
-          disabled={hasPhoto}
+          onPress={!hasPhoto || isEdit ? onSelect : undefined}
+          disabled={hasPhoto && !isEdit}
           className={`aspect-square overflow-hidden rounded-xl border bg-white ${
             hasPhoto ? 'border-pink-300' : 'border-pink-500'
           }`}>
@@ -45,21 +52,22 @@ const MainPhotoCard = ({ uri, onDelete, onSelect }: Props) => {
           }`}>
           <Text className="text-pink-500 body-rg-01">대표{'\n'}사진</Text>
         </View>
-        {hasPhoto ? (
-          <Pressable
-            onPress={onDelete}
-            hitSlop={10}
-            className="absolute -right-2 -top-2">
-            <CloseCircleIcons shape="M" width={24} height={24} />
-          </Pressable>
-        ) : (
-          <Pressable
-            onPress={onSelect}
-            hitSlop={10}
-            className="absolute -right-2 -top-2">
-            <PlusCircleIcons shape="M" width={24} height={24} />
-          </Pressable>
-        )}
+        {!isEdit &&
+          (hasPhoto ? (
+            <Pressable
+              onPress={onDelete}
+              hitSlop={10}
+              className="absolute -right-2 -top-2">
+              <CloseCircleIcons shape="M" width={24} height={24} />
+            </Pressable>
+          ) : (
+            <Pressable
+              onPress={onSelect}
+              hitSlop={10}
+              className="absolute -right-2 -top-2">
+              <PlusCircleIcons shape="M" width={24} height={24} />
+            </Pressable>
+          ))}
       </View>
     </View>
   );

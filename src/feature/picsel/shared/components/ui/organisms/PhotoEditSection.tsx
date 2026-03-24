@@ -12,6 +12,7 @@ interface Props {
   onSelectMainPhoto: () => void;
   onAddExtraPhoto: () => void;
   onRemoveExtraPhoto: (index: number) => void;
+  variant?: 'upload' | 'edit';
 }
 
 const PhotoEditSection = ({
@@ -21,6 +22,7 @@ const PhotoEditSection = ({
   onSelectMainPhoto,
   onAddExtraPhoto,
   onRemoveExtraPhoto,
+  variant,
 }: Props) => {
   return (
     <>
@@ -30,6 +32,7 @@ const PhotoEditSection = ({
           uri={mainPhoto}
           onDelete={onDeleteMainPhoto}
           onSelect={onSelectMainPhoto}
+          variant={variant}
         />
       </View>
 

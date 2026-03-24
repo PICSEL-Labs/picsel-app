@@ -3,7 +3,10 @@ import { useCallback } from 'react';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 import { useToastStore } from '@/shared/store/ui/toast';
 
-export const usePhotoSelection = (variant: 'main' | 'extra' | 'cover') => {
+export const usePhotoSelection = (
+  variant: 'main' | 'extra' | 'cover',
+  allowReplace = false,
+) => {
   const MAX_EXTRA_COUNT = 10;
   const { showToast } = useToastStore();
 
@@ -25,14 +28,14 @@ export const usePhotoSelection = (variant: 'main' | 'extra' | 'cover') => {
         return;
       }
 
-      if (mainPhoto) {
+      if (mainPhoto && !allowReplace) {
         showToast('대표사진은 1장만 선택 가능해요', 60);
         return;
       }
 
       setMainPhoto(uri);
     },
-    [mainPhoto, setMainPhoto, showToast],
+    [mainPhoto, setMainPhoto, showToast, allowReplace],
   );
 
   const selectBookCoverPhoto = useCallback(

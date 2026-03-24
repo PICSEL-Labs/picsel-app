@@ -25,3 +25,17 @@ export const getImageUrl = (path?: string | null): string => {
 
   return `${baseUrl}${normalizedPath}`;
 };
+
+/**
+ * 완전한 이미지 URL에서 IMAGE_URL을 제거하여 상대 경로를 반환 (getImageUrl의 역연산)
+ *
+ * @param url - 완전한 이미지 URL
+ * @returns 상대 경로
+ *
+ * @example
+ * getRelativeImagePath('https://imgdev.picsel.co.kr/img/picsel/abc.jpg')  // 'img/picsel/abc.jpg'
+ */
+export const getRelativeImagePath = (url: string): string => {
+  const baseUrl = (Config.IMAGE_URL ?? '').replace(/\/+$/, '');
+  return url.replace(`${baseUrl}/`, '');
+};

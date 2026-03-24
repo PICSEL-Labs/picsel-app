@@ -8,6 +8,7 @@ import {
   TOAST_MESSAGES,
 } from '../constants/picselDetailTexts';
 import { useDeletePicsels } from '../mutations/useDeletePicsels';
+import { useEditPicsel } from '../mutations/useEditPicsel';
 import { useGetPicselDetail } from '../queries/useGetPicselDetail';
 
 import { useDateLocationForm } from '@/feature/picsel/shared/hooks/datePicker/useDateLocationForm';
@@ -64,11 +65,29 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
     initialDate: picselData?.takenDate,
     initialStoreId: picselData?.store.storeId,
     initialLocation: picselData?.store.storeName,
-    onNext: (_date, _storeId, _locationName) => {
-      // TODO: 편집 API 연동
+    onNext: (date, storeId) => {
+      editPicsel(
+        {
+          picselId,
+          request: {
+            storeId,
+            takenDate: date,
+            title,
+            content,
+            imagePaths: [mainPhoto!, ...extraPhotos],
+          },
+        },
+        {
+          onSuccess: () => {
+            showToast(TOAST_MESSAGES.EDIT_SUCCESS);
+            navigation.goBack();
+          },
+        },
+      );
     },
   });
 
+  const { mutate: editPicsel } = useEditPicsel();
   const { mutate: deletePicsels } = useDeletePicsels();
   const { showToast } = useToastStore();
 

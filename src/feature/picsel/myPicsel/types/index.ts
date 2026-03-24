@@ -101,3 +101,15 @@ export interface MovePicselsRequest {
 export interface MovePicselsResponse extends CommonResponseType {
   data: null;
 }
+
+export interface EditPicselRequest {
+  storeId: string;
+  takenDate: string;
+  title: string;
+  content: string;
+  imagePaths: string[];
+}
+
+export interface EditPicselResponse extends CommonResponseType {
+  data: PicselDetailResponse;
+}

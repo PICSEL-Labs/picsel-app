@@ -64,7 +64,7 @@ const PicselEditScreen = ({ route, navigation }: Props) => {
             color="#26272C"
           />
         </Pressable>
-        <Text className="text-gray-900 title-01">전체 편집</Text>
+        <Text className="text-gray-900 title-01">편집</Text>
         <Pressable className="absolute right-4" onPress={handleClose}>
           <CloseIcons height={24} width={24} shape="black" />
         </Pressable>
@@ -84,6 +84,7 @@ const PicselEditScreen = ({ route, navigation }: Props) => {
             onSelectMainPhoto={handleSelectMainPhoto}
             onAddExtraPhoto={handleAddExtraPhoto}
             onRemoveExtraPhoto={removeExtraPhoto}
+            variant="edit"
           />
 
           <InputButton

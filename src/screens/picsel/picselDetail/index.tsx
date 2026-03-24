@@ -112,7 +112,7 @@ const PicselDetailScreen = ({ route, navigation }: Props) => {
         </View>
         <View className="justify-between px-4">
           {extraPhotos.length > 0 && (
-            <View className="justify-between px-4">
+            <View className="justify-between">
               {extraPhotos.map(photo => (
                 <Pressable
                   key={photo.imagePath}

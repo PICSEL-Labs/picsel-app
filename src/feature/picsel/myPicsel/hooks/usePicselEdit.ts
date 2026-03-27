@@ -50,8 +50,8 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
     };
   }, [picselData]);
 
-  const [title, setTitle] = useState(picselData?.title ?? '');
-  const [content, setContent] = useState(picselData?.content ?? '');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     if (!picselData) {
@@ -61,11 +61,19 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
     setContent(picselData.content);
   }, [picselData]);
 
+  const { mutate: editPicsel } = useEditPicsel();
+  const { mutate: deletePicsels } = useDeletePicsels();
+  const { showToast } = useToastStore();
+
   const { state, actions, datePicker } = useDateLocationForm({
     initialDate: picselData?.takenDate,
     initialStoreId: picselData?.store.storeId,
     initialLocation: picselData?.store.storeName,
     onNext: (date, storeId) => {
+      if (!mainPhoto) {
+        return;
+      }
+
       editPicsel(
         {
           picselId,
@@ -74,7 +82,7 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
             takenDate: date,
             title,
             content,
-            imagePaths: [mainPhoto!, ...extraPhotos],
+            imagePaths: [mainPhoto, ...extraPhotos],
           },
         },
         {
@@ -87,12 +95,11 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
     },
   });
 
-  const { mutate: editPicsel } = useEditPicsel();
-  const { mutate: deletePicsels } = useDeletePicsels();
-  const { showToast } = useToastStore();
-
   const isFilled =
-    state.isFilled && title.trim().length > 0 && content.trim().length > 0;
+    state.isFilled &&
+    !!mainPhoto &&
+    title.trim().length > 0 &&
+    content.trim().length > 0;
 
   const handleSelectMainPhoto = () => {
     navigation.navigate('SelectMainPhoto', { variant: 'main', from: 'edit' });

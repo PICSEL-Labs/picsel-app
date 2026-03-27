@@ -29,9 +29,14 @@ const SelectPhotoScreen = () => {
   const variant = route.params.variant;
   const picselBookRef = useRef<BottomSheetModal>(null);
 
-  const { from, bookName: pendingBookName = '' } = route.params as {
+  const {
+    from,
+    bookName: pendingBookName = '',
+    picselbookId,
+  } = route.params as {
     from?: 'edit';
     bookName?: string;
+    picselbookId?: string;
   };
 
   const { setMainPhoto, addExtraPhotos } = usePicselUploadStore();
@@ -61,10 +66,19 @@ const SelectPhotoScreen = () => {
 
   const { handleSubmit } = usePicselBook();
 
+  const { setBookCoverPhoto } = usePhotoStore();
+
   const handleSelectedCompleted = () => {
     switch (variant) {
       case 'cover':
+        if (picselbookId) {
+          setBookCoverPhoto(selectedUris[0]);
+          navigation.goBack();
+
+          return;
+        }
         picselBookRef.current?.present();
+
         return;
       case 'main':
         from === 'edit'
@@ -86,10 +100,11 @@ const SelectPhotoScreen = () => {
       <PhotoSelectHeader
         variant={variant}
         onReset={resetSelection}
-        hasSelected={!!selectedUris.length}
+        hasSelected={!picselbookId && !!selectedUris.length}
         albumName={displayAlbumName}
         isAlbumListOpen={isAlbumListOpen}
         onToggleAlbumList={toggleAlbumList}
+        isEditCover={!!picselbookId}
       />
 
       <View style={{ flex: 1 }}>

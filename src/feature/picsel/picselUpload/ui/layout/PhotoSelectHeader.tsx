@@ -21,6 +21,7 @@ interface Props {
   albumName: string;
   isAlbumListOpen: boolean;
   onToggleAlbumList: () => void;
+  isEditCover?: boolean;
 }
 
 const PhotoSelectHeader = ({
@@ -30,6 +31,7 @@ const PhotoSelectHeader = ({
   albumName,
   isAlbumListOpen,
   onToggleAlbumList,
+  isEditCover = false,
 }: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -53,7 +55,7 @@ const PhotoSelectHeader = ({
           title: '사진 선택',
           desc: (
             <Text className="text-center text-gray-500 headline-01">
-              커버사진으로 지정할{' '}
+              커버사진으로 {isEditCover ? '변경할' : '지정할'}{' '}
               <Text className="text-pink-500">사진 1장</Text>을 골라주세요.
             </Text>
           ),

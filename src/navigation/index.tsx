@@ -49,7 +49,11 @@ export type MainNavigationProps = {
   YearFolder: { year: string };
   MonthFolder: { year: string; month: string };
   PicselBookFolder: { bookId: string; bookName: string };
-  SelectBookCover: { variant: 'cover'; bookName: string };
+  SelectBookCover: {
+    variant: 'cover';
+    bookName: string;
+    picselbookId?: string;
+  };
 
   // Mypage
   MypageRoute: NavigatorScreenParams<MypageNavigationProps>;

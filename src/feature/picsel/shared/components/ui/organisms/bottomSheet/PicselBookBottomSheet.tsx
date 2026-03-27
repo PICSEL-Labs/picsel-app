@@ -14,41 +14,88 @@ import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import PicselBookIcons from '@/shared/icons/PicselBookIcons';
 import { cn } from '@/shared/lib/cn';
+import {
+  bottomSheetBackdrop,
+  bottomSheetBackground,
+} from '@/shared/styles/bottomSheetConfig';
 import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
 import Button from '@/shared/ui/atoms/Button';
+
+type BottomSheetMode = 'create' | 'editName' | 'editCover';
 
 interface Props {
   onSubmit: (bookName: string, coverType: CoverType) => void;
   initialBookName?: string;
+  mode?: BottomSheetMode;
+  picselbookId?: string;
+  coverPhotoUri?: string | null;
 }
 
 export type CoverType = 'default' | 'photo';
 
+const TITLE_MAP: Record<BottomSheetMode, string> = {
+  create: '픽셀북 추가',
+  editName: '픽셀북 이름 편집',
+  editCover: '커버사진 편집',
+};
+
 /**
  * 픽셀북 생성/수정 바텀시트
- * - 픽셀북 이름 입력 (특수문자 제한)
- * - 확인 버튼으로 제출
+ * - create: 이름 입력 → 커버 설정 → 완료
+ * - editName: 이름 입력 → 확인 (커버 단계 생략)
+ * - editCover: 커버 설정만 표시 (이름 입력 생략)
  */
 const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
-  ({ onSubmit, initialBookName = '' }, ref) => {
+  (
+    {
+      onSubmit,
+      initialBookName = '',
+      mode = 'create',
+      picselbookId,
+      coverPhotoUri,
+    },
+    ref,
+  ) => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const isEditCoverMode = mode === 'editCover';
+    const isEditNameMode = mode === 'editName';
+
     const [bookName, setBookName] = useState(initialBookName);
     const [errorMessage, setErrorMessage] = useState('');
-    const [isEdited, setIsEdited] = useState(true);
+    const [isEdited, setIsEdited] = useState(!isEditCoverMode);
     const [selectedCover, setSelectedCover] = useState<CoverType>('default');
-    const snapPoints = useMemo(() => ['100%'], []);
+    const snapPoints = useMemo(
+      () => [isEditCoverMode ? '50%' : '100%'],
+      [isEditCoverMode],
+    );
 
     useEffect(() => {
       if (initialBookName) {
         setBookName(initialBookName);
-        setIsEdited(false); // 이름이 있다면 바로 '커버 설정' 단계로 건너뜀
-        setSelectedCover('photo'); // 사진 선택 후 돌아온 것이므로 '사진 지정'을 활성화
+        if (mode === 'create') {
+          setIsEdited(false);
+          setSelectedCover('photo');
+        }
       }
-    }, [initialBookName]);
+    }, [initialBookName, mode]);
+
+    // 커버 편집 모드: 사진 선택 후 돌아왔을 때 사진 지정 체크
+    useEffect(() => {
+      if (isEditCoverMode && coverPhotoUri) {
+        setSelectedCover('photo');
+      }
+    }, [isEditCoverMode, coverPhotoUri]);
 
     const handleNextStep = () => {
       if (bookName.trim() && !errorMessage) {
-        setIsEdited(false); // 커버 설정 영역을 보여줌
+        if (isEditNameMode) {
+          Keyboard.dismiss();
+          onSubmit(bookName.trim(), 'default');
+          dismiss();
+
+          return;
+        }
+        setIsEdited(false);
         Keyboard.dismiss();
       }
     };
@@ -61,7 +108,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
     const handleDismiss = () => {
       Keyboard.dismiss();
       setBookName('');
-      setIsEdited(true);
+      setIsEdited(!isEditCoverMode);
       setErrorMessage('');
       setSelectedCover('default');
     };
@@ -82,13 +129,22 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
       dismiss();
     };
 
-    const handleSelectedCover = () => {
-      setSelectedCover('photo');
+    const navigateToSelectCover = () => {
       navigation.navigate('SelectBookCover', {
         variant: 'cover',
-        bookName: bookName,
+        bookName: isEditCoverMode ? '' : bookName,
+        ...(picselbookId && { picselbookId }),
       });
       dismiss();
+    };
+
+    const handleReselect = () => {
+      navigateToSelectCover();
+    };
+
+    const handleSelectedCover = () => {
+      setSelectedCover('photo');
+      navigateToSelectCover();
     };
 
     const renderBackdrop = (props: any) => (
@@ -96,8 +152,8 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
         {...props}
         disappearsOnIndex={-1}
         appearsOnIndex={0}
-        opacity={0.5}
-        style={[props.style, { backgroundColor: '#111114' }]}
+        opacity={bottomSheetBackdrop.opacity}
+        style={[props.style, { backgroundColor: bottomSheetBackdrop.color }]}
         onPress={handleBackdropPress}
       />
     );
@@ -112,7 +168,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
         enablePanDownToClose={false}
         enableContentPanningGesture={false}
         enableHandlePanningGesture={false}
-        backgroundStyle={{ backgroundColor: '#FFFFFF' }}
+        backgroundStyle={bottomSheetBackground}
         handleIndicatorStyle={bottomSheetIndicator}
         backdropComponent={renderBackdrop}
         onDismiss={handleDismiss}
@@ -120,37 +176,41 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
         keyboardBlurBehavior="restore"
         android_keyboardInputMode="adjustResize">
         <BottomSheetView>
-          <View className="flex h-[565px] px-4">
+          <View className={cn('flex px-4', !isEditCoverMode && 'h-[565px]')}>
             {/* 제목 */}
             <Text className="mb-2 text-center text-gray-900 title-01">
-              픽셀북 추가
+              {TITLE_MAP[mode]}
             </Text>
 
-            {/* 입력 필드 */}
-            <PicselBookInput
-              value={bookName}
-              errorMessage={errorMessage}
-              setErrorMessage={setErrorMessage}
-              onChangeText={setBookName}
-              onClear={handleClear}
-              isEdited={isEdited}
-              setIsEdited={setIsEdited}
-              maxLength={10}
-            />
+            {/* 입력 필드 (editCover 모드에서는 숨김) */}
+            {!isEditCoverMode && (
+              <>
+                <PicselBookInput
+                  value={bookName}
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
+                  onChangeText={setBookName}
+                  onClear={handleClear}
+                  isEdited={isEdited}
+                  setIsEdited={setIsEdited}
+                  maxLength={10}
+                />
 
-            {/* 버튼 영역 */}
-            {isEdited && (
-              <Button
-                className="mt-2 w-full"
-                text="확인"
-                color="active"
-                textColor="white"
-                onPress={handleNextStep}
-                disabled={!isButtonEnabled}
-              />
+                {/* 버튼 영역 */}
+                {isEdited && (
+                  <Button
+                    className="mt-2 w-full"
+                    text="확인"
+                    color="active"
+                    textColor="white"
+                    onPress={handleNextStep}
+                    disabled={!isButtonEnabled}
+                  />
+                )}
+              </>
             )}
 
-            {/* 입력 이후 -> 커버사진 설정 */}
+            {/* 커버사진 설정 */}
             {!isEdited && (
               <>
                 <View className="flex flex-col self-stretch pb-4 pt-10">
@@ -174,7 +234,11 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
                     </Pressable>
 
                     <Pressable
-                      onPress={handleSelectedCover}
+                      onPress={
+                        isEditCoverMode && coverPhotoUri
+                          ? undefined
+                          : handleSelectedCover
+                      }
                       className={cn(
                         selectedCover === 'photo' && 'opacity-40',
                         'flex flex-col items-center space-y-2 self-stretch px-6 py-2',
@@ -183,6 +247,11 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
                         height={72}
                         width={80}
                         shape="cover-selected"
+                        imageUri={
+                          isEditCoverMode && coverPhotoUri
+                            ? coverPhotoUri
+                            : undefined
+                        }
                       />
                       <Text className="pb-4 text-gray-900 body-rg-02">
                         사진 지정
@@ -196,14 +265,29 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
                   </View>
                 </View>
 
-                {/* 완료 */}
-                <View className="flex items-end self-stretch px-4 py-3 pt-10">
-                  <Pressable onPress={handleComplete}>
-                    <Text className="px-2 py-2 text-primary-pink headline-02">
-                      완료
-                    </Text>
-                  </Pressable>
-                </View>
+                {/* 하단 버튼 */}
+                {isEditCoverMode ? (
+                  <View className="flex flex-row items-center justify-between self-stretch px-4 py-3 pt-10">
+                    <Pressable onPress={handleReselect}>
+                      <Text className="px-2 py-2 text-primary-pink headline-02">
+                        다시 선택
+                      </Text>
+                    </Pressable>
+                    <Pressable onPress={handleComplete}>
+                      <Text className="px-2 py-2 text-primary-pink headline-02">
+                        완료
+                      </Text>
+                    </Pressable>
+                  </View>
+                ) : (
+                  <View className="flex items-end self-stretch px-4 py-3 pt-10">
+                    <Pressable onPress={handleComplete}>
+                      <Text className="px-2 py-2 text-primary-pink headline-02">
+                        완료
+                      </Text>
+                    </Pressable>
+                  </View>
+                )}
               </>
             )}
           </View>

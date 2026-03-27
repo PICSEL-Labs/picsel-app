@@ -1,11 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
-import { PicselBookEditType } from '../../../types';
+import { PICSEL_BOOK_EDIT_OPTIONS, PicselBookEditType } from '../../../types';
 
 import PhotoListView from '@/feature/picsel/myPicsel/components/ui/organisms/PhotoListView';
 import PhotoTextListView from '@/feature/picsel/picselBook/components/ui/organisms/PhotoTextListView';
+import { usePicselBookActions } from '@/feature/picsel/picselBook/hooks/usePicselBookActions';
 import { usePicselBookFolder } from '@/feature/picsel/picselBook/hooks/usePicselBookFolder';
 import EmptyStateLayout from '@/feature/picsel/shared/components/layouts/EmptyStateLayout';
 import SparkleBackground from '@/feature/picsel/shared/components/ui/atoms/SparkleBackground';
@@ -13,9 +15,11 @@ import FloatingActionButtons from '@/feature/picsel/shared/components/ui/molecul
 import EmptyMessage from '@/feature/picsel/shared/components/ui/molecules/EmptyMessage';
 import FolderHeader from '@/feature/picsel/shared/components/ui/molecules/FolderHeader';
 import UploadTooltip from '@/feature/picsel/shared/components/ui/molecules/UploadTooltip';
+import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import SelectionBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/SelectionBottomSheet';
 import PixelToolbar from '@/feature/picsel/shared/components/ui/organisms/toolBar';
 import { useSortActionSheet } from '@/feature/picsel/shared/hooks/animation/useSortActionSheet';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { showBrandFilterSheet } from '@/shared/lib/brandFilterSheet';
 
@@ -32,6 +36,19 @@ const PicselBookFolderTemplate = ({
   onBack,
   onPhotoPress,
 }: Props) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
+
+  const {
+    editNameBottomSheetRef,
+    editCoverBottomSheetRef,
+    bookCoverPhoto,
+    handleEdit: handleEditAction,
+    handleEditSubmit,
+    handleChangeCover,
+    handleCoverEditSubmit,
+  } = usePicselBookActions();
+
   const {
     photoData,
     rawData,
@@ -77,17 +94,24 @@ const PicselBookFolderTemplate = ({
     setShowingSkeleton(show);
   }, []);
 
-  // TODO: 편집 로직 구현
-  const handleEdit = (_editType: PicselBookEditType) => {
-    // TODO: 편집 로직 연동
+  // 커버 편집: SelectPhoto에서 돌아왔을 때만 바텀시트 자동 오픈
+  useEffect(() => {
+    if (isFocused && bookCoverPhoto) {
+      editCoverBottomSheetRef.current?.present();
+    }
+  }, [isFocused, bookCoverPhoto]);
+
+  const handleEdit = (editType: PicselBookEditType) => {
+    if (editType === 'editName') {
+      handleEditAction(bookId, bookName);
+    } else if (editType === 'editCover') {
+      handleChangeCover(bookId);
+    }
   };
 
   const { showSortSheet: showEditSheet } = useSortActionSheet({
     onSort: handleEdit,
-    options: [
-      { type: 'editName', label: '이름 편집' },
-      { type: 'editCover', label: '커버사진 편집' },
-    ],
+    options: PICSEL_BOOK_EDIT_OPTIONS,
   });
 
   return (
@@ -193,6 +217,25 @@ const PicselBookFolderTemplate = ({
         ref={selectionBottomSheetRef}
         onDelete={handleDelete}
         onMove={handleMove}
+      />
+
+      <PicselBookBottomSheet
+        ref={editNameBottomSheetRef}
+        onSubmit={newName =>
+          handleEditSubmit(newName, {
+            onSuccess: () => navigation.setParams({ bookName: newName }),
+          })
+        }
+        initialBookName={bookName}
+        mode="editName"
+      />
+
+      <PicselBookBottomSheet
+        ref={editCoverBottomSheetRef}
+        onSubmit={(_bookName, coverType) => handleCoverEditSubmit(coverType)}
+        mode="editCover"
+        picselbookId={bookId}
+        coverPhotoUri={bookCoverPhoto}
       />
     </ScreenLayout>
   );

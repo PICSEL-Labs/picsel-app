@@ -8,6 +8,14 @@ export type PicselBookSortType =
 
 export type PicselBookEditType = 'editName' | 'editCover';
 
+export const PICSEL_BOOK_EDIT_OPTIONS: {
+  type: PicselBookEditType;
+  label: string;
+}[] = [
+  { type: 'editName', label: '이름 편집' },
+  { type: 'editCover', label: '커버사진 편집' },
+];
+
 // API 요청 파라미터
 export interface PicselBookParams {
   page?: number;
@@ -88,4 +96,15 @@ export interface CreatePicselBookDraftData {
 // 픽셀북 드래프트 생성 응답
 export interface CreatePicselBookDraftResponse extends CommonResponseType {
   data: CreatePicselBookDraftData;
+}
+
+// 픽셀북 수정 요청
+export interface PatchPicselBookRequest {
+  bookName?: string;
+  coverImagePath?: string | null;
+}
+
+// 픽셀북 수정 응답
+export interface PatchPicselBookResponse extends CommonResponseType {
+  data: PicselBookItem;
 }

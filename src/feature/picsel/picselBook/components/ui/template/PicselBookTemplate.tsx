@@ -42,8 +42,16 @@ const PicselBookTemplate = () => {
     handleBookPress,
     handleDeletePress,
     handleEdit,
+    handleEditSubmit,
     handleChangeCover,
+    handleCoverEditSubmit,
     handleDelete,
+
+    editNameBottomSheetRef,
+    editCoverBottomSheetRef,
+    editingBookId,
+    editingBookName,
+    bookCoverPhoto,
 
     picselBookRef,
 
@@ -117,6 +125,21 @@ const PicselBookTemplate = () => {
       />
 
       <PicselBookBottomSheet ref={picselBookRef} onSubmit={handleSubmit} />
+
+      <PicselBookBottomSheet
+        ref={editNameBottomSheetRef}
+        onSubmit={bookName => handleEditSubmit(bookName)}
+        initialBookName={editingBookName}
+        mode="editName"
+      />
+
+      <PicselBookBottomSheet
+        ref={editCoverBottomSheetRef}
+        onSubmit={(_bookName, coverType) => handleCoverEditSubmit(coverType)}
+        mode="editCover"
+        picselbookId={editingBookId ?? undefined}
+        coverPhotoUri={bookCoverPhoto}
+      />
 
       {isSelecting && (
         <SelectionBottomSheet

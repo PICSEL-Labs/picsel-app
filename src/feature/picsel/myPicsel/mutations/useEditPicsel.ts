@@ -26,11 +26,12 @@ export const useEditPicsel = () => {
       );
 
       // 기존 사진은 상대 경로로 변환, 새 사진은 S3 업로드 결과로 교체 (순서 유지)
-      let s3Index = 0;
+      const localToS3 = new Map(localPhotos.map((p, i) => [p, s3ImageUrls[i]]));
+
       const imagePaths = request.imagePaths.map(photo =>
         photo.startsWith('http')
           ? getRelativeImagePath(photo)
-          : s3ImageUrls[s3Index++],
+          : localToS3.get(photo)!,
       );
 
       return editPicselApi(picselId, { ...request, imagePaths });

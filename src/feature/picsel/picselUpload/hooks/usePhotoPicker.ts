@@ -9,6 +9,7 @@ export const usePhotoPicker = (
   variant: 'main' | 'extra' | 'cover',
   albumName: string | null,
   groupTypes: AlbumGroupType | null,
+  allowReplace = false,
 ) => {
   const { photos, fetchPhotos, hasNextPage, appendCapturedPhoto } =
     usePhotoGrid(albumName, groupTypes);
@@ -21,7 +22,7 @@ export const usePhotoPicker = (
     selectExtraPhoto,
     selectBookCoverPhoto,
     resetCurrentPhoto,
-  } = usePhotoSelection(variant);
+  } = usePhotoSelection(variant, allowReplace);
 
   const { capturePhoto } = useCameraCapture();
 

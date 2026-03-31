@@ -104,3 +104,16 @@ export interface MovePicselsRequest {
 export interface MovePicselsResponse extends CommonResponseType {
   data: null;
 }
+
+export interface EditPicselRequest {
+  storeId: string;
+  takenDate: string;
+  title: string;
+  content: string;
+  /** 로컬 파일 경로, http URL, 상대 경로가 혼재할 수 있음. useEditPicsel에서 S3 업로드 후 상대 경로로 정규화됨 */
+  imagePaths: string[];
+}
+
+export interface EditPicselResponse extends CommonResponseType {
+  data: PicselDetailResponse;
+}

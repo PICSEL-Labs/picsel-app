@@ -62,7 +62,12 @@ const SelectPhotoScreen = () => {
     handleSelectPhoto,
     handleOpenCamera,
     resetSelection,
-  } = usePhotoPicker(variant, selectedAlbum, selectedGroupTypes);
+  } = usePhotoPicker(
+    variant,
+    selectedAlbum,
+    selectedGroupTypes,
+    from === 'edit',
+  );
 
   const { handleSubmit } = usePicselBook();
 

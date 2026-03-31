@@ -8,6 +8,7 @@ import {
   TOAST_MESSAGES,
 } from '../constants/picselDetailTexts';
 import { useDeletePicsels } from '../mutations/useDeletePicsels';
+import { useEditPicsel } from '../mutations/useEditPicsel';
 import { useGetPicselDetail } from '../queries/useGetPicselDetail';
 
 import { useDateLocationForm } from '@/feature/picsel/shared/hooks/datePicker/useDateLocationForm';
@@ -49,8 +50,8 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
     };
   }, [picselData]);
 
-  const [title, setTitle] = useState(picselData?.title ?? '');
-  const [content, setContent] = useState(picselData?.content ?? '');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     if (!picselData) {
@@ -60,20 +61,45 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
     setContent(picselData.content);
   }, [picselData]);
 
+  const { mutate: editPicsel } = useEditPicsel();
+  const { mutate: deletePicsels } = useDeletePicsels();
+  const { showToast } = useToastStore();
+
   const { state, actions, datePicker } = useDateLocationForm({
     initialDate: picselData?.takenDate,
     initialStoreId: picselData?.store.storeId,
     initialLocation: picselData?.store.storeName,
-    onNext: (_date, _storeId, _locationName) => {
-      // TODO: 편집 API 연동
+    onNext: (date, storeId) => {
+      if (!mainPhoto) {
+        return;
+      }
+
+      editPicsel(
+        {
+          picselId,
+          request: {
+            storeId,
+            takenDate: date,
+            title,
+            content,
+            imagePaths: [mainPhoto, ...extraPhotos],
+          },
+        },
+        {
+          onSuccess: () => {
+            showToast(TOAST_MESSAGES.EDIT_SUCCESS);
+            navigation.goBack();
+          },
+        },
+      );
     },
   });
 
-  const { mutate: deletePicsels } = useDeletePicsels();
-  const { showToast } = useToastStore();
-
   const isFilled =
-    state.isFilled && title.trim().length > 0 && content.trim().length > 0;
+    state.isFilled &&
+    !!mainPhoto &&
+    title.trim().length > 0 &&
+    content.trim().length > 0;
 
   const handleSelectMainPhoto = () => {
     navigation.navigate('SelectMainPhoto', { variant: 'main', from: 'edit' });

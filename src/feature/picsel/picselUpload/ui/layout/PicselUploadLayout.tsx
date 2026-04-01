@@ -8,6 +8,7 @@ import PicselUploadHeader from './PicselUploadHeader';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
+import { useMyPicselStore } from '@/shared/store/myPicsel';
 
 interface Props {
   children: React.ReactNode;
@@ -17,13 +18,11 @@ interface Props {
 const PicselUploadLayout = ({ children, onBack }: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { confirmExitUpload } = useConfirmExit();
+  const { setActiveTab } = useMyPicselStore();
 
   const navigateToExit = () => {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    } else {
-      navigation.navigate('Home');
-    }
+    setActiveTab('my');
+    navigation.navigate('Home', { screen: 'BookScreen' });
   };
 
   const handleBack = () => {

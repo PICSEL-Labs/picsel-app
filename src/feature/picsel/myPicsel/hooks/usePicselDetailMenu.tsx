@@ -13,6 +13,7 @@ import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { DropdownMenuItem } from '@/shared/components/ui/molecules/DropdownMenu';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
+import { useMyPicselStore } from '@/shared/store/myPicsel';
 import { useToastStore } from '@/shared/store/ui/toast';
 
 interface Props {
@@ -28,6 +29,7 @@ export const usePicselDetailMenu = ({
 }: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { showToast } = useToastStore();
+  const { setActiveTab } = useMyPicselStore();
 
   const { mutate: deletePicsels } = useDeletePicsels();
 
@@ -66,7 +68,8 @@ export const usePicselDetailMenu = ({
                   {
                     onSuccess: () => {
                       showToast(TOAST_MESSAGES.DELETE_SUCCESS);
-                      navigation.goBack();
+                      setActiveTab('my');
+                      navigation.pop(2);
                     },
                   },
                 );
@@ -90,6 +93,7 @@ export const usePicselDetailMenu = ({
       showToast,
       navigation,
       deletePicsels,
+      setActiveTab,
     ],
   );
 

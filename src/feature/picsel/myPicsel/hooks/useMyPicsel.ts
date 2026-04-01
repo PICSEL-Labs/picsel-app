@@ -149,6 +149,11 @@ export const useMyPicsel = () => {
     navigation.navigate('MonthFolder', { year, month });
   };
 
+  // 픽셀 상세로 이동
+  const handlePhotoPress = (picselId: string) => {
+    navigation.navigate('PicselDetail', { picselId });
+  };
+
   // 정렬 액션시트
   const { showSortSheet } = useSortActionSheet({
     onSort: setSortType,
@@ -213,5 +218,6 @@ export const useMyPicsel = () => {
     // 네비게이션
     handleViewAllYear,
     handleViewMonthFolder,
+    handlePhotoPress,
   };
 };

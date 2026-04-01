@@ -58,6 +58,7 @@ const MyPicselTemplate = () => {
 
     handleViewAllYear,
     handleViewMonthFolder,
+    handlePhotoPress,
   } = useMyPicsel();
 
   const [showingSkeleton, setShowingSkeleton] = useState(false);
@@ -120,6 +121,7 @@ const MyPicselTemplate = () => {
           onViewMore={handleViewMonthFolder}
           onViewAllYear={handleViewAllYear}
           onShowSkeletonChange={handleShowSkeletonChange}
+          onPhotoPress={handlePhotoPress}
         />
       ) : dateFilter === 'month' ? (
         <MonthFilterView
@@ -129,6 +131,7 @@ const MyPicselTemplate = () => {
           isLoading={isLoading}
           onViewMonthFolder={handleViewMonthFolder}
           onShowSkeletonChange={handleShowSkeletonChange}
+          onPhotoPress={handlePhotoPress}
         />
       ) : (
         <PhotoListView
@@ -141,6 +144,7 @@ const MyPicselTemplate = () => {
           onScroll={handleScroll}
           onEndReached={handleEndReached}
           onShowSkeletonChange={handleShowSkeletonChange}
+          onPhotoPress={handlePhotoPress}
         />
       )}
 

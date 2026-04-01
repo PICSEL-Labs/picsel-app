@@ -31,6 +31,7 @@ interface Props {
   onViewAllYear: (year: string) => void;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onShowSkeletonChange?: (showSkeleton: boolean) => void;
+  onPhotoPress?: (photoId: string) => void;
 }
 
 const YearFilterView = forwardRef<FlatList, Props>(
@@ -42,6 +43,7 @@ const YearFilterView = forwardRef<FlatList, Props>(
       onViewAllYear,
       onScroll,
       onShowSkeletonChange,
+      onPhotoPress,
     },
     ref,
   ) => {
@@ -128,6 +130,7 @@ const YearFilterView = forwardRef<FlatList, Props>(
                     showYear={false}
                     onImageLoad={handleImageLoad}
                     onImageError={handleImageError}
+                    onPress={() => onPhotoPress?.(photo.id)}
                   />
                 </View>
               ))}

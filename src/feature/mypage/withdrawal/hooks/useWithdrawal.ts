@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
 
 import { withdrawApi } from '../api/withdrawApi';
-import { ETC_REASON_ID } from '../constants/withdrawalText';
+import { ETC_REASON_ID, WITHDRAWAL_REASONS } from '../constants/withdrawalText';
 
 import { MypageNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
@@ -27,14 +27,28 @@ export const useWithdrawal = () => {
     });
   }, []);
 
+  const buildReasonText = useCallback(() => {
+    return selectedReasons
+      .map(id => {
+        if (id === ETC_REASON_ID) {
+          return etcReason;
+        }
+
+        return WITHDRAWAL_REASONS.find(r => r.id === id)?.label ?? '';
+      })
+      .filter(Boolean)
+      .join(', ');
+  }, [selectedReasons, etcReason]);
+
   const executeWithdrawal = useCallback(async () => {
     try {
-      await withdrawApi();
+      const reason = buildReasonText();
+      await withdrawApi(reason);
       navigation.navigate('MypageWithdrawalSuccess');
     } catch (error) {
       console.error('Withdrawal error:', error);
     }
-  }, [navigation]);
+  }, [navigation, buildReasonText]);
 
   const handleWithdraw = useCallback(() => {
     Keyboard.dismiss();

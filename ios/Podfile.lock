@@ -1452,6 +1452,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-image-manipulator (1.0.6):
+    - React
   - react-native-image-picker (8.2.1):
     - DoubleConversion
     - glog
@@ -2062,6 +2064,8 @@ PODS:
     - Yoga
   - RNDeviceInfo (14.1.1):
     - React-Core
+  - RNFS (2.20.0):
+    - React-Core
   - RNGestureHandler (2.25.0):
     - DoubleConversion
     - glog
@@ -2441,6 +2445,7 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-config (from `../node_modules/react-native-config`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-image-manipulator (from `../node_modules/react-native-image-manipulator`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-ios-context-menu (from `../node_modules/react-native-ios-context-menu`)
   - react-native-ios-utilities (from `../node_modules/react-native-ios-utilities`)
@@ -2484,6 +2489,7 @@ DEPENDENCIES:
   - "RNCKakaoCore (from `../node_modules/@react-native-kakao/core`)"
   - "RNCKakaoUser (from `../node_modules/@react-native-kakao/user`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - "RNNaverLogin (from `../node_modules/@react-native-seoul/naver-login`)"
@@ -2603,6 +2609,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-config"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-image-manipulator:
+    :path: "../node_modules/react-native-image-manipulator"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-ios-context-menu:
@@ -2689,6 +2697,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-kakao/user"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -2768,6 +2778,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: b3b7c59797d614dd86af515a81f2a6db7e5c4936
   react-native-config: 3367df9c1f25bb96197007ec531c7087ed4554c3
   react-native-geolocation: 2cd348a829e84fff7bbb98b6e66b0093a3aa8e1a
+  react-native-image-manipulator: dd4d7f879ab00f55e3813e7119669b4a936ab973
   react-native-image-picker: c73e6edfdbc2bbc1c12b3fe9c2149441fa08f149
   react-native-ios-context-menu: bfb4ddfb9617de7be3cc1377ded3c1c71af2b125
   react-native-ios-utilities: ba7381d7986ece2c922faf4ad3af94bba676f330
@@ -2811,6 +2822,7 @@ SPEC CHECKSUMS:
   RNCKakaoCore: bd5aaf1330e66242e7a76397001af25bb3a21889
   RNCKakaoUser: 57d6e04b46a92389298465b9ecc90ecee126203d
   RNDeviceInfo: 8b6fa8379062949dd79a009cf3d6b02a9c03ca59
+  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 5d8431415d4b8518e86e289e9ad5bb9be78f6dba
   RNGoogleSignin: d216e84db1adedb0d6f5306d5aedf3b43451bbab
   RNNaverLogin: cef5c8e8d1ce3272efe05db3d826631184f6abf8

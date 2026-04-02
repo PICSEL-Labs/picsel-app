@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Geolocation from '@react-native-community/geolocation';
 import { useNavigation } from '@react-navigation/native';
@@ -124,12 +124,15 @@ const StoreSearchScreen = () => {
           autoFocus
         />
         <View className="flex-1">
-          <SearchResultList
-            data={result}
-            highlight={highlight}
-            onPressItem={handleResultPress}
-          />
-          {!hasResults && <NoResult visible={uiState === 'noResults'} />}
+          {hasResults ? (
+            <SearchResultList
+              data={result}
+              highlight={highlight}
+              onPressItem={handleResultPress}
+            />
+          ) : (
+            <NoResult visible={uiState === 'noResults'} />
+          )}
         </View>
       </ScreenLayout>
     </TouchableWithoutFeedback>

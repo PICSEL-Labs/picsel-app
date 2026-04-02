@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 
 import { useWindowDimensions } from 'react-native';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { tabAnimationService } from './tabAnimationService';
 
+import { useMyPicselStore } from '@/shared/store/myPicsel';
+
 const INDICATOR_WIDTH = 167;
 
 export const usePicselBookTab = (initialTab: 'my' | 'book' = 'my') => {
-  const [activeTab, setActiveTab] = useState<'my' | 'book'>(initialTab);
+  const { activeTab, setActiveTab } = useMyPicselStore();
   const { width: screenWidth } = useWindowDimensions();
   const tabWidth = screenWidth / 2;
 
@@ -19,10 +21,9 @@ export const usePicselBookTab = (initialTab: 'my' | 'book' = 'my') => {
   );
   const indicatorPosition = useSharedValue(initialPosition);
 
-  const handleTabChange = (tab: 'my' | 'book') => {
-    setActiveTab(tab);
+  useEffect(() => {
     const newPosition = tabAnimationService.calculateIndicatorPosition(
-      tab,
+      activeTab,
       tabWidth,
       INDICATOR_WIDTH,
     );
@@ -30,6 +31,10 @@ export const usePicselBookTab = (initialTab: 'my' | 'book' = 'my') => {
       newPosition,
       tabAnimationService.getAnimationConfig(),
     );
+  }, [activeTab, tabWidth, indicatorPosition]);
+
+  const handleTabChange = (tab: 'my' | 'book') => {
+    setActiveTab(tab);
   };
 
   return {

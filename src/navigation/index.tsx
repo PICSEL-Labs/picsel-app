@@ -21,6 +21,13 @@ import QrScanScreen from '@/screens/qr/scan';
 import QrViewerScreen from '@/screens/qr/viewer';
 import StoreSearchScreen from '@/screens/search';
 
+export type BottomTabNavigationProps = {
+  HomeScreen: undefined;
+  QRScreen: undefined;
+  BookScreen: undefined;
+  MyScreen: undefined;
+};
+
 export type MainNavigationProps = {
   // Auth
   Onboarding: undefined;
@@ -28,7 +35,7 @@ export type MainNavigationProps = {
   SignupRoute: undefined;
 
   // Main
-  Home: undefined;
+  Home: NavigatorScreenParams<BottomTabNavigationProps>;
   StoreSearch: undefined;
 
   // QR

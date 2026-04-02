@@ -121,7 +121,7 @@ const PicselBookList = ({
   return (
     <View style={styles.container}>
       {/* 실제 리스트 - 스켈레톤 중에는 숨김 (이미지 다운로드는 진행) */}
-      {books.length > 0 && (
+      {(books.length > 0 || onAddBook) && (
         <FlatList
           data={bookItems}
           numColumns={NUM_COLUMNS}

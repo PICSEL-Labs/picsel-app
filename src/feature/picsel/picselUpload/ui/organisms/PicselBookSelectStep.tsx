@@ -22,7 +22,6 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
     handleBookPress,
     isLoading,
     handleAddBook,
-    isSelecting,
     picselBookRef,
     handleSubmit,
   } = usePicselBook();
@@ -66,7 +65,7 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
             selectedBookIds={selectedBookIds}
             onBookPress={(id, name) => handleBookPress(id, name, true)}
             isLoading={isLoading}
-            onAddBook={isSelecting ? undefined : handleAddBook}
+            onAddBook={handleAddBook}
           />
           <PicselBookBottomSheet ref={picselBookRef} onSubmit={handleSubmit} />
         </View>

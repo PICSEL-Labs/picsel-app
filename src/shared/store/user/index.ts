@@ -11,6 +11,7 @@ interface UserState {
   userSocialType: SocialTypes;
   userNickname: string | null;
   email: string | null;
+  isWithdrawn: boolean;
 
   setUserSocialType: (type: SocialTypes) => void;
   setSocialAccessToken: (token: string | null) => void;
@@ -18,6 +19,7 @@ interface UserState {
   setRefreshToken: (token: string | null) => void;
   setUserNickname: (nickname: string | null) => void;
   setEmail: (email: string | null) => void;
+  setIsWithdrawn: (isWithdrawn: boolean) => void;
 
   logout: () => void;
   withdraw: () => void;
@@ -32,6 +34,7 @@ export const useUserStore = create<UserState>()(
       userSocialType: null as UserState['userSocialType'],
       userNickname: null as UserState['userNickname'],
       email: null as UserState['email'],
+      isWithdrawn: false,
 
       setUserSocialType: (userSocialType: UserState['userSocialType']) =>
         set({ userSocialType }),
@@ -45,6 +48,7 @@ export const useUserStore = create<UserState>()(
       setUserNickname: (userNickname: UserState['userNickname']) =>
         set({ userNickname }),
       setEmail: (email: UserState['email']) => set({ email }),
+      setIsWithdrawn: (isWithdrawn: boolean) => set({ isWithdrawn }),
 
       logout: () =>
         set({
@@ -63,6 +67,7 @@ export const useUserStore = create<UserState>()(
           userSocialType: null,
           userNickname: null,
           email: null,
+          isWithdrawn: true,
         }),
     }),
     {
@@ -75,6 +80,7 @@ export const useUserStore = create<UserState>()(
         userSocialType: state.userSocialType,
         userNickname: state.userNickname,
         email: state.email,
+        isWithdrawn: state.isWithdrawn,
       }),
     },
   ),

@@ -32,6 +32,7 @@ const ConfirmModal = ({ animationType = 'fade' }: Props) => {
     message,
     confirmText = '확인',
     cancelText = '취소',
+    isSingleButton = false,
   } = currentConfig;
 
   return (
@@ -64,22 +65,32 @@ const ConfirmModal = ({ animationType = 'fade' }: Props) => {
               {!message && <View className="mb-6" />}
 
               {/* Buttons */}
-              <View className="flex-row space-x-2">
-                <Pressable
-                  onPress={cancel}
-                  className="flex-1 rounded-[15px] bg-gray-50 py-3">
-                  <Text className="text-center text-gray-600 headline-02">
-                    {cancelText}
-                  </Text>
-                </Pressable>
+              {isSingleButton ? (
                 <Pressable
                   onPress={confirm}
-                  className="flex-1 rounded-[15px] bg-primary-pink py-3">
+                  className="rounded-[15px] bg-primary-pink py-3">
                   <Text className="text-center text-white headline-02">
                     {confirmText}
                   </Text>
                 </Pressable>
-              </View>
+              ) : (
+                <View className="flex-row space-x-2">
+                  <Pressable
+                    onPress={cancel}
+                    className="flex-1 rounded-[15px] bg-gray-50 py-3">
+                    <Text className="text-center text-gray-600 headline-02">
+                      {cancelText}
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={confirm}
+                    className="flex-1 rounded-[15px] bg-primary-pink py-3">
+                    <Text className="text-center text-white headline-02">
+                      {confirmText}
+                    </Text>
+                  </Pressable>
+                </View>
+              )}
             </View>
           </TouchableWithoutFeedback>
         </View>

@@ -9,6 +9,7 @@ export interface ConfirmModalConfig {
   onCancel?: () => void;
   confirmButtonColor?: string;
   cancelButtonColor?: string;
+  isSingleButton?: boolean;
 }
 
 interface ConfirmModalStore {

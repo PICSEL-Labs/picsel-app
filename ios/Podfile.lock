@@ -72,7 +72,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - naveridlogin-sdk-ios (4.2.3)
-  - NidThirdPartyLogin (5.0.1)
+  - NidThirdPartyLogin (5.1.0)
   - NMapsGeometry (1.0.2)
   - NMapsMap (3.21.0):
     - NMapsGeometry
@@ -2741,7 +2741,7 @@ SPEC CHECKSUMS:
   KakaoSDKUser: 043bcd7e91454ebf3bf64f150c430e6f65f0a08d
   mj-studio-react-native-naver-map: cae333db46496c36dd8bd6aea59f0c441eb887e1
   naveridlogin-sdk-ios: d9d46d02119d303023d7000cd5963864d5bb89e5
-  NidThirdPartyLogin: ed291a543cc60a433bcad522b6bf7d3126ad4fdc
+  NidThirdPartyLogin: 9f1ffc5668d7487159bd1ddf9611086d454be3d4
   NMapsGeometry: 4e02554fa9880ef02ed96b075dc84355d6352479
   NMapsMap: 8e7e35c2446e7c4a88d6dd0d64aa0d1de903e4f0
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
@@ -2834,6 +2834,6 @@ SPEC CHECKSUMS:
   VisionCamera: 2230ecfd78a1f6cddd8be0fe4e6589f21a6385e1
   Yoga: fee373fb83c58550e84555a4e6bdafc34b4c5790
 
-PODFILE CHECKSUM: c624fd07c846a9a4d2e77b6c1609d1bd1b061aea
+PODFILE CHECKSUM: ea19d32e328675dbd07957f84472a01e7a90e06a
 
 COCOAPODS: 1.16.2

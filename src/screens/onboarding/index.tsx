@@ -11,7 +11,7 @@ const OnboardingScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   return (
-    <ScreenLayout>
+    <ScreenLayout className="bg-primary-black">
       <OnboardingCarousel />
       <OnboardingFooter onLoginPress={() => navigation.navigate('Login')} />
     </ScreenLayout>

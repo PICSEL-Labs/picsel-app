@@ -1,12 +1,14 @@
+import { StyleProp, ViewStyle } from 'react-native';
+
 export const paginationStyles = {
   activeDotStyle: {
-    backgroundColor: '#3B3E46',
+    backgroundColor: '#E5E6E9',
     width: 8,
     height: 8,
     borderRadius: 50,
   },
   dotStyle: {
-    backgroundColor: '#CCCDD3',
+    backgroundColor: '#26272C',
     width: 8,
     height: 8,
     borderRadius: 50,
@@ -16,5 +18,5 @@ export const paginationStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
-  },
+  } as StyleProp<ViewStyle>,
 };

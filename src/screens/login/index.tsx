@@ -15,11 +15,11 @@ const LoginScreen = () => {
   const { handleSocialLogin } = useLoginService(navigation);
 
   return (
-    <ScreenLayout>
+    <ScreenLayout className="bg-primary-black">
       <View className="flex-1">
         <LoginIntro />
 
-        <View className="flex-row justify-center pt-4">
+        <View className="flex-row justify-center pb-20">
           {(['KAKAO', 'NAVER', 'GOOGLE', 'APPLE'] as SocialTypes[]).map(
             type => (
               <SocialLoginButton

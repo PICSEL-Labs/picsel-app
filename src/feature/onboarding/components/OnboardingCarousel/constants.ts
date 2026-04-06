@@ -11,7 +11,7 @@ export const SCROLL_ANIMATION_DURATION = 400;
 export const SLIDE_COUNT = 4;
 
 // 슬라이드 이미지 높이 (px)
-export const IMAGE_HEIGHT = 375;
+export const IMAGE_HEIGHT = 388;
 
 // 페이지네이션 상단 오프셋 (캐러셀 하단 여백 보정)
-export const PAGINATION_TOP_OFFSET = -70;
+export const PAGINATION_TOP_OFFSET = -65;

@@ -58,7 +58,11 @@ const OnboardingCarousel = () => {
             </View>
             <Image
               source={item.image}
-              className={`aspect-square h-[${IMAGE_HEIGHT}px] self-stretch`}
+              style={{
+                height: IMAGE_HEIGHT,
+                aspectRatio: 1,
+                alignSelf: 'stretch',
+              }}
               resizeMode="contain"
             />
           </View>

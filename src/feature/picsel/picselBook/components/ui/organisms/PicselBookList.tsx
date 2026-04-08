@@ -120,8 +120,17 @@ const PicselBookList = ({
 
   return (
     <View style={styles.container}>
+      {/* 빈 상태: 추가하기 버튼만 직접 렌더링 */}
+      {books.length === 0 && onAddBook && !showSkeleton && (
+        <View style={contentContainerStyle}>
+          <View className="mb-7">
+            <AddBookButton onPress={onAddBook} />
+          </View>
+        </View>
+      )}
+
       {/* 실제 리스트 - 스켈레톤 중에는 숨김 (이미지 다운로드는 진행) */}
-      {(books.length > 0 || onAddBook) && (
+      {books.length > 0 && (
         <FlatList
           data={bookItems}
           numColumns={NUM_COLUMNS}

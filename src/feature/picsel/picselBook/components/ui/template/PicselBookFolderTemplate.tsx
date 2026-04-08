@@ -173,7 +173,7 @@ const PicselBookFolderTemplate = ({
         <>
           {viewMode === 'list' ? (
             <PhotoListView
-              showYear={false}
+              showYear={true}
               ref={flatListRef}
               data={photoData}
               selectedPhotos={selectedPhotos}

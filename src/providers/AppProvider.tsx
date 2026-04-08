@@ -7,7 +7,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 
-import { useSplashScreen } from '@/shared/hooks/useSplashScreen';
 import { useUserConfig } from '@/shared/hooks/useUserConfig';
 import { useLocationStore } from '@/shared/store';
 import Toast from '@/shared/ui/atoms/Toast';
@@ -49,7 +48,6 @@ const AppProvider = ({ children }: AppProviderProps) => {
     TextInput as unknown as TextInputWithDefaultProps
   ).defaultProps!.allowFontScaling = false;
 
-  useSplashScreen();
   useUserConfig();
 
   const fetchUserLocation = useLocationStore(state => state.fetchUserLocation);
@@ -57,14 +55,15 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
   useEffect(() => {
     const prepare = async () => {
+      const delay = new Promise(resolve => setTimeout(resolve, 3000));
       try {
         await fetchUserLocation();
       } catch (e) {
         console.warn('위치 정보를 불러올 수 없습니다.', e);
-      } finally {
-        setIsReady(true);
-        SplashScreen.hide();
       }
+      await delay;
+      setIsReady(true);
+      SplashScreen.hide();
     };
     prepare();
   }, []);

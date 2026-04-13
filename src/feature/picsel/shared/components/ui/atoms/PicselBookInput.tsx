@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 
-import { TextInput, Pressable, View, Text } from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 
 import { NICKNAME_INPUT } from '@/shared/constants/styles/nicknameInput';
 import CloseIcons from '@/shared/icons/CloseIcons';
@@ -43,7 +43,8 @@ const PicselBookInput = ({
     }
 
     // 특수문자 검증: 한글, 영문, 숫자, - . _ ~ 만 허용
-    const specialCharRegex = /^[가-힣a-zA-Z0-9\-._~\s]*$/;
+    const specialCharRegex =
+      /^[가-힣a-zA-Z0-9\-._~\s\p{Emoji}\p{Emoji_Component}]*$/u;
 
     if (!specialCharRegex.test(text)) {
       setErrorMessage('특수문자는 - . _ ~ 만 가능해요');

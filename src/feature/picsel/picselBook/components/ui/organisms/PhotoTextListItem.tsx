@@ -117,7 +117,7 @@ const PhotoTextListItem = ({
         <View className="flex-row items-center justify-end self-stretch">
           <SparkleImages shape="icon-one" width={25} height={25} />
           <Text className="text-primary-pink body-rg-02">
-            {picsel.storeName}
+            {picsel.placeNameSnapshot}
           </Text>
         </View>
       </View>

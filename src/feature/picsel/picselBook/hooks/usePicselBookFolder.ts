@@ -81,7 +81,7 @@ export const usePicselBookFolder = ({ bookId }: UsePicselBookFolderOptions) => {
       id: item.picselId,
       uri: getImageUrl(item.representativeImagePath),
       date: item.takenDate,
-      storeName: item.storeName,
+      storeName: item.placeNameSnapshot,
     }));
   }, [data, brandIds, isFilterActive]);
 

@@ -1,3 +1,4 @@
+import { PlaceType } from '@/feature/picsel/shared/types';
 import { CommonResponseType } from '@/shared/api/types';
 
 export type DateFilterType = 'all' | 'year' | 'month';
@@ -5,13 +6,16 @@ export type DateFilterType = 'all' | 'year' | 'month';
 // 정렬 타입
 export type MyPicselSortType = 'RECENT_DESC' | 'OLDEST_ASC';
 
+export type { PlaceType };
+
 // 개별 픽셀 아이템
 export interface MyPicselItem {
   picselId: string;
   imagePath: string;
   takenDate: string;
-  storeId: string;
-  storeName: string;
+  placeType: PlaceType;
+  placeId: string;
+  placeNameSnapshot: string;
   brandImagePath: string;
   brand: {
     brandId: string;
@@ -68,12 +72,6 @@ export interface PicselDetailBook {
   coverImagePath: string;
 }
 
-// 상세 페이지 내 스토어 정보
-export interface PicselDetailStore {
-  storeId: string;
-  storeName: string;
-}
-
 // 상세 페이지 내 개별 사진 아이템
 export interface PicselDetailPhoto {
   imagePath: string;
@@ -88,7 +86,9 @@ export interface PicselDetailResponse {
   title: string;
   content: string;
   takenDate: string;
-  store: PicselDetailStore;
+  placeType: PlaceType;
+  placeId: string;
+  placeNameSnapshot: string;
   photos: PicselDetailPhoto[];
 }
 
@@ -106,7 +106,8 @@ export interface MovePicselsResponse extends CommonResponseType {
 }
 
 export interface EditPicselRequest {
-  storeId: string;
+  placeType: PlaceType;
+  placeId: string;
   takenDate: string;
   title: string;
   content: string;

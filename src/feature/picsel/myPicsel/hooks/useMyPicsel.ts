@@ -74,7 +74,7 @@ export const useMyPicsel = () => {
         id: item.picselId,
         uri: getImageUrl(item.imagePath),
         date: item.takenDate,
-        storeName: item.storeName,
+        storeName: item.placeNameSnapshot,
       })),
     [filteredContent],
   );

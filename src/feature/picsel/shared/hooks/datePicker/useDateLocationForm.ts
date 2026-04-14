@@ -3,24 +3,35 @@ import { useCallback, useState } from 'react';
 import dayjs from 'dayjs';
 
 import { useDatePickerController } from '@/feature/picsel/picselUpload/hooks/useDatePickerController';
+import { PlaceType } from '@/feature/picsel/shared/types';
 
 interface Props {
   initialDate?: string;
-  initialStoreId?: string;
+  initialPlaceId?: string;
+  initialPlaceType?: PlaceType;
   initialLocation?: string;
-  onNext: (date: string, storeId: string, locationName: string) => void;
+  onNext: (
+    date: string,
+    placeId: string,
+    placeType: PlaceType,
+    locationName: string,
+  ) => void;
 }
 
 export const useDateLocationForm = ({
   initialDate,
-  initialStoreId,
+  initialPlaceId,
+  initialPlaceType,
   initialLocation,
   onNext,
 }: Props) => {
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [selectedLocationName, setSelectedLocationName] =
     useState(initialLocation);
-  const [selectedStoreId, setSelectedStoreId] = useState(initialStoreId || '');
+  const [selectedPlaceId, setSelectedPlaceId] = useState(initialPlaceId || '');
+  const [selectedPlaceType, setSelectedPlaceType] = useState<
+    PlaceType | undefined
+  >(initialPlaceType);
 
   const [activeSheet, setActiveSheet] = useState<'date' | 'location' | null>(
     null,
@@ -41,21 +52,33 @@ export const useDateLocationForm = ({
   }, [datePicker]);
 
   const handleSelectLocation = useCallback(
-    (id: string, name: string) => {
-      setSelectedStoreId(id);
+    (id: string, name: string, placeType: PlaceType) => {
+      setSelectedPlaceId(id);
       setSelectedLocationName(name);
+      setSelectedPlaceType(placeType);
       closeSheet();
     },
     [closeSheet],
   );
 
   const handleSubmit = useCallback(() => {
-    if (selectedDate && selectedStoreId) {
-      onNext(selectedDate, selectedStoreId, selectedLocationName);
+    if (selectedDate && selectedPlaceId && selectedPlaceType) {
+      onNext(
+        selectedDate,
+        selectedPlaceId,
+        selectedPlaceType,
+        selectedLocationName,
+      );
     }
-  }, [selectedDate, selectedStoreId, selectedLocationName, onNext]);
+  }, [
+    selectedDate,
+    selectedPlaceId,
+    selectedPlaceType,
+    selectedLocationName,
+    onNext,
+  ]);
 
-  const isFilled = !!(selectedDate && selectedStoreId);
+  const isFilled = !!(selectedDate && selectedPlaceId && selectedPlaceType);
 
   return {
     state: {

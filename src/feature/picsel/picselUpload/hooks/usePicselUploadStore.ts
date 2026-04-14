@@ -1,12 +1,15 @@
 import { create } from 'zustand';
 
+import { PlaceType } from '@/feature/picsel/shared/types';
+
 interface PicselUploadStore {
   // States
   mainPhoto: string | null;
   extraPhotos: string[];
 
   takenDate: string;
-  storeId: string;
+  placeType: PlaceType | '';
+  placeId: string;
   locationName: string;
 
   picselbookId: string;
@@ -23,7 +26,8 @@ interface PicselUploadStore {
 
   setDateLocation: (
     date: string,
-    storeId: string,
+    placeId: string,
+    placeType: PlaceType,
     locationName?: string,
   ) => void;
   setPicselbookId: (id: string, name: string) => void;
@@ -37,7 +41,8 @@ export const usePicselUploadStore = create<PicselUploadStore>((set, get) => ({
   mainPhoto: null,
   extraPhotos: [],
   takenDate: '',
-  storeId: '',
+  placeType: '',
+  placeId: '',
   locationName: '',
   picselbookId: '',
   bookName: '',
@@ -56,10 +61,11 @@ export const usePicselUploadStore = create<PicselUploadStore>((set, get) => ({
       extraPhotos: state.extraPhotos.filter(p => p !== uri),
     })),
 
-  setDateLocation: (date, storeId, locationName) =>
+  setDateLocation: (date, placeId, placeType, locationName) =>
     set({
       takenDate: date,
-      storeId,
+      placeId,
+      placeType,
       locationName: locationName,
     }),
 
@@ -77,7 +83,8 @@ export const usePicselUploadStore = create<PicselUploadStore>((set, get) => ({
       mainPhoto: null,
       extraPhotos: [],
       takenDate: '',
-      storeId: '',
+      placeType: '',
+      placeId: '',
       locationName: '',
       picselbookId: '',
       bookName: '',

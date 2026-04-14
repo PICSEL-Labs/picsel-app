@@ -6,6 +6,7 @@ import { useCreatePicselDraft } from '../mutations/useCreatePicselDraft';
 
 import { usePicselUploadStore } from './usePicselUploadStore';
 
+import { PlaceType } from '@/feature/picsel/shared/types';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { usePhotoStore } from '@/shared/store/picselUpload';
 
@@ -20,7 +21,8 @@ export const useCompletePicselUpload = () => {
 
   const {
     takenDate,
-    storeId,
+    placeId,
+    placeType,
     picselbookId,
     bookName,
     setRecord,
@@ -39,7 +41,8 @@ export const useCompletePicselUpload = () => {
     const requestPayload = {
       picselId: draftUuid,
       picselbookId,
-      storeId,
+      placeType: placeType as PlaceType,
+      placeId,
       takenDate,
       title,
       content,

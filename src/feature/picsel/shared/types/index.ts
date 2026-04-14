@@ -1,0 +1,1 @@
+export type PlaceType = 'STORE' | 'ADMINISTRATIVE_DISTRICT' | 'SUBWAY_STATION';

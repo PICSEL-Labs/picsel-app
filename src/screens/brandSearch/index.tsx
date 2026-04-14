@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Keyboard, Pressable, ScrollView, View } from 'react-native';
 
 import SignupHeader from '@/feature/auth/signup/ui/organisms/SignupHeader';
@@ -54,7 +54,9 @@ const BrandSearchScreen = () => {
     () =>
       brandList
         .filter(
-          brand => brand.brandId !== 'NONE' && brand.name.includes(brandName),
+          brand =>
+            brand.brandId !== 'NONE' &&
+            brand.name.toLowerCase().includes(brandName.toLowerCase()),
         )
         .sort((a, b) => a.name.localeCompare(b.name, 'ko')),
     [brandList, brandName],

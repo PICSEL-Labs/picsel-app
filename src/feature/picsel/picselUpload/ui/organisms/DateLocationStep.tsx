@@ -20,15 +20,16 @@ interface Props {
 }
 
 const DateLocationStep = ({ onNext }: Props) => {
-  const { takenDate, storeId, setDateLocation, locationName } =
+  const { takenDate, placeId, placeType, setDateLocation, locationName } =
     usePicselUploadStore();
 
   const { state, actions, datePicker } = useDateLocationForm({
     initialDate: takenDate,
-    initialStoreId: storeId,
+    initialPlaceId: placeId,
+    initialPlaceType: placeType || undefined,
     initialLocation: locationName,
-    onNext: (date, locationId, locName) => {
-      setDateLocation(date, locationId, locName);
+    onNext: (date, locationId, locPlaceType, locName) => {
+      setDateLocation(date, locationId, locPlaceType, locName);
       onNext();
     },
   });

@@ -56,6 +56,9 @@ export const useCompletePicselUpload = () => {
         queryClient.invalidateQueries({
           queryKey: ['picselBookPicsels', picselbookId],
         });
+        queryClient.invalidateQueries({
+          queryKey: ['myPicsels'],
+        });
         navigation.reset({
           index: 1,
           routes: [

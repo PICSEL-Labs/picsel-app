@@ -7,6 +7,7 @@ import { useHandleScroll } from '@/feature/brand/model/hooks/useHandleScroll';
 import NoResult from '@/feature/brand/ui/organisms/NoResult';
 import { useLocationSearch } from '@/feature/picsel/shared/hooks/bottomSheet/useLocationSearch';
 import { useLocationSearchBottomSheet } from '@/feature/picsel/shared/hooks/bottomSheet/useLocationSearchBottomSheet';
+import { PlaceType } from '@/feature/picsel/shared/types';
 import SearchResultList from '@/feature/search/ui/organisms/SearchResultList';
 import { bottomSheetIndicator } from '@/shared/styles/bottomSheetIndicator';
 import { bottomSheetShadow } from '@/shared/styles/shadows';
@@ -15,7 +16,7 @@ import Input from '@/shared/ui/atoms/Input';
 interface Props {
   visible: boolean;
   onClose: () => void;
-  onSelect: (id: string, name: string) => void;
+  onSelect: (id: string, name: string, placeType: PlaceType) => void;
 }
 
 const LocationSearchBottomSheet = ({ visible, onClose, onSelect }: Props) => {

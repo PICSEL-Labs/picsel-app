@@ -1,10 +1,12 @@
+import { PlaceType } from '@/feature/picsel/shared/types';
 import { CommonResponseType } from '@/shared/api/types';
 
 // 픽셀 추가 요청
 export interface PicselUploadRequest {
   picselId: string;
   picselbookId: string;
-  storeId: string;
+  placeType: PlaceType;
+  placeId: string;
   takenDate: string;
   title: string;
   content: string;

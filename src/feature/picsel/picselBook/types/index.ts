@@ -1,3 +1,4 @@
+import { PlaceType } from '@/feature/picsel/shared/types';
 import { CommonResponseType } from '@/shared/api/types';
 
 // 정렬 타입 (API 명세 기준)
@@ -52,8 +53,9 @@ export interface PicselBookPicselItem {
   title: string;
   contentPreview: string;
   takenDate: string;
-  storeId: string;
-  storeName: string;
+  placeType: PlaceType;
+  placeId: string;
+  placeNameSnapshot: string;
   brandImagePath: string;
   brand: {
     brandId: string;

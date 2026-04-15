@@ -67,9 +67,10 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
 
   const { state, actions, datePicker } = useDateLocationForm({
     initialDate: picselData?.takenDate,
-    initialStoreId: picselData?.store.storeId,
-    initialLocation: picselData?.store.storeName,
-    onNext: (date, storeId) => {
+    initialPlaceId: picselData?.placeId,
+    initialPlaceType: picselData?.placeType,
+    initialLocation: picselData?.placeNameSnapshot,
+    onNext: (date, placeId, placeType) => {
       if (!mainPhoto) {
         return;
       }
@@ -78,7 +79,8 @@ export const usePicselEdit = ({ picselId, navigation }: Props) => {
         {
           picselId,
           request: {
-            storeId,
+            placeType,
+            placeId,
             takenDate: date,
             title,
             content,

@@ -3,13 +3,20 @@ import { useCallback, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
 
+import { PlaceType } from '@/feature/picsel/shared/types';
 import { SearchResultView } from '@/feature/search/hooks/useSearchResultSections';
 import { useStoreSearch } from '@/feature/search/hooks/useStoreSearch';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { useMapLocationStore } from '@/shared/store';
 
+const KIND_TO_PLACE_TYPE: Record<SearchResultView['kind'], PlaceType> = {
+  store: 'STORE',
+  station: 'SUBWAY_STATION',
+  administrativeDistrict: 'ADMINISTRATIVE_DISTRICT',
+};
+
 interface Props {
-  onSelect: (id: string, name: string) => void;
+  onSelect: (id: string, name: string, placeType: PlaceType) => void;
   onClose: () => void;
 }
 
@@ -28,7 +35,7 @@ export const useLocationSearch = ({ onSelect, onClose }: Props) => {
     (item: SearchResultView) => {
       if (item?.id && item?.title) {
         Keyboard.dismiss();
-        onSelect(item.id, item.title);
+        onSelect(item.id, item.title, KIND_TO_PLACE_TYPE[item.kind]);
         onClose();
       }
     },

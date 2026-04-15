@@ -88,7 +88,7 @@ const PicselDetailScreen = ({ route, navigation }: Props) => {
           <View className="flex-row items-center gap-1 py-2">
             <SparkleImages shape="icon-one" height={24} width={24} />
             <Text className="text-gray-900 body-rg-03">
-              {picselData?.store.storeName}
+              {picselData?.placeNameSnapshot}
             </Text>
           </View>
         </View>

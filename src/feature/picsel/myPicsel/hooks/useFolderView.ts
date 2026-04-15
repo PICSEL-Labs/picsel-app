@@ -87,7 +87,7 @@ export const useFolderView = ({
       id: item.picselId,
       uri: getImageUrl(item.imagePath),
       date: item.takenDate,
-      storeName: item.storeName,
+      storeName: item.placeNameSnapshot,
     }));
   }, [myPicselsData, filterType, year, month, brandIds, isFilterActive]);
 

@@ -26,8 +26,6 @@ const RecordWriteStep = () => {
   const { complete, isPending } = useCompletePicselUpload();
   const scrollRef = useRef<ScrollView>(null);
 
-  const isFilled = title.trim().length > 0 && content.trim().length > 0;
-
   const handleComplete = () => complete({ title, content });
 
   return (
@@ -64,9 +62,9 @@ const RecordWriteStep = () => {
           <Button
             className="w-full"
             text="완료"
-            color={isFilled ? 'active' : 'disabled'}
+            color="active"
             textColor="white"
-            disabled={!isFilled || isPending}
+            disabled={isPending}
             onPress={handleComplete}
           />
         </View>

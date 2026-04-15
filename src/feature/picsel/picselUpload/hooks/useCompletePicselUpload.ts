@@ -60,8 +60,9 @@ export const useCompletePicselUpload = () => {
           queryKey: ['myPicsels'],
         });
         navigation.reset({
-          index: 1,
+          index: 2,
           routes: [
+            { name: 'Home', params: { screen: 'BookScreen' } },
             {
               name: 'PicselBookFolder',
               params: { bookId: picselbookId, bookName },

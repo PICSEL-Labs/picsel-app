@@ -9,6 +9,7 @@ import { usePicselUploadStore } from './usePicselUploadStore';
 import { PlaceType } from '@/feature/picsel/shared/types';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { usePhotoStore } from '@/shared/store/picselUpload';
+import { useToastStore } from '@/shared/store/ui/toast';
 
 type Params = {
   title: string;
@@ -31,6 +32,7 @@ export const useCompletePicselUpload = () => {
   } = usePicselUploadStore();
 
   const { reset: resetPhotoStore } = usePhotoStore();
+  const { showToast } = useToastStore();
 
   const { mutate: uploadPicsel, isPending } = useAddPicselToPicselBook();
   const { mutateAsync: createDraft } = useCreatePicselDraft();
@@ -77,6 +79,7 @@ export const useCompletePicselUpload = () => {
       },
       onError: error => {
         console.error('픽셀 업로드 중 에러 발생:', error);
+        showToast('업로드에 실패했어요😭 다시 시도해주세요', 60);
       },
     });
   };

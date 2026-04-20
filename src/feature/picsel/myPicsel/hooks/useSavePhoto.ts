@@ -1,16 +1,10 @@
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import RNFS from 'react-native-fs';
 import ImageManipulator from 'react-native-image-manipulator';
-import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 
 import { TOAST_MESSAGES } from '../constants/photoViewerTexts';
 
 import { useToastStore } from '@/shared/store/ui/toast';
-
-export const checkPhotoPermission = async (): Promise<boolean> => {
-  const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
-  return result === RESULTS.GRANTED || result === RESULTS.LIMITED;
-};
 
 /**
  * 원격 이미지 URI를 임시 파일로 다운로드한 뒤,

@@ -11,10 +11,6 @@ const QrScanFooter = () => {
 
   return (
     <View className="w-full items-center gap-4 pb-28">
-      <Text className="text-center text-white body-rg-01">
-        QR 스캔을 지원하지 않는 브랜드일 땐,{'\n'} 사진이 담긴 링크를
-        열어드릴게요
-      </Text>
       <Pressable
         className="flex-row items-center justify-center gap-1 rounded-xl border border-pink-500 p-3"
         onPress={() => navigation.navigate('SelectMainPhoto')}>

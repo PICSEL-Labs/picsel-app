@@ -1,11 +1,14 @@
 import { useCallback } from 'react';
 
+import { openSettings } from 'react-native-permissions';
 import type { WebViewMessageEvent } from 'react-native-webview';
 
 import { QR_DOWNLOAD_TOAST, QR_TOAST_MARGIN } from '../constants/qrDownload';
 import { QR_DOWNLOAD_INJECTED_SCRIPT } from '../utils/qrDownloadInjectedScript';
 import { savePhotoFromBase64 } from '../utils/savePhotoFromBase64';
 
+import { SAVE_PERMISSION_MODAL } from '@/shared/constants/text/photoPermissionText';
+import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { requestPhotoPermission } from '@/shared/lib/photoPermission';
 import { useToastStore } from '@/shared/store/ui/toast';
 
@@ -49,7 +52,11 @@ export const useQrMediaDownload = () => {
     async (message: QrCompleteMessage) => {
       const hasPermission = await requestPhotoPermission();
       if (!hasPermission) {
-        showToast(QR_DOWNLOAD_TOAST.PERMISSION_DENIED, QR_TOAST_MARGIN);
+        showConfirmModal(SAVE_PERMISSION_MODAL.TITLE, openSettings, {
+          title: SAVE_PERMISSION_MODAL.DESCRIPTION,
+          confirmText: SAVE_PERMISSION_MODAL.CONFIRM,
+          cancelText: SAVE_PERMISSION_MODAL.CANCEL,
+        });
         return;
       }
 

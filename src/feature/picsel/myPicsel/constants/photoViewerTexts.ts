@@ -19,13 +19,6 @@ export const SET_REPRESENTATIVE_ALERT = {
   CONFIRM: '변경',
 } as const;
 
-export const SAVE_PERMISSION_MODAL = {
-  TITLE: '설정에서 픽셀의\n사진 접근을 허용해야 해요',
-  DESCRIPTION: '설정 > 픽셀 > 사진에서\n사진 접근 허용으로 변경해 주세요',
-  CANCEL: '취소',
-  CONFIRM: '설정으로 이동',
-} as const;
-
 export const TOAST_MESSAGES = {
   REPRESENTATIVE_SUCCESS: '대표사진이 변경됐어요',
   SAVE_SUCCESS: '사진을 앨범에 저장했어요',

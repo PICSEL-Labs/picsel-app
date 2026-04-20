@@ -2,14 +2,12 @@ import React, { useMemo } from 'react';
 
 import { openSettings } from 'react-native-permissions';
 
-import {
-  DROPDOWN_ITEMS,
-  SAVE_PERMISSION_MODAL,
-} from '../constants/photoViewerTexts';
+import { DROPDOWN_ITEMS } from '../constants/photoViewerTexts';
 
 import { useSavePhoto } from './useSavePhoto';
 
 import { DropdownMenuItem } from '@/shared/components/ui/molecules/DropdownMenu';
+import { SAVE_PERMISSION_MODAL } from '@/shared/constants/text/photoPermissionText';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
 import { showConfirmModal } from '@/shared/lib/confirmModal';
 import { requestPhotoPermission } from '@/shared/lib/photoPermission';

@@ -9,12 +9,12 @@ import { savePhotoFromBase64 } from '../utils/savePhotoFromBase64';
 import { requestPhotoPermissionWithModal } from '@/shared/lib/photoPermission';
 import { useToastStore } from '@/shared/store/ui/toast';
 
-type QrCompleteMessage = {
+interface QrCompleteMessage {
   type: 'qr-download:complete';
   base64: string;
   mimeType?: string;
   filename?: string;
-};
+}
 
 type QrDownloadMessage =
   | QrCompleteMessage

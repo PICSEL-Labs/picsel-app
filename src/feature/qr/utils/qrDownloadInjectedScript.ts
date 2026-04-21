@@ -65,22 +65,6 @@ export const QR_DOWNLOAD_INJECTED_SCRIPT = `
   // capture phase(true)로 등록해 벤더 페이지의 자체 핸들러보다 먼저 실행되게 한다.
   // 그래야 preventDefault로 기본 네비게이션을 막을 수 있다.
   document.addEventListener('click', function(e) {
-    // 먼저 어떤 엘리먼트가 눌렸는지 부모 5단계까지 기록해서 디버깅 데이터를 확보한다.
-    // 새 벤더에서 저장이 안 될 때 이 체인을 보고 필요한 매칭 조건을 역산한다.
-    var chain = [];
-    var cur = e.target;
-    for (var i = 0; i < 5 && cur; i++) {
-      chain.push({
-        tag: cur.tagName,
-        id: cur.id || null,
-        className: (typeof cur.className === 'string') ? cur.className : null,
-        href: cur.getAttribute ? cur.getAttribute('href') : null,
-        download: cur.hasAttribute ? cur.hasAttribute('download') : null,
-      });
-      cur = cur.parentElement;
-    }
-    post({ type: 'qr-download:debug', event: 'click', chain: chain });
-
     // 실제로 다운로드로 이어지는 클릭은 <a> 태그(자신 또는 조상)인 경우에 한정한다.
     // 아이콘 SVG나 내부 span이 클릭돼도 조상을 타고 올라가 A를 찾는다.
     var el = e.target;
@@ -90,7 +74,25 @@ export const QR_DOWNLOAD_INJECTED_SCRIPT = `
       el = el.parentElement;
     }
 
-    if (!foundA) return;
+    // A 미발견 시에만 부모 5단계 체인을 남긴다. 새 벤더가 <a>가 아닌 엘리먼트로
+    // 저장 버튼을 만들 때, 이 로그만이 어떤 매칭 조건을 추가해야 할지 역산하는 단서가 된다.
+    // 성공 케이스는 handle:* 디버그 로그로 추적 가능하므로 여기서 또 남기지 않는다.
+    if (!foundA) {
+      var chain = [];
+      var cur = e.target;
+      for (var i = 0; i < 5 && cur; i++) {
+        chain.push({
+          tag: cur.tagName,
+          id: cur.id || null,
+          className: (typeof cur.className === 'string') ? cur.className : null,
+          href: cur.getAttribute ? cur.getAttribute('href') : null,
+          download: cur.hasAttribute ? cur.hasAttribute('download') : null,
+        });
+        cur = cur.parentElement;
+      }
+      post({ type: 'qr-download:debug', event: 'click-no-a', chain: chain });
+      return;
+    }
 
     var href = foundA.getAttribute('href') || '';
     var absHref = foundA.href || '';

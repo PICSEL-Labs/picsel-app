@@ -20,7 +20,16 @@ export const QR_DOWNLOAD_INJECTED_SCRIPT = `
 
   // 다운로드 파이프라인: URL → fetch → blob → base64 → RN. 각 단계마다 debug 메시지를 남겨
   // 실패 시 어느 구간에서 끊겼는지(네트워크 / MIME / FileReader) 바로 추적할 수 있게 한다.
+  //
+  // 빠른 연타로 같은 이미지가 중복 저장되는 것을 막기 위해 진행 중에는 플래그로 재진입을 차단한다.
+  // 성공/실패 모두에서 finally로 해제해야 다음 다운로드가 가능해진다.
   function handle(href, downloadName) {
+    if (window.__picselQrDownloading) {
+      post({ type: 'qr-download:debug', event: 'handle:skip-inflight' });
+      return;
+    }
+    window.__picselQrDownloading = true;
+
     post({ type: 'qr-download:debug', event: 'handle:start', href: href, downloadName: downloadName });
     fetch(href)
       .then(function(res) {
@@ -58,6 +67,9 @@ export const QR_DOWNLOAD_INJECTED_SCRIPT = `
       .catch(function(err) {
         post({ type: 'qr-download:debug', event: 'handle:catch', message: (err && err.message) || String(err) });
         post({ type: 'qr-download:error', message: (err && err.message) || String(err) });
+      })
+      .finally(function() {
+        window.__picselQrDownloading = false;
       });
   }
 
@@ -138,6 +150,13 @@ export const QR_DOWNLOAD_INJECTED_SCRIPT = `
         }
 
         if (imageFile) {
+          // handle()과 동일한 in-flight 플래그를 공유해 연타로 인한 중복 저장을 차단한다.
+          if (window.__picselQrDownloading) {
+            post({ type: 'qr-download:debug', event: 'share:skip-inflight' });
+            return Promise.resolve();
+          }
+          window.__picselQrDownloading = true;
+
           return new Promise(function(resolve, reject) {
             var reader = new FileReader();
             reader.onloadend = function() {
@@ -154,6 +173,8 @@ export const QR_DOWNLOAD_INJECTED_SCRIPT = `
               reject(new Error('FileReader error'));
             };
             reader.readAsDataURL(imageFile);
+          }).finally(function() {
+            window.__picselQrDownloading = false;
           });
         }
       }

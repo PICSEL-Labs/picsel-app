@@ -73,7 +73,6 @@ export const useQrMediaDownload = () => {
 
       switch (parsed?.type) {
         case 'qr-download:debug':
-          console.log('[QR WebView debug]', parsed);
           return;
 
         case 'qr-download:error':

@@ -1,16 +1,12 @@
 import React, { useMemo } from 'react';
 
-import { openSettings } from 'react-native-permissions';
-
 import { DROPDOWN_ITEMS } from '../constants/photoViewerTexts';
 
 import { useSavePhoto } from './useSavePhoto';
 
 import { DropdownMenuItem } from '@/shared/components/ui/molecules/DropdownMenu';
-import { SAVE_PERMISSION_MODAL } from '@/shared/constants/text/photoPermissionText';
 import PicselActionIcons from '@/shared/icons/PicselActionIcons';
-import { showConfirmModal } from '@/shared/lib/confirmModal';
-import { requestPhotoPermission } from '@/shared/lib/photoPermission';
+import { requestPhotoPermissionWithModal } from '@/shared/lib/photoPermission';
 
 interface Props {
   uri: string;
@@ -26,13 +22,8 @@ export const usePhotoViewerMenu = ({ uri, hideDropdown }: Props) => {
         label: DROPDOWN_ITEMS.SAVE_PHOTO,
         onPress: () => {
           hideDropdown(async () => {
-            const hasPermission = await requestPhotoPermission();
+            const hasPermission = await requestPhotoPermissionWithModal();
             if (!hasPermission) {
-              showConfirmModal(SAVE_PERMISSION_MODAL.TITLE, openSettings, {
-                title: SAVE_PERMISSION_MODAL.DESCRIPTION,
-                confirmText: SAVE_PERMISSION_MODAL.CONFIRM,
-                cancelText: SAVE_PERMISSION_MODAL.CANCEL,
-              });
               return;
             }
             savePhoto();

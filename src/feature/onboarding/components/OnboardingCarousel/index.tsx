@@ -4,7 +4,6 @@ import {
   Image,
   ImageSourcePropType,
   StyleProp,
-  Text,
   View,
   ViewStyle,
 } from 'react-native';
@@ -15,8 +14,8 @@ import { verticalScale } from 'react-native-size-matters';
 import {
   AUTO_PLAY_INTERVAL,
   CAROUSEL_HEIGHT,
-  IMAGE_HEIGHT,
-  PAGINATION_TOP_OFFSET,
+  PAGINATION_MARGIN_BOTTOM,
+  PAGINATION_MARGIN_TOP,
   SCROLL_ANIMATION_DURATION,
   SLIDE_COUNT,
 } from './constants';
@@ -27,8 +26,6 @@ import { ONBOARDING_SLIDES } from '@/shared/constants/text/onboardingText';
 
 interface SlideItem {
   id: number;
-  title: string;
-  highlight: string;
   image: ImageSourcePropType;
 }
 
@@ -47,29 +44,21 @@ const OnboardingCarousel = () => {
         scrollAnimationDuration={SCROLL_ANIMATION_DURATION}
         onProgressChange={(_, p) => (progress.value = p)}
         renderItem={({ item }: { item: SlideItem }) => (
-          <View className="flex-1">
-            <View className="items-start px-4 pt-20">
-              <Text className="w-full text-center text-pink-100 title-05">
-                {item.title}
-              </Text>
-              <Text className="w-full text-center text-pink-500 title-05">
-                {item.highlight}
-              </Text>
-            </View>
+          <View className="flex-1 pt-6">
             <Image
               source={item.image}
-              style={{
-                height: IMAGE_HEIGHT,
-                aspectRatio: 1,
-                alignSelf: 'stretch',
-              }}
+              style={{ height: 588, width: WIDTH }}
               resizeMode="contain"
             />
           </View>
         )}
       />
 
-      <View style={{ marginTop: PAGINATION_TOP_OFFSET }}>
+      <View
+        style={{
+          marginTop: PAGINATION_MARGIN_TOP,
+          marginBottom: PAGINATION_MARGIN_BOTTOM,
+        }}>
         <Pagination.Basic
           progress={progress}
           data={ONBOARDING_SLIDES.slice(0, SLIDE_COUNT)}

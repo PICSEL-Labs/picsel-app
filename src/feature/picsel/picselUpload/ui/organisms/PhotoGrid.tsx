@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
   Dimensions,
@@ -28,6 +28,15 @@ interface Props {
   onLoadMore: () => void;
 }
 
+const getItemLayout = (_: unknown, index: number) => ({
+  length: IMAGE_SIZE,
+  offset: IMAGE_SIZE * Math.floor(index / 3),
+  index,
+});
+
+const keyExtractor = (item: GridItem) =>
+  item.type === 'camera' ? 'camera' : item.photo.id;
+
 export const PhotoGrid = ({
   photos,
   selectedUris,
@@ -44,68 +53,80 @@ export const PhotoGrid = ({
     [photos],
   );
 
-  const renderItem = ({ item }: { item: GridItem }) => {
-    if (item.type === 'camera') {
+  const selectedUriSet = useMemo(
+    () => new Map(selectedUris.map((uri, i) => [uri, i])),
+    [selectedUris],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: GridItem }) => {
+      if (item.type === 'camera') {
+        return (
+          <Pressable
+            onPress={onOpenCamera}
+            className="items-center justify-center"
+            style={{
+              width: IMAGE_SIZE,
+              height: IMAGE_SIZE,
+              backgroundColor: '#111114',
+            }}>
+            <CameraIcons shape="XL" width={40} height={40} color="#FFFFFF" />
+            <Text className="text-white body-rg-01">사진 촬영</Text>
+          </Pressable>
+        );
+      }
+
+      const uri = item.photo.uri;
+      const selectedIndex = selectedUriSet.get(uri);
+      const isSelected = selectedIndex !== undefined;
+
+      const renderSelection = () => {
+        if (!isSelected) {
+          return <SelectIcons shape="default" width={24} height={24} />;
+        }
+
+        if (variant === 'main' || variant === 'cover') {
+          return <SelectIcons shape="active" width={24} height={24} />;
+        }
+
+        return (
+          <View className="h-6 w-6 items-center justify-center rounded-full bg-pink-500">
+            <Text className="text-white headline-01">{selectedIndex + 1}</Text>
+          </View>
+        );
+      };
+
       return (
-        <Pressable
-          onPress={onOpenCamera}
-          className="items-center justify-center"
-          style={{
-            width: IMAGE_SIZE,
-            height: IMAGE_SIZE,
-            backgroundColor: '#111114',
-          }}>
-          <CameraIcons shape="XL" width={40} height={40} color="#FFFFFF" />
-          <Text className="text-white body-rg-01">사진 촬영</Text>
+        <Pressable onPress={() => onSelectPhoto(uri)}>
+          <View style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}>
+            <Image
+              source={{ uri }}
+              className="h-full w-full rounded-none"
+              resizeMode="cover"
+            />
+            <View className="absolute right-2 top-2">{renderSelection()}</View>
+          </View>
         </Pressable>
       );
-    }
-
-    const uri = item.photo.uri;
-
-    const selectedIndex = selectedUris.indexOf(uri);
-    const isSelected = selectedIndex !== -1;
-
-    const renderSelection = () => {
-      if (!isSelected) {
-        return <SelectIcons shape="default" width={24} height={24} />;
-      }
-
-      if (variant === 'main') {
-        return <SelectIcons shape="active" width={24} height={24} />;
-      }
-
-      return (
-        <View className="h-6 w-6 items-center justify-center rounded-full bg-pink-500">
-          <Text className="text-white headline-01">{selectedIndex + 1}</Text>
-        </View>
-      );
-    };
-
-    return (
-      <Pressable onPress={() => onSelectPhoto(uri)}>
-        <View style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}>
-          <Image
-            source={{ uri }}
-            className="h-full w-full rounded-none"
-            resizeMode="cover"
-          />
-          <View className="absolute right-2 top-2">{renderSelection()}</View>
-        </View>
-      </Pressable>
-    );
-  };
+    },
+    [onOpenCamera, onSelectPhoto, selectedUriSet, variant],
+  );
 
   return (
     <FlatList
       data={data}
       numColumns={3}
-      keyExtractor={item => (item.type === 'camera' ? 'camera' : item.photo.id)}
+      keyExtractor={keyExtractor}
       renderItem={renderItem}
+      getItemLayout={getItemLayout}
       showsVerticalScrollIndicator={false}
       onEndReached={onLoadMore}
       onEndReachedThreshold={2.0}
       bounces={false}
+      removeClippedSubviews
+      windowSize={11}
+      maxToRenderPerBatch={18}
+      initialNumToRender={21}
       contentContainerStyle={{ paddingBottom: 100 }}
     />
   );

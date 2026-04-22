@@ -11,13 +11,15 @@ export const usePhotoGrid = (
   const { photos, fetchPhotos, hasNextPage, resetPhotos } =
     useInfiniteScrollPhotos(albumName, groupTypes);
 
-  const combinedPhotos = useMemo(
-    () => [
-      ...capturedPhotos,
-      ...photos.filter(p => !capturedPhotos.some(c => c.uri === p.uri)),
-    ],
-    [capturedPhotos, photos],
-  );
+  const combinedPhotos = useMemo(() => {
+    if (capturedPhotos.length === 0) {
+      return photos;
+    }
+
+    const capturedUris = new Set(capturedPhotos.map(c => c.uri));
+
+    return [...capturedPhotos, ...photos.filter(p => !capturedUris.has(p.uri))];
+  }, [capturedPhotos, photos]);
 
   return {
     photos: combinedPhotos,

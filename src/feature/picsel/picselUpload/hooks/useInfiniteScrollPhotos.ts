@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Alert } from 'react-native';
@@ -9,6 +9,20 @@ export type GridPhoto = {
   id: string;
   uri: string;
   source: 'gallery' | 'camera';
+};
+
+const FIRST_PAGE_SIZE = 50;
+const NEXT_PAGE_SIZE = 150;
+
+const buildGroupParams = (
+  name: string | null,
+  type: DisplayGroupType | null,
+) => {
+  if (!name || !type || type === 'All') {
+    return {};
+  }
+
+  return { groupName: name, groupTypes: type };
 };
 
 export const useInfiniteScrollPhotos = (
@@ -37,19 +51,16 @@ export const useInfiniteScrollPhotos = (
 
     loadingRef.current = true;
     try {
-      const fetchCount = endCursorRef.current ? 100 : 15;
-
       const { edges, page_info } = await CameraRoll.getPhotos({
-        first: fetchCount,
+        first: NEXT_PAGE_SIZE,
         after: endCursorRef.current,
         assetType: 'Photos',
-        ...(albumNameRef.current &&
-          groupTypesRef.current &&
-          groupTypesRef.current !== 'All' && {
-            groupName: albumNameRef.current,
-            groupTypes: groupTypesRef.current,
-          }),
+        ...buildGroupParams(albumNameRef.current, groupTypesRef.current),
       });
+
+      if (page_info.end_cursor === endCursorRef.current) {
+        return;
+      }
 
       const mappedPhotos: GridPhoto[] = edges.map(edge => ({
         id: edge.node.id,
@@ -57,11 +68,7 @@ export const useInfiniteScrollPhotos = (
         source: 'gallery',
       }));
 
-      if (page_info.end_cursor === endCursorRef.current) {
-        return;
-      }
-
-      setPhotos(prev => [...prev, ...mappedPhotos]);
+      setPhotos(prev => prev.concat(mappedPhotos));
       setEndCursor(page_info.end_cursor);
       setHasNextPage(page_info.has_next_page);
     } catch (error) {
@@ -85,12 +92,9 @@ export const useInfiniteScrollPhotos = (
     const loadFirstPage = async () => {
       try {
         const { edges, page_info } = await CameraRoll.getPhotos({
-          first: 15,
+          first: FIRST_PAGE_SIZE,
           assetType: 'Photos',
-          ...(groupTypes !== 'All' && {
-            groupName: albumName,
-            groupTypes,
-          }),
+          ...buildGroupParams(albumName, groupTypes),
         });
 
         const mappedPhotos: GridPhoto[] = edges.map(edge => ({

@@ -4,6 +4,7 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 import WebView from 'react-native-webview';
 
+import { useQrMediaDownload } from '@/feature/qr/hooks/useQrMediaDownload';
 import QrViewerHeader from '@/feature/qr/ui/layout/QrViewerHeader';
 import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
@@ -19,6 +20,7 @@ interface Props {
 const QrViewerScreen = ({ route }: Props) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const webViewRef = useRef<WebView>(null);
+  const { injectedJavaScript, onMessage } = useQrMediaDownload();
 
   const { url } = route.params || {};
 
@@ -34,7 +36,15 @@ const QrViewerScreen = ({ route }: Props) => {
       />
 
       <View className="flex-1">
-        <WebView ref={webViewRef} source={{ uri: url }} style={{ flex: 1 }} />
+        <WebView
+          ref={webViewRef}
+          source={{ uri: url }}
+          style={{ flex: 1 }}
+          injectedJavaScript={injectedJavaScript}
+          onMessage={onMessage}
+          allowsInlineMediaPlayback
+          mediaPlaybackRequiresUserAction={false}
+        />
       </View>
 
       <View className="px-4 py-3">

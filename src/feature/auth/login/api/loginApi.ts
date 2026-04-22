@@ -13,3 +13,12 @@ export const loginApi = async ({
 
   return response.data;
 };
+
+// TODO: 앱스토어 심사 완료 후 제거
+export const testLoginApi = async (): Promise<LoginResponse> => {
+  const response = await axiosInstance.post<LoginResponse>(
+    '/auth/signin/appstore-test',
+  );
+
+  return response.data;
+};

@@ -91,7 +91,7 @@ const MapOverlay = memo(
             const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
             return {
               imageConfig: { httpUri: getImageUrl(finalImageUrl) },
-              size: 56,
+              size: 48,
               zIndex: 2000,
             };
           }
@@ -109,7 +109,7 @@ const MapOverlay = memo(
         const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
         return {
           imageConfig: { httpUri: getImageUrl(finalImageUrl) },
-          size: isSelected ? 64 : 38,
+          size: isSelected ? 48 : 38,
           zIndex: isSelected ? 1000 : 0,
         };
       };

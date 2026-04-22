@@ -29,7 +29,7 @@ import { useMapLocationStore } from '@/shared/store';
 import { floatingButtonShadow } from '@/shared/styles/shadows';
 import Input from '@/shared/ui/atoms/Input';
 
-const GPS_BOTTOM_DEFAULT = 90;
+const GPS_BOTTOM_DEFAULT = 50;
 const GPS_SHEET_GAP = -30;
 
 const HomeScreen = () => {

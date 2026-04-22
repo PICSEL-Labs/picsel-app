@@ -7,7 +7,7 @@
     "strictNullChecks": false,
     "jsx": "react",
     "sourceMap": true,
-    "typeRoots": ["src/@types/types"],
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],

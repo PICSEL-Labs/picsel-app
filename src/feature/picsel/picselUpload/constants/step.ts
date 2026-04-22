@@ -1,0 +1,6 @@
+export const UPLOAD_STEP = {
+  PHOTO_SELECT: 1,
+  DATE_LOCATION: 2,
+  PICSEL_BOOK_SELECT: 3,
+  RECORD_WRITE: 4,
+} as const;

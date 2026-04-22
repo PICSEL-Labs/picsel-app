@@ -78,3 +78,7 @@ yarn-error.log
 # react-native-config codegen
 ios/tmp.xcconfig
 .env
+
+# Claude
+CLAUDE.md
+.claude/

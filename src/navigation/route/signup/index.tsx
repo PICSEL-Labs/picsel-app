@@ -1,0 +1,70 @@
+import React from 'react';
+
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import BottomTabBar from '@/navigation/tabs';
+import BrandSearchScreen from '@/screens/brandSearch';
+import LoginScreen from '@/screens/login';
+import OnboardingScreen from '@/screens/onboarding';
+import NicknameInputScreen from '@/screens/signup/nicknameInput';
+import SelectBrandScreen from '@/screens/signup/selectBrand';
+import SignupSuccessScreen from '@/screens/signup/signupSuccess';
+
+export type SignupNavigationProps = {
+  Onboarding: undefined;
+  Login: undefined;
+  NicknameInput: undefined;
+  SelectBrand: { marketingConsent: boolean; refreshToken: string } | undefined;
+  BrandSearch: { variant: 'signup' | 'mypage' };
+  SignupSuccess: { refreshToken: string };
+  Home: undefined;
+};
+
+const SignupRoute = () => {
+  const Stack = createNativeStackNavigator<SignupNavigationProps>();
+
+  return (
+    <Stack.Navigator
+      id={undefined}
+      initialRouteName="Onboarding"
+      screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+
+      <Stack.Screen name="Login" component={LoginScreen} />
+
+      <Stack.Screen name="NicknameInput" component={NicknameInputScreen} />
+
+      <Stack.Screen
+        name="SelectBrand"
+        component={SelectBrandScreen}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="BrandSearch"
+        component={BrandSearchScreen}
+        initialParams={{ variant: 'signup' }}
+      />
+
+      <Stack.Screen
+        name="SignupSuccess"
+        component={SignupSuccessScreen}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="Home"
+        component={BottomTabBar}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export default SignupRoute;

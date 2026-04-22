@@ -1,0 +1,102 @@
+import React from 'react';
+
+import {
+  Dimensions,
+  Modal,
+  Pressable,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
+import { useConfirmModalStore } from '@/shared/store/ui/confirmModal';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const MODAL_WIDTH = Math.min(SCREEN_WIDTH * 0.8, 400);
+
+interface Props {
+  animationType?: 'none' | 'fade';
+}
+
+const ConfirmModal = ({ animationType = 'fade' }: Props) => {
+  const { visible, config, confirm, cancel } = useConfirmModalStore();
+  const { isVisible, currentConfig } = useModalAnimation(visible, config);
+
+  if (!currentConfig) {
+    return null;
+  }
+
+  const {
+    title,
+    message,
+    confirmText = '확인',
+    cancelText = '취소',
+    isSingleButton = false,
+  } = currentConfig;
+
+  return (
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType={animationType}
+      onRequestClose={cancel}>
+      <TouchableWithoutFeedback>
+        <View className="flex-1 items-center justify-center bg-[#11111480]">
+          <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
+            <View
+              className="rounded-[22px] bg-white px-6 pb-6 pt-8"
+              style={{ width: MODAL_WIDTH }}>
+              {/* Title */}
+              {title && (
+                <Text className="mb-1 text-center text-gray-900 headline-03">
+                  {title}
+                </Text>
+              )}
+
+              {/* Message */}
+              {message && (
+                <Text className="mb-7 text-center text-gray-900 body-rg-02">
+                  {message}
+                </Text>
+              )}
+
+              {/* message가 없을 때 간격 추가 */}
+              {!message && <View className="mb-6" />}
+
+              {/* Buttons */}
+              {isSingleButton ? (
+                <Pressable
+                  onPress={confirm}
+                  className="rounded-[15px] bg-primary-pink py-3">
+                  <Text className="text-center text-white headline-02">
+                    {confirmText}
+                  </Text>
+                </Pressable>
+              ) : (
+                <View className="flex-row space-x-2">
+                  <Pressable
+                    onPress={cancel}
+                    className="flex-1 rounded-[15px] bg-gray-50 py-3">
+                    <Text className="text-center text-gray-600 headline-02">
+                      {cancelText}
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={confirm}
+                    className="flex-1 rounded-[15px] bg-primary-pink py-3">
+                    <Text className="text-center text-white headline-02">
+                      {confirmText}
+                    </Text>
+                  </Pressable>
+                </View>
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
+
+export default ConfirmModal;

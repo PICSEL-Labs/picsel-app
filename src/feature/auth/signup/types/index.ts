@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type ValidationType = 'user-id' | 'nickname';
 
 export interface ValidateResponse {
@@ -8,15 +10,16 @@ export interface ValidateResponse {
 }
 
 export interface SignupResponse {
-  socialType: string;
-  accessToken: string;
-  refreshToken: string;
+  data: {
+    socialType: string;
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 export interface SignupRequest {
   socialAccessToken: string;
   socialType: string;
-  userId: string;
   userNickname: string;
   userAgreementConsentRequestDto: {
     ageConsent: boolean;
@@ -25,4 +28,16 @@ export interface SignupRequest {
     locationConsent: boolean;
     marketingConsent: boolean;
   };
+}
+
+export interface TermsState {
+  setCheckedStates: Dispatch<SetStateAction<boolean[]>>;
+  checkedStates: boolean[];
+  allChecked: boolean;
+  isRequiredAllChecked: boolean;
+}
+
+export interface TermsActions {
+  toggleAll: () => void;
+  toggleItem: (index: number) => void;
 }

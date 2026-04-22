@@ -8,7 +8,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   data: {
-    socialType: string;
+    socialType: SocialTypes;
     accessToken: string;
     refreshToken: string;
     signUp: boolean;

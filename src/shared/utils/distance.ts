@@ -1,0 +1,10 @@
+export const formatDistance = (m?: number) => {
+  const meters = m == null || m < 0 ? 0 : m;
+
+  if (meters >= 1000) {
+    const km = meters / 1000;
+    const s = Number.isInteger(km) ? km.toFixed(0) : km.toFixed(1);
+    return `${s}KM`;
+  }
+  return `${Math.round(meters)}M`;
+};

@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef } from 'react';
 
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { Pressable, Text, View } from 'react-native';
@@ -12,13 +12,12 @@ interface Props {
 
 const SelectionBottomSheet = forwardRef<BottomSheetModal, Props>(
   ({ onDelete, onMove }, ref) => {
-    const snapPoints = useMemo(() => [200], []);
     const isMyPicselMode = !!onMove; // onMove가 있으면 내픽셀 모드, 없으면 픽셀북 모드
 
     return (
       <BottomSheetModal
         ref={ref}
-        snapPoints={snapPoints}
+        enableDynamicSizing
         enablePanDownToClose={!isMyPicselMode}
         enableContentPanningGesture={!isMyPicselMode}
         enableHandlePanningGesture={!isMyPicselMode}
@@ -26,7 +25,7 @@ const SelectionBottomSheet = forwardRef<BottomSheetModal, Props>(
         backgroundStyle={{ backgroundColor: '#FFFFFF' }}>
         <BottomSheetView>
           <View
-            className={`h-28 flex-row items-center px-6 py-4 ${isMyPicselMode ? 'justify-around' : 'justify-center'}`}>
+            className={`flex-row items-center px-6 py-8 ${isMyPicselMode ? 'justify-around' : 'justify-center'}`}>
             <Pressable
               onPress={onDelete}
               className="flex-row items-center justify-center space-x-1 space-y-0.5">

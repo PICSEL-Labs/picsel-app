@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { SharedValue } from 'react-native-reanimated';
 
 import BrandDetailContent from './BrandDetailContent';
 
@@ -14,6 +15,7 @@ interface Props {
   storeDetail: StoreDetail | null;
   onClose: () => void;
   isFavorite: boolean;
+  animatedPosition: SharedValue<number>;
 }
 
 const BrandDetailBottomSheet = ({
@@ -21,6 +23,7 @@ const BrandDetailBottomSheet = ({
   storeDetail,
   onClose,
   isFavorite,
+  animatedPosition,
 }: Props) => {
   const { bottomSheetModalRef, openCopy, handleCopyButton, handleCopyAddress } =
     useBrandDetailBottomSheet({
@@ -52,6 +55,7 @@ const BrandDetailBottomSheet = ({
       handleIndicatorStyle={bottomSheetIndicator}
       onDismiss={onClose}
       backgroundStyle={{ borderRadius: 24 }}
+      animatedPosition={animatedPosition}
       enableDynamicSizing>
       <BottomSheetView>
         <BrandDetailContent

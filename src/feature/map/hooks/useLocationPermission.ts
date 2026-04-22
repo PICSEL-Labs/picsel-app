@@ -1,8 +1,23 @@
 import { useCallback } from 'react';
 
 import Geolocation from '@react-native-community/geolocation';
-import { Alert, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+
+import {
+  GEOLOCATION_OPTIONS,
+  LOCATION_ALERT,
+} from '../constants/locationConfig';
+
+const showLocationPermissionAlert = () => {
+  Alert.alert(LOCATION_ALERT.TITLE, LOCATION_ALERT.MESSAGE, [
+    { text: LOCATION_ALERT.CANCEL_TEXT, style: 'cancel' },
+    {
+      text: LOCATION_ALERT.CONFIRM_TEXT,
+      onPress: () => Linking.openSettings(),
+    },
+  ]);
+};
 
 export const useLocationPermission = () => {
   const requestLocationPermission = useCallback(async (): Promise<boolean> => {
@@ -41,10 +56,8 @@ export const useLocationPermission = () => {
     const hasPermission = await requestLocationPermission();
 
     if (!hasPermission) {
-      Alert.alert(
-        '위치 권한 거절',
-        '내주변 가까운 매장을 찾기 위해 위치 권한이 필요해요. 설정에서 위치 권한을 허용해주세요.',
-      );
+      showLocationPermissionAlert();
+
       return null;
     }
 
@@ -58,11 +71,7 @@ export const useLocationPermission = () => {
           console.error('Location error:', error);
           resolve(null);
         },
-        {
-          enableHighAccuracy: true,
-          timeout: 15000,
-          maximumAge: 10000,
-        },
+        GEOLOCATION_OPTIONS,
       );
     });
   }, [requestLocationPermission]);

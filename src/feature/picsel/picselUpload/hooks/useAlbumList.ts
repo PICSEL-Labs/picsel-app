@@ -1,15 +1,36 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import {
+  CameraRoll,
+  iosReadGalleryPermission,
+  iosRequestReadWriteGalleryPermission,
+} from '@react-native-camera-roll/camera-roll';
 
 export type AlbumGroupType = 'Album' | 'SmartAlbum';
+export type DisplayGroupType = AlbumGroupType | 'All';
 
 export interface Album {
   title: string;
   count: number;
   thumbnailUri?: string;
-  groupTypes: AlbumGroupType;
+  groupTypes: DisplayGroupType;
 }
+
+const ALL_PHOTOS_ALBUM: Album = {
+  title: '모든 사진',
+  count: 0,
+  groupTypes: 'All',
+};
+
+const ensurePhotoPermission = async () => {
+  const status = await iosReadGalleryPermission('readWrite');
+
+  if (status === 'not-determined') {
+    return iosRequestReadWriteGalleryPermission();
+  }
+
+  return status;
+};
 
 const getAlbumsByType = async () => {
   const [userAlbums, smartAlbums] = await Promise.all([
@@ -38,9 +59,12 @@ const fetchThumbnails = async (albumList: Album[]) => {
         const { edges } = await CameraRoll.getPhotos({
           first: 1,
           assetType: 'Photos',
-          groupName: album.title,
-          groupTypes: album.groupTypes,
+          ...(album.groupTypes !== 'All' && {
+            groupName: album.title,
+            groupTypes: album.groupTypes,
+          }),
         });
+
         return edges[0]?.node.image.uri;
       } catch {
         return undefined;
@@ -59,15 +83,31 @@ export const useAlbumList = () => {
   const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
   const [isAlbumListOpen, setIsAlbumListOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [isPermissionDenied, setIsPermissionDenied] = useState(false);
 
   const fetchAlbums = useCallback(async () => {
     try {
+      const permissionStatus = await ensurePhotoPermission();
+
+      if (permissionStatus === 'denied' || permissionStatus === 'blocked') {
+        setIsPermissionDenied(true);
+        setIsReady(true);
+
+        return;
+      }
+
       const sorted = await getAlbumsByType();
 
-      setAlbums(sorted);
-      if (sorted.length > 0) {
-        setSelectedAlbum(sorted[0].title);
+      if (sorted.length === 0) {
+        setAlbums([ALL_PHOTOS_ALBUM]);
+        setSelectedAlbum(ALL_PHOTOS_ALBUM.title);
+        setIsReady(true);
+
+        return;
       }
+
+      setAlbums(sorted);
+      setSelectedAlbum(sorted[0].title);
       setIsReady(true);
 
       const withThumbnails = await fetchThumbnails(sorted);
@@ -99,6 +139,7 @@ export const useAlbumList = () => {
     displayAlbumName: selectedAlbum ?? '',
     isAlbumListOpen,
     isReady,
+    isPermissionDenied,
     toggleAlbumList,
     selectAlbum,
   };

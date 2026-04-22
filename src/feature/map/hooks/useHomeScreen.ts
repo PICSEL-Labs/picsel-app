@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { NaverMapViewRef } from '@mj-studio/react-native-naver-map';
 import { useNavigation } from '@react-navigation/native';
 
 import { useBottomSheetManager } from '../hooks/useBottomSheetManager';
+import { useLocationPermission } from '../hooks/useLocationPermission';
 import { useMapActions } from '../hooks/useMapActions';
 import { useMapCamera } from '../hooks/useMapCamera';
 import { useMapEffects } from '../hooks/useMapEffects';
@@ -70,16 +71,37 @@ export const useHomeScreen = () => {
   });
 
   const isFavorite = useStoreFavorite(stores?.data?.brands, selectedStore);
+  const { getCurrentLocation } = useLocationPermission();
+  const [isGpsActive, setIsGpsActive] = useState(false);
+
+  const handleGpsPress = useCallback(async () => {
+    const location = await getCurrentLocation();
+
+    if (!location) {
+      return;
+    }
+
+    setIsGpsActive(true);
+    mapRef.current?.setLocationTrackingMode('Follow');
+  }, [getCurrentLocation]);
+
+  const handleCameraChanged = useCallback((reason: string) => {
+    if (reason === 'Gesture' || reason === 'Control') {
+      setActiveButton('location');
+      setIsGpsActive(false);
+    }
+  }, []);
 
   const { syncFavorites } = useFavoriteStore();
 
   useEffect(() => {
     const brands = stores?.data?.brands;
     if (brands && brands.length > 0) {
-      const favoritesMap = brands.reduce<Record<string, boolean>>(
-        (acc, b) => ({ ...acc, [b.brandId]: b.isFavorite }),
-        {},
-      );
+      const favoritesMap = brands.reduce<Record<string, boolean>>((acc, b) => {
+        acc[b.brandId] = b.isFavorite;
+
+        return acc;
+      }, {});
       syncFavorites(favoritesMap);
     }
   }, [stores?.data?.brands, syncFavorites]);
@@ -123,6 +145,9 @@ export const useHomeScreen = () => {
     // Actions
     handleLocationSearch,
     handleNavigateSearch,
+    handleGpsPress,
+    isGpsActive,
+    handleCameraChanged,
     searchStoresByLocation,
   };
 };

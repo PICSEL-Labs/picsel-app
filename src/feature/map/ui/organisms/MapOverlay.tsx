@@ -100,7 +100,7 @@ const MapOverlay = memo(
             imageConfig: {
               httpUri: getImageUrl('/common/search-marker.png'),
             },
-            size: 22,
+            size: 30,
             zIndex: 2000,
           };
         }
@@ -109,7 +109,7 @@ const MapOverlay = memo(
         const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
         return {
           imageConfig: { httpUri: getImageUrl(finalImageUrl) },
-          size: isSelected ? 48 : 28,
+          size: isSelected ? 48 : 38,
           zIndex: isSelected ? 1000 : 0,
         };
       };

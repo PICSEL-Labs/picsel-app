@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { useLoginService } from '@/feature/auth/login/model/loginService';
 import { SocialTypes } from '@/feature/auth/login/types';
@@ -14,7 +14,8 @@ import SocialLoginButton from '@/shared/ui/molecules/SocialLoginButton';
 
 const LoginScreen = () => {
   const navigation = useNavigation<SignupNavigationProp>();
-  const { handleSocialLogin } = useLoginService(navigation);
+  // TODO: 앱스토어 심사 완료 후 handleTestLogin 제거
+  const { handleSocialLogin, handleTestLogin } = useLoginService(navigation);
   const { isWithdrawn, setIsWithdrawn } = useUserStore();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const LoginScreen = () => {
       <View className="flex-1">
         <LoginIntro />
 
-        <View className="flex-row justify-center pb-20">
+        <View className="flex-row justify-center pb-5">
           {(['KAKAO', 'NAVER', 'GOOGLE', 'APPLE'] as SocialTypes[]).map(
             type => (
               <SocialLoginButton
@@ -46,6 +47,13 @@ const LoginScreen = () => {
             ),
           )}
         </View>
+
+        {/* TODO: 앱스토어 심사 완료 후 테스트 로그인 버튼 제거 */}
+        <Pressable
+          onPress={handleTestLogin}
+          className="mb-20 items-center self-center rounded-lg bg-gray-700 px-6 py-3">
+          <Text className="text-gray-300 body-rg-01">테스트 계정 로그인</Text>
+        </Pressable>
       </View>
     </ScreenLayout>
   );

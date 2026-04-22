@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 
-import { AlbumGroupType } from './useAlbumList';
+import { DisplayGroupType } from './useAlbumList';
 import { GridPhoto, useInfiniteScrollPhotos } from './useInfiniteScrollPhotos';
 
 export const usePhotoGrid = (
   albumName: string | null,
-  groupTypes: AlbumGroupType | null,
+  groupTypes: DisplayGroupType | null,
 ) => {
   const [capturedPhotos, setCapturedPhotos] = useState<GridPhoto[]>([]);
   const { photos, fetchPhotos, hasNextPage, resetPhotos } =

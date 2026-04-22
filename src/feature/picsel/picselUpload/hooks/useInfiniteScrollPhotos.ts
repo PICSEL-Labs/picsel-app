@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Alert } from 'react-native';
 
-import { AlbumGroupType } from './useAlbumList';
+import { DisplayGroupType } from './useAlbumList';
 
 export type GridPhoto = {
   id: string;
@@ -13,7 +13,7 @@ export type GridPhoto = {
 
 export const useInfiniteScrollPhotos = (
   albumName: string | null,
-  groupTypes: AlbumGroupType | null,
+  groupTypes: DisplayGroupType | null,
 ) => {
   const [photos, setPhotos] = useState<GridPhoto[]>([]);
   const [endCursor, setEndCursor] = useState<string | undefined>();
@@ -44,7 +44,8 @@ export const useInfiniteScrollPhotos = (
         after: endCursorRef.current,
         assetType: 'Photos',
         ...(albumNameRef.current &&
-          groupTypesRef.current && {
+          groupTypesRef.current &&
+          groupTypesRef.current !== 'All' && {
             groupName: albumNameRef.current,
             groupTypes: groupTypesRef.current,
           }),
@@ -86,8 +87,10 @@ export const useInfiniteScrollPhotos = (
         const { edges, page_info } = await CameraRoll.getPhotos({
           first: 15,
           assetType: 'Photos',
-          groupName: albumName,
-          groupTypes,
+          ...(groupTypes !== 'All' && {
+            groupName: albumName,
+            groupTypes,
+          }),
         });
 
         const mappedPhotos: GridPhoto[] = edges.map(edge => ({

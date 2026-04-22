@@ -1,12 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { View } from 'react-native';
+import { Alert, Linking, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
 import { usePicselBook } from '@/feature/picsel/picselBook/hooks/usePicselBook';
+import { PHOTO_PERMISSION_ALERT } from '@/feature/picsel/picselUpload/constants/album';
 import { useAlbumList } from '@/feature/picsel/picselUpload/hooks/useAlbumList';
 import { usePhotoPicker } from '@/feature/picsel/picselUpload/hooks/usePhotoPicker';
 import { usePicselUploadStore } from '@/feature/picsel/picselUpload/hooks/usePicselUploadStore';
@@ -50,9 +51,30 @@ const SelectPhotoScreen = () => {
     displayAlbumName,
     isAlbumListOpen,
     isReady,
+    isPermissionDenied,
     toggleAlbumList,
     selectAlbum,
   } = useAlbumList();
+
+  useEffect(() => {
+    if (isPermissionDenied) {
+      Alert.alert(
+        PHOTO_PERMISSION_ALERT.TITLE,
+        PHOTO_PERMISSION_ALERT.MESSAGE,
+        [
+          {
+            text: PHOTO_PERMISSION_ALERT.CANCEL_TEXT,
+            style: 'cancel',
+            onPress: () => navigation.goBack(),
+          },
+          {
+            text: PHOTO_PERMISSION_ALERT.CONFIRM_TEXT,
+            onPress: () => Linking.openSettings(),
+          },
+        ],
+      );
+    }
+  }, [isPermissionDenied, navigation]);
 
   const {
     photos,

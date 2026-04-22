@@ -19,10 +19,10 @@ const TeamIntroScreen = () => {
       <MypageHeader title="팀원 소개" white />
 
       <View className="flex items-center">
-        <Image source={Logo} />
+        <Image source={Logo} style={{ width: 375, height: 66 }} />
       </View>
 
-      <View className="flex items-center justify-center px-4 pb-10 pt-3">
+      <View className="flex items-center justify-center px-4 pb-10 pt-8">
         <Text className="text-center text-white body-rg-02">
           {TEAM_INTRO_DESCRIPTION}
         </Text>

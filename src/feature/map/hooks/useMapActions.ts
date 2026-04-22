@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
-import { useFilteredBrandsStore, useMapLocationStore } from '@/shared/store';
+import { useMapLocationStore } from '@/shared/store';
 
 interface UseMapActionsParams {
   searchStoresByLocation: (lat: number, lng: number, zoom?: number) => void;
@@ -24,7 +24,6 @@ export const useMapActions = ({
   navigation,
   camera,
 }: UseMapActionsParams) => {
-  const { clearAppliedFilter } = useFilteredBrandsStore();
   const { mapMode } = useMapLocationStore();
 
   const resetSearchUI = useCallback(() => {
@@ -35,10 +34,9 @@ export const useMapActions = ({
   }, [setSelectedMarkerId, hideSearchButton, setActiveButton, showSheet]);
 
   const handleLocationSearch = useCallback(() => {
-    clearAppliedFilter('map');
     searchStoresByLocation(camera.latitude, camera.longitude, camera.zoom);
     resetSearchUI();
-  }, [searchStoresByLocation, camera, clearAppliedFilter, resetSearchUI]);
+  }, [searchStoresByLocation, camera, resetSearchUI]);
 
   const handleNavigateSearch = useCallback(() => {
     mapMode === 'search'

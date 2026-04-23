@@ -82,13 +82,17 @@ const MapOverlay = memo(
           isStoreSearchMode && data.storeId === selectedStoreId;
         const isFavorite =
           optimisticFavorites[data.brandId] ?? brandInfo?.isFavorite ?? false;
-        const brandIconUrl = brandInfo?.brandIconImageUrl || '';
+        const markerIconUrl = brandInfo?.markerIconImageUrl || '';
         const shouldShowBrandImage =
           isSelected || (!hasBeenSelected && !keepSearchedMarker);
 
         if (isSearchedStore) {
           if (shouldShowBrandImage) {
-            const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
+            const finalImageUrl = getFavoriteImageUrl(
+              markerIconUrl,
+              isFavorite,
+            );
+
             return {
               imageConfig: { httpUri: getImageUrl(finalImageUrl) },
               size: 48,
@@ -106,7 +110,8 @@ const MapOverlay = memo(
         }
 
         // 일반 스토어인 경우
-        const finalImageUrl = getFavoriteImageUrl(brandIconUrl, isFavorite);
+        const finalImageUrl = getFavoriteImageUrl(markerIconUrl, isFavorite);
+
         return {
           imageConfig: { httpUri: getImageUrl(finalImageUrl) },
           size: isSelected ? 48 : 38,

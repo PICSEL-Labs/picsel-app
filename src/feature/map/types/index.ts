@@ -26,6 +26,7 @@ export interface StoreData {
 export interface BrandData {
   brandDisplayOrder: number;
   brandIconImageUrl: string;
+  markerIconImageUrl: string;
   brandId: string;
   brandName: string;
   isFavorite: boolean;

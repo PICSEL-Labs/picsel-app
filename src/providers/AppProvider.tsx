@@ -2,10 +2,12 @@ import React, { ReactNode, useEffect, useState } from 'react';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Platform } from 'react-native';
 import { Text, TextInput } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 
 import { useUserConfig } from '@/shared/hooks/useUserConfig';
 import { useLocationStore } from '@/shared/store';
@@ -64,6 +66,10 @@ const AppProvider = ({ children }: AppProviderProps) => {
       await delay;
       setIsReady(true);
       SplashScreen.hide();
+
+      if (Platform.OS === 'ios') {
+        requestTrackingPermission();
+      }
     };
     prepare();
   }, []);

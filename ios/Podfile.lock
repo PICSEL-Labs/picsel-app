@@ -1615,6 +1615,8 @@ PODS:
     - Yoga
   - react-native-splash-screen (3.3.0):
     - React-Core
+  - react-native-tracking-transparency (0.1.2):
+    - React
   - react-native-webview (13.16.0):
     - DoubleConversion
     - glog
@@ -2451,6 +2453,7 @@ DEPENDENCIES:
   - react-native-ios-utilities (from `../node_modules/react-native-ios-utilities`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - react-native-tracking-transparency (from `../node_modules/react-native-tracking-transparency`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
@@ -2621,6 +2624,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  react-native-tracking-transparency:
+    :path: "../node_modules/react-native-tracking-transparency"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-NativeModulesApple:
@@ -2784,6 +2789,7 @@ SPEC CHECKSUMS:
   react-native-ios-utilities: ba7381d7986ece2c922faf4ad3af94bba676f330
   react-native-safe-area-context: 00d03dc688ba86664be66f9e3f203fc7d747d899
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
+  react-native-tracking-transparency: 25ff1ff866e338c137c818bdec20526bb05ffcc1
   react-native-webview: 31e5182717002afb31a4452498e890daf28a77de
   React-NativeModulesApple: 6d750bb9829fdf0f02c56e9a68cbb390e1f5de25
   React-oscompat: 74eb4badd12e93899f37a5dbb03d8a638011a292

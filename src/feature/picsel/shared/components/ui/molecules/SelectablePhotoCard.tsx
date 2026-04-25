@@ -57,7 +57,7 @@ const SelectablePhotoCard = ({
         {isSelecting && <SelectionCheckbox isSelected={isSelected} />}
 
         <View
-          className="items-center justify-center overflow-hidden bg-gray-100"
+          className="items-center justify-center overflow-hidden bg-white"
           style={{ width: imageWidth, height: imageHeight }}>
           <CachedImage
             uri={photo.uri}

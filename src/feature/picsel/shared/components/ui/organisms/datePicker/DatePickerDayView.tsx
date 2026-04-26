@@ -4,9 +4,8 @@ import dayjs from 'dayjs';
 import { Pressable, Text, View } from 'react-native';
 
 import {
-  CELL_WIDTH,
   DATE_STYLES,
-  TOTAL_CALENDAR_CELLS,
+  DAYS_PER_WEEK,
   WEEK_DAYS,
 } from '@/feature/picsel/shared/constants/datePicker';
 
@@ -19,10 +18,11 @@ interface Props {
 const DatePickerDayView = ({ current, selectedDate, onSelect }: Props) => {
   const cells = useMemo(() => {
     const daysInMonth = current.daysInMonth();
-
     const startDay = current.startOf('month').day();
+    const weeksNeeded = Math.ceil((startDay + daysInMonth) / DAYS_PER_WEEK);
+    const totalCells = weeksNeeded * DAYS_PER_WEEK;
 
-    return Array.from({ length: TOTAL_CALENDAR_CELLS }, (_, i) => {
+    return Array.from({ length: totalCells }, (_, i) => {
       const dayOffset = i - startDay + 1;
       const date = current.startOf('month').add(dayOffset - 1, 'day');
 
@@ -55,35 +55,42 @@ const DatePickerDayView = ({ current, selectedDate, onSelect }: Props) => {
     return { containerStyle, textStyle };
   };
 
+  const weeksNeeded = cells.length / DAYS_PER_WEEK;
+
   return (
     <View className="pt-2">
       <View className="mb-3 flex-row">
         {WEEK_DAYS.map(day => (
-          <View
-            key={day.key}
-            style={{ flexBasis: CELL_WIDTH }}
-            className="items-center">
+          <View key={day.key} style={{ flex: 1 }} className="items-center">
             <Text className="text-gray-300 body-rg-01">{day.label}</Text>
           </View>
         ))}
       </View>
 
-      <View className="flex-row flex-wrap">
-        {cells.map((item, idx) => {
-          const { containerStyle, textStyle } = getDateStyles(item);
+      <View>
+        {Array.from({ length: weeksNeeded }, (_, weekIdx) => (
+          <View key={weekIdx} className="flex-row">
+            {cells
+              .slice(weekIdx * DAYS_PER_WEEK, (weekIdx + 1) * DAYS_PER_WEEK)
+              .map((item, idx) => {
+                const { containerStyle, textStyle } = getDateStyles(item);
 
-          return (
-            <Pressable
-              key={`${item.date.toString()}-${idx}`}
-              onPress={() => item.isCurrentMonth && onSelect(item.date)}
-              style={{ flexBasis: CELL_WIDTH }}
-              className="mb-3 items-center">
-              <View className={containerStyle}>
-                <Text className={`body-rg-03 ${textStyle}`}>{item.day}</Text>
-              </View>
-            </Pressable>
-          );
-        })}
+                return (
+                  <Pressable
+                    key={`${item.date.toString()}-${idx}`}
+                    onPress={() => item.isCurrentMonth && onSelect(item.date)}
+                    style={{ flex: 1 }}
+                    className="mb-3 items-center">
+                    <View className={containerStyle}>
+                      <Text className={`body-rg-03 ${textStyle}`}>
+                        {item.day}
+                      </Text>
+                    </View>
+                  </Pressable>
+                );
+              })}
+          </View>
+        ))}
       </View>
     </View>
   );

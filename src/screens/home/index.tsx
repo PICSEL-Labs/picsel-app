@@ -5,6 +5,7 @@ import {
   NaverMapView,
   Region,
 } from '@mj-studio/react-native-naver-map';
+import { useNavigation } from '@react-navigation/native';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -21,6 +22,7 @@ import EmptyBottomSheet from '@/feature/map/ui/organisms/EmptyBottomSheet';
 import MapActionButton from '@/feature/map/ui/organisms/MapActionButton';
 import MapOverlay from '@/feature/map/ui/organisms/MapOverlay';
 import { usePrefetchMyPage } from '@/feature/mypage/main/hooks/usePrefetchMyPage';
+import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import ScreenLayout from '@/shared/components/layouts/ScreenLayout';
 import { HEIGHT } from '@/shared/constants/size';
 import { useRequestNotificationPermission } from '@/shared/hooks/useRequestNotificationPermission';
@@ -35,7 +37,13 @@ const GPS_SHEET_GAP = -30;
 const HomeScreen = () => {
   useRequestNotificationPermission();
   usePrefetchMyPage();
+  const navigation = useNavigation<RootStackNavigationProp>();
   const { showBrandTooltip, fadeAnim } = useBrandTooltipOnce();
+
+  const handleQrSave = () => {
+    hideSheet('detail');
+    navigation.navigate('QrScan');
+  };
 
   const {
     targetLocation,
@@ -232,6 +240,7 @@ const HomeScreen = () => {
         isFavorite={isFavorite}
         onClose={handleBottomSheetClose}
         animatedPosition={sheetAnimatedPosition}
+        onQrSave={handleQrSave}
       />
 
       {filteredBrands?.length === 0 && (

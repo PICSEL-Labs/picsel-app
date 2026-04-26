@@ -16,6 +16,7 @@ interface Props {
   onClose: () => void;
   isFavorite: boolean;
   animatedPosition: SharedValue<number>;
+  onQrSave: () => void;
 }
 
 const BrandDetailBottomSheet = ({
@@ -24,6 +25,7 @@ const BrandDetailBottomSheet = ({
   onClose,
   isFavorite,
   animatedPosition,
+  onQrSave,
 }: Props) => {
   const { bottomSheetModalRef, openCopy, handleCopyButton, handleCopyAddress } =
     useBrandDetailBottomSheet({
@@ -65,6 +67,7 @@ const BrandDetailBottomSheet = ({
           openCopy={openCopy}
           handleCopyButton={handleCopyButton}
           handleCopyAddress={handleCopyAddress}
+          onQrSave={onQrSave}
         />
       </BottomSheetView>
     </BottomSheetModal>

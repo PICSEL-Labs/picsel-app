@@ -28,7 +28,7 @@ const PicselbookSection = ({ picselbook, onMovePress }: Props) => {
 
       <View className="items-center gap-2" style={{ width: 80 }}>
         <PicselBookIcons
-          shape={picselbook?.coverImagePath ? 'cover-selected' : 'default'}
+          shape="default"
           width={80}
           height={72}
           imageUri={

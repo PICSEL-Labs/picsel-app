@@ -71,7 +71,7 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
         </View>
       </View>
 
-      <View className="absolute bottom-[-5px] w-full items-center">
+      <View className="absolute bottom-2 w-full items-center">
         <Button
           text="다음"
           color={isNextEnabled ? 'active' : 'disabled'}

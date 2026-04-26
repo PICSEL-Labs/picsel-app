@@ -22,6 +22,8 @@ export const MYPAGE_MENU_ITEMS: MenuItem[] = [
   },
 ];
 
+import Config from 'react-native-config';
+
 import { MypageNavigationProps } from '@/navigation/route/mypage';
 
 export type MypageScreenName = keyof MypageNavigationProps;
@@ -32,6 +34,7 @@ export interface MenuCardItem {
   backgroundColor: string;
   iconType: string | null;
   screenName: MypageScreenName | null;
+  link?: string;
 }
 
 export const MYPAGE_CARD_ITEMS: MenuCardItem[] = [
@@ -48,5 +51,6 @@ export const MYPAGE_CARD_ITEMS: MenuCardItem[] = [
     backgroundColor: '',
     iconType: null,
     screenName: null,
+    link: `itms-apps://apps.apple.com/app/id${Config.APPLE_APP_ID}?action=write-review`,
   },
 ];

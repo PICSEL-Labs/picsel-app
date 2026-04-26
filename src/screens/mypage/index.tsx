@@ -63,7 +63,7 @@ const MypageScreen = () => {
                 <MenuCardIcon iconType={card.iconType} />
               ) : undefined
             }
-            onPress={() => handleCardPress(card.screenName)}
+            onPress={() => handleCardPress(card)}
           />
         ))}
       </View>

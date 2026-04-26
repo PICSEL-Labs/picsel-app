@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { Linking } from 'react-native';
 
-import { MYPAGE_MENU_ITEMS, MypageScreenName } from '../constants/menuItems';
+import { MenuCardItem, MYPAGE_MENU_ITEMS } from '../constants/menuItems';
 
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import MypageIcons from '@/shared/icons/MypageIcons';
@@ -57,9 +58,13 @@ export const useMypageMenu = () => {
     };
   });
 
-  const handleCardPress = (screenName: MypageScreenName | null) => {
-    if (screenName) {
-      navigation.navigate('MypageRoute', { screen: screenName });
+  const handleCardPress = (card: MenuCardItem) => {
+    if (card.link) {
+      Linking.openURL(card.link);
+      return;
+    }
+    if (card.screenName) {
+      navigation.navigate('MypageRoute', { screen: card.screenName });
     }
   };
 

@@ -20,6 +20,9 @@ declare module 'react-native-config' {
     // API
     API_KEY: string;
     IMAGE_URL: string;
+
+    // App Store
+    APPLE_APP_ID: string;
   }
 
   export const Config: NativeConfig;

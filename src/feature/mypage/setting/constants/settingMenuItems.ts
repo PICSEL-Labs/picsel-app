@@ -6,7 +6,8 @@ export const EXTERNAL_LINKS = {
   notice:
     'https://daisy-tamarillo-7ee.notion.site/2e22a4516dff8019a8f5eb6c96169ad1?v=2e22a4516dff80ff8a36000c693971d6',
   faq: '', // 추후 FAQ 페이지 오픈 시 링크 추가
-  inquiry: 'https://forms.gle/3FEVyNMcb1yEFRvq5',
+  inquiry:
+    'https://docs.google.com/forms/u/0/d/11cldn40YEX12Rr7p3C0syL9xt-1yQT74_J_YU2hqBWE',
 } as const;
 
 export interface SettingMenuItem {

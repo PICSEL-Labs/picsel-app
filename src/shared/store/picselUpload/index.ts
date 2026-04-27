@@ -4,9 +4,11 @@ interface PhotoState {
   mainPhoto: string | null;
   extraPhotos: string[];
   bookCoverPhoto: string | null;
+  draftBookName: string | null;
 
   setMainPhoto: (uri: string | null) => void;
   setBookCoverPhoto: (uri: string | null) => void;
+  setDraftBookName: (name: string | null) => void;
 
   setExtraPhotos: (uris: string[]) => void;
   addExtraPhotos: (uris: string[]) => void;
@@ -19,10 +21,13 @@ export const usePhotoStore = create<PhotoState>(set => ({
   mainPhoto: null,
   extraPhotos: [],
   bookCoverPhoto: null,
+  draftBookName: null,
 
   setMainPhoto: uri => set({ mainPhoto: uri }),
 
   setBookCoverPhoto: uri => set({ bookCoverPhoto: uri }),
+
+  setDraftBookName: name => set({ draftBookName: name }),
 
   addExtraPhotos: uris =>
     set(state => ({
@@ -36,5 +41,11 @@ export const usePhotoStore = create<PhotoState>(set => ({
       extraPhotos: state.extraPhotos.filter((_, i) => i !== index),
     })),
 
-  reset: () => set({ mainPhoto: null, extraPhotos: [], bookCoverPhoto: null }),
+  reset: () =>
+    set({
+      mainPhoto: null,
+      extraPhotos: [],
+      bookCoverPhoto: null,
+      draftBookName: null,
+    }),
 }));

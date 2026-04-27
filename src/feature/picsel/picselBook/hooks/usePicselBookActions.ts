@@ -38,7 +38,9 @@ export const usePicselBookActions = () => {
     bookName: string,
     options?: HandleEditNameSubmitOptions,
   ) => {
-    if (!editingBookId) return;
+    if (!editingBookId) {
+      return;
+    }
 
     patchPicselBook(
       { picselbookId: editingBookId, bookName },
@@ -60,16 +62,19 @@ export const usePicselBookActions = () => {
     setEditingBookId(id);
     navigation.navigate('SelectBookCover', {
       variant: 'cover',
-      bookName: '',
       picselbookId: id,
     });
   };
 
   const handleCoverEditSubmit = (coverType: CoverType) => {
-    if (!editingBookId) return;
+    if (!editingBookId) {
+      return;
+    }
 
     const coverImagePath = coverType === 'default' ? null : bookCoverPhoto;
-    if (coverType === 'photo' && !coverImagePath) return;
+    if (coverType === 'photo' && !coverImagePath) {
+      return;
+    }
 
     patchPicselBook(
       { picselbookId: editingBookId, coverImagePath },

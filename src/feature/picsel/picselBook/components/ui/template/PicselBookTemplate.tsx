@@ -52,6 +52,7 @@ const PicselBookTemplate = () => {
     editingBookId,
     editingBookName,
     bookCoverPhoto,
+    draftBookName,
 
     picselBookRef,
 
@@ -91,7 +92,12 @@ const PicselBookTemplate = () => {
           />
         </View>
 
-        <PicselBookBottomSheet ref={picselBookRef} onSubmit={handleSubmit} />
+        <PicselBookBottomSheet
+          ref={picselBookRef}
+          onSubmit={handleSubmit}
+          coverPhotoUri={bookCoverPhoto}
+          initialBookName={draftBookName ?? ''}
+        />
       </EmptyStateLayout>
     );
   }
@@ -124,7 +130,12 @@ const PicselBookTemplate = () => {
         onShowSkeletonChange={handleShowSkeletonChange}
       />
 
-      <PicselBookBottomSheet ref={picselBookRef} onSubmit={handleSubmit} />
+      <PicselBookBottomSheet
+        ref={picselBookRef}
+        onSubmit={handleSubmit}
+        coverPhotoUri={bookCoverPhoto}
+        initialBookName={draftBookName ?? ''}
+      />
 
       <PicselBookBottomSheet
         ref={editNameBottomSheetRef}

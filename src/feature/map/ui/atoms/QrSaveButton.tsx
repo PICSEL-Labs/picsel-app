@@ -5,16 +5,16 @@ import { Text, TouchableOpacity } from 'react-native';
 import QrIcons from '@/shared/icons/QrIcons';
 import { defaultButtonShadow } from '@/shared/styles/shadows';
 
-const QrSaveButton = () => {
-  const [isPressed, setIsPressed] = useState(false);
+interface Props {
+  onPress: () => void;
+}
 
-  const handlePress = () => {
-    // TODO: 큐알 저장 로직 구현
-  };
+const QrSaveButton = ({ onPress }: Props) => {
+  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <TouchableOpacity
-      onPress={handlePress}
+      onPress={onPress}
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}
       activeOpacity={0.5}

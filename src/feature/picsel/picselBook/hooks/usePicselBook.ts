@@ -71,6 +71,7 @@ export const usePicselBook = () => {
   const { mutate: deletePicselBooks } = useDeletePicselBooks();
 
   const { reset: resetPhotoStore } = usePhotoStore();
+  const draftBookName = usePhotoStore(state => state.draftBookName);
   const { mutateAsync: createDraft } = useCreatePicselBookDraft();
 
   const books: PicselBookItem[] = data ?? [];
@@ -132,9 +133,6 @@ export const usePicselBook = () => {
 
     createPicselBook(payload, {
       onSuccess: response => {
-        if (bookCoverPhoto) {
-          navigation.pop(1);
-        }
         showToast(`"${bookName}"을 추가했어요`, 60);
 
         const newBookId = response.data?.picselbookId;
@@ -218,6 +216,13 @@ export const usePicselBook = () => {
     }
   }, [isFocused, bookCoverPhoto, editingBookId]);
 
+  // 픽셀북 생성 리턴 플로우: 사진 선택 후 돌아왔을 때 create 시트 자동 재오픈
+  useEffect(() => {
+    if (isFocused && bookCoverPhoto && draftBookName) {
+      picselBookRef.current?.present();
+    }
+  }, [isFocused, bookCoverPhoto, draftBookName]);
+
   useEffect(() => {
     if (selectedBookIds.length === 0 && savedBookId && books.length > 0) {
       const target = books.find(b => b.picselbookId === savedBookId);
@@ -275,6 +280,7 @@ export const usePicselBook = () => {
     editingBookId,
     editingBookName,
     bookCoverPhoto,
+    draftBookName,
 
     // Refs
     picselBookRef,

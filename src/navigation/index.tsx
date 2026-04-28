@@ -58,7 +58,6 @@ export type MainNavigationProps = {
   PicselBookFolder: { bookId: string; bookName: string };
   SelectBookCover: {
     variant: 'cover';
-    bookName: string;
     picselbookId?: string;
   };
 
@@ -105,7 +104,7 @@ const MainRoute = () => {
       <Stack.Screen
         name="SelectBookCover"
         component={SelectPhotoScreen}
-        initialParams={{ variant: 'cover', bookName: '' }}
+        initialParams={{ variant: 'cover' }}
       />
       <Stack.Screen name="RegisterPhoto" component={RegisterPhotoScreen} />
       <Stack.Screen name="PicselUpload" component={PicselUploadScreen} />

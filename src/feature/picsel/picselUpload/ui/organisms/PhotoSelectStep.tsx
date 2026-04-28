@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import { STEP_TEXTS } from '../../constants/stepTexts';
 
@@ -22,8 +22,10 @@ const PhotoSelectStep = ({ onNext }: Props) => {
     usePhotoStore();
 
   return (
-    <>
-      <View className="flex-1">
+    <View className="flex-1">
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}>
         <UploadStepHeader
           title={
             <>
@@ -45,17 +47,17 @@ const PhotoSelectStep = ({ onNext }: Props) => {
           onAdd={() => navigation.navigate('SelectExtraPhoto')}
           onRemove={removeExtraPhoto}
         />
-        <View className="absolute bottom-2 w-full items-center">
-          <Button
-            text="다음"
-            color={`${mainPhoto ? 'active' : 'disabled'}`}
-            textColor="white"
-            disabled={!mainPhoto}
-            onPress={onNext}
-          />
-        </View>
+      </ScrollView>
+      <View className="absolute bottom-2 w-full items-center">
+        <Button
+          text="다음"
+          color={`${mainPhoto ? 'active' : 'disabled'}`}
+          textColor="white"
+          disabled={!mainPhoto}
+          onPress={onNext}
+        />
       </View>
-    </>
+    </View>
   );
 };
 

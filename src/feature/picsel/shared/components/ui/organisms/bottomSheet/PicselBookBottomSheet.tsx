@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useMemo, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   BottomSheetBackdrop,
@@ -6,7 +6,13 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
-import { Keyboard, Pressable, Text, View } from 'react-native';
+import {
+  Keyboard,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import PicselBookInput from '../../atoms/PicselBookInput';
 
@@ -14,6 +20,7 @@ import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import CheckRoundIcons from '@/shared/icons/CheckRound';
 import PicselBookIcons from '@/shared/icons/PicselBookIcons';
 import { cn } from '@/shared/lib/cn';
+import { usePhotoStore } from '@/shared/store/picselUpload';
 import {
   bottomSheetBackdrop,
   bottomSheetBackground,
@@ -57,13 +64,19 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
     ref,
   ) => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const setDraftBookName = usePhotoStore(state => state.setDraftBookName);
+    const isNavigatingRef = useRef(false);
     const isEditCoverMode = mode === 'editCover';
     const isEditNameMode = mode === 'editName';
 
     const [bookName, setBookName] = useState(initialBookName);
     const [errorMessage, setErrorMessage] = useState('');
-    const [isEdited, setIsEdited] = useState(!isEditCoverMode);
-    const [selectedCover, setSelectedCover] = useState<CoverType>('default');
+    const [isEdited, setIsEdited] = useState(
+      !isEditCoverMode && !(mode === 'create' && initialBookName),
+    );
+    const [selectedCover, setSelectedCover] = useState<CoverType>(
+      mode === 'create' && initialBookName ? 'photo' : 'default',
+    );
     const snapPoints = useMemo(
       () => [isEditCoverMode ? '50%' : '100%'],
       [isEditCoverMode],
@@ -79,12 +92,12 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
       }
     }, [initialBookName, mode]);
 
-    // 커버 편집 모드: 사진 선택 후 돌아왔을 때 사진 지정 체크
+    // 사진 선택 후 돌아왔을 때 사진 지정 체크
     useEffect(() => {
-      if (isEditCoverMode && coverPhotoUri) {
+      if (coverPhotoUri) {
         setSelectedCover('photo');
       }
-    }, [isEditCoverMode, coverPhotoUri]);
+    }, [coverPhotoUri]);
 
     const handleNextStep = () => {
       if (bookName.trim() && !errorMessage) {
@@ -107,10 +120,15 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
 
     const handleDismiss = () => {
       Keyboard.dismiss();
+      if (isNavigatingRef.current) {
+        isNavigatingRef.current = false;
+        return;
+      }
       setBookName('');
       setIsEdited(!isEditCoverMode);
       setErrorMessage('');
       setSelectedCover('default');
+      setDraftBookName(null);
     };
 
     const dismiss = () => {
@@ -130,9 +148,12 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
     };
 
     const navigateToSelectCover = () => {
+      if (mode === 'create' && bookName.trim()) {
+        setDraftBookName(bookName.trim());
+      }
+      isNavigatingRef.current = true;
       navigation.navigate('SelectBookCover', {
         variant: 'cover',
-        bookName: isEditCoverMode ? '' : bookName,
         ...(picselbookId && { picselbookId }),
       });
       dismiss();
@@ -233,25 +254,15 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
                       />
                     </Pressable>
 
-                    <Pressable
-                      onPress={
-                        isEditCoverMode && coverPhotoUri
-                          ? undefined
-                          : handleSelectedCover
-                      }
-                      className={cn(
-                        selectedCover === 'photo' && 'opacity-40',
-                        'flex flex-col items-center space-y-2 self-stretch px-6 py-2',
-                      )}>
+                    <TouchableOpacity
+                      onPress={coverPhotoUri ? undefined : handleSelectedCover}
+                      activeOpacity={0.4}
+                      className="flex flex-col items-center space-y-2 self-stretch px-6 py-2">
                       <PicselBookIcons
                         height={72}
                         width={80}
                         shape="cover-selected"
-                        imageUri={
-                          isEditCoverMode && coverPhotoUri
-                            ? coverPhotoUri
-                            : undefined
-                        }
+                        imageUri={coverPhotoUri ?? undefined}
                       />
                       <Text className="pb-4 text-gray-900 body-rg-02">
                         사진 지정
@@ -261,7 +272,7 @@ const PicselBookBottomSheet = forwardRef<BottomSheetModal, Props>(
                         height={24}
                         width={24}
                       />
-                    </Pressable>
+                    </TouchableOpacity>
                   </View>
                 </View>
 

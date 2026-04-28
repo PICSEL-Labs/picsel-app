@@ -9,8 +9,6 @@ export const WEEK_DAYS = [
 ] as const;
 
 export const DAYS_PER_WEEK = 7;
-export const TOTAL_CALENDAR_CELLS = 42;
-export const CELL_WIDTH = `${100 / DAYS_PER_WEEK}%`;
 export const MONTH_GRID_COLUMNS = 3;
 
 export const DATE_STYLES = {

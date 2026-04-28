@@ -17,6 +17,7 @@ interface Props extends MapBottomSheetProps {
   openCopy: boolean;
   handleCopyButton: () => void;
   handleCopyAddress: (address: string) => void;
+  onQrSave: () => void;
 }
 
 const BrandDetailContent = ({
@@ -26,6 +27,7 @@ const BrandDetailContent = ({
   openCopy,
   handleCopyButton,
   handleCopyAddress,
+  onQrSave,
 }: Props) => {
   const { userLocation } = useLocationStore();
   const { location, detailLocation } = splitAddress(storeDetail.address);
@@ -59,7 +61,7 @@ const BrandDetailContent = ({
       )}
 
       <View className="mb-2 py-4">
-        <QrSaveButton />
+        <QrSaveButton onPress={onQrSave} />
       </View>
     </View>
   );

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import { Camera } from 'react-native-vision-camera';
+import { requestCameraPermissionWithModal } from '@/shared/lib/cameraPermission';
 
 export const useCameraPermission = () => {
   const [permission, setPermission] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const status = await Camera.requestCameraPermission();
-      setPermission(status === 'granted');
+      const granted = await requestCameraPermissionWithModal();
+      setPermission(granted);
     })();
   }, []);
 

@@ -54,7 +54,7 @@ const PicselBookCard = ({
       {/* 픽셀북 아이콘 */}
       <View className="relative mb-2">
         <PicselBookIcons
-          shape={coverImage ? 'cover-selected' : 'default'}
+          shape="default"
           width={80}
           height={72}
           imageUri={coverImage}
@@ -156,7 +156,7 @@ const PicselBookCard = ({
             menuConfig={menuConfig}
             onPressMenuItem={handleMenuItem}>
             <PicselBookIcons
-              shape={coverImage ? 'cover-selected' : 'default'}
+              shape="default"
               width={80}
               height={72}
               imageUri={coverImage}

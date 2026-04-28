@@ -57,12 +57,12 @@ const SelectablePhotoCard = ({
         {isSelecting && <SelectionCheckbox isSelected={isSelected} />}
 
         <View
-          className="items-center justify-center overflow-hidden bg-white"
+          className="overflow-hidden"
           style={{ width: imageWidth, height: imageHeight }}>
           <CachedImage
             uri={photo.uri}
             style={{ width: imageWidth, height: imageHeight }}
-            resizeMode="contain"
+            resizeMode="cover"
             onLoad={() => onImageLoad?.(photo.uri)}
             onError={() => onImageError?.(photo.uri)}
           />

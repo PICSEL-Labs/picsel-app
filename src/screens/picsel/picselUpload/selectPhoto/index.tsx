@@ -1,12 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Alert, Linking, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectButton from '@/feature/brand/ui/organisms/SelectButton';
-import { usePicselBook } from '@/feature/picsel/picselBook/hooks/usePicselBook';
 import { PHOTO_PERMISSION_ALERT } from '@/feature/picsel/picselUpload/constants/album';
 import { useAlbumList } from '@/feature/picsel/picselUpload/hooks/useAlbumList';
 import { usePhotoPicker } from '@/feature/picsel/picselUpload/hooks/usePhotoPicker';
@@ -14,7 +12,6 @@ import { usePicselUploadStore } from '@/feature/picsel/picselUpload/hooks/usePic
 import PhotoSelectHeader from '@/feature/picsel/picselUpload/ui/layout/PhotoSelectHeader';
 import AlbumListPanel from '@/feature/picsel/picselUpload/ui/organisms/AlbumListPanel';
 import { PhotoGrid } from '@/feature/picsel/picselUpload/ui/organisms/PhotoGrid';
-import PicselBookBottomSheet from '@/feature/picsel/shared/components/ui/organisms/bottomSheet/PicselBookBottomSheet';
 import { MainNavigationProps } from '@/navigation';
 import { RootStackNavigationProp } from '@/navigation/types/navigateTypeUtil';
 import { usePhotoStore } from '@/shared/store/picselUpload';
@@ -28,15 +25,9 @@ const SelectPhotoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const route = useRoute<SelectPhotoRouteProp>();
   const variant = route.params.variant;
-  const picselBookRef = useRef<BottomSheetModal>(null);
 
-  const {
-    from,
-    bookName: pendingBookName = '',
-    picselbookId,
-  } = route.params as {
+  const { from, picselbookId } = route.params as {
     from?: 'edit';
-    bookName?: string;
     picselbookId?: string;
   };
 
@@ -91,20 +82,13 @@ const SelectPhotoScreen = () => {
     from === 'edit',
   );
 
-  const { handleSubmit } = usePicselBook();
-
   const { setBookCoverPhoto } = usePhotoStore();
 
   const handleSelectedCompleted = () => {
     switch (variant) {
       case 'cover':
-        if (picselbookId) {
-          setBookCoverPhoto(selectedUris[0]);
-          navigation.goBack();
-
-          return;
-        }
-        picselBookRef.current?.present();
+        setBookCoverPhoto(selectedUris[0]);
+        navigation.goBack();
 
         return;
       case 'main':
@@ -153,12 +137,6 @@ const SelectPhotoScreen = () => {
           onSelectAlbum={selectAlbum}
         />
       </View>
-
-      <PicselBookBottomSheet
-        ref={picselBookRef}
-        initialBookName={pendingBookName}
-        onSubmit={handleSubmit}
-      />
 
       {selectedCount > 0 && (
         <SelectButton

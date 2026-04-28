@@ -24,6 +24,8 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
     handleAddBook,
     picselBookRef,
     handleSubmit,
+    bookCoverPhoto,
+    draftBookName,
   } = usePicselBook();
 
   const setPicselbookId = usePicselUploadStore(state => state.setPicselbookId);
@@ -67,11 +69,16 @@ const PicselBookSelectStep = ({ onNext }: Props) => {
             isLoading={isLoading}
             onAddBook={handleAddBook}
           />
-          <PicselBookBottomSheet ref={picselBookRef} onSubmit={handleSubmit} />
+          <PicselBookBottomSheet
+            ref={picselBookRef}
+            onSubmit={handleSubmit}
+            coverPhotoUri={bookCoverPhoto}
+            initialBookName={draftBookName ?? ''}
+          />
         </View>
       </View>
 
-      <View className="absolute bottom-[-5px] w-full items-center">
+      <View className="absolute bottom-2 w-full items-center">
         <Button
           text="다음"
           color={isNextEnabled ? 'active' : 'disabled'}

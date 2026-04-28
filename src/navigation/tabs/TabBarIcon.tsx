@@ -15,8 +15,8 @@ const TabBarIcon = ({ routeName, focused }: Props) => {
       return (
         <MapIcons
           shape={focused ? 'fill-pink' : 'border-gray'}
-          width={32}
-          height={32}
+          width={focused ? 38 : 32}
+          height={focused ? 38 : 32}
         />
       );
     case 'QRScreen':

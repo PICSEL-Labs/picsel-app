@@ -14,7 +14,8 @@ export const TEAM_MEMBERS = [
 
 export const TEAM_LINKS = {
   instagram: 'https://www.instagram.com/picsel_kr/',
-  introduce: '',
+  introduce:
+    'https://daisy-tamarillo-7ee.notion.site/PICSEL-34e2a4516dff8089a53cf4ea7fe6d273',
 };
 
 export const TEAM_ACTION_CARDS_TEXT = {
